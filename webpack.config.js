@@ -15,25 +15,30 @@ const config = {
   stats: {
     excludeModules: /node_modules/,
   },
-  entry: path.resolve(__dirname, './client/index.jsx'),
+  entry: path.resolve(__dirname, './client/src/index.tsx'),
   output: {
     path: path.resolve(__dirname, './client/dist/'),
     publicPath: '/',
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.ts', '.tsx'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-react', '@babel/preset-env'],
+        test: /\.(js|tsx)$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-react', '@babel/preset-env'],
+            },
           },
-        },
+          {
+            loader: 'ts-loader'
+          },
+        ],
         exclude: /node_modules/,
       },
       {
@@ -76,7 +81,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './client/index.ejs'),
+      template: path.resolve(__dirname, './client/index.html'),
     }),
     new NodePolyfillPlugin(),
   ],
