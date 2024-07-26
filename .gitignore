@@ -1,0 +1,5 @@
+node_modules
+dist
+.env
+*~Stashed changes
+.DS_Store
