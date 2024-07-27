@@ -1,8 +1,7 @@
-// const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const autoprefixer = require('autoprefixer');
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import autoprefixer from 'autoprefixer';
 require('dotenv').config();
 
 const { NODE_ENV } = process.env;

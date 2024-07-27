@@ -4,6 +4,9 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
+    "build": "webpack",
+    "start": "nodemon server/index.ts",
+    "dev": "concurrently --kill-others \"npm run build\" \"npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,22 +20,30 @@
   },
   "homepage": "https://github.com/immersion-juliet-misfits/sproutsupport#readme",
   "dependencies": {
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
-    "@mui/material": "^5.16.5",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mysql2": "^3.10.3",
     "node-polyfill-webpack-plugin": "^4.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
     "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.12",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
     "html-webpack-plugin": "^5.6.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0",
     "webpack": "^5.93.0"
   }
 }
