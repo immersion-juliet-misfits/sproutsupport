@@ -1,9 +1,17 @@
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import autoprefixer from 'autoprefixer';
-require('dotenv').config();
+// import { load } from 'ts-dotenv';
+// const dotenv = require('dotenv');
+// require('dotenv').config();
+// require('dotenv').config();
+import dotenv from 'dotenv';
 
+
+
+// eslint-disable-next-line no-undef
 const { NODE_ENV } = process.env;
 const isDev = NODE_ENV.includes('dev');
 
@@ -14,7 +22,7 @@ const config = {
   stats: {
     excludeModules: /node_modules/,
   },
-  entry: path.resolve(__dirname, './client/src/index.tsx'),
+  entry: path.resolve(__dirname, './client/src/index.ts'),
   output: {
     path: path.resolve(__dirname, './client/dist/'),
     publicPath: '/',
@@ -22,6 +30,7 @@ const config = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    plugins: [new TsconfigPathsPlugin()],
   },
   module: {
     rules: [
@@ -35,7 +44,7 @@ const config = {
             },
           },
           {
-            loader: 'ts-loader'
+            loader: 'ts-loader',
           },
         ],
         exclude: /node_modules/,
@@ -67,6 +76,7 @@ const config = {
             // Remove if we need to fix them later
             options: {
               /* eslint-disable global-require */
+              // eslint-disable-next-line no-undef
               implementation: require('sass'),
               /* eslint-enable global-require */
               sassOptions: {
