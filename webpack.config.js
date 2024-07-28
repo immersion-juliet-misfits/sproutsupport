@@ -3,6 +3,103 @@ import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import autoprefixer from 'autoprefixer';
+import 'dotenv/config';
+// import dotenv from 'dotenv';
+// import { load } from 'ts-dotenv';
+// const dotenv = require('dotenv');
+// require('dotenv').config();
+
+module.exports = (env) => {
+  // Use env.<YOUR VARIABLE> here:
+  console.log('NODE_ENV: ', env.NODE_ENV); // e.g., 'local'
+  const isDev = env.NODE_ENV.includes('dev');
+
+  return {
+    mode: isDev ? 'development' : 'production',
+    devtool: isDev ? 'inline-source-map' : 'source-map',
+    watch: isDev,
+    stats: {
+      excludeModules: /node_modules/,
+    },
+    entry: path.resolve(__dirname, './client/src/index.ts'),
+    output: {
+      path: path.resolve(__dirname, './client/dist/'),
+      publicPath: '/',
+      filename: 'bundle.js',
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js'],
+      plugins: [new TsconfigPathsPlugin()],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(js|tsx)$/,
+          use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-react', '@babel/preset-env'],
+              },
+            },
+            {
+              loader: 'ts-loader',
+            },
+          ],
+          exclude: /node_modules/,
+        },
+        {
+          test: /\.(scss|css)$/,
+          use: [
+            {
+              // Adds CSS to the DOM by injecting a `<style>` tag
+              loader: 'style-loader',
+            },
+            {
+              // Interprets `@import` and `url()` like `import/require()` and will resolve them
+              loader: 'css-loader',
+            },
+            {
+              // Loader for webpack to process CSS with PostCSS
+              loader: 'postcss-loader',
+              options: {
+                postcssOptions: {
+                  plugins: [autoprefixer],
+                },
+              },
+            },
+            {
+              // Loads a SASS/SCSS file and compiles it to CSS
+              loader: 'sass-loader',
+              // Added to suppress webpack sass deprecation warnings
+              // Remove if we need to fix them later
+              options: {
+                implementation: require('sass'),
+                sassOptions: {
+                  quietDeps: true,
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: path.resolve(__dirname, './client/index.html'),
+      }),
+      new NodePolyfillPlugin(),
+    ],
+  };
+};
+
+/*
+
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import autoprefixer from 'autoprefixer';
 // import { load } from 'ts-dotenv';
 // const dotenv = require('dotenv');
 // require('dotenv').config();
@@ -75,10 +172,8 @@ const config = {
             // Added to suppress webpack sass deprecation warnings
             // Remove if we need to fix them later
             options: {
-              /* eslint-disable global-require */
               // eslint-disable-next-line no-undef
               implementation: require('sass'),
-              /* eslint-enable global-require */
               sassOptions: {
                 quietDeps: true,
               },
@@ -97,3 +192,6 @@ const config = {
 };
 
 module.exports = config;
+
+
+*/
