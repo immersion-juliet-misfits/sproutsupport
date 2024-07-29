@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    google_id Int
+    location_id Int
+    userName String?
+    email String? @unique
+    password String?
+    avatar String?
+    bio String?
+    level Int?
+    meets Meet[]
+    notifications Notification[]
+    plants Plant[]
+    posts Post[]
+    comments Comment[]
+    attendees Attendee[]
+}
+
+model Image {
+    id Int @id @default(autoincrement())
+    url String
+    category String
+    posts Post[]
+}
+
+model Meet {
+    id Int @id @default(autoincrement())
+    time_date String 
+    location String 
+    eventName String 
+    description String 
+    imageUrl String 
+    userId Int 
+    owner User @relation(fields: [userId], references: [id])
+    attendees Attendee[]
+}
+
+model Notification {
+    id Int @id @default(autoincrement())
+    userId Int 
+    message String
+    recipient User @relation(fields: [userId], references: [id])
+}
+
+model Plant {
+    id Int @id @default(autoincrement())
+    userId Int 
+    plantAPIID Int 
+    species String 
+    commonName String 
+    nickname String 
+    location String 
+    imageUrl String 
+    description String
+    caregiver User @relation(fields: [userId], references: [id])
+    tasks Task[]
+}
+model Task {
+    id Int @id @default(autoincrement())
+    taskName String 
+    frequency String 
+    lastCompleted String 
+    nextComplection String 
+    active String 
+    plant_id Int 
+    taskPlant Plant @relation(fields: [plant_id], references: [id])
+}
+
+model Post {
+    id Int @id @default(autoincrement())
+    userId Int 
+    image_id Int?
+    message String
+    owner User @relation(fields: [userId], references: [id])
+    image Image? @relation(fields: [image_id], references: [id])
+    comments Comment[]
+}
+
+model Comment {
+    id Int @id @default(autoincrement())
+    userId Int 
+    message String 
+    post_id Int
+    commentor User @relation(fields: [userId], references: [id])
+    commentPost Post @relation(fields: [post_id], references: [id])
+}
+
+model Attendee {
+    id Int @id @default(autoincrement())
+    meet_id Int 
+    userId Int
+    participant User @relation(fields: [userId], references: [id])
+    meet Meet @relation(fields: [meet_id], references: [id])
+}
+
+// ALTER TABLE
+//     comment ADD CONSTRAINT comment_user_id_foreign FOREIGN KEY(userId) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     attendees ADD CONSTRAINT attendees_meet_id_foreign FOREIGN KEY(meet_id) REFERENCES meet(id); || DONE
+// ALTER TABLE
+//     user ADD CONSTRAINT user_location_id_foreign FOREIGN KEY(location_id) REFERENCES plants(location); || LATER
+// ALTER TABLE
+//     attendees ADD CONSTRAINT attendees_user_id_foreign FOREIGN KEY(userId) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     post ADD CONSTRAINT post_user_id_foreign FOREIGN KEY(userId) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     notification ADD CONSTRAINT notification_user_id_foreign FOREIGN KEY(userId) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     tasks ADD CONSTRAINT tasks_plant_id_foreign FOREIGN KEY(plant_id) REFERENCES plants(id); || DONE
+// ALTER TABLE
+//     meet ADD CONSTRAINT meet_owner_id_foreign FOREIGN KEY(owner_id) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     comment ADD CONSTRAINT comment_post_id_foreign FOREIGN KEY(post_id) REFERENCES post(id); || DONE
+// ALTER TABLE
+//     plants ADD CONSTRAINT plants_user_id_foreign FOREIGN KEY(userId) REFERENCES user(id); || DONE
+// ALTER TABLE
+//     post ADD CONSTRAINT post_image_id_foreign FOREIGN KEY(image_id) REFERENCES image(id); || DONE
