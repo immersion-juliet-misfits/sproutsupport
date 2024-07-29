@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "webpack",
-    "start": "nodemon server/index.ts",
+    "start": "tsx server/index.ts",
     "dev": "concurrently --kill-others \"npm run build\" \"npm start\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,12 +23,10 @@
   "dependencies": {
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
-    "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mysql2": "^3.10.3",
-    "node-polyfill-webpack-plugin": "^4.0.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
     "react": "^18.3.1",
@@ -55,6 +53,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
+    "tsx": "^4.16.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^7.17.0",
     "webpack": "^5.93.0",

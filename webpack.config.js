@@ -1,19 +1,18 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import path, { dirname } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-import dotenv from 'dotenv';
+import autoprefixer from 'autoprefixer'; // Parses CSS
+import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
 
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default (env) => {
-  // console.log('NODE_ENV: ', process.env.NODE_ENV); // logs: correctly
   const isDev = process.env.NODE_ENV.includes('dev');
 
   return {
@@ -84,7 +83,6 @@ export default (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),
       }),
-      new NodePolyfillPlugin(),
     ],
   };
 };
