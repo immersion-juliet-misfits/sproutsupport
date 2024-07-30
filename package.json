@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/immersion-juliet-misfits/sproutsupport#readme",
   "dependencies": {
+    "@prisma/client": "^5.17.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -60,6 +61,7 @@
     "typescript": "^5.5.4",
     "typescript-eslint": "^7.17.0",
     "webpack": "^5.93.0",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
   }
 }
