@@ -9,7 +9,6 @@ import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -39,13 +38,10 @@ export default (env) => {
           test: /\.(js|tsx)$/,
           use: [
             {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-react', '@babel/preset-env'],
-              },
-            },
-            {
               loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+              },
             },
           ],
           exclude: /node_modules/,
