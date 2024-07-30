@@ -36,12 +36,6 @@ export default (env) => {
         {
           test: /\.(js|tsx)$/,
           use: [
-            // {
-            //   loader: 'babel-loader',
-            //   options: {
-            //     presets: ['@babel/preset-react', '@babel/preset-env'],
-            //   },
-            // },
             {
               loader: 'ts-loader',
               options: {
