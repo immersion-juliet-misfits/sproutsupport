@@ -1,6 +1,7 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import Plants from './routes/plantAddRoutes'
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,5 +18,11 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+
+app.use('/plants', Plants)
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
+});
 
 app.listen(port, () => {console.log(`Listening on http://localhost:${port}`)})
