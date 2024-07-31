@@ -4,6 +4,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import Posts from './routes/postRoute';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
@@ -24,6 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+app.use('/post', Posts)
 
 // GAuth Session middleware
 app.use(
