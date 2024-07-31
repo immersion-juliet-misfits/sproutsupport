@@ -27,6 +27,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(DIST_PATH));
 app.use('/post', Posts)
 
+app.use('/plants', Plants)
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
+});
+
+
 // GAuth Session middleware
 app.use(
   session({
