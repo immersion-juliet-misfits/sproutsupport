@@ -23,18 +23,9 @@ Plants.post('/search', (req: Request, res: Response) => {
 })
 
   axios.post('https://plantsservices.sc.egov.usda.gov/api/CharacteristicsSearch', params)
-  //   {
-  //   params: {
-  //     Type: 'Characteristics',
-  //     'TaxonSearchCriteria[Text]': 'strawberry',
-  //     'TaxonSearchCriteria[Field]': 'Common Name',
-  //     SortBy: 'sortCommonName',
-  //     Offset: -1
-  //   }
-  // }
   .then(({data}) => {
     console.log(data)
-    res.send(data)
+    res.send(data.PlantResults)
   })
   .catch((err) => {
     console.error(err)
