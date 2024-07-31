@@ -1,5 +1,3 @@
-// 2DO: Figure out google/profile id string type mismatch & finish User interface
-
 import express, { Request, Response, NextFunction } from 'express';
 import session from 'express-session';
 import passport from 'passport';
@@ -42,10 +40,8 @@ app.use(passport.session());
 
 interface User {
   id: number;
-  displayName: string;
+  google_id: string | number;
   userName: string | null;
-
-  google_id: number;
   email: string | null;
   avatar: string | null;
 }
@@ -69,19 +65,20 @@ passport.use(
 
       // Prisma method for adding User to DB
       prisma.user
-        .upsert({
+        .findUnique({
           where: { google_id: profile.id },
-          update: {
-            email: profile.emails?.[0].value,
-            userName: profile.displayName,
-            avatar: profile.photos?.[0].value,
-          },
-          create: {
-            google_id: profile.id,
-            email: profile.emails?.[0].value,
-            userName: profile.displayName,
-            avatar: profile.photos?.[0].value,
-          },
+        })
+        .then((user) => {
+          if (!user) {
+            return prisma.user.create({
+              data: {
+                google_id: profile.id,
+                userName: profile.displayName,
+                email: profile.emails?.[0].value,
+                avatar: profile.photos?.[0].value,
+              },
+            });
+          }
         })
         .then((user) => doneCB(null, user))
         .catch((error) => doneCB(error));
