@@ -1,20 +1,21 @@
+import { Routes, Route } from "react-router-dom";
+import { ChakraProvider } from '@chakra-ui/react';
+import Home from "./Home";
+import CreatePost from "./CreatePost";
 import Meetup from "./meetup/Meetup";
-// import { ChakraBaseProvider, extendBaseTheme, theme as chakraTheme, } from '@chakra-ui/react'
 
-// const theme = extendBaseTheme({
-//   components: {
-//     Button,
-//     Box
-//   },
-// })
-
-const App = () => <div>
-      {/* <ChakraBaseProvider theme={theme}>
-      <Component {...pageProps} />
-      
-    </ChakraBaseProvider> */}
-    <Meetup />
-  "Hello World: Welcome to Sprout Support" 
-  </div>;
+const App = () => {
+  return (
+    <ChakraProvider>
+      <div className='App'>
+        <Routes >
+          <Route path='/' element={<Home />}/>
+          <Route path='/createPost' element={<CreatePost />}/>
+          <Route path='/meetup' element={<Meetup />}/>
+        </Routes>
+      </div>
+    </ChakraProvider>
+  );
+};
 
 export default App;

@@ -1,6 +1,7 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import Posts from './routes/postRoute';
 import 'dotenv/config';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+app.use('/post', Posts)
 
 //routes
  app.use('/meetup', routerMeetup)
