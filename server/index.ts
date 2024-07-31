@@ -112,6 +112,16 @@ app.use((req, res, next) => {
   }
 });
 
+// Redirect  from login to home if authenticated
+app.get('/login', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.sendFile(path.join(DIST_PATH, 'index.html'));
+  }
+});
+
+
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
@@ -129,7 +139,7 @@ app.get('/home', isAuthenticated, (req, res) => {
   res.sendFile(path.join(DIST_PATH, 'index.html'));
 });
 
-app.get('*', (req, res) => {
+app.get('*', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
 });
 
