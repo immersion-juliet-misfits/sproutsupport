@@ -1,10 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import Posts from './routes/postRoute';
+// import Posts from './routes/postRoute';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
@@ -25,14 +25,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
-app.use('/post', Posts)
-
-app.use('/plants', Plants)
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
-});
-
 
 // GAuth Session middleware
 app.use(
@@ -88,9 +80,10 @@ passport.use(
               },
             });
           }
+          return user;
         })
         .then((user) => doneCB(null, user))
-        .catch((error) => doneCB(error));
+        .catch((err) => doneCB(err));
     }
   )
 );
@@ -106,21 +99,18 @@ passport.deserializeUser((obj: User, doneCB) => {
   doneCB(null, obj);
 });
 
-// **********************************
-
-// Middleware to ensure user is authenticated
-export const ensureAuthenticated = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (req.isAuthenticated()) {
+// Directs users to specific pages based on their login status
+app.use((req, res, next) => {
+  if (
+    req.isAuthenticated() ||
+    req.path.startsWith('/auth/google') ||
+    req.path.startsWith('/login')
+  ) {
     return next();
+  } else {
+    return res.redirect('/login');
   }
-  res.redirect('/');
-};
-
-// **********************************
+});
 
 app.get(
   '/auth/google',
@@ -129,14 +119,18 @@ app.get(
 
 app.get(
   '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
-    res.redirect('/');
+    res.redirect('/home');
   }
 );
 
-app.get('/protected', isAuthenticated, (req, res) => {
-  res.send('This is a protected route.');
+app.get('/home', isAuthenticated, (req, res) => {
+  res.sendFile(path.join(DIST_PATH, 'index.html'));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
 });
 
 app.listen(port, () => {
