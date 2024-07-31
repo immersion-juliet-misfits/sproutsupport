@@ -2,6 +2,7 @@ import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
+import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,5 +18,9 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+
+//routes
+ app.use('/meetup', routerMeetup)
+
 
 app.listen(port, () => {console.log(`Listening on http://localhost:${port}`)})

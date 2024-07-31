@@ -8,4 +8,4 @@ const MeetupList = ({list}) =>{
   )
 } 
 
-export MeetupList
+export default MeetupList
