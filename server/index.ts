@@ -1,7 +1,7 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import Plants from './routes/plantAddRoutes'
+import Plants from './routes/plantCareRoutes/plantAddRoutes'
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
