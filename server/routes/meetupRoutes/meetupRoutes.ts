@@ -19,7 +19,7 @@ routerMeetup.get('/all', (req: Request, res: Response): void =>{
 })
 
 routerMeetup.post('/create',(req: Request, res: Response): void =>{
- const {time_date, location, eventName, description, imageUrl, userId} = req.body
+ const {time_date, location, eventName, description, imageUrl}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string} = req.body
   prisma.meet.create({
     data:{
       time_date,
@@ -27,7 +27,7 @@ routerMeetup.post('/create',(req: Request, res: Response): void =>{
       eventName,
       description,
       imageUrl,
-      userId
+      userId: 1
     }
   })
   .then((result)=>{

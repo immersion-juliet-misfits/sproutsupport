@@ -1,9 +1,9 @@
 import MeetupListItem from './MeetupListItem'
 
-const MeetupList = ({list}) =>{
+const MeetupList = ({list}: {list: Array<T>}) =>{
   return(
     <>
-    {list.map((group)=>{return(<MeetupListItem group={group}/>)})}
+    {list.map((group, i)=>{return(<MeetupListItem group={group} index={i}/>)})}
     </>
   )
 } 
