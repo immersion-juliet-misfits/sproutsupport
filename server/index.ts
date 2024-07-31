@@ -1,6 +1,7 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import Posts from './routes/postRoute';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,5 +18,6 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+app.use('/post', Posts)
 
 app.listen(port, () => {console.log(`Listening on http://localhost:${port}`)})
