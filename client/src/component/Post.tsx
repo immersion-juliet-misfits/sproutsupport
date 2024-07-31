@@ -1,30 +1,92 @@
 import { Box, Flex, Spacer } from '@chakra-ui/react';
-import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { IconButton } from '@chakra-ui/react';
+
 
 
 const Post = () => {
+
   return (
     <div>
-      <ChakraLink as={ReactRouterLink} to='/createPost'>
-        Create Post
-      </ChakraLink>
       <Flex
         flexDirection='column-reverse'
         alignItems='center'
         justifyContent='flex-end'
       >
         <Box>
-          <div>Post1</div>
+          <div>{post}</div>
+          <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='red'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
+        <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='blue'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
         </Box>
         <Box>
           <div>Post2</div>
+          <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='red'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
+        <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='blue'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
         </Box>
         <Box>
           <div>Post3</div>
+          <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='red'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
+        <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='blue'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
         </Box>
         <Box>
           <div>Post4</div>
+          <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='red'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
+        <IconButton
+          isRound={true}
+          variant='solid'
+          colorScheme='blue'
+          aria-label='Done'
+          fontSize='20px'
+          icon={}
+        />
         </Box>
       </Flex>
     </div>
