@@ -9,7 +9,7 @@ const App = () => {
       <div className='App'>
         <Routes >
           <Route path='/' element={<Home />}/>
-          <Route path='/createPost' element={<CreatePost />}/>
+          <Route path='/post' element={<CreatePost />}/>
         </Routes>
       </div>
     </ChakraProvider>

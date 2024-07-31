@@ -13,7 +13,7 @@ const Post = () => {
         justifyContent='flex-end'
       >
         <Box>
-          <div>{post}</div>
+          <div>{}</div>
           <IconButton
           isRound={true}
           variant='solid'
