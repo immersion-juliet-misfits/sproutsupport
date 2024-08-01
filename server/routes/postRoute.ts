@@ -8,6 +8,7 @@ Posts.get('/post', (req: Request, res: Response) => {
   prisma.post
     .findMany()
     .then((posts) => {
+      console.log(posts)
       posts
         ? res.status(201).send(posts)
         : res.status(404).send('Post not found');
@@ -67,7 +68,7 @@ Posts.delete('/post:id', (req: Request, res: Response) => {
     })
       .then(() => res.sendStatus(201))
       .catch((err) => {
-        console.error('Faild to delete post: ', err)
+        console.error('Failed to delete post: ', err)
         res.sendStatus(500)});
 });
 

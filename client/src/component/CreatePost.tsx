@@ -8,6 +8,7 @@ import {
   IconButton,
   Card,
   Button,
+  Box
   // Image,
 } from '@chakra-ui/react';
 import axios from 'axios';
@@ -32,8 +33,8 @@ const CreatePost = () => {
 
   const [image, setImage] = useState(null);
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e: { target: { files: never[]; }; }) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -46,8 +47,8 @@ const CreatePost = () => {
   const addMessage = () => {
     axios
       .post('/post', post)
-      .then((res) => {
-        setPost(res.data);
+      .then(({data}) => {
+        setPost(data);
       })
       .catch((err) => {
         console.error('Failed to POST message: ', err);
@@ -55,8 +56,8 @@ const CreatePost = () => {
   };
 
   return (
-    <Card>
-      <Box>
+    <Box>
+      <Box >
         <FormControl>
           <FormLabel htmlFor='image'>Upload Image</FormLabel>
           <Input
@@ -98,7 +99,7 @@ const CreatePost = () => {
           onClick={addMessage}
         />
       </FormControl>
-    </Card>
+    </Box>
   );
 };
 
