@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+// import express, { Request, Response } from 'express';
+// import { PrismaClient } from '@prisma/client';
 
-const Posts = express.Router();
-const prisma = new PrismaClient();
+// const Posts = express.Router();
+// const prisma = new PrismaClient();
 
 Posts.get('/post', (req: Request, res: Response) => {
   prisma.post

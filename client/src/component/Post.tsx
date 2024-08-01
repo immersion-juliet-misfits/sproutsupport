@@ -21,6 +21,7 @@ const Post = () => {
           aria-label='Done'
           fontSize='20px'
           // icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -28,6 +29,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
+          // icon={}
           // icon={}
         />
         </Box>
@@ -40,6 +42,7 @@ const Post = () => {
           aria-label='Done'
           fontSize='20px'
           // icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -47,6 +50,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
+          // icon={}
           // icon={}
         />
         </Box>
@@ -59,6 +63,7 @@ const Post = () => {
           aria-label='Done'
           fontSize='20px'
           // icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -66,6 +71,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
+          // icon={}
           // icon={}
         />
         </Box>
@@ -78,6 +84,7 @@ const Post = () => {
           aria-label='Done'
           fontSize='20px'
           // icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -85,6 +92,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
+          // icon={}
           // icon={}
         />
         </Box>
