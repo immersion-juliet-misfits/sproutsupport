@@ -12,7 +12,7 @@ Plants.get('/test', (req: Request, res: Response) => {
 })
 
 Plants.post('/all', (req: Request, res: Response) => {
-  prisma.Plant.create({data: {nickname: 'leaf'}})
+  prisma.Plant.create({data: {nickname: 'fern'}})
     .then((data) => {
       res.send(data)
     })
