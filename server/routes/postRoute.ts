@@ -21,4 +21,4 @@ Posts.delete('/post:id', (req: Request, res: Response) => {
 });
 
 
-export default Post;
+export default Posts;

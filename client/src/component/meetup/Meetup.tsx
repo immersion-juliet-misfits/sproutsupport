@@ -26,7 +26,7 @@ getMeetups()
   return (<div>test 
     <Box m={2} color='red' backgroundColor='tomato'>Tomato</Box> 
     <MeetupCreate refresh={getMeetups}/>
-    <MeetupList list={list}/>
+    <MeetupList list={list} refresh={getMeetups}/>
     </div>)
 };
 

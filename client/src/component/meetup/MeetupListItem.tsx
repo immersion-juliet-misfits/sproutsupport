@@ -5,7 +5,6 @@ const MeetupListItem = ({group, index}: {group: object, index: number}) => {
 <div>{group.time_date}</div>
 <div>{group.imageUrl}</div>
 <div>{group.description}</div>
-<div>{group.userId}</div>
 </div>)
 }
 
