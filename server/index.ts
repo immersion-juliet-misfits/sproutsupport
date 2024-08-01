@@ -1,7 +1,8 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import Posts from './routes/postRoute';
+// import Posts from './routes/postRoute';
+import Plants from './routes/plantCareRoutes/plantAddRoutes'
 import 'dotenv/config';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
@@ -19,7 +20,13 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
-app.use('/post', Posts)
+// app.use('/post', Posts)
+
+app.use('/plants', Plants)
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
+});
 
 //routes
  app.use('/meetup', routerMeetup)
