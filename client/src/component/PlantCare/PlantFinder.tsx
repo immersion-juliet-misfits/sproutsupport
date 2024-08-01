@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+type Plant = {
+    CommonName: string;
+    ScientificName: string;
+}
+
 const PlantFinder = () => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState([]);
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState<Plant | null>(null);
+  const [nickname, setNickname] = useState<string>('');
+  // const [bio, setBio] = useState<string>('');
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     console.log(e.currentTarget.value);
@@ -22,13 +29,19 @@ const PlantFinder = () => {
       })
   }
 
-  const handlePlantSelect = (selected: object) => {
+  const handlePlantSelect = (selected: Plant) => {
     console.log(selected);
     setSelected(selected);
+    setNickname(selected.CommonName)
   };
+
+//   const handleAddPlant() {
+//     axios.
+//   }
 
   useEffect(() => {
     console.log('test', selected)
+    console.log('test', nickname)
   }, [selected])
 
   return (
@@ -42,9 +55,13 @@ const PlantFinder = () => {
         onChange={(e) => handleInput(e)}
       ></input>
       <input type="button" value="Search" onClick={() => handleSubmit()}></input><br></br>
-      {/* {selected &&
-        
-      } */}
+      {selected && selected.CommonName &&
+        <div>
+          <h3>Choose a name for your plant (optional)</h3>
+          <input type="text" placeholder={selected.CommonName}></input><br></br>
+          <input type="text" placeholder="Bio :P(you get it?)"></input>
+        </div>
+      }
       {results &&
         results.map((result, i) => {
             // look into simplifying this later
