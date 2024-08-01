@@ -112,7 +112,7 @@ app.use((req, res, next) => {
   }
 });
 
-// Redirect  from login to home if authenticated
+// Redirect from login page to home page if authenticated
 app.get('/login', (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect('/home');
@@ -121,12 +121,27 @@ app.get('/login', (req, res) => {
   }
 });
 
+// Add endpoint to logout
+app.post('/api/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).send('Logout failed');
+    }
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid');
+      res.redirect('/login');
+    });
+  });
+});
 
+
+// Initiates authentication - requests access to User profile & email
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
+// 
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
