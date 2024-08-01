@@ -1,4 +1,4 @@
-import { Box, Flex, Spacer } from '@chakra-ui/react';
+import { Box, Flex } from '@chakra-ui/react';
 import { IconButton } from '@chakra-ui/react';
 
 
@@ -13,14 +13,14 @@ const Post = () => {
         justifyContent='flex-end'
       >
         <Box>
-          <div>{post}</div>
+          <div></div>
           <IconButton
           isRound={true}
           variant='solid'
           colorScheme='red'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -28,7 +28,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         </Box>
         <Box>
@@ -39,7 +39,7 @@ const Post = () => {
           colorScheme='red'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -47,7 +47,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         </Box>
         <Box>
@@ -58,7 +58,7 @@ const Post = () => {
           colorScheme='red'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -66,7 +66,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         </Box>
         <Box>
@@ -77,7 +77,7 @@ const Post = () => {
           colorScheme='red'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         <IconButton
           isRound={true}
@@ -85,7 +85,7 @@ const Post = () => {
           colorScheme='blue'
           aria-label='Done'
           fontSize='20px'
-          icon={}
+          // icon={}
         />
         </Box>
       </Flex>

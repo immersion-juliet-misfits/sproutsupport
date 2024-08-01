@@ -2,6 +2,7 @@
   Warnings:
 
   - You are about to drop the column `userId` on the `Plant` table. All the data in the column will be lost.
+  - A unique constraint covering the columns `[google_id]` on the table `User` will be added. If there are existing duplicate values, this will fail.
 
 */
 -- DropForeignKey
@@ -16,3 +17,6 @@ ALTER TABLE `Plant` DROP COLUMN `userId`,
     MODIFY `location` VARCHAR(191) NULL,
     MODIFY `imageUrl` VARCHAR(191) NULL,
     MODIFY `description` VARCHAR(191) NULL;
+
+-- CreateIndex
+CREATE UNIQUE INDEX `User_google_id_key` ON `User`(`google_id`);
