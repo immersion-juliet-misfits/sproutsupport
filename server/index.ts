@@ -4,7 +4,8 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-// import Posts from './routes/postRoute';
+// // import Posts from './routes/postRoute';
+import Plants from './routes/plantCareRoutes/plantAddRoutes'
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
@@ -112,6 +113,8 @@ app.use((req, res, next) => {
   }
 });
 
+app.use('/plants', Plants)
+
 // Redirect from login page to home page if authenticated
 app.get('/login', (req, res) => {
   if (req.isAuthenticated()) {
@@ -141,7 +144,7 @@ app.get(
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-// 
+//
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
