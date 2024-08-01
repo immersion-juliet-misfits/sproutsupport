@@ -4,8 +4,8 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-// // import Posts from './routes/postRoute';
-import Plants from './routes/plantCareRoutes/plantAddRoutes'
+// import Posts from './routes/postRoute';
+import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
@@ -113,9 +113,23 @@ app.use((req, res, next) => {
   }
 });
 
-app.use('/plants', Plants)
+// Checking auth for the Client
+app.get('/api/checkAuth', (req, res) => {
+  res.json({ isAuthenticated: req.isAuthenticated() });
+});
 
-// Redirect from login page to home page if authenticated
+app.use('/plants', Plants);
+
+// When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
+app.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/home');
+  } else {
+    res.redirect('/login');
+  }
+});
+
+// When User navigates to '/login' - if logged in, redirected to '/home'.  If not, to '/login'
 app.get('/login', (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect('/home');
@@ -124,7 +138,7 @@ app.get('/login', (req, res) => {
   }
 });
 
-// Add endpoint to logout
+// Add endpoint to enable logout
 app.post('/api/logout', (req, res) => {
   req.logout((err) => {
     if (err) {
@@ -137,14 +151,13 @@ app.post('/api/logout', (req, res) => {
   });
 });
 
-
 // Initiates authentication - requests access to User profile & email
 app.get(
   '/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-//
+// Authenticates User , handles Google callback, & redirects User to home on successful Google login
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
@@ -153,10 +166,12 @@ app.get(
   }
 );
 
+// Serves the homepage after User logs in (is Authenticated)
 app.get('/home', isAuthenticated, (req, res) => {
   res.sendFile(path.join(DIST_PATH, 'index.html'));
 });
 
+// handles all path defaults
 app.get('*', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
 });
