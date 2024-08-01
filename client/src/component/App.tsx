@@ -8,12 +8,12 @@ const App = () => {
   return (
     <ChakraProvider>
       <div className='App'>
-        {/* <Routes >
+        <Routes >
           <Route path='/' element={<Home />}/>
           <Route path='/createPost' element={<CreatePost />}/>
           <Route path='/meetup' element={<Meetup />}/>
-        </Routes> */}
-        <Meetup />
+        </Routes>
+        {/* <Meetup /> */}
       </div>
     </ChakraProvider>
   );

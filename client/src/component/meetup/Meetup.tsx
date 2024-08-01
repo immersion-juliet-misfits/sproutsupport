@@ -5,8 +5,8 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 
 const Meetup = () => {
-const [user, setUser] = useState('none')
-const [weather, setWeather] = useState({})
+// const [user, setUser] = useState('none')
+// const [weather, setWeather] = useState({})
 const [list, setList] = useState([])
 
 const getMeetups = (): void => {
