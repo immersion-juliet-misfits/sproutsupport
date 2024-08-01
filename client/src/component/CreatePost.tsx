@@ -5,17 +5,20 @@ import {
   FormErrorMessage,
   FormHelperText,
   Input,
+  IconButton,
+  Card,
+  Button,
+  // Image,
 } from '@chakra-ui/react';
-import { IconButton, Card } from '@chakra-ui/react';
 import axios from 'axios';
 
-interface post {
-  userId: number,
-  image_id: number,
-  message: string,
-  image: number,
-  comments: Array<string>
-}
+// interface post {
+//   userId: number;
+//   image_id: number;
+//   message: string;
+//   image: number;
+//   comments: Array<string>;
+// }
 
 const CreatePost = () => {
   const [input, setInput] = useState('');
@@ -27,23 +30,61 @@ const CreatePost = () => {
 
   const isError = input === '';
 
-const addMessage = () => {
-  axios.post('/post', post)
-  .then((res) => {
-    setPost(res.data)
-  })
-  .catch((err) => {
-    console.error('Failed to POST message: ', err)
-  })
-}
+  const [image, setImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const addMessage = () => {
+    axios
+      .post('/post', post)
+      .then((res) => {
+        setPost(res.data);
+      })
+      .catch((err) => {
+        console.error('Failed to POST message: ', err);
+      });
+  };
 
   return (
     <Card>
+      <Box>
+        <FormControl>
+          <FormLabel htmlFor='image'>Upload Image</FormLabel>
+          <Input
+            id='image'
+            type='file'
+            accept='image/*'
+            onChange={handleImageChange}
+          />
+        </FormControl>
+
+        {image && <Image src={image} alt='Uploaded' boxSize='200px' mt={4} />}
+
+        <Button
+          mt={4}
+          onClick={() => {
+            /* Handle form submission */
+          }}
+        >
+          Submit
+        </Button>
+      </Box>
       <FormControl isInvalid={isError}>
         <FormLabel>Post</FormLabel>
         <Input type='post' value={input} onChange={handleInputChange} />
         {!isError ? (
-          <FormHelperText>Select the green button to create post.</FormHelperText>
+          <FormHelperText>
+            Select the green button to create post.
+          </FormHelperText>
         ) : (
           <FormErrorMessage>A post is required.</FormErrorMessage>
         )}
