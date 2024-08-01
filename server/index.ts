@@ -1,6 +1,7 @@
 import express from 'express';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+// import Posts from './routes/postRoute';
 import Plants from './routes/plantCareRoutes/plantAddRoutes'
 import 'dotenv/config';
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended: false}));
 
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+// app.use('/post', Posts)
 
 app.use('/plants', Plants)
 
