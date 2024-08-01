@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `google_id` INTEGER NOT NULL,
-    `location_id` INTEGER NOT NULL,
+    `google_id` VARCHAR(191) NOT NULL,
+    `location_id` INTEGER NULL,
     `userName` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
     `password` VARCHAR(191) NULL,
