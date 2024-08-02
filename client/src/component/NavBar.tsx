@@ -15,8 +15,8 @@ const Nav = () => {
       <ChakraLink as={ReactRouterLink} to='/meetup'>
         Meet Up
       </ChakraLink>
-      <ChakraLink as={ReactRouterLink} to='/createPost'>
-        Create Post
+      <ChakraLink as={ReactRouterLink} to='/myplants'>
+        My Plants
       </ChakraLink>
       </Box>
   )
