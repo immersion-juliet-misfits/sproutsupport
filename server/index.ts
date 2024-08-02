@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+app.use('/plants', Plants);
 
 // GAuth Session middleware
 app.use(
@@ -56,7 +57,7 @@ passport.use(
     {
       clientID: G_CLIENT_ID as string,
       clientSecret: G_CLIENT_SECRET as string,
-      callbackURL: 'http://localhost:8000/auth/google/callback',
+      callbackURL: '/auth/google/callback',
     },
     // Setting function User authorization
     (
@@ -121,7 +122,6 @@ app.get('/api/checkAuth', (req, res) => {
   res.json({ isAuthenticated: req.isAuthenticated() });
 });
 
-app.use('/plants', Plants);
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {

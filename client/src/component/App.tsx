@@ -35,7 +35,7 @@ const App = () => {
   }
 
   return (
-    <ChakraProvider>
+    // <ChakraProvider>
       <div className='App'>
         Sprout Support
         {isAuthenticated && <PrivateProfile onLogout={handleLogout} />}
@@ -54,7 +54,7 @@ const App = () => {
           />
         </Routes>
       </div>
-    </ChakraProvider>
+    // </ChakraProvider>
   );
 };
 

@@ -12,7 +12,8 @@ Plants.get('/test', (req: Request, res: Response) => {
 })
 
 Plants.post('/all', (req: Request, res: Response) => {
-  prisma.Plant.create({data: {nickname: 'fern'}})
+  const { nickname } = req.body;
+  prisma.plant.create({data: {nickname}})
     .then((data) => {
       res.send(data)
     })

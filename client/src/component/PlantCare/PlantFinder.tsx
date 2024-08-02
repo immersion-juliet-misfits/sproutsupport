@@ -35,6 +35,17 @@ const PlantFinder = () => {
     setNickname(selected.CommonName)
   };
 
+  const handleNicknameChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setNickname(e.currentTarget.value);
+  };
+
+  const handleNicknameSubmit = () => {
+    axios.post('/plants/all', {nickname})
+     .then((data) => {
+      console.log(data)
+     })    
+  }
+
 //   const handleAddPlant() {
 //     axios.
 //   }
@@ -58,8 +69,9 @@ const PlantFinder = () => {
       {selected && selected.CommonName &&
         <div>
           <h3>Choose a name for your plant (optional)</h3>
-          <input type="text" placeholder={selected.CommonName}></input><br></br>
-          <input type="text" placeholder="Bio :P(you get it?)"></input>
+          <input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></input><br></br>
+          <input type="text" placeholder="Bio :P(you get it?)"></input><br></br>
+          <input type="button" value="Search" onClick={() => handleNicknameSubmit()}></input>
         </div>
       }
       {results &&
