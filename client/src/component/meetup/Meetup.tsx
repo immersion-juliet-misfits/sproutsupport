@@ -4,12 +4,7 @@ import axios from 'axios';
 import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
-console.log(0o1 === 1, 'for 01 and 1 equal')
-console.log(dayjs().minute(), 'minute')
-console.log(dayjs().hour(), 'hour')
-console.log(dayjs().date(), 'day')
-console.log(dayjs().month() + 1, 'month') // january start a 0 so add 1
-console.log(dayjs().year(), 'year')
+
 const Meetup = () => {
 // const [user, setUser] = useState('none')
 // const [weather, setWeather] = useState({})
