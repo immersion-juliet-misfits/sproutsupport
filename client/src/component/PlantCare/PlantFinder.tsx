@@ -7,13 +7,15 @@ type Plant = {
     Id: number;
 }
 
-const PlantFinder = () => {
+const PlantFinder = ({ user }) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState<Plant | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [bio, setBio] = useState<string>('');
-  // const [bio, setBio] = useState<string>('');
+  const [taskName, setTaskName] = useState('');
+  const [tasks, setTasks] = useState([]);
+
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
     console.log(e.currentTarget.value);
@@ -48,10 +50,19 @@ const PlantFinder = () => {
   const handleNicknameSubmit = () => {
     const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
     const { CommonName, Id } = selected;
-    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id })
-     .then((data) => {
+    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
+    .then((data) => {
       console.log(data)
-     })    
+    })    
+  }
+  
+  const handleTaskName = (e: React.FormEvent<HTMLInputElement>) => {
+    setTaskName(e.currentTarget.value);
+  };
+
+  const handleAddTask = () => {
+    setTasks([...tasks, taskName]);
+    setTaskName('');
   }
 
 //   const handleAddPlant() {
@@ -60,8 +71,8 @@ const PlantFinder = () => {
 
   useEffect(() => {
     console.log('test', selected)
-    console.log('test', nickname)
-  }, [selected])
+    console.log('takss', tasks, taskName, 'taskname')
+  }, [selected, tasks, taskName])
 
   return (
     <div>
@@ -79,6 +90,14 @@ const PlantFinder = () => {
           <h3>Choose a name for your plant (optional)</h3>
           <input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></input><br></br>
           <input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></input><br></br>
+
+          <input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></input><br></br>
+          {tasks.length > 0 &&
+            tasks.map((task) => (
+              <h4>{task}</h4>
+            ))
+          }
+          <input type="button" value="Add Task" onClick={() => handleAddTask()}></input>
           <input type="button" value="Search" onClick={() => handleNicknameSubmit()}></input>
         </div>
       }

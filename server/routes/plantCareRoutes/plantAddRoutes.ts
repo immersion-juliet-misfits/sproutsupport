@@ -12,15 +12,17 @@ Plants.get('/test', (req: Request, res: Response) => {
 })
 
 Plants.post('/newPlant', (req: Request, res: Response) => {
-  const { nickname, bio, ScientificName, CommonName, Id } = req.body;
-  prisma.plant.create({data: {nickname, description:bio, species: ScientificName, commonName: CommonName, plantAPIID: Id}})
+  const { nickname, bio, ScientificName, CommonName, Id, userId } = req.body;
+  prisma.plant.create({data: {nickname, description:bio, species: ScientificName, commonName: CommonName, plantAPIID: Id, userId}})
     .then((data) => {
       res.send(data)
     })
 })
 
-Plants.get('/all', (req: Request, res: Response) => {
-  prisma.plant.findMany()
+Plants.get('/all/:id', (req: Request, res: Response) => {
+  const { id } = req.params;
+  let num = Number(id)
+  prisma.plant.findMany({where: { userId: num }})
     .then((data) => {
       res.send(data)
     })

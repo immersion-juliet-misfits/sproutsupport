@@ -119,7 +119,8 @@ app.use((req, res, next) => {
 
 // Checking auth for the Client
 app.get('/api/checkAuth', (req, res) => {
-  res.json({ isAuthenticated: req.isAuthenticated() });
+  console.log('user stuff', req.user)
+  res.json({ isAuthenticated: req.isAuthenticated(), currentUser: req.user });
 });
 
 

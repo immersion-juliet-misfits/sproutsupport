@@ -25,7 +25,7 @@ model User {
     level Int?
     meets Meet[]
     notifications Notification[]
-    // plants Plant[]
+    plants Plant[]
     posts Post[]
     comments Comment[]
     attendees Attendee[]
@@ -59,7 +59,7 @@ model Notification {
 
 model Plant {
     id Int @id @default(autoincrement())
-    // userId Int
+    userId Int
     plantAPIID Int?
     species String?
     commonName String?
@@ -67,7 +67,7 @@ model Plant {
     location String?
     imageUrl String?
     description String?
-    // caregiver User @relation(fields: [userId], references: [id])
+    caregiver User @relation(fields: [userId], references: [id])
     tasks Task[]
 }
 model Task {

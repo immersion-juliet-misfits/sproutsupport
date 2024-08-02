@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const OwnedPlants = () => {
+const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
   
   const getPlants = () => {
-    axios.get('/plants/all')
+    axios.get(`/plants/all/${user.id}`)
       .then(({data}) => {
         setPlants(data)
         console.log(data, 'here')
@@ -22,7 +22,7 @@ const OwnedPlants = () => {
 
   return (
     <div>
-      <h1>Owned Plants</h1>
+      <h1>{`${user.userName}'s Owned Plants`}</h1>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
         <input type="button" value="Add a Plant"></input>

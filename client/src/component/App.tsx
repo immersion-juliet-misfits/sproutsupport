@@ -10,6 +10,7 @@ import PrivateProfile from './UserProfile/privateProfile';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsAuthenticated(data.isAuthenticated);
+        setUser(data.currentUser);
         setLoading(false);
       })
       .catch((err) => {
@@ -46,8 +48,8 @@ const App = () => {
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
           <Route path='/createPost' element={<CreatePost />} />
-          <Route path='/myplants' element={<OwnedPlants />}></Route>
-          <Route path='/plantfinder' element={<PlantFinder />}></Route>
+          <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
+          <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
