@@ -40,7 +40,7 @@ const PlantFinder = () => {
   };
 
   const handleNicknameSubmit = () => {
-    axios.post('/plants/all', {nickname})
+    axios.post('/plants/newPlant', {nickname})
      .then((data) => {
       console.log(data)
      })    

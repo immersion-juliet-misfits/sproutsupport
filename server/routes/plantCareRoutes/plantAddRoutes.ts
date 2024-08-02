@@ -11,9 +11,16 @@ Plants.get('/test', (req: Request, res: Response) => {
   res.send('test success')
 })
 
-Plants.post('/all', (req: Request, res: Response) => {
+Plants.post('/newPlant', (req: Request, res: Response) => {
   const { nickname } = req.body;
   prisma.plant.create({data: {nickname}})
+    .then((data) => {
+      res.send(data)
+    })
+})
+
+Plants.get('/all', (req: Request, res: Response) => {
+  prisma.plant.findMany()
     .then((data) => {
       res.send(data)
     })

@@ -67,7 +67,7 @@ passport.use(
       doneCB: (error: User, user?: Express.User) => void
     ) => {
       // Temp logging the profile
-      console.log(profile);
+      // console.log(profile);
 
       // Prisma method for adding User to DB
       prisma.user
