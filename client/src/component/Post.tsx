@@ -55,7 +55,7 @@ const Post = () => {
          return (
            <li key={post.id}>
             <Flex
-              flexDirection='column'
+              flexDirection='column-reverse'
               alignItems='center'
               justifyContent='flex-end'
             >
@@ -85,7 +85,7 @@ const Post = () => {
             </Flex>
           </li>
           )
-        })}
+        }).reverse()}
         </ul>
         </div>
   );

@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Box } from '@chakra-ui/react';
 import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';

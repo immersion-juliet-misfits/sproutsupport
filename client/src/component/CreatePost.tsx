@@ -7,10 +7,12 @@ import {
   Input,
   IconButton,
   Button,
-  Box
-  // Image,
+  Box,
+  Image,
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 // interface post {
 //   userId: number;
@@ -32,23 +34,23 @@ const CreatePost = () => {
 
   const [image, setImage] = useState(null);
 
-  const handleImageChange = (e: { target: { files: never[]; }; }) => {
-    // const file = e.target.files[0];
-    // const reader = new FileReader();
+  const handleImageChange = (e: { target: { files: any[] } }) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
 
-    // reader.onload = (e) => {
-    //   setImage(e.target.result);
-    // };
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
 
-    // reader.readAsDataURL(file);
+    reader.readAsDataURL(file);
   };
 
   const addMessage = () => {
-    axios
-      .post('/post/post', post)
+    return axios
+      .post('/post/post', { message: input })
       .then((data) => {
-        console.log('data', data)
-        setPost(data);
+        // console.log('data', data)
+        // setPost(data);
       })
       .catch((err) => {
         console.error('Failed to POST message: ', err);
@@ -57,7 +59,7 @@ const CreatePost = () => {
 
   return (
     <Box>
-      <Box >
+      <Box>
         <FormControl>
           <FormLabel htmlFor='image'>Upload Image</FormLabel>
           <Input
@@ -70,10 +72,7 @@ const CreatePost = () => {
 
         {image && <Image src={image} alt='Uploaded' boxSize='200px' mt={4} />}
 
-        <Button
-          mt={4}
-          onClick={}
-        >
+        <Button mt={4} onClick={}>
           Submit
         </Button>
       </Box>
@@ -87,15 +86,17 @@ const CreatePost = () => {
         ) : (
           <FormErrorMessage>A post is required.</FormErrorMessage>
         )}
-        <IconButton
-          isRound={true}
-          variant='solid'
-          colorScheme='teal'
-          aria-label='Done'
-          fontSize='20px'
-          icon={}
-          onClick={addMessage}
-        />
+        <ChakraLink as={ReactRouterLink} to='/home'>
+          <IconButton
+            isRound={true}
+            variant='solid'
+            colorScheme='teal'
+            aria-label='Done'
+            fontSize='20px'
+            icon={}
+            onClick={addMessage}
+          />
+        </ChakraLink>
       </FormControl>
     </Box>
   );
