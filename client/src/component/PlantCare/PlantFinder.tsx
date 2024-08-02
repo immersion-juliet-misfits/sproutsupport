@@ -4,6 +4,7 @@ import axios from 'axios';
 type Plant = {
     CommonName: string;
     ScientificName: string;
+    Id: number;
 }
 
 const PlantFinder = () => {
@@ -11,6 +12,7 @@ const PlantFinder = () => {
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState<Plant | null>(null);
   const [nickname, setNickname] = useState<string>('');
+  const [bio, setBio] = useState<string>('');
   // const [bio, setBio] = useState<string>('');
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
@@ -39,8 +41,14 @@ const PlantFinder = () => {
     setNickname(e.currentTarget.value);
   };
 
+  const handleBio = (e: React.FormEvent<HTMLInputElement>) => {
+    setBio(e.currentTarget.value);
+  };
+
   const handleNicknameSubmit = () => {
-    axios.post('/plants/newPlant', {nickname})
+    const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
+    const { CommonName, Id } = selected;
+    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id })
      .then((data) => {
       console.log(data)
      })    
@@ -70,7 +78,7 @@ const PlantFinder = () => {
         <div>
           <h3>Choose a name for your plant (optional)</h3>
           <input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></input><br></br>
-          <input type="text" placeholder="Bio :P(you get it?)"></input><br></br>
+          <input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></input><br></br>
           <input type="button" value="Search" onClick={() => handleNicknameSubmit()}></input>
         </div>
       }

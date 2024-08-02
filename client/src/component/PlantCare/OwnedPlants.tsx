@@ -27,6 +27,7 @@ const OwnedPlants = () => {
       <Link to={'/plantfinder'}>
         <input type="button" value="Add a Plant"></input>
       </Link>
+      {/* make into seperate component */}
       {plants.length > 0 && 
         plants.map((plant) => (
           <h4>{plant.nickname}</h4>
