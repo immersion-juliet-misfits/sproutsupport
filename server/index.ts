@@ -27,6 +27,9 @@ app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
 
+app.use('/plants', Plants);
+
+
 // GAuth Session middleware
 app.use(
   session({
@@ -121,7 +124,7 @@ app.get('/api/checkAuth', (req, res) => {
   res.json({ isAuthenticated: req.isAuthenticated() });
 });
 
-app.use('/plants', Plants);
+
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
@@ -157,7 +160,7 @@ app.post('/api/logout', (req, res) => {
 // Initiates authentication - requests access to User profile & email
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'consent' })
 );
 
 // Authenticates User , handles Google callback, & redirects User to home on successful Google login
