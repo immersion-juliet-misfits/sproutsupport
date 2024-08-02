@@ -31,9 +31,8 @@ const MeetupCreate = ({refresh}: {refresh: any}) => {
 
   const makeMeetup = (): void =>{
     axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: image})
-    .then((data)=>{
-console.log(data)
-refresh()
+    .then(()=>{
+     refresh()
     })
     .catch((err)=>{
       console.error("Error can/'t schedule meetup: ", err)

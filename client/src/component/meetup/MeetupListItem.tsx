@@ -1,14 +1,18 @@
-import {Button } from '@chakra-ui/react';
+import {Button, Card, CardHeader, CardBody} from '@chakra-ui/react';
 
-const MeetupListItem = ({group, index, update, remove}: {group: object, index: number, update: any, remove: any}) => {
+const MeetupListItem = ({group, index, remove, swap}: {group: object, index: number, remove: any, swap: any}) => {
   return(<div key={index}>
-    <Button onClick={()=>{update({time_date: 'update', location: 'update', eventName: 'update', description: 'update', imageUrl: 'update', id: 12})}}>update</Button>
-    <Button onClick={()=>{remove(12)}}>delete</Button>
-<div>{group.eventName}</div>
+    <Card>
+      <CardHeader><div>{group.eventName}</div></CardHeader>
+      <CardBody>
 <div>{group.location}</div>
 <div>{group.time_date}</div>
 <div>{group.imageUrl}</div>
 <div>{group.description}</div>
+<Button onClick={()=>{swap(group)}}>update</Button>
+<Button onClick={()=>{remove(12)}}>delete</Button>
+</CardBody>
+</Card>
 </div>)
 }
 

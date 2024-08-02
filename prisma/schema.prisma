@@ -15,8 +15,8 @@ datasource db {
 
 model User {
     id Int @id @default(autoincrement())
-    google_id Int
-    location_id Int
+    google_id String @unique
+    location_id Int?
     userName String?
     email String? @unique
     password String?
@@ -40,50 +40,50 @@ model Image {
 
 model Meet {
     id Int @id @default(autoincrement())
-    time_date String 
-    location String 
-    eventName String 
-    description String 
-    imageUrl String 
-    userId Int 
+    time_date String
+    location String
+    eventName String
+    description String
+    imageUrl String
+    userId Int
     owner User @relation(fields: [userId], references: [id])
     attendees Attendee[]
 }
 
 model Notification {
     id Int @id @default(autoincrement())
-    userId Int 
+    userId Int
     message String
     recipient User @relation(fields: [userId], references: [id])
 }
 
 model Plant {
     id Int @id @default(autoincrement())
-    // userId Int 
-    plantAPIID Int? 
-    species String? 
-    commonName String? 
-    nickname String? 
-    location String? 
-    imageUrl String? 
+    // userId Int
+    plantAPIID Int?
+    species String?
+    commonName String?
+    nickname String?
+    location String?
+    imageUrl String?
     description String?
     // caregiver User @relation(fields: [userId], references: [id])
     tasks Task[]
 }
 model Task {
     id Int @id @default(autoincrement())
-    taskName String 
-    frequency String 
-    lastCompleted String 
-    nextComplection String 
-    active String 
-    plant_id Int 
+    taskName String
+    frequency String
+    lastCompleted String
+    nextComplection String
+    active String
+    plant_id Int
     taskPlant Plant @relation(fields: [plant_id], references: [id])
 }
 
 model Post {
     id Int @id @default(autoincrement())
-    userId Int 
+    userId Int
     image_id Int?
     message String
     owner User @relation(fields: [userId], references: [id])
@@ -93,8 +93,8 @@ model Post {
 
 model Comment {
     id Int @id @default(autoincrement())
-    userId Int 
-    message String 
+    userId Int
+    message String
     post_id Int
     commentor User @relation(fields: [userId], references: [id])
     commentPost Post @relation(fields: [post_id], references: [id])
@@ -102,7 +102,7 @@ model Comment {
 
 model Attendee {
     id Int @id @default(autoincrement())
-    meet_id Int 
+    meet_id Int
     userId Int
     participant User @relation(fields: [userId], references: [id])
     meet Meet @relation(fields: [meet_id], references: [id])
