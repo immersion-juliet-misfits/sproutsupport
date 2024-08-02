@@ -6,6 +6,7 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import Post from './Post';
 
 const Home = () => {
+  
   return (
     <Box>
       <ChakraLink as={ReactRouterLink} to='/createPost'>

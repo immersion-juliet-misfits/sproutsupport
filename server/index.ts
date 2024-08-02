@@ -4,7 +4,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-// import Posts from './routes/postRoute';
+import Posts from './routes/postRoute';
 import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
@@ -26,6 +26,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+
+app.use('/plants', Plants);
+app.use('/post', Posts)
 
 // GAuth Session middleware
 app.use(
@@ -66,7 +69,7 @@ passport.use(
       doneCB: (error: User, user?: Express.User) => void
     ) => {
       // Temp logging the profile
-      console.log(profile);
+      // console.log(profile);
 
       // Prisma method for adding User to DB
       prisma.user
@@ -121,7 +124,6 @@ app.get('/api/checkAuth', (req, res) => {
   res.json({ isAuthenticated: req.isAuthenticated() });
 });
 
-app.use('/plants', Plants);
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {

@@ -1,14 +1,13 @@
-// import express, { Request, Response } from 'express';
-// import { PrismaClient } from '@prisma/client';
+import express, { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 
-// const Posts = express.Router();
-// const prisma = new PrismaClient();
+const Posts = express.Router();
+const prisma = new PrismaClient();
 
 Posts.get('/post', (req: Request, res: Response) => {
   prisma.post
     .findMany()
     .then((posts) => {
-      console.log(posts)
       posts
         ? res.status(201).send(posts)
         : res.status(404).send('Post not found');
@@ -20,17 +19,18 @@ Posts.get('/post', (req: Request, res: Response) => {
 });
 
 Posts.post('/post', (req: Request, res: Response) => {
-  const post = {
-    userId: 0,
-    image_id: 1,
-    message: 'Hello',
-  };
+  const { userId, message } = req.body;
+
+  console.log('message', message)
   prisma.post
     .create({
-      data: post,
+      data: {
+        userId,
+        message,
+      },
     })
-    .then(() => {
-      res.sendStatus(201);
+    .then((data) => {
+      res.status(201).send(data);
     })
     .catch((err) => {
       console.error('Failed to create Post: ', err);

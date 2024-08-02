@@ -6,7 +6,6 @@ import {
   FormHelperText,
   Input,
   IconButton,
-  Card,
   Button,
   Box
   // Image,
@@ -34,20 +33,21 @@ const CreatePost = () => {
   const [image, setImage] = useState(null);
 
   const handleImageChange = (e: { target: { files: never[]; }; }) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
+    // const file = e.target.files[0];
+    // const reader = new FileReader();
 
-    reader.onload = (e) => {
-      setImage(e.target.result);
-    };
+    // reader.onload = (e) => {
+    //   setImage(e.target.result);
+    // };
 
-    reader.readAsDataURL(file);
+    // reader.readAsDataURL(file);
   };
 
   const addMessage = () => {
     axios
-      .post('/post', post)
-      .then(({data}) => {
+      .post('/post/post', post)
+      .then((data) => {
+        console.log('data', data)
         setPost(data);
       })
       .catch((err) => {
@@ -72,9 +72,7 @@ const CreatePost = () => {
 
         <Button
           mt={4}
-          onClick={() => {
-            /* Handle form submission */
-          }}
+          onClick={}
         >
           Submit
         </Button>
