@@ -9,9 +9,11 @@ import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
+import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+app.use('/plants', Plants);
+app.use('/meetup', routerMeetup);
 
 app.use('/plants', Plants);
 app.use('/post', Posts)
