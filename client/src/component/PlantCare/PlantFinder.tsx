@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Input, Heading } from '@chakra-ui/react'
 import axios from 'axios';
 
 type Plant = {
@@ -76,29 +78,32 @@ const PlantFinder = ({ user }) => {
 
   return (
     <div>
-      <h1>Plant Finder</h1>
+      <Heading>Plant Finder</Heading>
+      <Link to={'/myplants'}>
+        <input type="button" value="My Plants"></input>
+      </Link>
       <h3>{`Searched: ${input}`}</h3>
       {/* will eventually be used with cards... */}
-      <input
+      <Input
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
-      ></input>
-      <input type="button" value="Search" onClick={() => handleSubmit()}></input><br></br>
+      ></Input>
+      <Input type="button" value="Search" onClick={() => handleSubmit()}></Input><br></br>
       {selected && selected.CommonName &&
         <div>
           <h3>Choose a name for your plant (optional)</h3>
-          <input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></input><br></br>
-          <input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></input><br></br>
+          <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
+          <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></Input><br></br>
 
-          <input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></input><br></br>
+          <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></Input><br></br>
           {tasks.length > 0 &&
             tasks.map((task) => (
               <h4>{task}</h4>
             ))
           }
-          <input type="button" value="Add Task" onClick={() => handleAddTask()}></input>
-          <input type="button" value="Search" onClick={() => handleNicknameSubmit()}></input>
+          <Input type="button" value="Add Task" onClick={() => handleAddTask()}></Input>
+          <Input type="button" value="Add New Plant" onClick={() => handleNicknameSubmit()}></Input>
         </div>
       }
       {results &&

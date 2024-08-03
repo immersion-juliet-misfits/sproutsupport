@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -22,7 +23,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      <h1>{`${user.userName}'s Owned Plants`}</h1>
+      <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
         <input type="button" value="Add a Plant"></input>
@@ -30,7 +31,16 @@ const OwnedPlants = ({ user }) => {
       {/* make into seperate component */}
       {plants.length > 0 && 
         plants.map((plant) => (
-          <h4>{plant.nickname}</h4>
+          <Card>
+            <CardHeader>
+              <Heading size='md'>{plant.nickname}</Heading>
+              {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
+              {/* <h4>{plant.CommonName}</h4> */}
+            </CardHeader>
+            <CardBody>
+              <h3>{plant.description}</h3>
+            </CardBody>
+          </Card>
         ))
       }
     </div>
