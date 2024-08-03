@@ -9,6 +9,7 @@ import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
+import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
 const prisma = new PrismaClient();
@@ -31,7 +32,6 @@ app.use(express.static(DIST_PATH));
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 
-app.use('/plants', Plants);
 app.use('/post', Posts)
 
 // GAuth Session middleware
@@ -63,7 +63,7 @@ passport.use(
     {
       clientID: G_CLIENT_ID as string,
       clientSecret: G_CLIENT_SECRET as string,
-      callbackURL: 'http://localhost:8000/auth/google/callback',
+      callbackURL: '/auth/google/callback',
     },
     // Setting function User authorization
     (
@@ -125,7 +125,8 @@ app.use((req, res, next) => {
 
 // Checking auth for the Client
 app.get('/api/checkAuth', (req, res) => {
-  res.json({ isAuthenticated: req.isAuthenticated() });
+  console.log('user stuff', req.user)
+  res.json({ isAuthenticated: req.isAuthenticated(), currentUser: req.user });
 });
 
 
@@ -188,3 +189,4 @@ app.get('*', isAuthenticated, (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
+job.start();
