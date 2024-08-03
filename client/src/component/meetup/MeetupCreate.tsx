@@ -1,6 +1,6 @@
 import { Input, Button } from '@chakra-ui/react';
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 const MeetupCreate = ({refresh}: {refresh: any}) => {
   const [dateTime, setDateTime] = useState('')
@@ -8,6 +8,7 @@ const MeetupCreate = ({refresh}: {refresh: any}) => {
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
+  const [fillIn, setFillIn] = useState(false)
 
   const edit = (name: string, value: string): void =>{
     switch(name){
@@ -39,8 +40,27 @@ const MeetupCreate = ({refresh}: {refresh: any}) => {
     })
   }
 
+  useEffect(()=>{
+    if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[12] === ':' && dateTime[15] === ' '){
+      if(dateTime[16] + dateTime[17] === 'pm' || dateTime[16] + dateTime[17] === 'am'){
+        setFillIn(true)
+      }else{
+        setFillIn(false)
+      }
+    }else{
+ setFillIn(false)
+    }
+
+    if(location.length > 0 && eventName.length > 0 && description.length !== 0 && image.length !== 0 ){
+      setFillIn(true)
+    }else{
+        setFillIn(false)
+      }
+  },[edit])
+
   return (<div>
-    <Button onClick={()=>{makeMeetup()}}>create</Button>
+    {fillIn === true && <Button colorScheme="green" onClick={()=>{makeMeetup()}}>create</Button>}
+    {fillIn === false && <Button colorScheme="red">can't create</Button>}
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder='fill in date/time'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='fill in location'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='fill in eventName'></Input>
