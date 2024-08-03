@@ -6,14 +6,15 @@ import {
   GridItem,
   Input,
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
 const UserInfo = ({
   bio,
-  EditableControls,
+  location_id,
   userName,
+  EditableControls,
   handleAvatarChange,
   handleBioChange,
+  handleLocationChange,
   handleUserNameChange,
 }) => {
   return (
@@ -82,8 +83,28 @@ const UserInfo = ({
           </Editable>
         </GridItem>
         <GridItem bg='green.500' h='100px'>
-          {/* Change Placeholder */}
-          Email/Password/Login
+          <Editable
+            defaultValue={String(location_id)}
+            onSubmit={handleLocationChange}
+            mt={2}
+            minH='40px'
+            isPreviewFocusable={false}
+          >
+            <Input
+              as={EditableInput}
+              type='number'
+              border='1px solid black'
+              bg='white'
+              placeholder='Update your Location'
+              borderRadius='md'
+              minH='40px'
+              p={2}
+            />
+            <EditableControls top='5px' left='5px' />
+            Change Location
+            <p />
+            {location_id}
+          </Editable>
         </GridItem>
         <GridItem bg='green.500' h='200px'>
           <Editable

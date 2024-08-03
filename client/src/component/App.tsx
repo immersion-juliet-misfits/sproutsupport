@@ -7,6 +7,7 @@ import PlantFinder from "./PlantCare/PlantFinder";
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
+import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
 import Post from './Post';
 
@@ -52,6 +53,7 @@ const App = () => {
           <Route path='/myplants' element={<OwnedPlants />}></Route>
           <Route path='/plantfinder' element={<PlantFinder />}></Route>
           <Route path='/userprofile' element={<UserPrivateProfile onLogout={handleLogout} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}

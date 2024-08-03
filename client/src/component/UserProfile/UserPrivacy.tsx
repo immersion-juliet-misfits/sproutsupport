@@ -26,13 +26,14 @@ const UserPrivacy = () => {
         gap={4}
       >
         <GridItem bg='green.500' h='100px'>
-          Placeholder
+          {/* Change Placeholder */}
+          Email/Password/Login Method Editing will be here
         </GridItem>
         <GridItem bg='green.500' h='100px'>
-          Placeholder
+          Placeholder - Accept messages from strangers?
         </GridItem>
         <GridItem bg='green.500' h='200px'>
-          Placeholder
+          Placeholder - Blocking?
         </GridItem>
       </Grid>
     </>

@@ -21,6 +21,7 @@ const UserPrivateProfile = ({ onLogout }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [bio, setBio] = useState('');
+  const [location_id, setLocationId] = useState('');
   const [currentView, setCurrentView] = useState('info');
 
   const fetchUserData = () => {
@@ -29,6 +30,7 @@ const UserPrivateProfile = ({ onLogout }) => {
       .then((response) => {
         setUserName(response.data.userName);
         setBio(response.data.bio);
+        setLocationId(response.data.location_id);
       })
       .catch((error) => {
         console.error('Fetch User Data: Failed ', error);
@@ -67,7 +69,7 @@ const UserPrivateProfile = ({ onLogout }) => {
     axios
       .post('/user/updateBio', { userId: 1, bio: newBio })
       .then((response) => {
-        console.log('Verify Bio Change Response: ', response);
+        // console.log('Verify Bio Change Response: ', response);
         setBio(newBio);
       })
       .catch((error) => {
@@ -75,11 +77,24 @@ const UserPrivateProfile = ({ onLogout }) => {
       });
   };
 
+  const handleLocationChange = (newLocationId) => {
+    axios
+      .post('/user/updateLocation', { userId: 1, location_id: newLocationId })
+      .then((response) => {
+        // console.log('Verify Location Change Response: ', response);
+        // Replace with data from location API later
+        setLocationId(newLocationId);
+      })
+      .catch((error) => {
+        console.error('Update Location: Failed ', error);
+      });
+  };
+
   const handleUserNameChange = (newUserName) => {
     axios
       .post('/user/updateUserName', { userId: 1, userName: newUserName })
       .then((response) => {
-        console.log('Verify UN Change Response: ', response);
+        // console.log('Verify UN Change Response: ', response);
         setUserName(newUserName);
       })
       .catch((error) => {
@@ -105,14 +120,25 @@ const UserPrivateProfile = ({ onLogout }) => {
       });
   };
 
+  const goToPublicProfile = () => {
+    navigate('/public-profile', { state: { bio, location_id, userName } });
+  };
+
   useEffect(() => {
     fetchUserData();
   }, []);
 
   return (
     <Grid
-      w='1100px'
       // border='5px solid purple'
+      w='1100px'
+      mx='auto'
+      mt={10}
+      p={5}
+      borderWidth='1px'
+      borderRadius='lg'
+      overflow='hidden'
+      boxShadow='md'
     >
       {/* Below is a Placeholder header. It needs to be replaced by the bar that will be on every page eventually  */}
       <Grid
@@ -188,22 +214,20 @@ const UserPrivateProfile = ({ onLogout }) => {
           alignItems='center'
           justifyContent='center'
         >
-          <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} />
-          {/* <UserInfo
-            bio={bio}
-            userName={userName}
-            EditableControls={EditableControls}
-            handleAvatarChange={handleAvatarChange}
-            handleBioChange={handleBioChange}
-            handleUserNameChange={handleUserNameChange}
-          /> */}
+          <UserTabs
+            handleLogOut={handleLogOut}
+            setCurrentView={setCurrentView}
+            goToPublicProfile={goToPublicProfile}
+          />
           {currentView === 'info' && (
             <UserInfo
               bio={bio}
+              location_id={location_id}
               userName={userName}
               EditableControls={EditableControls}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
+              handleLocationChange={handleLocationChange}
               handleUserNameChange={handleUserNameChange}
             />
           )}
