@@ -4,15 +4,17 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-// import Posts from './routes/postRoute';
+import Posts from './routes/postRoute';
 import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
+import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,6 +30,9 @@ app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
 app.use('/plants', Plants);
+app.use('/meetup', routerMeetup);
+
+app.use('/post', Posts)
 
 // GAuth Session middleware
 app.use(

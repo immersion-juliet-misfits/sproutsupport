@@ -35,7 +35,7 @@ model Image {
     id Int @id @default(autoincrement())
     url String
     category String
-    posts Post[]
+    //posts Post[]
 }
 
 model Meet {
@@ -83,11 +83,11 @@ model Task {
 
 model Post {
     id Int @id @default(autoincrement())
-    userId Int
+    userId Int?
     image_id Int?
     message String
     owner User @relation(fields: [userId], references: [id])
-    image Image? @relation(fields: [image_id], references: [id])
+    //image Image? @relation(fields: [image_id], references: [id])
     comments Comment[]
 }
 
