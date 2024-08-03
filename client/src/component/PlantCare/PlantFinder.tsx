@@ -14,23 +14,20 @@ const PlantFinder = () => {
   // const [bio, setBio] = useState<string>('');
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
     setInput(e.currentTarget.value);
   };
 
   const handleSubmit = () => {
     axios.post('/plants/search', {query: input})
       .then(({data}) => {
-        console.log(data)
         setResults(data)
       })
       .catch((err) => {
-        console.log('No results found.', err)
+        console.error('No results found.', err)
       })
   }
 
   const handlePlantSelect = (selected: Plant) => {
-    console.log(selected);
     setSelected(selected);
     setNickname(selected.CommonName)
   };
@@ -40,8 +37,6 @@ const PlantFinder = () => {
 //   }
 
   useEffect(() => {
-    console.log('test', selected)
-    console.log('test', nickname)
   }, [selected])
 
   return (

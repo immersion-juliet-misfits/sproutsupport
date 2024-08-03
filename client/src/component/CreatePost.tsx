@@ -48,9 +48,7 @@ const CreatePost = () => {
   const addMessage = () => {
     return axios
       .post('/post/post', { message: input })
-      .then((data) => {
-        // console.log('data', data)
-        // setPost(data);
+      .then(() => {
       })
       .catch((err) => {
         console.error('Failed to POST message: ', err);

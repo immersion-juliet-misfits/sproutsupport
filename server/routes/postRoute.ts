@@ -39,8 +39,6 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
   const { message } = req.body;
-  console.log('updtd: ', id)
-  // if (updateType === 'message') {
     prisma.post.update({
       where: {
         id: Number(id),
@@ -50,11 +48,9 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
       }
     })
       .then(updatedPost => {
-        console.log('updated', updatedPost);
         res.status(201).send(updatedPost);
       })
       .catch(() => res.sendStatus(404));
-  // }
 });
 
 Posts.delete('/post:id', (req: Request, res: Response) => {

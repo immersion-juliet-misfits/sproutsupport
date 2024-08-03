@@ -31,7 +31,6 @@ Plants.post('/search', (req: Request, res: Response) => {
 
   axios.post('https://plantsservices.sc.egov.usda.gov/api/CharacteristicsSearch', params)
   .then(({data}) => {
-    console.log(data)
     res.send(data.PlantResults)
   })
   .catch((err) => {

@@ -17,7 +17,6 @@ const Post = () => {
   const [posts, setPosts] = useState([]);
   const [id, setId] = useState('');
   const [message, setMessage] = useState('')
-  // console.log('post', posts);
 
   function EditableControls() {
     const {
@@ -43,7 +42,6 @@ const Post = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
-        console.log('get data', data);
         setPosts(data);
       })
       .catch((err) => {
@@ -52,11 +50,9 @@ const Post = () => {
   };
 
   const updateMessage = (id: string) => {
-    console.log('update: ', id)
     axios
       .patch(`/post/post${id}`, {message})
       .then((data) => {
-        console.log('data', data)
         getPosts();
       })
       .catch((err) => {
@@ -68,7 +64,6 @@ const Post = () => {
     axios
       .delete(`/post/post${id}`)
       .then(() => {
-        console.info('post deleted');
         getPosts();
       })
       .catch((err) => {
@@ -79,10 +74,6 @@ const Post = () => {
   const handleDelete = (id: string) => {
     deleteMessage(id);
   };
-
-  // const handleUpdate = (id: string) => {
-  //   return updateMessage(id);
-  // };
 
   useEffect(() => {
     getPosts();
