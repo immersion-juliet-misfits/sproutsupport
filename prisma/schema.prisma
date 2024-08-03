@@ -26,7 +26,7 @@ model User {
     meets Meet[]
     notifications Notification[]
     plants Plant[]
-    posts Post[]
+    // posts Post[]
     comments Comment[]
     attendees Attendee[]
 }
@@ -76,7 +76,7 @@ model Task {
     frequency String?
     lastCompleted DateTime?
     nextComplection DateTime?
-    active Boolean? 
+    overdue Boolean? 
     plant_id Int
     taskPlant Plant @relation(fields: [plant_id], references: [id])
 }
@@ -86,7 +86,7 @@ model Post {
     userId Int?
     image_id Int?
     message String
-    owner User @relation(fields: [userId], references: [id])
+    // owner User @relation(fields: [userId], references: [id])
     //image Image? @relation(fields: [image_id], references: [id])
     comments Comment[]
 }

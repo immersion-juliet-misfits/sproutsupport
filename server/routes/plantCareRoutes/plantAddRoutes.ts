@@ -37,6 +37,10 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
 //     })
 // })
 
+// Plants.get('/overdue', (req: Request, res: Response) => {
+  
+// })
+
 Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
   const { taskName, tasks, freq } = req.body;
@@ -62,7 +66,7 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   // console.log('name of tas', taskName, tasks)
   
   const newTasks = tasks.map((taskName) => ({
-    taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), active: true
+    taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), overdue: false
     // console.log(getNextCompletionDate(freq))
   }))
 
