@@ -42,7 +42,7 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
 
   const { updateType, updateVal } = req.body;
   if (updateType === 'message') {
-    prisma.user.update({
+    prisma.post.update({
       where: {
         id: Number(id),
       },
@@ -51,7 +51,7 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
       }
     })
       .then(updatedPost => {
-        console.log(updatedPost);
+        console.log('updated', updatedPost);
         res.status(201).send(updatedPost);
       })
       .catch(() => res.sendStatus(404));
@@ -60,10 +60,13 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
 
 Posts.delete('/post:id', (req: Request, res: Response) => {
   const { id } = req.params;
-
-    prisma.user.delete({
+  console.log('type of id', typeof id)
+  console.log('id', id)
+  const nId = parseInt(id);
+  console.log('nId', nId)
+    prisma.post.delete({
       where: {
-        id: Number(id)
+        id: nId
       }
     })
       .then(() => res.sendStatus(201))
