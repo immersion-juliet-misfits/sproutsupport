@@ -1,13 +1,14 @@
 import {
-  Box,
   Editable,
   EditableInput,
   Grid,
   GridItem,
+  Image,
   Input,
 } from '@chakra-ui/react';
 
 const UserInfo = ({
+  avatar,
   bio,
   location_id,
   userName,
@@ -35,16 +36,19 @@ const UserInfo = ({
           cursor='pointer'
           onClick={() => document.getElementById('avatarInput').click()}
         >
-          <Box
-            w='90%' // Temp 90% so I can see
-            h='90%' // This too
+          <Image
+            src={avatar}
+            alt='Click to Edit Avatar'
+            // w='90%' // Temp 90% so I can see
+            // h='90%' // This too
+            w='100%'
+            h='100%'
+            borderRadius='50%'
             bg='green.500'
             display='flex'
             alignItems='center'
             justifyContent='center'
-          >
-            Click to Edit Avatar
-          </Box>
+          />
           <input
             type='file'
             id='avatarInput'

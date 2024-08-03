@@ -20,6 +20,7 @@ import UserHelp from './UserHelp';
 const UserPrivateProfile = ({ onLogout }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
+  const [avatar, setAvatar] = useState('');
   const [bio, setBio] = useState('');
   const [location_id, setLocationId] = useState('');
   const [currentView, setCurrentView] = useState('info');
@@ -28,9 +29,10 @@ const UserPrivateProfile = ({ onLogout }) => {
     axios
       .get('/user/getUserData')
       .then((response) => {
-        setUserName(response.data.userName);
+        setAvatar(response.data.avatar);
         setBio(response.data.bio);
         setLocationId(response.data.location_id);
+        setUserName(response.data.userName);
       })
       .catch((error) => {
         console.error('Fetch User Data: Failed ', error);
@@ -121,7 +123,7 @@ const UserPrivateProfile = ({ onLogout }) => {
   };
 
   const goToPublicProfile = () => {
-    navigate('/public-profile', { state: { bio, location_id, userName } });
+    navigate('/public-profile', { state: { avatar, bio, location_id, userName } });
   };
 
   useEffect(() => {
@@ -221,6 +223,7 @@ const UserPrivateProfile = ({ onLogout }) => {
           />
           {currentView === 'info' && (
             <UserInfo
+              avatar={avatar}
               bio={bio}
               location_id={location_id}
               userName={userName}

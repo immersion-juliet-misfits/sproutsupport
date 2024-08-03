@@ -87,7 +87,7 @@ passport.use(
                 google_id: profile.id,
                 userName: profile.displayName,
                 email: profile.emails?.[0].value,
-                avatar: profile.photos?.[0].value,
+                avatar: "https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH" ,
               },
             });
           }

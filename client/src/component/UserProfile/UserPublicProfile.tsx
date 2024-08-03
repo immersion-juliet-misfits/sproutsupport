@@ -3,9 +3,7 @@ import { useLocation } from 'react-router-dom';
 
 const UserPublicProfile = () => {
   let location = useLocation();
-  let { bio, location_id, userName } = location.state || { userName: 'Default User', bio: 'No bio available' };
-
-  let avatarUrl = "https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH";
+  let { avatar, bio, location_id, userName } = location.state || { bio: 'No bio available' };
 
   return (
     <Grid
@@ -85,7 +83,7 @@ const UserPublicProfile = () => {
           <Image
             borderRadius="full"
             boxSize="150px"
-            src={avatarUrl}
+            src={avatar}
             alt={`${userName}'s avatar`}
           />
           <Heading as="h2" size="xl">
