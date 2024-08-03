@@ -12,7 +12,7 @@ const job = new CronJob('*/9 * * * * *', () => {
   // prisma.task.updateMany({where: { nextComplection: { lt: new Date() }, active: true}, data: {active: false}})
   prisma.task.findMany({where: { nextComplection: { lt: new Date() }, active: true}})
    .then((data) => {
-    console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
+    // console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
    })
 })
 
