@@ -20,8 +20,6 @@ Posts.get('/post', (req: Request, res: Response) => {
 
 Posts.post('/post', (req: Request, res: Response) => {
   const { userId, message } = req.body;
-
-  console.log('message', message)
   prisma.post
     .create({
       data: {
@@ -40,14 +38,15 @@ Posts.post('/post', (req: Request, res: Response) => {
 Posts.patch('/post:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const { updateType, updateVal } = req.body;
-  if (updateType === 'message') {
+  const { message } = req.body;
+  console.log('updtd: ', id)
+  // if (updateType === 'message') {
     prisma.post.update({
       where: {
         id: Number(id),
       },
       data: {
-        message: updateVal
+        message
       }
     })
       .then(updatedPost => {
@@ -55,15 +54,12 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
         res.status(201).send(updatedPost);
       })
       .catch(() => res.sendStatus(404));
-  }
+  // }
 });
 
 Posts.delete('/post:id', (req: Request, res: Response) => {
   const { id } = req.params;
-  console.log('type of id', typeof id)
-  console.log('id', id)
   const nId = parseInt(id);
-  console.log('nId', nId)
     prisma.post.delete({
       where: {
         id: nId

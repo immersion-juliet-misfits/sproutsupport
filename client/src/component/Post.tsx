@@ -16,6 +16,7 @@ import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 const Post = () => {
   const [posts, setPosts] = useState([]);
   const [id, setId] = useState('');
+  const [message, setMessage] = useState('')
   // console.log('post', posts);
 
   function EditableControls() {
@@ -51,10 +52,12 @@ const Post = () => {
   };
 
   const updateMessage = (id: string) => {
+    console.log('update: ', id)
     axios
-      .patch(`/post/post${id}`, posts)
-      .then(({ data }) => {
-        setPosts(data);
+      .patch(`/post/post${id}`, {message})
+      .then((data) => {
+        console.log('data', data)
+        getPosts();
       })
       .catch((err) => {
         console.error('Failed to Update message: ', err);
@@ -65,7 +68,7 @@ const Post = () => {
     axios
       .delete(`/post/post${id}`)
       .then(() => {
-        console.log('post deleted');
+        console.info('post deleted');
         getPosts();
       })
       .catch((err) => {
@@ -77,9 +80,9 @@ const Post = () => {
     deleteMessage(id);
   };
 
-  const handleUpdate = (id: string) => {
-    updateMessage(id);
-  };
+  // const handleUpdate = (id: string) => {
+  //   return updateMessage(id);
+  // };
 
   useEffect(() => {
     getPosts();
@@ -103,6 +106,8 @@ const Post = () => {
                     <Editable
                       textAlign='center'
                       defaultValue={post.message}
+                      onSubmit={() => {updateMessage(post.id)}}
+                      onChange={(newMessage) => {setMessage(newMessage)}}
                       fontSize='2xl'
                       isPreviewFocusable={false}
                     >
@@ -118,17 +123,6 @@ const Post = () => {
                       fontSize='20px'
                       onClick={() => {
                         handleDelete(post.id);
-                      }}
-                      // icon={}
-                    />
-                    <IconButton
-                      isRound={true}
-                      variant='solid'
-                      colorScheme='blue'
-                      aria-label='Done'
-                      fontSize='20px'
-                      onClick={() => {
-                        handleUpdate(post.id);
                       }}
                       // icon={}
                     />
