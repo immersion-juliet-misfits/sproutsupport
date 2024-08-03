@@ -37,9 +37,14 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
 //     })
 // })
 
-// Plants.get('/overdue', (req: Request, res: Response) => {
-  
-// })
+Plants.get('/overdue/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+  prisma.task.findMany({where: { plant_id: Number(plantId), overdue: true }})
+    .then((data) => {
+      console.log(data, 'overdue tasks')
+      res.send(data)
+    })
+})
 
 Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
