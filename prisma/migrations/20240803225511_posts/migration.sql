@@ -10,9 +10,6 @@
 -- DropForeignKey
 ALTER TABLE `Post` DROP FOREIGN KEY `Post_image_id_fkey`;
 
--- DropForeignKey
-ALTER TABLE `Post` DROP FOREIGN KEY `Post_userId_fkey`;
-
 -- AlterTable
 ALTER TABLE `Plant` MODIFY `plantAPIID` INTEGER NULL,
     MODIFY `species` VARCHAR(191) NULL,
@@ -21,9 +18,6 @@ ALTER TABLE `Plant` MODIFY `plantAPIID` INTEGER NULL,
     MODIFY `location` VARCHAR(191) NULL,
     MODIFY `imageUrl` VARCHAR(191) NULL,
     MODIFY `description` VARCHAR(191) NULL;
-
--- AlterTable
-ALTER TABLE `Post` MODIFY `userId` INTEGER NULL;
 
 -- AlterTable
 ALTER TABLE `Task` DROP COLUMN `active`,

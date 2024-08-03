@@ -20,6 +20,7 @@ const PlantSnippet = ({ plant }) => {
     <CardHeader>
         <Heading size='md'>{plant.nickname}</Heading>
         {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
+        {tasks.length > 0 ? ( <h3>!! {tasks.length} Tasks Due</h3> ): (<h3>No Tasks</h3>)}
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody>
@@ -27,7 +28,7 @@ const PlantSnippet = ({ plant }) => {
         <h3>{plant.description}</h3>
         {tasks.length > 0 &&
           tasks.map((task) => (
-            <p>{task.taskName}</p>
+            <p style={{color:"red"}}>{task.taskName}</p>
           ))
         }
     </CardBody>
