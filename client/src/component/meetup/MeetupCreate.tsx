@@ -43,7 +43,6 @@ const MeetupCreate = ({refresh}: {refresh: any}) => {
   useEffect(()=>{
     if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[12] === ':' && dateTime[15] === ' '){
       if(dateTime[16] + dateTime[17] === 'pm' || dateTime[16] + dateTime[17] === 'am'){
-        console.log('test')
         if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.length > 0 ){
           setFillIn(true)
         }else{
