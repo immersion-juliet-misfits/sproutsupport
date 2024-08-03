@@ -39,12 +39,31 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
 
 Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
-  const { taskName, tasks } = req.body;
+  const { taskName, tasks, freq } = req.body;
+
+  const getNextCompletionDate = (frequency) => {
+    const now = new Date();
+    let nextCompletion = new Date();
+  
+    if (frequency === 'second') {
+      nextCompletion = new Date(now.getTime() + 1000); 
+    } else if (frequency === 'minute') {
+      nextCompletion = new Date(now.getTime() + 60000); 
+    } else if (frequency === 'hour') {
+      nextCompletion = new Date(now.getTime() + 3600000);
+    } else {
+      nextCompletion = now;
+    }
+  
+    console.log(frequency, nextCompletion, 'nextCompletion');
+    return nextCompletion;
+  };
   let num = Number(plantId)
   // console.log('name of tas', taskName, tasks)
-
+  
   const newTasks = tasks.map((taskName) => ({
-    taskName, plant_id: Number(plantId)
+    taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), active: true
+    // console.log(getNextCompletionDate(freq))
   }))
 
   prisma.task.createMany({data: newTasks, skipDuplicates: true})

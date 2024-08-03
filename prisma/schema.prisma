@@ -74,9 +74,9 @@ model Task {
     id Int @id @default(autoincrement())
     taskName String?
     frequency String?
-    lastCompleted String?
-    nextComplection String?
-    active String?
+    lastCompleted DateTime?
+    nextComplection DateTime?
+    active Boolean? 
     plant_id Int
     taskPlant Plant @relation(fields: [plant_id], references: [id])
 }
