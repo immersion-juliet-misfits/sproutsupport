@@ -27,9 +27,8 @@ model User {
     notifications Notification[]
     plants        Plant[]
     posts         Post[]
-    //    comments      Comment[]
+    // comments Comment[]
     attendees     Attendee[]
-    Comment       Comment[]
 }
 
 model Image {
@@ -84,22 +83,22 @@ model Task {
 }
 
 model Post {
-    id       Int       @id @default(autoincrement())
-    userId   Int
-    image_id Int?
-    message  String
-    owner    User      @relation(fields: [userId], references: [id])
+    id      Int    @id @default(autoincrement())
+    userId  Int
+    // image_id Int?
+    message String
+    owner   User   @relation(fields: [userId], references: [id])
     //image Image? @relation(fields: [image_id], references: [id])
-    comments Comment[]
+    //comments Comment[]
 }
 
 model Comment {
-    id          Int    @id @default(autoincrement())
-    userId      Int
-    message     String
-    post_id     Int
-    commentor   User   @relation(fields: [userId], references: [id])
-    commentPost Post   @relation(fields: [post_id], references: [id])
+    id Int @id @default(autoincrement())
+    // userId Int
+    // message String
+    // post_id Int
+    // commentor User @relation(fields: [userId], references: [id])
+    // commentPost Post @relation(fields: [post_id], references: [id])
 }
 
 model Attendee {
