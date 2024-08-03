@@ -1,20 +1,47 @@
-import {
-  useState,
-  useEffect,
-} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Flex } from '@chakra-ui/react';
 import { IconButton, Image } from '@chakra-ui/react';
+import {
+  Input,
+  Editable,
+  EditableInput,
+  EditableTextarea,
+  EditablePreview,
+  ButtonGroup,
+  useEditableControls
+} from '@chakra-ui/react';
+import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
-  // console.log('post', posts);
+  const [id, setId] = useState('');
+  const [message, setMessage] = useState('')
+
+  function EditableControls() {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls();
+
+    return isEditing ? (
+      <ButtonGroup justifyContent='center' size='sm'>
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
+        <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+      </ButtonGroup>
+    ) : (
+      <Flex justifyContent='center'>
+        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+      </Flex>
+    );
+  }
 
   const getPosts = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
-        // console.log('get data', data)
         setPosts(data);
       })
       .catch((err) => {
@@ -22,72 +49,82 @@ const Post = () => {
       });
   };
 
-  const updatePost = () => {
+  const updateMessage = (id: string) => {
     axios
-      .patch('/post:id', posts)
-      .then(({ data }) => {
-        setPosts(data);
+      .patch(`/post/post${id}`, {message})
+      .then((data) => {
+        getPosts();
       })
       .catch((err) => {
         console.error('Failed to Update message: ', err);
       });
   };
 
-  const deleteMessage = () => {
+  const deleteMessage = (id: string) => {
     axios
-      .delete('/post:id')
+      .delete(`/post/post${id}`)
       .then(() => {
-        console.log('post deleted');
+        getPosts();
       })
       .catch((err) => {
         console.error('Failed to Delete message: ', err);
       });
   };
 
+  const handleDelete = (id: string) => {
+    deleteMessage(id);
+  };
+
   useEffect(() => {
     getPosts();
-  });
+  }, []);
 
   return (
     <div>
       <ul>
-        {posts.map((post) => {
-         return (
-           <li key={post.id}>
-            <Flex
-              flexDirection='column'
-              alignItems='center'
-              justifyContent='flex-end'
-            >
-              {/* <Image>Picture</Image> */}
-              <Box>
-                <div>Picture</div>
-                <div>{post.message}</div>
-                <IconButton
-                  isRound={true}
-                  variant='solid'
-                  colorScheme='red'
-                  aria-label='Done'
-                  fontSize='20px'
-                  onClick={deleteMessage}
-                  // icon={}
-                />
-                <IconButton
-                  isRound={true}
-                  variant='solid'
-                  colorScheme='blue'
-                  aria-label='Done'
-                  fontSize='20px'
-                  onClick={updatePost}
-                  // icon={}
-                  />
-              </Box>
-            </Flex>
-          </li>
-          )
-        })}
-        </ul>
-        </div>
+        {posts
+          .map((post) => {
+            return (
+              <li key={post.id}>
+                <Flex
+                  flexDirection='column-reverse'
+                  alignItems='center'
+                  justifyContent='space-between'
+                >
+                  {/* <Image>Picture</Image> */}
+                  <Box>
+                    <div>Picture</div>
+                    <Editable
+                      textAlign='center'
+                      defaultValue={post.message}
+                      onSubmit={() => {updateMessage(post.id)}}
+                      onChange={(newMessage) => {setMessage(newMessage)}}
+                      fontSize='2xl'
+                      isPreviewFocusable={false}
+                    >
+                      <EditablePreview />
+                      <Input as={EditableInput} />
+                      <EditableControls />
+                    </Editable>
+                    <IconButton
+                      isRound={true}
+                      variant='solid'
+                      colorScheme='red'
+                      aria-label='Done'
+                      fontSize='20px'
+                      onClick={() => {
+                        handleDelete(post.id);
+                      }}
+                      // icon={}
+                    />
+                  </Box>
+                </Flex>
+              </li>
+            );
+          })
+          .reverse()}
+      </ul>
+    </div>
   );
 };
 

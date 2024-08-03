@@ -44,31 +44,27 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const getNextCompletionDate = (frequency) => {
     const now = new Date();
     let nextCompletion = new Date();
-  
+
     if (frequency === 'second') {
-      nextCompletion = new Date(now.getTime() + 1000); 
+      nextCompletion = new Date(now.getTime() + 1000);
     } else if (frequency === 'minute') {
-      nextCompletion = new Date(now.getTime() + 60000); 
+      nextCompletion = new Date(now.getTime() + 60000);
     } else if (frequency === 'hour') {
       nextCompletion = new Date(now.getTime() + 3600000);
     } else {
       nextCompletion = now;
     }
-  
-    console.log(frequency, nextCompletion, 'nextCompletion');
+
     return nextCompletion;
   };
   let num = Number(plantId)
-  // console.log('name of tas', taskName, tasks)
-  
+
   const newTasks = tasks.map((taskName) => ({
     taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), active: true
-    // console.log(getNextCompletionDate(freq))
   }))
 
   prisma.task.createMany({data: newTasks, skipDuplicates: true})
     .then((data) => {
-      console.log('the right data', data)
       res.send(data)
     })
 
@@ -94,7 +90,6 @@ Plants.post('/search', (req: Request, res: Response) => {
 
   axios.post('https://plantsservices.sc.egov.usda.gov/api/CharacteristicsSearch', params)
   .then(({data}) => {
-    console.log(data)
     res.send(data.PlantResults)
   })
   .catch((err) => {

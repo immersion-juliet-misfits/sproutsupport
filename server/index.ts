@@ -72,8 +72,6 @@ passport.use(
       profile: Profile,
       doneCB: (error: User, user?: Express.User) => void
     ) => {
-      // Temp logging the profile
-      // console.log(profile);
 
       // Prisma method for adding User to DB
       prisma.user
@@ -125,7 +123,6 @@ app.use((req, res, next) => {
 
 // Checking auth for the Client
 app.get('/api/checkAuth', (req, res) => {
-  console.log('user stuff', req.user)
   res.json({ isAuthenticated: req.isAuthenticated(), currentUser: req.user });
 });
 
@@ -187,6 +184,6 @@ app.get('*', isAuthenticated, (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
+  console.info(`Listening on http://localhost:${port}`);
 });
 job.start();

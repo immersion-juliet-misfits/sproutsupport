@@ -21,29 +21,25 @@ const PlantFinder = ({ user }) => {
 
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
     setInput(e.currentTarget.value);
   };
 
   const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFreq(e.currentTarget.value);
-    console.log(freq)
   };
 
   const handleSubmit = () => {
     axios.post('/plants/search', {query: input})
       .then(({data}) => {
-        console.log(data)
         setResults(data)
       })
       .catch((err) => {
-        console.log('No results found.', err)
+        console.error('No results found.', err)
       })
   }
 
   const handlePlantSelect = (selected: Plant) => {
     setSelected(selected);
-    console.log(selected);
     setNickname(selected.CommonName)
   };
 
@@ -54,7 +50,7 @@ const PlantFinder = ({ user }) => {
   const handleBio = (e: React.FormEvent<HTMLInputElement>) => {
     setBio(e.currentTarget.value);
   };
-  
+
   const handleTaskName = (e: React.FormEvent<HTMLInputElement>) => {
     setTaskName(e.currentTarget.value);
   };
@@ -64,7 +60,7 @@ const PlantFinder = ({ user }) => {
     // axios.put(`/plants/task/${data.id}`, { tasks })
     // .then((result) => {
     //   console.log(result, 'resstdshtdrjdjyfc')
-    // })    
+    // })
     setTaskName('');
   }
 
@@ -73,16 +69,14 @@ const PlantFinder = ({ user }) => {
     const { CommonName, Id } = selected;
     axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
     .then(({data}) => {
-      console.log(data)
       axios.put(`/plants/task/${data.id}`, { tasks, freq })
         .then((result) => {
-          console.log(result, 'resstdshtdrjdjyfc')
-        })  
-    })    
+        })
+    })
   }
 
-  
-  
+
+
 
 
 //   const handleAddPlant() {
@@ -90,8 +84,6 @@ const PlantFinder = ({ user }) => {
 //   }
 
   useEffect(() => {
-    console.log('test', selected)
-    console.log('takss', tasks, taskName, 'taskname')
   }, [selected, tasks, taskName])
 
   return (
