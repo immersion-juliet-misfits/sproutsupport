@@ -5,17 +5,16 @@ import { Link } from 'react-router-dom';
 
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
-  
+
   const getPlants = () => {
     axios.get(`/plants/all/${user.id}`)
       .then(({data}) => {
         setPlants(data)
-        console.log(data, 'here')
       })
       .catch((err) => {
         console.error(err)
       })
-  }  
+  }
 
   useEffect(() => {
     getPlants();
@@ -29,7 +28,7 @@ const OwnedPlants = ({ user }) => {
         <input type="button" value="Add a Plant"></input>
       </Link>
       {/* make into seperate component */}
-      {plants.length > 0 && 
+      {plants.length > 0 &&
         plants.map((plant) => (
           <Card>
             <CardHeader>

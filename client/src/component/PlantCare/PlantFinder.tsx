@@ -26,7 +26,6 @@ const PlantFinder = ({ user }) => {
 
   const handleFrequencyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFreq(e.currentTarget.value);
-    console.log(freq)
   };
 
   const handleSubmit = () => {
@@ -70,10 +69,8 @@ const PlantFinder = ({ user }) => {
     const { CommonName, Id } = selected;
     axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
     .then(({data}) => {
-      console.log(data)
       axios.put(`/plants/task/${data.id}`, { tasks, freq })
         .then((result) => {
-          console.log(result, 'resstdshtdrjdjyfc')
         })
     })
   }
@@ -87,8 +84,6 @@ const PlantFinder = ({ user }) => {
 //   }
 
   useEffect(() => {
-    console.log('test', selected)
-    console.log('takss', tasks, taskName, 'taskname')
   }, [selected, tasks, taskName])
 
   return (
