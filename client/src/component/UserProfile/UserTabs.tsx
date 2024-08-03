@@ -1,17 +1,20 @@
-import { Box, Button, Grid, GridItem } from '@chakra-ui/react';
+import { Button, Grid, GridItem } from '@chakra-ui/react';
 
 const UserTabs = ({ handleLogOut }) => {
   return (
     <Grid
-      h='200px'
-      templateRows='repeat(2, 1fr)'
-      templateColumns='repeat(5, 1fr)'
-      gap={4}
+      h='100px'
+      templateRows='repeat(1, 1fr)'
+      templateColumns='repeat(4, 1fr)'
+      alignItems='center'
+      justifyItems='center'
+      gap={10}
     >
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
           onClick={handleLogOut}
-          w='100%'
+          bg='#c1e3c9'
+          w='200px'
           h='100px'
           display='flex'
           alignItems='center'
@@ -22,7 +25,8 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
-          w='100%'
+          bg='#c1e3c9'
+          w='200px'
           h='100px'
           display='flex'
           alignItems='center'
@@ -33,8 +37,9 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
-          w='100%'
-          h='100%'
+          bg='#c1e3c9'
+          w='200px'
+          h='100px'
           display='flex'
           alignItems='center'
           justifyContent='center'
@@ -44,13 +49,14 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
-          w='100%'
-          h='100%'
+          bg='#c1e3c9'
+          w='200px'
+          h='100px'
           display='flex'
           alignItems='center'
           justifyContent='center'
         >
-          User Info - Verifying Component
+          User Info
         </Button>
       </GridItem>
     </Grid>

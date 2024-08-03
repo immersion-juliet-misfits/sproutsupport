@@ -7,6 +7,7 @@ import PlantFinder from "./PlantCare/PlantFinder";
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
+import Meetup from "./meetup/Meetup";
 import Post from './Post';
 
 const App = () => {
@@ -55,6 +56,7 @@ const App = () => {
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
           />
+          <Route path='/meetup' element={<Meetup />} />
         </Routes>
       </div>
     </ChakraProvider>

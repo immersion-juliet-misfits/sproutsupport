@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import path, { dirname } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -79,6 +80,7 @@ export default (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),
       }),
+      new BundleAnalyzerPlugin(),
     ],
   };
 };

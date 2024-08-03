@@ -1,14 +1,58 @@
-// Temporarily only adding the logout function
-// Will eventually display other Private User Profile information
-
-// import React from 'react';
-import { Box, Button, Grid, GridItem, Heading } from '@chakra-ui/react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Box, Grid, GridItem, Heading } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import UserInfo from './UserInfo';
 import UserTabs from './UserTabs';
 
 const UserPrivateProfile = ({ onLogout }) => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState('');
+  const [bio, setBio] = useState('');
+
+  const fetchUserData = () => {
+    axios
+      .get('/user/getUserData')
+      .then((response) => {
+        setUserName(response.data.userName);
+        setBio(response.data.bio);
+      })
+      .catch((error) => {
+        console.error('Fetch User Data: Failed ', error);
+      });
+  };
+
+  const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Placeholder: need file upload logic
+      console.log('Selected file:', file);
+    }
+  };
+
+  const handleBioChange = (newBio) => {
+    axios
+      .post('/user/updateBio', { userId: 1, bio: newBio })
+      .then((response) => {
+        console.log('Verify Bio Change Response: ', response);
+        setBio(newBio);
+      })
+      .catch((error) => {
+        console.error('Update Bio: Failed ', error);
+      });
+  };
+
+  const handleUserNameChange = (newUserName) => {
+    axios
+      .post('/user/updateUserName', { userId: 1, userName: newUserName })
+      .then((response) => {
+        console.log('Verify UN Change Response: ', response);
+        setUserName(newUserName);
+      })
+      .catch((error) => {
+        console.error('Update User Name: Failed ', error);
+      });
+  };
 
   const handleLogOut = () => {
     fetch('/api/logout', {
@@ -28,18 +72,28 @@ const UserPrivateProfile = ({ onLogout }) => {
       });
   };
 
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
-    <>
+    <Grid
+      w='1100px'
+      // border='5px solid purple'
+    >
+      {/* Below is a Placeholder header. It needs to be replaced by the bar that will be on every page eventually  */}
       <Grid
-        h='100px'
-        templateRows='repeat(2, 1fr)'
+        // border='5px solid yellow'
+        className='header-grid'
+        templateRows='repeat(1, 1fr)'
         templateColumns='repeat(5, 1fr)'
+        h='100px'
         gap={4}
         mb={4}
       >
         <GridItem
           colSpan={1}
-          bg='blue.500'
+          bg='teal'
           display='flex'
           alignItems='center'
           justifyContent='center'
@@ -47,7 +101,6 @@ const UserPrivateProfile = ({ onLogout }) => {
           <Box
             w='100px'
             h='100px'
-            bg='blue.500'
             display='flex'
             alignItems='center'
             justifyContent='center'
@@ -56,8 +109,8 @@ const UserPrivateProfile = ({ onLogout }) => {
           </Box>
         </GridItem>
         <GridItem
-          colSpan={2}
-          bg='yellow.500'
+          colSpan={3}
+          bg='#c1e3c9'
           display='flex'
           alignItems='center'
           justifyContent='center'
@@ -68,7 +121,7 @@ const UserPrivateProfile = ({ onLogout }) => {
         </GridItem>
         <GridItem
           colSpan={1}
-          bg='blue.500'
+          bg='teal'
           display='flex'
           alignItems='center'
           justifyContent='center'
@@ -76,7 +129,6 @@ const UserPrivateProfile = ({ onLogout }) => {
           <Box
             w='100px'
             h='100px'
-            bg='blue.500'
             display='flex'
             alignItems='center'
             justifyContent='center'
@@ -86,17 +138,35 @@ const UserPrivateProfile = ({ onLogout }) => {
         </GridItem>
       </Grid>
       <Grid
-        h='200px'
-        templateRows='repeat(2, 1fr)'
-        templateColumns='repeat(5, 1fr)'
-        gap={4}
+        className='content-grid'
+        templateRows='1fr'
+        templateColumns='1fr'
+        bg='teal'
+        alignItems='center'
+        justifyContent='center'
+        py={4}
       >
-        <GridItem colSpan={4} bg='teal' h='600px'>
-          <UserTabs />
-          <UserInfo />
-        </GridItem>
+        <Grid
+          // border='5px solid red'
+          // colSpan={1}
+          // bg='blue.500'
+          gap={10}
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+        >
+          <UserTabs handleLogOut={handleLogOut} />
+          <UserInfo
+            userName={userName}
+            bio={bio}
+            handleAvatarChange={handleAvatarChange}
+            handleBioChange={handleBioChange}
+            handleUserNameChange={handleUserNameChange}
+          />
+        </Grid>
       </Grid>
-    </>
+    </Grid>
   );
 };
 

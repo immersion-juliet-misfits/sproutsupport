@@ -1,58 +1,128 @@
-import { Box, Grid, GridItem } from '@chakra-ui/react';
+import {
+  Box,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  Grid,
+  GridItem,
+} from '@chakra-ui/react';
 
-const UserInfo = ({ onAvatarChange }) => {
-  // Placeholder
-  // const handleAvatarChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     // Handle the file upload logic here
-  //     console.log('Selected file:', file);
-  //   }
-  // };
-
+const UserInfo = ({
+  bio,
+  userName,
+  handleAvatarChange,
+  handleBioChange,
+  handleUserNameChange,
+}) => {
   return (
-<Grid
-            h='100%'
-            templateRows='repeat(4, 1fr)'
-            templateColumns='repeat(1, 1fr)'
-            gap={4}
+    <>
+      <Grid>
+        <GridItem
+          bg='yellow.500'
+          display='flex'
+          alignItems='center'
+          justifyContent='center'
+          justifySelf='center'
+          alignSelf='center'
+          borderRadius='50%'
+          w='250px'
+          h='250px'
+          position='relative'
+          overflow='hidden'
+          cursor='pointer'
+          onClick={() => document.getElementById('avatarInput').click()}
+        >
+          <Box
+            w='90%' // Temp 90% so I can see
+            h='90%'
+            bg='green.500'
+            display='flex'
+            alignItems='center'
+            justifyContent='center'
           >
-            <GridItem
-              bg='yellow.500'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-              justifySelf='center'
-              alignSelf='center'
-              borderRadius='50%'
-              w='150px'
-              h='150px'
-              position='relative'
-              overflow='hidden'
-              cursor='pointer'
-              onClick={() => document.getElementById('avatarInput').click()}
+            Click to Edit Avatar
+          </Box>
+          <input
+            type='file'
+            id='avatarInput'
+            style={{ display: 'none' }}
+            onChange={handleAvatarChange}
+          />
+        </GridItem>
+      </Grid>
+      <Grid
+        // border='5px solid red'
+        // templateRows='repeat(3, 1fr)'
+        templateColumns='repeat(1, 1fr)'
+        w='85%'
+        gap={4}
+      >
+        <GridItem bg='green.500' h='100px'>
+          Change Display name
+          <p />
+          {userName}
+          <Editable
+            defaultValue={userName}
+            onSubmit={handleUserNameChange}
+            mt={2}
+            // startWithEditView={false}
+            minH='40px'
+          >
+            <EditablePreview
+              border='1px solid black'
+              bg='white'
+              p={2}
+              borderRadius='md'
+              minH='40px'
             >
-              <Box
-                w='90%' // Temp 90% so I can see
-                h='90%'
-                bg='green.500'
-                display='flex'
-                alignItems='center'
-                justifyContent='center'
-              >
-                This needs to be a circle
-              </Box>
-              <input
-                type='file'
-                id='avatarInput'
-                style={{ display: 'none' }}
-                // onChange={handleAvatarChange} // Placeholder for Avatar editing
-              />
-            </GridItem>
-            <GridItem bg='green.500'>TESTING</GridItem>
-            <GridItem bg='green.500' />
-            <GridItem bg='green.500' />
-          </Grid>
+              {userName || 'Click to edit name'}
+            </EditablePreview>
+            <EditableInput
+              border='1px solid black'
+              bg='white'
+              p={2}
+              borderRadius='md'
+              minH='40px'
+              placeholder='Enter your name'
+            />
+          </Editable>
+        </GridItem>
+        <GridItem bg='green.500' h='100px'>
+          {/* Change Placeholder */}
+          Email/Password/Login
+        </GridItem>
+        <GridItem bg='green.500' h='200px'>
+          User Bio
+          <p />
+          {bio}
+          <Editable
+            defaultValue={bio}
+            onSubmit={handleBioChange}
+            mt={2}
+            // startWithEditView={false}
+            minH='40px'
+          >
+            <EditablePreview
+              border='1px solid black'
+              bg='white'
+              p={2}
+              borderRadius='md'
+              minH='40px'
+            >
+              {bio || 'Click to edit bio'}
+            </EditablePreview>
+            <EditableInput
+              border='1px solid black'
+              bg='white'
+              p={2}
+              borderRadius='md'
+              minH='40px'
+              placeholder='Enter your bio'
+            />
+          </Editable>
+        </GridItem>
+      </Grid>
+    </>
   );
 };
 
