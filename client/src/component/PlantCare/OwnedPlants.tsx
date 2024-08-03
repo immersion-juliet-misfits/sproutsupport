@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import PlantSnippet from './PlantSnippet';
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
   
@@ -31,16 +31,17 @@ const OwnedPlants = ({ user }) => {
       {/* make into seperate component */}
       {plants.length > 0 && 
         plants.map((plant) => (
-          <Card>
-            <CardHeader>
-              <Heading size='md'>{plant.nickname}</Heading>
-              {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
-              {/* <h4>{plant.CommonName}</h4> */}
-            </CardHeader>
-            <CardBody>
-              <h3>{plant.description}</h3>
-            </CardBody>
-          </Card>
+          <PlantSnippet plant={plant}/>
+          // <Card>
+          //   <CardHeader>
+          //     <Heading size='md'>{plant.nickname}</Heading>
+          //     {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
+          //     {/* <h4>{plant.CommonName}</h4> */}
+          //   </CardHeader>
+          //   <CardBody>
+          //     <h3>{plant.description}</h3>
+          //   </CardBody>
+          // </Card>
         ))
       }
     </div>

@@ -37,6 +37,7 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
 //     })
 // })
 
+// gets all overdue tasks for a plant
 Plants.get('/overdue/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
   prisma.task.findMany({where: { plant_id: Number(plantId), overdue: true }})
