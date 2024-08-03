@@ -27,7 +27,7 @@ model User {
     notifications Notification[]
     plants Plant[]
     posts Post[]
-    comments Comment[]
+    // comments Comment[]
     attendees Attendee[]
 }
 
@@ -74,9 +74,9 @@ model Task {
     id Int @id @default(autoincrement())
     taskName String?
     frequency String?
-    lastCompleted DateTime?
-    nextComplection DateTime?
-    active Boolean?
+    lastCompleted DateTime
+    nextComplection DateTime
+    active Boolean
     plant_id Int
     taskPlant Plant @relation(fields: [plant_id], references: [id])
 }
