@@ -1,6 +1,6 @@
 import { Button, Grid, GridItem } from '@chakra-ui/react';
 
-const UserTabs = ({ handleLogOut }) => {
+const UserTabs = ({ handleLogOut, setCurrentView }) => {
   return (
     <Grid
       h='100px'
@@ -25,6 +25,7 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
+          onClick={() => setCurrentView('help')}
           bg='#c1e3c9'
           w='200px'
           h='100px'
@@ -37,6 +38,7 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
+          onClick={() => setCurrentView('privacy')}
           bg='#c1e3c9'
           w='200px'
           h='100px'
@@ -49,6 +51,7 @@ const UserTabs = ({ handleLogOut }) => {
       </GridItem>
       <GridItem colSpan={1} bg='papayawhip'>
         <Button
+          onClick={() => setCurrentView('info')}
           bg='#c1e3c9'
           w='200px'
           h='100px'

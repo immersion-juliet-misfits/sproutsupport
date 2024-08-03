@@ -2,13 +2,15 @@ import {
   Box,
   Editable,
   EditableInput,
-  EditablePreview,
   Grid,
   GridItem,
+  Input,
 } from '@chakra-ui/react';
+import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
 const UserInfo = ({
   bio,
+  EditableControls,
   userName,
   handleAvatarChange,
   handleBioChange,
@@ -34,7 +36,7 @@ const UserInfo = ({
         >
           <Box
             w='90%' // Temp 90% so I can see
-            h='90%'
+            h='90%' // This too
             bg='green.500'
             display='flex'
             alignItems='center'
@@ -52,39 +54,31 @@ const UserInfo = ({
       </Grid>
       <Grid
         // border='5px solid red'
-        // templateRows='repeat(3, 1fr)'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
         <GridItem bg='green.500' h='100px'>
-          Change Display name
-          <p />
-          {userName}
           <Editable
             defaultValue={userName}
             onSubmit={handleUserNameChange}
             mt={2}
-            // startWithEditView={false}
             minH='40px'
+            isPreviewFocusable={false}
           >
-            <EditablePreview
+            <Input
+              as={EditableInput}
               border='1px solid black'
               bg='white'
-              p={2}
+              placeholder='Update your User Name'
               borderRadius='md'
               minH='40px'
-            >
-              {userName || 'Click to edit name'}
-            </EditablePreview>
-            <EditableInput
-              border='1px solid black'
-              bg='white'
               p={2}
-              borderRadius='md'
-              minH='40px'
-              placeholder='Enter your name'
             />
+            <EditableControls top='5px' left='5px' />
+            Change Display name
+            <p />
+            {userName}
           </Editable>
         </GridItem>
         <GridItem bg='green.500' h='100px'>
@@ -92,33 +86,26 @@ const UserInfo = ({
           Email/Password/Login
         </GridItem>
         <GridItem bg='green.500' h='200px'>
-          User Bio
-          <p />
-          {bio}
           <Editable
             defaultValue={bio}
             onSubmit={handleBioChange}
             mt={2}
-            // startWithEditView={false}
             minH='40px'
+            isPreviewFocusable={false}
           >
-            <EditablePreview
+            <Input
+              as={EditableInput}
               border='1px solid black'
               bg='white'
               p={2}
               borderRadius='md'
               minH='40px'
-            >
-              {bio || 'Click to edit bio'}
-            </EditablePreview>
-            <EditableInput
-              border='1px solid black'
-              bg='white'
-              p={2}
-              borderRadius='md'
-              minH='40px'
-              placeholder='Enter your bio'
+              placeholder='Update your bio'
             />
+            <EditableControls top='5px' left='5px' />
+            User Bio
+            <p />
+            {bio}
           </Editable>
         </GridItem>
       </Grid>

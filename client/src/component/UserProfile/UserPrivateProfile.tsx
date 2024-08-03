@@ -1,14 +1,27 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Box, Grid, GridItem, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  ButtonGroup,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  IconButton,
+  useEditableControls,
+} from '@chakra-ui/react';
+import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import UserInfo from './UserInfo';
 import UserTabs from './UserTabs';
+import UserInfo from './UserInfo';
+import UserPrivacy from './UserPrivacy';
+import UserHelp from './UserHelp';
 
 const UserPrivateProfile = ({ onLogout }) => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [bio, setBio] = useState('');
+  const [currentView, setCurrentView] = useState('info');
 
   const fetchUserData = () => {
     axios
@@ -20,6 +33,26 @@ const UserPrivateProfile = ({ onLogout }) => {
       .catch((error) => {
         console.error('Fetch User Data: Failed ', error);
       });
+  };
+
+  const EditableControls = () => {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls();
+
+    return isEditing ? (
+      <ButtonGroup size='sm'>
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
+        <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+      </ButtonGroup>
+    ) : (
+      <Flex>
+        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+      </Flex>
+    );
   };
 
   const handleAvatarChange = (event) => {
@@ -148,7 +181,6 @@ const UserPrivateProfile = ({ onLogout }) => {
       >
         <Grid
           // border='5px solid red'
-          // colSpan={1}
           // bg='blue.500'
           gap={10}
           display='flex'
@@ -156,14 +188,27 @@ const UserPrivateProfile = ({ onLogout }) => {
           alignItems='center'
           justifyContent='center'
         >
-          <UserTabs handleLogOut={handleLogOut} />
-          <UserInfo
-            userName={userName}
+          <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} />
+          {/* <UserInfo
             bio={bio}
+            userName={userName}
+            EditableControls={EditableControls}
             handleAvatarChange={handleAvatarChange}
             handleBioChange={handleBioChange}
             handleUserNameChange={handleUserNameChange}
-          />
+          /> */}
+          {currentView === 'info' && (
+            <UserInfo
+              bio={bio}
+              userName={userName}
+              EditableControls={EditableControls}
+              handleAvatarChange={handleAvatarChange}
+              handleBioChange={handleBioChange}
+              handleUserNameChange={handleUserNameChange}
+            />
+          )}
+          {currentView === 'privacy' && <UserPrivacy />}
+          {currentView === 'help' && <UserHelp />}
         </Grid>
       </Grid>
     </Grid>
