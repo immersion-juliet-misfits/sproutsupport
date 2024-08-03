@@ -36,8 +36,8 @@ const PlantFinder = ({ user }) => {
   }
 
   const handlePlantSelect = (selected: Plant) => {
-    console.log(selected);
     setSelected(selected);
+    console.log(selected);
     setNickname(selected.CommonName)
   };
 
@@ -48,15 +48,6 @@ const PlantFinder = ({ user }) => {
   const handleBio = (e: React.FormEvent<HTMLInputElement>) => {
     setBio(e.currentTarget.value);
   };
-
-  const handleNicknameSubmit = () => {
-    const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
-    const { CommonName, Id } = selected;
-    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
-    .then((data) => {
-      console.log(data)
-    })    
-  }
   
   const handleTaskName = (e: React.FormEvent<HTMLInputElement>) => {
     setTaskName(e.currentTarget.value);
@@ -64,8 +55,29 @@ const PlantFinder = ({ user }) => {
 
   const handleAddTask = () => {
     setTasks([...tasks, taskName]);
+    // axios.put(`/plants/task/${data.id}`, { tasks })
+    // .then((result) => {
+    //   console.log(result, 'resstdshtdrjdjyfc')
+    // })    
     setTaskName('');
   }
+
+  const handleNicknameSubmit = () => {
+    const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
+    const { CommonName, Id } = selected;
+    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
+    .then(({data}) => {
+      console.log(data)
+      axios.put(`/plants/task/${data.id}`, { tasks })
+        .then((result) => {
+          console.log(result, 'resstdshtdrjdjyfc')
+        })  
+    })    
+  }
+
+  
+  
+
 
 //   const handleAddPlant() {
 //     axios.

@@ -28,6 +28,40 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
     })
 })
 
+// Plants.get('/all/:id', (req: Request, res: Response) => {
+//   const { id } = req.params;
+//   let num = Number(id)
+//   prisma.plant.findMany({where: { userId: num }})
+//     .then((data) => {
+//       res.send(data)
+//     })
+// })
+
+Plants.put('/task/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+  const { taskName, tasks } = req.body;
+  let num = Number(plantId)
+  // console.log('name of tas', taskName, tasks)
+
+  const newTasks = tasks.map((taskName) => ({
+    taskName, plant_id: Number(plantId)
+  }))
+
+  prisma.task.createMany({data: newTasks, skipDuplicates: true})
+    .then((data) => {
+      console.log('the right data', data)
+      res.send(data)
+    })
+
+  // prisma.task.upsert({ where: { id: num, plant_id: num }, create: { taskName: taskName, plant_id: num }, update: { taskName } })
+  //   .then((data) => {
+  //     res.send(data)
+  //   })
+  //   .catch((err) => {
+  //     console.error(err)
+  //   })
+})
+
 Plants.post('/search', (req: Request, res: Response) => {
   const { query } = req.body;
 

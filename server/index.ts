@@ -9,6 +9,7 @@ import Plants from './routes/plantCareRoutes/plantAddRoutes';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
+import job from './routes/plantCareRoutes/cron';
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
@@ -183,3 +184,4 @@ app.get('*', isAuthenticated, (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
+job.start();
