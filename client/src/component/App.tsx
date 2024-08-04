@@ -63,7 +63,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup />} />
         </Routes>
       </div>
-     </ChakraProvider>
+   </ChakraProvider>
   );
 };
 
