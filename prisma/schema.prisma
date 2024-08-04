@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  google_id     String         @unique
-  location_id   Int?
-  userName      String?
-  email         String?        @unique
-  password      String?
-  avatar        String?
-  bio           String?
-  level         Int?
-  attendees     Attendee[]
-  comments      Comment[]
-  meets         Meet[]
-  notifications Notification[]
-  posts         Post[]
+    id Int @id @default(autoincrement())
+    google_id String @unique
+    location_id Int?
+    userName String?
+    email String? @unique
+    password String?
+    avatar String?
+    bio String?
+    level Int?
+    meets Meet[]
+    notifications Notification[]
+    plants Plant[]
+    posts Post[]
+    // comments Comment[]
+    attendees Attendee[]
 }
 
 model Image {
@@ -55,53 +56,47 @@ model Notification {
 }
 
 model Plant {
-  id          Int     @id @default(autoincrement())
-  plantAPIID  Int?
-  species     String?
-  commonName  String?
-  nickname    String?
-  location    String?
-  imageUrl    String?
-  description String?
-  tasks       Task[]
+    id Int @id @default(autoincrement())
+    userId Int
+    plantAPIID Int?
+    species String?
+    commonName String?
+    nickname String?
+    location String?
+    imageUrl String?
+    description String?
+    caregiver User @relation(fields: [userId], references: [id])
+    tasks Task[]
 }
 
 model Task {
-  id              Int    @id @default(autoincrement())
-  taskName        String
-  frequency       String
-  lastCompleted   String
-  nextComplection String
-  active          String
-  plant_id        Int
-  taskPlant       Plant  @relation(fields: [plant_id], references: [id])
-
-  @@index([plant_id], map: "Task_plant_id_fkey")
+    id Int @id @default(autoincrement())
+    taskName String?
+    frequency String?
+    lastCompleted DateTime
+    nextComplection DateTime
+    active Boolean
+    plant_id Int
+    taskPlant Plant @relation(fields: [plant_id], references: [id])
 }
 
 model Post {
-  id       Int       @id @default(autoincrement())
-  userId   Int
-  image_id Int?
-  message  String
-  comments Comment[]
-  Image    Image?    @relation(fields: [image_id], references: [id])
-  owner    User      @relation(fields: [userId], references: [id])
-
-  @@index([image_id], map: "Post_image_id_fkey")
-  @@index([userId], map: "Post_userId_fkey")
+    id Int @id @default(autoincrement())
+    userId Int
+    // image_id Int?
+    message String
+    owner User @relation(fields: [userId], references: [id])
+    //image Image? @relation(fields: [image_id], references: [id])
+    //comments Comment[]
 }
 
 model Comment {
-  id          Int    @id @default(autoincrement())
-  userId      Int
-  message     String
-  post_id     Int
-  commentPost Post   @relation(fields: [post_id], references: [id])
-  commentor   User   @relation(fields: [userId], references: [id])
-
-  @@index([post_id], map: "Comment_post_id_fkey")
-  @@index([userId], map: "Comment_userId_fkey")
+    id Int @id @default(autoincrement())
+    // userId Int
+    // message String
+    // post_id Int
+    // commentor User @relation(fields: [userId], references: [id])
+    // commentPost Post @relation(fields: [post_id], references: [id])
 }
 
 model Attendee {
