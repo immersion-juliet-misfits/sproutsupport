@@ -10,6 +10,9 @@
 -- DropForeignKey
 ALTER TABLE `Post` DROP FOREIGN KEY `Post_image_id_fkey`;
 
+-- DropForeignKey
+ALTER TABLE `Task` DROP FOREIGN KEY `Task_plant_id_fkey`;
+
 -- AlterTable
 ALTER TABLE `Plant` MODIFY `plantAPIID` INTEGER NULL,
     MODIFY `species` VARCHAR(191) NULL,
@@ -25,7 +28,11 @@ ALTER TABLE `Task` DROP COLUMN `active`,
     MODIFY `taskName` VARCHAR(191) NULL,
     MODIFY `frequency` VARCHAR(191) NULL,
     MODIFY `lastCompleted` DATETIME(3) NULL,
-    MODIFY `nextComplection` DATETIME(3) NULL;
+    MODIFY `nextComplection` DATETIME(3) NULL,
+    MODIFY `plant_id` INTEGER NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `User_google_id_key` ON `User`(`google_id`);
+
+-- AddForeignKey
+ALTER TABLE `Task` ADD CONSTRAINT `Task_plant_id_fkey` FOREIGN KEY (`plant_id`) REFERENCES `Plant`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;

@@ -77,8 +77,8 @@ model Task {
     lastCompleted DateTime?
     nextComplection DateTime?
     overdue Boolean? 
-    plant_id Int
-    taskPlant Plant @relation(fields: [plant_id], references: [id])
+    plant_id Int?
+    taskPlant Plant? @relation(fields: [plant_id], references: [id])
 }
 
 model Post {

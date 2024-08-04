@@ -47,6 +47,17 @@ Plants.get('/overdue/:plantId', (req: Request, res: Response) => {
     })
 })
 
+Plants.delete('/delete/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+
+  prisma.$transaction([prisma.task.deleteMany({where: { plant_id: Number(plantId) }}), prisma.plant.delete({where: { id: Number(plantId) }})])
+
+  // prisma.plant.delete({where: { id: Number(plantId) }})
+  //   .then((data) => {
+  //     res.send('deleted')
+  //   })
+})
+
 Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
   const { taskName, tasks, freq } = req.body;
