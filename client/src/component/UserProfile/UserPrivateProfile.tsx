@@ -42,18 +42,18 @@ const UserPrivateProfile = ({ onLogout }) => {
   const EditableControls = () => {
     const {
       isEditing,
-      getSubmitButtonProps,
       getCancelButtonProps,
+      getSubmitButtonProps,
       getEditButtonProps,
     } = useEditableControls();
 
     return isEditing ? (
-      <ButtonGroup size='sm'>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
+      <ButtonGroup size='sm' position='absolute'>
         <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
       </ButtonGroup>
     ) : (
-      <Flex>
+      <Flex position='absolute'>
         <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
       </Flex>
     );

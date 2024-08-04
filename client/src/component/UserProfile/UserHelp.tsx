@@ -1,13 +1,9 @@
 import {
-  // Box,
-  // Editable,
-  // EditableInput,
+  Button,
   Grid,
   GridItem,
   Heading,
-  // Input,
 } from '@chakra-ui/react';
-// import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
 const UserHelp = () => {
   return (
@@ -26,7 +22,9 @@ const UserHelp = () => {
         gap={4}
       >
         <GridItem bg='green.500' h='100px'>
-          Placeholder
+          <Button colorScheme='red'>
+            Delete Account Placeholder
+          </Button>
         </GridItem>
         <GridItem bg='green.500' h='100px'>
           Placeholder

@@ -1,10 +1,14 @@
 import {
   Editable,
   EditableInput,
+  Flex,
   Grid,
   GridItem,
+  Heading,
   Image,
   Input,
+  Spacer,
+  Text,
 } from '@chakra-ui/react';
 
 const UserInfo = ({
@@ -71,6 +75,16 @@ const UserInfo = ({
             minH='40px'
             isPreviewFocusable={false}
           >
+            <Flex alignItems='center' gap='10'>
+              <EditableControls bottom='5px' left='5px' w='100px' />
+              <Text fontSize='xl' fontWeight='bold' ml='90px'>
+                Change Display name
+              </Text>
+            </Flex>
+            <p />
+            <Heading as='h2' size='lg' textAlign='center'>
+              {userName}
+            </Heading>
             <Input
               as={EditableInput}
               border='1px solid black'
@@ -80,10 +94,6 @@ const UserInfo = ({
               minH='40px'
               p={2}
             />
-            <EditableControls top='5px' left='5px' />
-            Change Display name
-            <p />
-            {userName}
           </Editable>
         </GridItem>
         <GridItem bg='green.500' h='100px'>
@@ -94,6 +104,16 @@ const UserInfo = ({
             minH='40px'
             isPreviewFocusable={false}
           >
+            <Flex alignItems='center' gap='10'>
+              <EditableControls bottom='5px' left='5px' w='100px' />
+              <Text fontSize='xl' fontWeight='bold' ml='90px'>
+                Change Location
+              </Text>
+            </Flex>
+            <p />
+            <Heading as='h2' size='lg' textAlign='center'>
+              {location_id}
+            </Heading>
             <Input
               as={EditableInput}
               type='number'
@@ -104,10 +124,6 @@ const UserInfo = ({
               minH='40px'
               p={2}
             />
-            <EditableControls top='5px' left='5px' />
-            Change Location
-            <p />
-            {location_id}
           </Editable>
         </GridItem>
         <GridItem bg='green.500' h='200px'>
@@ -118,6 +134,16 @@ const UserInfo = ({
             minH='40px'
             isPreviewFocusable={false}
           >
+            <Flex alignItems='center' gap='10'>
+              <EditableControls bottom='5px' left='5px' w='100px' />
+              <Text fontSize='xl' fontWeight='bold' ml='90px'>
+                User Bio
+              </Text>
+            </Flex>
+            <p />
+            <Heading as='h2' size='lg' textAlign='center'>
+              {bio}
+            </Heading>
             <Input
               as={EditableInput}
               border='1px solid black'
@@ -127,10 +153,6 @@ const UserInfo = ({
               minH='40px'
               placeholder='Update your bio'
             />
-            <EditableControls top='5px' left='5px' />
-            User Bio
-            <p />
-            {bio}
           </Editable>
         </GridItem>
       </Grid>
