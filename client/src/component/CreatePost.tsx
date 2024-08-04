@@ -22,7 +22,7 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 //   comments: Array<string>;
 // }
 
-const CreatePost = () => {
+const CreatePost = ({user}) => {
   const [input, setInput] = useState('');
   const [post, setPost] = useState('');
 
@@ -47,7 +47,7 @@ const CreatePost = () => {
 
   const addMessage = () => {
     return axios
-      .post('/post/post', { message: input })
+      .post('/post/post', { message: input, userId: user.id})
       .then(() => {
       })
       .catch((err) => {

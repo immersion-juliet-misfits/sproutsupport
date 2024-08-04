@@ -11,7 +11,7 @@ import {
   ButtonGroup,
   useEditableControls
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, EditIcon, DeleteIcon} from '@chakra-ui/icons';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
@@ -115,7 +115,7 @@ const Post = () => {
                       onClick={() => {
                         handleDelete(post.id);
                       }}
-                      // icon={}
+                      icon={<DeleteIcon/>}
                     />
                   </Box>
                 </Flex>
