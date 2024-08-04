@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, {useState} from 'react'
 import { Input, Button, SimpleGrid, Box } from '@chakra-ui/react';
 
-const MeetupList = ({list, refresh, createSwapUpdateCheck}: {list: Array<T>, refresh: any, createSwapUpdateCheck: any}) =>{
+const MeetupList = ({list, refresh, createSwapUpdateCheck, user}: {list: Array<T>, refresh: any, createSwapUpdateCheck: any, user: object}) =>{
   const [swap, setSwap] = useState('none')
   const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
@@ -76,9 +76,9 @@ const meetupSwap = (event: object): void =>{
     
     {/* <Button onClick={()=>{meetupDelete(10)}}>delete</Button> */}
         <SimpleGrid columns={3} spacing={10}>
-        {swap === 'none' && <>{list.map((group, i)=>{return(<MeetupListItem key={i} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck}/>)})}</>}
+        {swap === 'none' && <>{list.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck}/>)})}</>}
         </SimpleGrid>
-    {swap === 'update' && <><Box>
+    {swap === 'update' && <><Box w={'500px'}>
       <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>

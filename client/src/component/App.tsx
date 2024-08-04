@@ -57,7 +57,7 @@ const App = () => {
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
           />
-          <Route path='/meetup' element={<Meetup />} />
+          <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
      </ChakraProvider>

@@ -2,7 +2,7 @@ import { Input, Button, Box } from '@chakra-ui/react';
 import axios from 'axios';
 import React, {useState, useEffect} from 'react'
 
-const MeetupCreate = ({refresh}: {refresh: any}) => {
+const MeetupCreate = ({refresh, user}: {refresh: any, user: object}) => {
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
   const [eventName, setEventName] = useState('')
@@ -31,7 +31,7 @@ const MeetupCreate = ({refresh}: {refresh: any}) => {
   }
 
   const makeMeetup = (): void =>{
-    axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: image})
+    axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: image, userId: user.id})
     .then(()=>{
      refresh()
     })

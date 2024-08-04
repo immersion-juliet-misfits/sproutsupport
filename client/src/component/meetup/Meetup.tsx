@@ -5,7 +5,7 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
-const Meetup = () => {
+const Meetup = ({user}: {user: object}) => {
 // const [user, setUser] = useState('none')
 // const [weather, setWeather] = useState({})
 const [list, setList] = useState([])
@@ -119,13 +119,13 @@ useEffect(()=>{
 }, [])
 
   return (<div>
-    <script>{window.setInterval(doubleCall, 15000)}</script>
-    <Box m={2} color='white' backgroundColor='green'><Nav /></Box> 
+    <script>{window.setInterval(doubleCall, 60000)}</script>
+    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>create/show</Button>
-    {timeLeft.length === 0 && <Box m={2} color='white' backgroundColor='green'>{currentTime}</Box>} 
-    {timeLeft.length > 0 && <Box m={2} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === false && <>{inputSwap === false && <MeetupCreate refresh={getMeetups}/>} </>} 
-    {show === true && <MeetupList list={list} refresh={getMeetups} createSwapUpdateCheck={createSwapUpdate}/>} 
+    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
+    {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
+    {show === false && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user}/>} </>} 
+    {show === true && <MeetupList list={list} refresh={getMeetups} createSwapUpdateCheck={createSwapUpdate} user={user}/>} 
     </div>)
 };
 
