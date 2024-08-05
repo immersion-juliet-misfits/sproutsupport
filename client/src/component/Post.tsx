@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Flex } from '@chakra-ui/react';
+import { Card, Box, Flex } from '@chakra-ui/react';
 import { IconButton, Image } from '@chakra-ui/react';
 import {
   Input,
@@ -92,7 +92,7 @@ const Post = () => {
                   justifyContent='space-between'
                 >
                   {/* <Image>Picture</Image> */}
-                  <Box>
+                  <Card>
                     <div>Picture</div>
                     <Editable
                       textAlign='center'
@@ -117,7 +117,7 @@ const Post = () => {
                       }}
                       icon={<DeleteIcon/>}
                     />
-                  </Box>
+                  </Card>
                 </Flex>
               </li>
             );

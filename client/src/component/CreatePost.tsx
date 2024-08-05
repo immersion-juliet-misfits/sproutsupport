@@ -24,7 +24,7 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 
 const CreatePost = ({user}) => {
   const [input, setInput] = useState('');
-  const [post, setPost] = useState('');
+  const [img, setImg] = useState('');
 
   const handleInputChange = (e: {
     target: { value: SetStateAction<string> };
@@ -33,16 +33,26 @@ const CreatePost = ({user}) => {
   const isError = input === '';
 
   const [image, setImage] = useState(null);
-
   const handleImageChange = (e: { target: { files: any[] } }) => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
     reader.onload = (e) => {
       setImage(e.target.result);
+      addImg(user.id);
     };
 
     reader.readAsDataURL(file);
+  };
+
+  const addImg = (id: string) => {
+    axios
+      .patch(`/post/post${id}`, {img})
+      .then((data) => {
+      })
+      .catch((err) => {
+        console.error('Failed to Update image: ', err);
+      });
   };
 
   const addMessage = () => {
