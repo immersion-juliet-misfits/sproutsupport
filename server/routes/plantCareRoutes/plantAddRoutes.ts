@@ -37,6 +37,31 @@ Plants.get('/all/:id', (req: Request, res: Response) => {
 //     })
 // })
 
+// gets all overdue tasks for a plant
+Plants.get('/overdue/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+  prisma.task.findMany({where: { plant_id: Number(plantId), overdue: true }})
+    .then((data) => {
+      // console.log(data, 'overdue tasks')
+      res.send(data)
+    })
+})
+
+Plants.delete('/delete/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+
+  prisma.$transaction([
+    prisma.task.deleteMany({where: { plant_id: Number(plantId) }}),
+    prisma.plant.delete({where: { id: Number(plantId) }})
+  ])
+  res.send('deleted')
+
+  // prisma.plant.delete({where: { id: Number(plantId) }})
+  //   .then((data) => {
+  //     res.send('deleted')
+  //   })
+})
+
 Plants.put('/task/:plantId', (req: Request, res: Response) => {
   const { plantId } = req.params;
   const { taskName, tasks, freq } = req.body;
@@ -60,7 +85,8 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   let num = Number(plantId)
 
   const newTasks = tasks.map((taskName) => ({
-    taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), active: true
+    taskName, plant_id: Number(plantId), frequency: freq, nextComplection: getNextCompletionDate(freq), overdue: false
+    // console.log(getNextCompletionDate(freq))
   }))
 
   prisma.task.createMany({data: newTasks, skipDuplicates: true})
