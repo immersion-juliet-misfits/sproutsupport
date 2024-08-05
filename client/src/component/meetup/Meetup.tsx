@@ -124,7 +124,7 @@ useEffect(()=>{
     <Button onClick={()=>{showSwitch()}}>create/show</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === false && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user}/>} </>} 
+    {show === false && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>} 
     {show === true && <MeetupList list={list} refresh={getMeetups} createSwapUpdateCheck={createSwapUpdate} user={user}/>} 
     </div>)
 };
