@@ -15,7 +15,7 @@ const job = new CronJob('*/9 * * * * *', () => { // wanna make this dynamic
 
     // notify plant owner of their overdue task
     if (data.count > 0) {
-      console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
+      // console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
     }
    })
 })

@@ -11,9 +11,9 @@ const PlantSnippet = ({ plant }) => {
     axios.get(`/plants/overdue/${plant.id}`)
       .then(({data}) => {
         setTasks(data)
-        console.log(plant.nickname, data)
+        // console.log(plant.nickname, data)
       })
-    console.log(plant)
+    // console.log(plant)
   }, [])
 
   return (
