@@ -16,6 +16,10 @@ const OwnedPlants = ({ user }) => {
       })
   }
 
+  // const handlePlantDelete = () => {
+  //   axios.get(`/plants/delete/${plant.id}`)
+  // }
+
   useEffect(() => {
     getPlants();
   }, [])
