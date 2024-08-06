@@ -1,18 +1,14 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
 model User {
     id Int @id @default(autoincrement())
     google_id String @unique
@@ -30,14 +26,12 @@ model User {
     // comments Comment[]
     attendees Attendee[]
 }
-
 model Image {
     id Int @id @default(autoincrement())
     url String
     category String
     //posts Post[]
 }
-
 model Meet {
     id Int @id @default(autoincrement())
     time_date String
@@ -49,14 +43,12 @@ model Meet {
     owner User @relation(fields: [userId], references: [id])
     attendees Attendee[]
 }
-
 model Notification {
     id Int @id @default(autoincrement())
     userId Int
     message String
     recipient User @relation(fields: [userId], references: [id])
 }
-
 model Plant {
     id Int @id @default(autoincrement())
     userId Int
@@ -76,11 +68,10 @@ model Task {
     frequency String?
     lastCompleted DateTime?
     nextComplection DateTime?
-    overdue Boolean? 
+    overdue Boolean?
     plant_id Int?
     taskPlant Plant? @relation(fields: [plant_id], references: [id])
 }
-
 model Post {
     id Int @id @default(autoincrement())
     userId Int
@@ -90,7 +81,6 @@ model Post {
     //image Image? @relation(fields: [image_id], references: [id])
     //comments Comment[]
 }
-
 model Comment {
     id Int @id @default(autoincrement())
     // userId Int
@@ -99,7 +89,6 @@ model Comment {
     // commentor User @relation(fields: [userId], references: [id])
     // commentPost Post @relation(fields: [post_id], references: [id])
 }
-
 model Attendee {
     id Int @id @default(autoincrement())
     meet_id Int
