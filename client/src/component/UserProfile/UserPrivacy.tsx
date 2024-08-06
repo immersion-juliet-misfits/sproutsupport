@@ -30,7 +30,7 @@ const UserPrivacy = () => {
           Email/Password/Login Method Editing will be here
         </GridItem>
         <GridItem bg='green.500' h='100px'>
-          Placeholder - Accept messages from strangers?
+          Placeholder - Accept messages from strangers? Display link to your Forum posts? Display your plants? Your Meetups?
         </GridItem>
         <GridItem bg='green.500' h='200px'>
           Placeholder - Blocking?
