@@ -111,6 +111,51 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   //   })
 })
 
+Plants.post('/completeTask', (req: Request, res: Response) => {
+  const { id } = req.body
+
+  const getNextCompletionDate = (frequency) => {
+    const now = new Date();
+    let nextCompletion = new Date();
+
+    if (frequency === 'second') {
+      nextCompletion = new Date(now.getTime() + 1000);
+    } else if (frequency === 'minute') {
+      nextCompletion = new Date(now.getTime() + 60000);
+    } else if (frequency === 'hour') {
+      nextCompletion = new Date(now.getTime() + 3600000);
+    } else {
+      nextCompletion = now;
+    }
+
+    return nextCompletion;
+  };
+
+  prisma.task.findUnique({
+    where: { id }
+  })
+  .then((task) => {
+    prisma.task.update({
+      where: { id },
+      data: {
+        lastCompleted: new Date(),
+        nextComplection: getNextCompletionDate(task.frequency),
+        overdue: false
+      }
+    })
+    .then(() => {
+      res.send('done')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  })
+
+  
+
+
+})
+
 
 Plants.post('/search', (req: Request, res: Response) => {
   const { query } = req.body;

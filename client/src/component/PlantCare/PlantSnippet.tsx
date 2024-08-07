@@ -45,14 +45,14 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
     {plant.imageUrl && <img width={250} height={250} src={plant.imageUrl}></img>}
         <h3><em>{plant.description}</em></h3>
     </CardBody>
-        {tasks.length > 0 &&
+        {/* {tasks.length > 0 &&
           tasks.map((task) => (
             <p key={task.id} style={{color:"red"}}>{task.taskName}</p>
           ))
-        }
+        } */}
     <CardFooter>
       <DeleteIcon onClick={handleDelete}/>
-      <PlantCare plant={plant}/>
+      <PlantCare plant={plant} tasks={tasks}/>
     </CardFooter>
     </Card>
   )
