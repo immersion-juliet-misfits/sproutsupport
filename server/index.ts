@@ -12,6 +12,7 @@ import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 import Upload from './routes/uploadImgRoutes';
+import UserInfo from './routes/userRoutes/userInfoRoutes';
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
@@ -33,8 +34,8 @@ app.use(express.static(DIST_PATH));
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
-
 app.use('/post', Posts)
+app.use('/user', UserInfo);
 
 // GAuth Session middleware
 app.use(
@@ -87,7 +88,7 @@ passport.use(
                 google_id: profile.id,
                 userName: profile.displayName,
                 email: profile.emails?.[0].value,
-                avatar: profile.photos?.[0].value,
+                avatar: "https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH" ,
               },
             });
           }
@@ -129,6 +130,7 @@ app.get('/api/checkAuth', (req, res) => {
 });
 
 
+
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
@@ -163,7 +165,7 @@ app.post('/api/logout', (req, res) => {
 // Initiates authentication - requests access to User profile & email
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'consent' })
 );
 
 // Authenticates User , handles Google callback, & redirects User to home on successful Google login

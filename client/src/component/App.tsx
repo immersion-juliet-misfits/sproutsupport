@@ -6,7 +6,8 @@ import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
-import PrivateProfile from './UserProfile/privateProfile';
+import UserPrivateProfile from './UserProfile/UserPrivateProfile';
+import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
 import Post from './Post';
 
@@ -42,7 +43,7 @@ const App = () => {
     <ChakraProvider>
       <div className='App'>
         Sprout Support
-        {isAuthenticated && <PrivateProfile onLogout={handleLogout} />}
+        {/* {isAuthenticated && <UserPrivateProfile onLogout={handleLogout} />} */}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
@@ -53,6 +54,8 @@ const App = () => {
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile onLogout={handleLogout} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
@@ -60,7 +63,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup />} />
         </Routes>
       </div>
-     </ChakraProvider>
+   </ChakraProvider>
   );
 };
 
