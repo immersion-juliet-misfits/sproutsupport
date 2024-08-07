@@ -1,31 +1,29 @@
 import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
-const Posts = express.Router();
+const Images = express.Router();
 const prisma = new PrismaClient();
-
-Posts.get('/post', (req: Request, res: Response) => {
-  prisma.post
-    .findMany()
-    .then((posts) => {
-      posts
-        ? res.status(201).send(posts)
+ Images.get('/image:', (req: Request, res: Response) => {
+  const { id } = req.body
+  prisma.image
+    .findUnique({where: id})
+    .then((image) => {
+      image
+        ? res.status(201).send(image)
         : res.status(404).send('Post not found');
     })
     .catch((err) => {
-      console.error('Failed to get post: ', err);
+      console.error('Failed to get image: ', err);
       res.sendStatus(500);
     });
 });
-
-Posts.post('/post', (req: Request, res: Response) => {
-  const { userId, message, imageUrl } = req.body;
-  prisma.post
+ Images.post('/image', (req: Request, res: Response) => {
+  const { category, url } = req.body;
+  prisma.image
     .create({
       data: {
-        userId,
-        message,
-        imageUrl
+        url,
+        category,
       },
     })
     .then((data) => {
@@ -35,17 +33,16 @@ Posts.post('/post', (req: Request, res: Response) => {
       console.error('Failed to create Post: ', err);
     });
 });
-
-Posts.patch('/post:id', (req: Request, res: Response) => {
+ Images.patch('/image:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
-  const { message } = req.body;
-    prisma.post.update({
+  const { url } = req.body;
+    prisma.image.update({
       where: {
         id: Number(id),
       },
       data: {
-        message
+        url
       }
     })
       .then(updatedPost => {
@@ -53,19 +50,18 @@ Posts.patch('/post:id', (req: Request, res: Response) => {
       })
       .catch(() => res.sendStatus(404));
 });
-
-Posts.delete('/post:id', (req: Request, res: Response) => {
+ Images.delete('/image:id', (req: Request, res: Response) => {
   const { id } = req.params;
   const nId = parseInt(id);
-    prisma.post.delete({
+    prisma.image.delete({
       where: {
         id: nId
       }
     })
       .then(() => res.sendStatus(201))
       .catch((err) => {
-        console.error('Failed to delete post: ', err)
+        console.error('Failed to delete image: ', err)
         res.sendStatus(500)});
 });
 
-export default Posts;
+export default Images;

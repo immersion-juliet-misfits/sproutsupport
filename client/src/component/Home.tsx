@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { Link as ChakraLink, LinkProps } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import Post from './Post';
+import Post from './Post/Post';
 import Nav from './NavBar';
 
 const Home = () => {

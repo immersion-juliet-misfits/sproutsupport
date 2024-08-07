@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from "./Home";
-import CreatePost from "./CreatePost";
+import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
 import PrivateProfile from './UserProfile/privateProfile';
 import Meetup from "./meetup/Meetup";
-import Post from './Post';
+import Post from './Post/Post';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,7 +49,7 @@ const App = () => {
             path='/home'
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
-          <Route path='/createPost' element={<CreatePost />} />
+          <Route path='/createPost' element={<CreatePost user={user} />} />
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
