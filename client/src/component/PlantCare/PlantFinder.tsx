@@ -71,7 +71,7 @@ const PlantFinder = ({ user }) => {
   const handleNicknameSubmit = () => {
     const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
     const { CommonName, Id } = selected;
-    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id })
+    axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id, imageUrl })
     .then(({data}) => {
       axios.put(`/plants/task/${data.id}`, { tasks, freq })
         .then((result) => {
@@ -86,9 +86,6 @@ const PlantFinder = ({ user }) => {
 
 
   const handleUploadFile = () => {
-    if (!imageUrl) {
-      console.info('No image selected')
-    }
 
     axios.get('/upload/url', { params: {filename: image.name}})
       .then(({data}) => {
@@ -114,8 +111,6 @@ const PlantFinder = ({ user }) => {
 
   return (
     <div>
-      <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
-      {imageUrl && <img src={imageUrl}></img>}
 
       <Heading>Plant Finder</Heading>
       <Link to={'/myplants'}>
@@ -127,18 +122,20 @@ const PlantFinder = ({ user }) => {
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
-      ></Input>
+        ></Input>
       <Input type="button" value="Search" onClick={() => handleSubmit()}></Input><br></br>
       {selected && selected.CommonName &&
         <div>
           <h3>Choose a name for your plant (optional)</h3>
           <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
+          {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
           <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></Input><br></br>
           <Select placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
           </Select>
+          <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
           <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></Input><br></br>
           {tasks.length > 0 &&
             tasks.map((task) => (

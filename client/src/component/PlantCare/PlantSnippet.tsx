@@ -26,7 +26,7 @@ const PlantSnippet = ({ plant }) => {
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody>
-
+    {plant.imageUrl && <img width={250} height={250} src={plant.imageUrl}></img>}
         <h3><em>{plant.description}</em></h3>
     </CardBody>
         {tasks.length > 0 &&

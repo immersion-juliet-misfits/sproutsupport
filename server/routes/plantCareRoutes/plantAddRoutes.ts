@@ -12,8 +12,16 @@ Plants.get('/test', (req: Request, res: Response) => {
 })
 
 Plants.post('/newPlant', (req: Request, res: Response) => {
-  const { nickname, bio, ScientificName, CommonName, Id, userId } = req.body;
-  prisma.plant.create({data: {nickname, description:bio, species: ScientificName, commonName: CommonName, plantAPIID: Id, userId}})
+  const { nickname, bio, ScientificName, CommonName, Id, userId, imageUrl } = req.body;
+  prisma.plant.create({data: {
+    nickname,
+    description:bio,
+    species: ScientificName,
+    commonName: CommonName,
+    plantAPIID: Id,
+    userId,
+    imageUrl
+  }})
     .then((data) => {
       res.send(data)
     })
@@ -102,6 +110,7 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   //     console.error(err)
   //   })
 })
+
 
 Plants.post('/search', (req: Request, res: Response) => {
   const { query } = req.body;
