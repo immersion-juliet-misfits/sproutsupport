@@ -3,6 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/reac
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { DeleteIcon } from '@chakra-ui/icons';
+import PlantCare from './PlantCare';
 
 const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
   const [tasks, setTasks] = useState([]);
@@ -51,6 +52,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
         }
     <CardFooter>
       <DeleteIcon onClick={handleDelete}/>
+      <PlantCare plant={plant}/>
     </CardFooter>
     </Card>
   )
