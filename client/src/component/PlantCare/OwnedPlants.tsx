@@ -17,8 +17,20 @@ const OwnedPlants = ({ user }) => {
       })
   }
 
-  // const handlePlantDelete = () => {
-  //   axios.get(`/plants/delete/${plant.id}`)
+  const handlePlantClick = (plant) => {
+    console.log('selected plant', plant)
+    // setSelected(selected);
+  };
+
+  // const handleDelete = () => {
+  //   // let plantName = plant.
+  //   axios.delete(`/plants/delete/${plant.id}`)
+  //     .then(() => {
+  //       console.info('Plant deleted')
+  //     })
+  //     .then(() => {
+  //       getPlants()
+  //     })
   // }
 
   useEffect(() => {
@@ -35,7 +47,7 @@ const OwnedPlants = ({ user }) => {
       {/* make into seperate component */}
       {plants.length > 0 &&
         plants.map((plant) => (
-          <PlantSnippet plant={plant}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>
