@@ -3,7 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/reac
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PlantSnippet from './PlantSnippet';
-import UploadImage from '../UploadImage';
+// import UploadImage from '../UploadImage';
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
 
@@ -27,7 +27,6 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      <UploadImage />
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>

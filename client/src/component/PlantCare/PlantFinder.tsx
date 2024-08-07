@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Input, Heading, Select } from '@chakra-ui/react'
 import axios from 'axios';
+import PlantImgUpload from './PlantImgUpload';
 
 type Plant = {
     CommonName: string;
@@ -18,6 +19,9 @@ const PlantFinder = ({ user }) => {
   const [taskName, setTaskName] = useState('');
   const [freq, setFreq] = useState('');
   const [tasks, setTasks] = useState([]);
+  const [image, setImage] = useState(null)
+  const [imageUrl, setImageUrl] = useState(null)
+
 
 
   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
@@ -75,8 +79,30 @@ const PlantFinder = ({ user }) => {
     })
   }
 
+  const handleChooseFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setImage(e.currentTarget.value);
+    setImage(e.target.files[0]) // prob want entire obj
+  };
 
 
+  const handleUploadFile = () => {
+    if (!imageUrl) {
+      console.info('No image selected')
+    }
+
+    axios.get('/upload/url', { params: {filename: image.name}})
+      .then(({data}) => {
+        return axios.put(data, image, {
+          headers: {'Content-Type': image.type}
+        })
+      })
+      .then(() => {
+        setImageUrl(`https://ssupportbucket.s3.amazonaws.com/${image.name}`)
+      })
+      .catch((err) => {
+        console.error('Failed to get image url', err)
+      })
+  }
 
 
 //   const handleAddPlant() {
@@ -88,6 +114,9 @@ const PlantFinder = ({ user }) => {
 
   return (
     <div>
+      <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
+      {imageUrl && <img src={imageUrl}></img>}
+
       <Heading>Plant Finder</Heading>
       <Link to={'/myplants'}>
         <input type="button" value="My Plants"></input>
