@@ -9,14 +9,13 @@ import {
   EditableTextarea,
   EditablePreview,
   ButtonGroup,
-  useEditableControls
+  useEditableControls,
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon, EditIcon, DeleteIcon} from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
-  const [id, setId] = useState('');
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
 
   function EditableControls() {
     const {
@@ -42,6 +41,7 @@ const Post = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
+        console.log('data', data);
         setPosts(data);
       })
       .catch((err) => {
@@ -51,7 +51,7 @@ const Post = () => {
 
   const updateMessage = (id: string) => {
     axios
-      .patch(`/post/post${id}`, {message})
+      .patch(`/post/post${id}`, { message })
       .then((data) => {
         getPosts();
       })
@@ -91,14 +91,22 @@ const Post = () => {
                   alignItems='center'
                   justifyContent='space-between'
                 >
-                  {/* <Image>Picture</Image> */}
-                  <Box>
-                    <div>Picture</div>
+                  {/* <div>{post.imageUrl}</div> */}
+                  <Box >
+                    <Image
+                      src={post.imageUrl}
+                      // sizes='(max-width: 40px) 80px, 120px'
+                      boxSize='180px'
+                      />
                     <Editable
                       textAlign='center'
                       defaultValue={post.message}
-                      onSubmit={() => {updateMessage(post.id)}}
-                      onChange={(newMessage) => {setMessage(newMessage)}}
+                      onSubmit={() => {
+                        updateMessage(post.id);
+                      }}
+                      onChange={(newMessage) => {
+                        setMessage(newMessage);
+                      }}
                       fontSize='2xl'
                       isPreviewFocusable={false}
                     >
@@ -115,7 +123,7 @@ const Post = () => {
                       onClick={() => {
                         handleDelete(post.id);
                       }}
-                      icon={<DeleteIcon/>}
+                      icon={<DeleteIcon />}
                     />
                   </Box>
                 </Flex>
