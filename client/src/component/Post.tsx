@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Flex } from '@chakra-ui/react';
+import { Card, Box, Flex } from '@chakra-ui/react';
 import { IconButton, Image } from '@chakra-ui/react';
 import {
   Input,
@@ -11,7 +11,7 @@ import {
   ButtonGroup,
   useEditableControls
 } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
+import { CheckIcon, CloseIcon, EditIcon, DeleteIcon} from '@chakra-ui/icons';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
@@ -92,7 +92,7 @@ const Post = () => {
                   justifyContent='space-between'
                 >
                   {/* <Image>Picture</Image> */}
-                  <Box>
+                  <Card>
                     <div>Picture</div>
                     <Editable
                       textAlign='center'
@@ -115,9 +115,9 @@ const Post = () => {
                       onClick={() => {
                         handleDelete(post.id);
                       }}
-                      // icon={}
+                      icon={<DeleteIcon/>}
                     />
-                  </Box>
+                  </Card>
                 </Flex>
               </li>
             );
