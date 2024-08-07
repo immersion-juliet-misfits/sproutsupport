@@ -14,18 +14,20 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
     axios.delete(`/plants/delete/${plant.id}`)
       .then(() => {
         console.info('Plant deleted')
-      })
-      .then(() => {
         getPlants()
       })
   }
 
-  useEffect(() => {
+  const fetchTasks = () => {
     axios.get(`/plants/overdue/${plant.id}`)
       .then(({data}) => {
         setTasks(data)
         // console.log(plant.nickname, data)
       })
+  }
+
+  useEffect(() => {
+    fetchTasks()
       // .then(() => [
       //   getPlants()
       // ])
@@ -52,7 +54,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
         } */}
     <CardFooter>
       <DeleteIcon onClick={handleDelete}/>
-      <PlantCare plant={plant} tasks={tasks}/>
+      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks}/>
     </CardFooter>
     </Card>
   )
