@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
 import axios from 'axios';
-// import { Link } from 'react-router-dom';
-import { bucketName } from '../../../server/s3';
 
 const UploadImage = () => {
   const [image, setImage] = useState(null)
@@ -10,37 +7,27 @@ const UploadImage = () => {
 
   const handleChooseFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setImage(e.currentTarget.value);
-    console.log(e.target.files[0].name)
     setImage(e.target.files[0]) // prob want entire obj
-    console.log(image)
   };
 
   const handleUploadFile = () => {
     if (!image) {
-      console.log('no image')
+      console.info('No image selected')
     }
+
     axios.get('/upload/url', { params: {filename: image.name}})
-      .then((data) => {
-        
-        console.log('sum working', data)
-        let test = data.data
-        return axios.put(test, image, {
+      .then(({data}) => {
+        return axios.put(data, image, {
           headers: {'Content-Type': image.type}
         })
-        // setSignedUrl(data)
       })
       .then(() => {
         setSignedUrl(`https://ssupportbucket.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
-        console.error(err)
+        console.error('Failed to get image url', err)
       })
   }
-
-
-  useEffect(() => {
-    console.log('image', image)
-  }, [image])
 
   return (
     <div>
