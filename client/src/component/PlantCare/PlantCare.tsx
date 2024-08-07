@@ -22,7 +22,10 @@ const PlantCare = ({ plant, tasks }) => {
 
   const handleCompletion = (task) => {
     console.log(task, 'task')
-    // axios.post('/completeTask', {  })
+    axios.post('/plants/completeTask', { id: task.id })
+      .then((data) => {
+        console.log(data)
+      })
   }
 
   return (
