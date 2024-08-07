@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from "./Home";
-import CreatePost from "./CreatePost";
+import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
 import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
 import PrivateProfile from './UserProfile/privateProfile';
 import Meetup from "./meetup/Meetup";
-import Post from './Post';
+import Post from './Post/Post';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
