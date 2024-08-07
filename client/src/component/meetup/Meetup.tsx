@@ -5,6 +5,8 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
+import sendEmail from '../../../../server/routes/meetupRoutes/cron';
+ sendEmail();
 const Meetup = ({user}: {user: object}) => {
 // const [user, setUser] = useState('none')
 // const [weather, setWeather] = useState({})
@@ -120,6 +122,7 @@ useEffect(()=>{
 
   return (<div>
     <script>{window.setInterval(doubleCall, 60000)}</script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>create/show</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
