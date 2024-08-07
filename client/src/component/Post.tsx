@@ -41,7 +41,6 @@ const Post = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
-        console.log('data', data);
         setPosts(data);
       })
       .catch((err) => {
