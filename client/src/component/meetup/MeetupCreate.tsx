@@ -7,10 +7,10 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
   const [location, setLocation] = useState('')
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState({})
   const [fillIn, setFillIn] = useState(false)
 
-  const edit = (name: string, value: string): void =>{
+  const edit = (name: string, value: React.ChangeEvent<HTMLInputElement>): void =>{
     switch(name){
       case 'dt':
       setDateTime(value)
@@ -31,7 +31,15 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
   }
 
   const makeMeetup = (): void =>{
-    axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: image, userId: user.id})
+if(image.name !== undefined){
+  axios.get('/upload/url', { params: {filename: image.name}})
+  .then(({data}) => {
+    return axios.put(data, image, {
+      headers: {'Content-Type': image.type}
+    })
+  })
+  .then(() => {
+    axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id})
     .then(()=>{
      refresh()
      showSwitch()
@@ -39,12 +47,20 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
     .catch((err)=>{
       console.error("Error can/'t schedule meetup: ", err)
     })
+  })
+  .catch((err) => {
+    console.error('Failed to get image url', err)
+  })
+
+  }else{
+    console.error('No image added Can\'t create')
+  }
   }
 
   useEffect(()=>{
     if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[12] === ':' && dateTime[15] === ' '){
       if(dateTime[16] + dateTime[17] === 'pm' || dateTime[16] + dateTime[17] === 'am'){
-        if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.length > 0 ){
+        if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.name !== undefined ){
           setFillIn(true)
         }else{
             setFillIn(false)
@@ -66,7 +82,7 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='fill in location'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='fill in eventName'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='fill in description'></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='img' placeholder='fill in imageUrl'></Input>
+    <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
     </Box>
   </div>)
 };

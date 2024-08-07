@@ -5,8 +5,7 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
-import sendEmail from '../../../../server/routes/meetupRoutes/cron';
- sendEmail();
+
 const Meetup = ({user}: {user: object}) => {
 // const [user, setUser] = useState('none')
 // const [weather, setWeather] = useState({})

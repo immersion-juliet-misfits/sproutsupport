@@ -15,7 +15,6 @@ routerMeetup.get('/all', (req: Request, res: Response): void =>{
     console.error('Error meetup get line 13: ', err)
     res.sendStatus(500)
   })
-  
 })
 
 routerMeetup.post('/create',(req: Request, res: Response): void =>{

@@ -1,8 +1,9 @@
-import {Button, Card, CardHeader, CardBody} from '@chakra-ui/react';
+import {Button, Card, CardHeader, CardBody } from '@chakra-ui/react';
 
 const MeetupListItem = ({group, remove, swap, createSwapUpdate, user}: {group: object, remove: any, swap: any, createSwapUpdate: any, user: object}) => {
   return(<div>
     <Card>
+      <img src={group.imageUrl}></img>
       <CardHeader><div>{group.eventName}</div></CardHeader>
       <CardBody>
 <div>{group.location}</div>
