@@ -8,6 +8,9 @@ import autoprefixer from 'autoprefixer'; // Parses CSS
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,7 +83,8 @@ export default (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),
       }),
-      new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(),
+      new NodePolyfillPlugin(),
     ],
   };
 };
