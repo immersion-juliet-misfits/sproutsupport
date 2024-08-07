@@ -11,6 +11,7 @@ import 'dotenv/config';
 import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
+import Upload from './routes/uploadImgRoutes';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
 
 const prisma = new PrismaClient();
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(DIST_PATH));
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
+app.use('/upload', Upload);
 app.use('/post', Posts)
 app.use('/user', UserInfo);
 
