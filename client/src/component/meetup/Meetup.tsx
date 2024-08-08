@@ -98,6 +98,27 @@ if(du[4][0] === 0){
 const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseInt(cur[4])) - (parseInt(du[4])) : ((parseInt(cur[4])) - (parseInt(du[4]))) * -1
 
 setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')
+
+let str: string = 'HEY you have a meetup today for'
+
+if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
+str = 'Hey you have ' + dayDiff + ' left for the ' + list[0].eventName + ' meetup'
+}else{
+  str = 'HEY you have a meetup today for ' + list[0].eventName
+}
+console.log(str)
+
+// const obj: object = {time_date: list[0].time_date, location: list[0].location, eventName: list[0].eventName, description: list[0].description, imageUrl: list[0].imageUrl, id: list[0].id}
+// const url = 'meetup/update/' + id
+// axios.patch(url, obj)
+// .then(()=>{
+//   refresh()
+//   meetupSwap({})
+// })
+// .catch((err: any)=>{
+//   console.error('Error can\'t update: ', err)
+// })
+
   }
 }
 

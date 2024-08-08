@@ -1,8 +1,26 @@
 import { CronJob } from 'cron';
 import dayjs from 'dayjs';;
 import { PrismaClient } from'@prisma/client';
+import 'dotenv/config'
 
 const prisma = new PrismaClient()
+
+const emailRequest = (message: string): void=>{
+
+  const service: string = process.env.Email_Service_id
+  const template: string = process.env.Email_Template
+  const id: string = process.env.Email_Public_key
+
+axios.post('https://api.emailjs.com/api/v1.0/email/send', obj)
+.then(()=>{
+  console.log('sent')
+})
+.catch((err: any)=>{
+  console.log('Can\'t send email: ', err)
+})
+})
+
+}
 
 const getTime = (): void =>{
   const day: number | string = dayjs().date() > 9 ? dayjs().date() : `0${dayjs().date()}`
@@ -43,7 +61,6 @@ const getTime = (): void =>{
     if(typeof dueDate[1] === "string"){
       dueDate[1] = parseInt(dueDate[1].slice(1))
     }
-    console.log('cur =', curDate, ' and ', 'due =', dueDate)
 
 let diffMonth: number = 0
 let diffDay: number = 0
@@ -72,13 +89,13 @@ let diffYear: number = 0
       str += `HEY you have a meetup today`
      }
 console.log(str)
+emailRequest(str) 
   }
 
 const sendEmail = new CronJob('*/1 * * * *', () => { // wanna make this dynamic 
 console.log('hey test')
 prisma.meet.findMany()
   .then((result)=>{
-    console.log(result[0])
     const time: string = getTime()
     compare(time, result[0].time_date)
     
@@ -87,5 +104,6 @@ prisma.meet.findMany()
     console.error('Error meetup get line 17 in cron.ts: ', err)
   })
 })
+
 
  export default sendEmail;

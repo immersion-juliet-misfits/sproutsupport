@@ -192,4 +192,4 @@ app.listen(port, () => {
 
 //cron
 job.start();
-sendEmail.start()
+// sendEmail.start()
