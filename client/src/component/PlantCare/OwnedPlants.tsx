@@ -35,7 +35,7 @@ const OwnedPlants = ({ user }) => {
 
   useEffect(() => {
     getPlants();
-  }, [])
+  }, [getPlants]) // stale reference || made everytime reran
 
   return (
     <div>

@@ -12,10 +12,10 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick }) => {
   const handleDelete = () => {
     // let plantName = plant.
     axios.delete(`/plants/delete/${plant.id}`)
-      .then(() => {
-        console.info('Plant deleted')
-        getPlants()
-      })
+    .then(() => {
+      console.info('Plant deleted')
+      getPlants()
+    })
   }
 
   const fetchTasks = () => {
