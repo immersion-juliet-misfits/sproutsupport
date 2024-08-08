@@ -12,6 +12,7 @@ import {
   useEditableControls,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
+import Comment from './Comment';
 
 const Post = () => {
   const [posts, setPosts] = useState([]);
@@ -80,7 +81,7 @@ const Post = () => {
   }, []);
 
   return (
-    <div>
+    <Box alignContent='space-evenly'>
       <ul>
         {posts
           .map((post) => {
@@ -89,15 +90,17 @@ const Post = () => {
                 <Flex
                   flexDirection='column-reverse'
                   alignItems='center'
-                  justifyContent='space-between'
+                  border='revert-layer'
                 >
-                  {/* <div>{post.imageUrl}</div> */}
-                  <Box >
+                  <Box>
+                    <Comment />
+                  </Box>
+                  <Box>
                     <Image
                       src={post.imageUrl}
                       // sizes='(max-width: 40px) 80px, 120px'
                       boxSize='180px'
-                      />
+                    />
                     <Editable
                       textAlign='center'
                       defaultValue={post.message}
@@ -132,7 +135,7 @@ const Post = () => {
           })
           .reverse()}
       </ul>
-    </div>
+    </Box>
   );
 };
 
