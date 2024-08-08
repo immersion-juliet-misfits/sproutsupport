@@ -1,7 +1,8 @@
 import { Box, Image, Text, VStack, HStack, Heading, Grid, GridItem, Button } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
+import NavBar from '../NavBar';
 
-const UserPublicProfile = () => {
+const UserPublicProfile = ({ user }) => {
   let location = useLocation();
   let { avatar, bio, location_id, userName } = location.state || { bio: 'No bio available' };
 
@@ -66,7 +67,7 @@ const UserPublicProfile = () => {
             alignItems='center'
             justifyContent='center'
           >
-            Hamburger Nav
+             <NavBar />
           </Box>
         </GridItem>
       </Grid>

@@ -12,32 +12,27 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
+import NavBar from '../NavBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserPrivacy from './UserPrivacy';
 import UserHelp from './UserHelp';
 
-const UserPrivateProfile = ({ onLogout }) => {
-  const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
-  const [avatar, setAvatar] = useState('');
-  const [bio, setBio] = useState('');
-  const [location_id, setLocationId] = useState('');
-  const [currentView, setCurrentView] = useState('info');
+// User context
+interface User {
+  id: number;
+  google_id: string;
+  userName: string;
+  email: string;
+  avatar: string;
+  bio: string;
+  location_id: string;
+}
 
-  const fetchUserData = () => {
-    axios
-      .get('/user/getUserData')
-      .then((response) => {
-        setAvatar(response.data.avatar);
-        setBio(response.data.bio);
-        setLocationId(response.data.location_id);
-        setUserName(response.data.userName);
-      })
-      .catch((error) => {
-        console.error('Fetch User Data: Failed ', error);
-      });
-  };
+// Main component
+const UserPrivateProfile = ({ onLogout, user, setUser }) => {
+  const navigate = useNavigate();
+  const [currentView, setCurrentView] = useState('info');
 
   const EditableControls = () => {
     const {
@@ -67,40 +62,39 @@ const UserPrivateProfile = ({ onLogout }) => {
     }
   };
 
-  const handleBioChange = (newBio) => {
+  const handleUserNameChange = (newUserName) => {
     axios
-      .post('/user/updateBio', { userId: 1, bio: newBio })
+      .patch('/user/updateUserName', { userId: user.id, userName: newUserName })
       .then((response) => {
-        // console.log('Verify Bio Change Response: ', response);
-        setBio(newBio);
+        setUser((prevUser) => ({ ...prevUser, userName: newUserName }));
       })
       .catch((error) => {
-        console.error('Update Bio: Failed ', error);
+        console.error('Update User Name: Failed ', error);
       });
   };
 
   const handleLocationChange = (newLocationId) => {
     axios
-      .post('/user/updateLocation', { userId: 1, location_id: newLocationId })
+      .patch('/user/updateLocation', {
+        userId: user.id,
+        location_id: newLocationId,
+      })
       .then((response) => {
-        // console.log('Verify Location Change Response: ', response);
-        // Replace with data from location API later
-        setLocationId(newLocationId);
+        setUser((prevUser) => ({ ...prevUser, location_id: newLocationId }));
       })
       .catch((error) => {
         console.error('Update Location: Failed ', error);
       });
   };
 
-  const handleUserNameChange = (newUserName) => {
+  const handleBioChange = (newBio) => {
     axios
-      .post('/user/updateUserName', { userId: 1, userName: newUserName })
+      .patch('/user/updateBio', { userId: user.id, bio: newBio })
       .then((response) => {
-        // console.log('Verify UN Change Response: ', response);
-        setUserName(newUserName);
+        setUser((prevUser) => ({ ...prevUser, bio: newBio }));
       })
       .catch((error) => {
-        console.error('Update User Name: Failed ', error);
+        console.error('Update Bio: Failed ', error);
       });
   };
 
@@ -123,12 +117,16 @@ const UserPrivateProfile = ({ onLogout }) => {
   };
 
   const goToPublicProfile = () => {
-    navigate('/public-profile', { state: { avatar, bio, location_id, userName } });
+    navigate('/public-profile', {
+      state: { avatar, bio, location_id, userName },
+    });
   };
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  useEffect(() => {}, []);
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Grid
@@ -142,7 +140,6 @@ const UserPrivateProfile = ({ onLogout }) => {
       overflow='hidden'
       boxShadow='md'
     >
-      {/* Below is a Placeholder header. It needs to be replaced by the bar that will be on every page eventually  */}
       <Grid
         // border='5px solid yellow'
         className='header-grid'
@@ -194,7 +191,7 @@ const UserPrivateProfile = ({ onLogout }) => {
             alignItems='center'
             justifyContent='center'
           >
-            Hamburger Nav will be passed in here
+            <NavBar />
           </Box>
         </GridItem>
       </Grid>
@@ -223,10 +220,10 @@ const UserPrivateProfile = ({ onLogout }) => {
           />
           {currentView === 'info' && (
             <UserInfo
-              avatar={avatar}
-              bio={bio}
-              location_id={location_id}
-              userName={userName}
+              avatar={user.avatar}
+              bio={user.bio}
+              location_id={user.location_id}
+              userName={user.userName}
               EditableControls={EditableControls}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}

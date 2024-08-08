@@ -54,8 +54,8 @@ const App = () => {
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
-          <Route path='/userprofile' element={<UserPrivateProfile onLogout={handleLogout} />}></Route>
-          <Route path='/public-profile' element={<UserPublicProfile />}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
