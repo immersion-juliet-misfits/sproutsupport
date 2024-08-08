@@ -44,7 +44,7 @@ const CreatePost = ({user}) => {
         })
       })
       .then(() => {
-        setSignedUrl(`https://sprout-support.s3.amazonaws.com/${image.name}`)
+        setSignedUrl(`https://sproutsupportbucket.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
         console.error('Failed to get image url', err)
