@@ -1,4 +1,4 @@
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   FormControl,
@@ -10,8 +10,9 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-const Comment = () => {
+const Comment = ({postId}) => {
   const [input, setInput] = useState('');
+  const [comments, setComments] = useState([]);
 
   const handleInputChange = (e: {
     target: { value: SetStateAction<string> };
@@ -21,17 +22,38 @@ const Comment = () => {
 
   const addComment = () => {
     return axios
-      .post('post/comment', {})
+      .post('comment/comment', {message: input, postId})
       .then(() => {
+        console.log('comment success')
       })
       .catch((err) => {
         console.error('Failed to POST comment: ', err);
       });
   }
 
+  const getComments = () => {
+    axios
+      .get('/comment/comment')
+      .then(({ data }) => {
+        // console.log('data', data);
+        setComments(data);
+      })
+      .catch((err) => {
+        console.error('Failed to GET post: ', err);
+      });
+  };
+
+  useEffect(() => {
+    getComments();
+  }, []);
 
   return (
+    <div>
+
     <Flex>
+        {comments.map((comment) => {
+          <div>{comment.message}</div>
+        })}
       <FormControl isInvalid={isError}>
         <FormLabel>Comment</FormLabel>
         <Input type='post' value={input} onChange={handleInputChange} />
@@ -47,6 +69,7 @@ const Comment = () => {
         </Button>
       </FormControl>
     </Flex>
+  </div>
   );
 };
 

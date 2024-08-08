@@ -93,7 +93,7 @@ const Post = () => {
                   border='revert-layer'
                 >
                   <Box>
-                    <Comment />
+                    <Comment postId={post.id}/>
                   </Box>
                   <Box>
                     <Image
@@ -118,9 +118,7 @@ const Post = () => {
                       <EditableControls />
                     </Editable>
                     <IconButton
-                      isRound={true}
                       variant='solid'
-                      colorScheme='red'
                       aria-label='Done'
                       fontSize='20px'
                       onClick={() => {
