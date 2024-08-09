@@ -33,7 +33,7 @@ const Comment = ({postId}) => {
 
   const getComments = () => {
     axios
-      .get('/comment/comment')
+      .get(`/comment/comment/${postId}`)
       .then(({ data }) => {
         // console.log('data', data);
         setComments(data);
@@ -43,17 +43,32 @@ const Comment = ({postId}) => {
       });
   };
 
+  const renderComments = () => {
+    return comments.map((comment: object) => (
+      <div>{comment.message}</div>
+    ))
+  }
+
+  const deleteComment = (id: string) => {
+    axios
+      .delete(`/comment/comment${id}`)
+      .then(() => {
+        getComments();
+      })
+      .catch((err) => {
+        console.error('Failed to Delete message: ', err);
+      });
+  };
+
   useEffect(() => {
     getComments();
   }, []);
 
   return (
     <div>
+        { renderComments() }
 
     <Flex>
-        {comments.map((comment) => {
-          <div>{comment.message}</div>
-        })}
       <FormControl isInvalid={isError}>
         <FormLabel>Comment</FormLabel>
         <Input type='post' value={input} onChange={handleInputChange} />

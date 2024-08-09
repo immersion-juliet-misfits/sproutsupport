@@ -4,10 +4,14 @@ import { PrismaClient } from '@prisma/client';
 const Comments = express.Router();
 const prisma = new PrismaClient();
 
-Comments.get('/comment', (req: Request, res: Response) => {
-  const { postId } = req.body
+Comments.get('/comment/:postId', (req: Request, res: Response) => {
+  const { postId } = req.params;
   prisma.comment
-    .findMany({where: postId})
+    .findMany({
+      where: {
+        postId: Number(postId),
+      },
+    })
     .then((comments) => {
       comments
         ? res.status(201).send(comments)
@@ -26,7 +30,6 @@ Comments.post('/comment', (req: Request, res: Response) => {
       data: {
         postId,
         message,
-
       },
     })
     .then((data) => {
@@ -41,32 +44,35 @@ Comments.patch('/comment:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
   const { message } = req.body;
-    prisma.comment.update({
+  prisma.comment
+    .update({
       where: {
         id: Number(id),
       },
       data: {
-        message
-      }
+        message,
+      },
     })
-      .then(updatedComment => {
-        res.status(201).send(updatedComment);
-      })
-      .catch(() => res.sendStatus(404));
+    .then((updatedComment) => {
+      res.status(201).send(updatedComment);
+    })
+    .catch(() => res.sendStatus(404));
 });
 
 Comments.delete('/comment:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
-    prisma.comment.delete({
+  prisma.comment
+    .delete({
       where: {
-        id: parseInt(id)
-      }
+        id: Number(id),
+      },
     })
-      .then(() => res.sendStatus(201))
-      .catch((err) => {
-        console.error('Failed to delete comment: ', err)
-        res.sendStatus(500)});
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.error('Failed to delete comment: ', err);
+      res.sendStatus(500);
+    });
 });
 
 export default Comments;
