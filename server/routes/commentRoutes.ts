@@ -59,7 +59,7 @@ Comments.patch('/comment:id', (req: Request, res: Response) => {
     .catch(() => res.sendStatus(404));
 });
 
-Comments.delete('/comment:id', (req: Request, res: Response) => {
+Comments.delete('/comment/:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
   prisma.comment
