@@ -34,6 +34,7 @@ CREATE TABLE `Meet` (
     `imageUrl` VARCHAR(191) NOT NULL,
     `userId` INTEGER NOT NULL,
 
+    INDEX `Meet_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -43,6 +44,7 @@ CREATE TABLE `Notification` (
     `userId` INTEGER NOT NULL,
     `message` VARCHAR(191) NOT NULL,
 
+    INDEX `Notification_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -58,6 +60,7 @@ CREATE TABLE `Plant` (
     `imageUrl` VARCHAR(191) NULL,
     `description` VARCHAR(191) NULL,
 
+    INDEX `Plant_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -71,6 +74,7 @@ CREATE TABLE `Task` (
     `overdue` BOOLEAN NULL,
     `plant_id` INTEGER NULL,
 
+    INDEX `Task_plant_id_fkey`(`plant_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -81,6 +85,7 @@ CREATE TABLE `Post` (
     `image_id` INTEGER NULL,
     `message` VARCHAR(191) NOT NULL,
 
+    INDEX `Post_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -97,6 +102,8 @@ CREATE TABLE `Attendee` (
     `meet_id` INTEGER NOT NULL,
     `userId` INTEGER NOT NULL,
 
+    INDEX `Attendee_meet_id_fkey`(`meet_id`),
+    INDEX `Attendee_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -116,7 +123,7 @@ ALTER TABLE `Task` ADD CONSTRAINT `Task_plant_id_fkey` FOREIGN KEY (`plant_id`) 
 ALTER TABLE `Post` ADD CONSTRAINT `Post_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Attendee` ADD CONSTRAINT `Attendee_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Attendee` ADD CONSTRAINT `Attendee_meet_id_fkey` FOREIGN KEY (`meet_id`) REFERENCES `Meet`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Attendee` ADD CONSTRAINT `Attendee_meet_id_fkey` FOREIGN KEY (`meet_id`) REFERENCES `Meet`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Attendee` ADD CONSTRAINT `Attendee_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
