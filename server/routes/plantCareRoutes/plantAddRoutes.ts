@@ -131,8 +131,12 @@ Plants.post('/completeTask', (req: Request, res: Response) => {
     return nextCompletion;
   };
 
+  const getNextPointReq = (currLvl) => {
+    return 50 + (currLvl * 50)
+  }
+
   prisma.task.findUnique({
-    where: { id }
+    where: { id }, include: {taskPlant: true}
   })
   .then((task) => {
     prisma.task.update({
@@ -143,17 +147,46 @@ Plants.post('/completeTask', (req: Request, res: Response) => {
         overdue: false
       }
     })
-    .then(() => {
-      res.send('done')
-    })
-    .catch((err) => {
-      console.error(err)
+    .then((data) => {
+      console.log(data, 'task')
+      prisma.plant.findUnique({where: {id: data.plant_id}, select: {caregiver: true}})
+       .then((plant) => {
+        prisma.user.update({where: {id: plant.caregiver.id}, data: { points: { increment: 5}}, select: { points: true, level:true, id: true }})
+          .then((updatedUser) => {
+            let pointsNeeded = getNextPointReq(updatedUser.level)
+            console.log(updatedUser, pointsNeeded, 'hahahapple')
+
+            if(updatedUser.points >= pointsNeeded) {
+              console.log('LEVEL UP')
+              // Property 'id' does not exist on type
+              prisma.user.update({where: {id: updatedUser.id}, data: {level: {increment: 1}, points: updatedUser.points - pointsNeeded}})
+                .then((newLvl) => {
+                  console.log(newLvl, 'LVL UP FR UPDATE')
+                  res.send('lvl up')
+                })  
+            } else {
+              res.send('no lvl up')
+            }
+            // return null;
+            // res.send('ok')
+          })
+          // .then(() => {
+          //   res.send('no lvlup')
+          // })
+       })
     })
   })
+ // error handling additions
+})
 
-  
+// feels repetetive
+Plants.get('/points/:userId', (req: Request, res: Response) => {
+  const { userId } = req.params;
 
-
+  prisma.user.findUnique({where: {id: Number(userId) } })
+    .then((data) => {
+      res.send({points: data.points, level: data.level})
+    })
 })
 
 

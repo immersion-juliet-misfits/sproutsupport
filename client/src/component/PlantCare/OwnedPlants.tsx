@@ -44,7 +44,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      <LevelBar />
+      <LevelBar user={user}/>
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>

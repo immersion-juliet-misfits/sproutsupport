@@ -22,8 +22,8 @@ model User {
     password String?
     avatar String?
     bio String?
-    level Int?
-    points Int?
+    level Int @default(1)
+    points Int @default(0)
     meets Meet[]
     notifications Notification[]
     plants Plant[]
