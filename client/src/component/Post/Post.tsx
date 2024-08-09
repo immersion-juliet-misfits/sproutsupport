@@ -52,7 +52,7 @@ const Post = () => {
 
   const updateMessage = (id: string) => {
     axios
-      .patch(`/post/post${id}`, { message })
+      .patch(`/post/post/${id}`, { message })
       .then((data) => {
         getPosts();
       })
@@ -63,7 +63,7 @@ const Post = () => {
 
   const deleteMessage = (id: string) => {
     axios
-      .delete(`/post/post${id}`)
+      .delete(`/post/post/${id}`)
       .then(() => {
         getPosts();
       })

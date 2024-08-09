@@ -86,7 +86,7 @@ model Post {
   id       Int    @id @default(autoincrement())
   userId   Int
   message  String
-  imageUrl String 
+  imageUrl String
   owner    User   @relation(fields: [userId], references: [id])
   // postImg   Image   @relation(fields: [imageId], references: [id])
   // @@index([imageId], map: "Post_imageId_fkey")
@@ -97,8 +97,8 @@ model Post {
 model Comment {
   id          Int @id @default(autoincrement())
   message     String
-  postId      Int
-  post        Post @relation(fields: [postId], references: [id])
+  postId      Int?
+  post        Post? @relation(fields: [postId], references: [id])
 }
 
 model Attendee {
