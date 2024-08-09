@@ -3,6 +3,7 @@ import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/reac
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PlantSnippet from './PlantSnippet';
+import LevelBar from './LevelBar';
 // import UploadImage from '../UploadImage';
 // import io from 'socket.io-client';
 
@@ -43,6 +44,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
+      <LevelBar />
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>

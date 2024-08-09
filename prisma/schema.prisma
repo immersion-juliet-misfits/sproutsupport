@@ -23,6 +23,7 @@ model User {
     avatar String?
     bio String?
     level Int?
+    points Int?
     meets Meet[]
     notifications Notification[]
     plants Plant[]

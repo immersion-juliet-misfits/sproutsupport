@@ -42,7 +42,8 @@ const App = () => {
           description: `${task.taskName} ${task.taskPlant.nickname}`,
           status: 'warning',
           duration: 5000,
-          isClosable: true
+          isClosable: true,
+          position: 'top-right'
         })
       }
 
