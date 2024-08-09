@@ -35,15 +35,21 @@ const App = () => {
         setLoading(false);
       });
 
-      socket.on('overdue', (task) => {
+      let notif = (task) => {
         console.log(task, 'hello')
         toast({
-          title: 'test',
-          description: `${task.taskName}`,
-          status: 'success',
+          title: 'Task',
+          description: `${task.taskName} ${task.taskPlant.nickname}`,
+          status: 'warning',
           duration: 5000,
-          isClosable: false
+          isClosable: true
         })
+      }
+
+      socket.on('overdue', notif) // task on
+
+      return (() => {
+        socket.off('overdue', notif) // then off to not double up upon re-render with update
       })
   }, []);
 

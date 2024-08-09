@@ -14,7 +14,7 @@ const job = new CronJob('*/9 * * * * *', () => { // wanna make this dynamic
   // overdue tasks || find them and update active to false(needs to be clicked to be true again/not overdue)
   // returns object with count
   // prisma.task.updateMany({where: { nextComplection: { lt: new Date() }, overdue: false }, data: { overdue: true }}) // marks tasks as overdue
-  prisma.task.findMany({where: { nextComplection: { lt: new Date() }, overdue: false}}) // gives me all entries back
+  prisma.task.findMany({where: { nextComplection: { lt: new Date() }, overdue: false}, include: {taskPlant: true}}) // gives me all entries back
    .then((data) => {
      data.forEach((task) => {
       io.emit('overdue', task)
