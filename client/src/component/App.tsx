@@ -9,11 +9,17 @@ import Login from './Login';
 import PrivateProfile from './UserProfile/privateProfile';
 import Meetup from "./meetup/Meetup";
 import Post from './Post';
+import io from 'socket.io-client';
+import { useToast } from '@chakra-ui/react'
+
+const socket = io('http://localhost:8000');
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
+
+  const toast = useToast()
 
   useEffect(() => {
     // Fetch Users authentication status
@@ -28,6 +34,17 @@ const App = () => {
         console.error('Login Status Fetch: Failed', err);
         setLoading(false);
       });
+
+      socket.on('overdue', (task) => {
+        console.log(task, 'hello')
+        toast({
+          title: 'test',
+          description: `${task.taskName}`,
+          status: 'success',
+          duration: 5000,
+          isClosable: false
+        })
+      })
   }, []);
 
   const handleLogout = () => {

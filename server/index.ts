@@ -1,4 +1,5 @@
 import express from 'express';
+import { createServer } from "http";
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
@@ -12,6 +13,7 @@ import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes'
 import Upload from './routes/uploadImgRoutes';
+import { Server } from "socket.io";
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
@@ -21,6 +23,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+const httpServer = createServer(app);
 const port = 8000;
 const DIST_PATH = path.resolve(__dirname, '../client/dist');
 
@@ -185,7 +188,20 @@ app.get('*', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+  // ...
+  console.log(`${socket.id} connected.`)
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected.`);
+  });
+});
+
+httpServer.listen(port, () => {
   console.info(`Listening on http://localhost:${port}`);
 });
+// let test = 'hey'
 job.start();
+export { io }

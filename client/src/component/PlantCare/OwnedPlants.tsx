@@ -4,6 +4,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PlantSnippet from './PlantSnippet';
 // import UploadImage from '../UploadImage';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8000');
+
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
 
