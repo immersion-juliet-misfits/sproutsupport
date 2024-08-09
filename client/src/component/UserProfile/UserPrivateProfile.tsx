@@ -30,7 +30,7 @@ interface User {
 }
 
 // Main component
-const UserPrivateProfile = ({ onLogout, user, setUser }) => {
+const UserPrivateProfile = ({ user, setUser, onLogout }) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
 
@@ -57,41 +57,56 @@ const UserPrivateProfile = ({ onLogout, user, setUser }) => {
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Placeholder: need file upload logic
-      console.log('Selected file:', file);
+      axios
+        .get('/upload/url', { params: { filename: file.name } })
+        .then(({ data }) => {
+          return axios.put(data, file, {
+            headers: { 'Content-Type': file.type },
+          });
+        })
+        .then(() => {
+          const newAvatarUrl = `https://my1test1bucket.s3.amazonaws.com/${file.name}`;
+          return axios
+            .patch('/user/updateAvatar', {
+              avatar: newAvatarUrl,
+            })
+            .then((response) => {
+              return setUser(response.data);
+            });
+        })
+        .catch((err) => {
+          console.error('Failed to get image url', err);
+        });
     }
   };
 
-  const handleUserNameChange = (newUserName) => {
+  const handleUserNameChange = (newUserName: string) => {
     axios
-      .patch('/user/updateUserName', { userId: user.id, userName: newUserName })
+      .patch('/user/updateUserName', { userName: newUserName })
       .then((response) => {
-        setUser((prevUser) => ({ ...prevUser, userName: newUserName }));
+        return setUser(response.data);
       })
       .catch((error) => {
         console.error('Update User Name: Failed ', error);
       });
   };
 
-  const handleLocationChange = (newLocationId) => {
+  const handleLocationChange = (newLocationId: number) => {
     axios
-      .patch('/user/updateLocation', {
-        userId: user.id,
-        location_id: newLocationId,
-      })
+      .patch('/user/updateLocation', { location_id: newLocationId })
       .then((response) => {
-        setUser((prevUser) => ({ ...prevUser, location_id: newLocationId }));
+        return setUser(response.data);
       })
       .catch((error) => {
         console.error('Update Location: Failed ', error);
       });
   };
 
-  const handleBioChange = (newBio) => {
+  const handleBioChange = (newBio: string) => {
     axios
-      .patch('/user/updateBio', { userId: user.id, bio: newBio })
+      .patch('/user/updateBio', { bio: newBio })
       .then((response) => {
-        setUser((prevUser) => ({ ...prevUser, bio: newBio }));
+        return setUser(response.data);
       })
       .catch((error) => {
         console.error('Update Bio: Failed ', error);
@@ -122,7 +137,9 @@ const UserPrivateProfile = ({ onLogout, user, setUser }) => {
     });
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // console.log('Use Effect User Check: ', user);
+  }, [user]);
 
   if (!user) {
     return <div>Loading...</div>;

@@ -35,7 +35,7 @@ app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts)
-app.use('/user', UserInfo);
+
 
 // GAuth Session middleware
 app.use(
@@ -128,6 +128,10 @@ app.use((req, res, next) => {
 app.get('/api/checkAuth', (req, res) => {
   res.json({ isAuthenticated: req.isAuthenticated(), currentUser: req.user });
 });
+
+
+// Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
+app.use('/user', UserInfo);
 
 
 

@@ -7,9 +7,9 @@ import {
   Heading,
   Image,
   Input,
-  Spacer,
   Text,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 const UserInfo = ({
   avatar,
@@ -22,6 +22,8 @@ const UserInfo = ({
   handleLocationChange,
   handleUserNameChange,
 }) => {
+  const [editableUserName, setEditableUserName] = useState(userName);
+
   return (
     <>
       <Grid>
@@ -70,7 +72,8 @@ const UserInfo = ({
         <GridItem bg='green.500' h='100px'>
           <Editable
             defaultValue={userName}
-            onSubmit={handleUserNameChange}
+            onChange={(nextValue) => { setEditableUserName(nextValue); } }
+            onSubmit={() => {handleUserNameChange(editableUserName); } }
             mt={2}
             minH='40px'
             isPreviewFocusable={false}

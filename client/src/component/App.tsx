@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios'
+import { ChakraProvider } from '@chakra-ui/react';
 import Home from "./Home";
 import CreatePost from "./CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
-import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
@@ -16,11 +17,9 @@ const App = () => {
   const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Fetch Users authentication status
-    fetch('/api/checkAuth')
-      .then((res) => res.json())
-      .then((data) => {
+  const fetchUserData = () => {
+    axios.get('/api/checkAuth')
+      .then(({data}) => {
         setIsAuthenticated(data.isAuthenticated);
         setUser(data.currentUser);
         setLoading(false);
@@ -29,6 +28,10 @@ const App = () => {
         console.error('Login Status Fetch: Failed', err);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchUserData();
   }, []);
 
   const handleLogout = () => {
@@ -43,7 +46,6 @@ const App = () => {
     <ChakraProvider>
       <div className='App'>
         Sprout Support
-        {/* {isAuthenticated && <UserPrivateProfile onLogout={handleLogout} />} */}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
