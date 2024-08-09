@@ -1,4 +1,5 @@
 import {
+  Button,
   Editable,
   EditableInput,
   Flex,
@@ -14,12 +15,15 @@ import { useState } from 'react';
 const UserInfo = ({
   avatar,
   bio,
-  location_id,
+  // location_id,
+  latitude,
+  longitude,
   userName,
   EditableControls,
   handleAvatarChange,
   handleBioChange,
-  handleLocationChange,
+  handleLatLonChange,
+  // handleLocationChange,
   handleUserNameChange,
 }) => {
   const [editableUserName, setEditableUserName] = useState(userName);
@@ -72,8 +76,12 @@ const UserInfo = ({
         <GridItem bg='green.500' h='100px'>
           <Editable
             defaultValue={userName}
-            onChange={(nextValue) => { setEditableUserName(nextValue); } }
-            onSubmit={() => {handleUserNameChange(editableUserName); } }
+            onChange={(nextValue) => {
+              setEditableUserName(nextValue);
+            }}
+            onSubmit={() => {
+              handleUserNameChange(editableUserName);
+            }}
             mt={2}
             minH='40px'
             isPreviewFocusable={false}
@@ -99,34 +107,37 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
-        <GridItem bg='green.500' h='100px'>
+        <GridItem bg='green.500' h='150px'>
           <Editable
-            defaultValue={String(location_id)}
-            onSubmit={handleLocationChange}
+            defaultValue={
+              latitude && longitude
+                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+                : 'Coordinates not set'
+            }
+            isPreviewFocusable={false}
             mt={2}
             minH='40px'
-            isPreviewFocusable={false}
           >
             <Flex alignItems='center' gap='10'>
               <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Change Location
+                Coordinates
               </Text>
             </Flex>
             <p />
             <Heading as='h2' size='lg' textAlign='center'>
-              {location_id}
+              {latitude && longitude
+                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+                : 'Coordinates not set'}
             </Heading>
-            <Input
-              as={EditableInput}
-              type='number'
-              border='1px solid black'
-              bg='white'
-              placeholder='Update your Location'
-              borderRadius='md'
-              minH='40px'
-              p={2}
-            />
+            <Button
+              onClick={handleLatLonChange}
+              colorScheme='teal'
+              size='md'
+              mt={4}
+            >
+              Update My Location
+            </Button>
           </Editable>
         </GridItem>
         <GridItem bg='green.500' h='200px'>

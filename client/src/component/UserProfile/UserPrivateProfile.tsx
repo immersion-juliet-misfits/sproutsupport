@@ -26,13 +26,17 @@ interface User {
   email: string;
   avatar: string;
   bio: string;
-  location_id: string;
+  // location_id: string;
+  latitude: float;
+  longitude: float;
 }
 
 // Main component
 const UserPrivateProfile = ({ user, setUser, onLogout }) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
+  // const [latitude, setLatitude] = useState(null);
+  // const [longitude, setLongitude] = useState(null);
 
   const EditableControls = () => {
     const {
@@ -91,15 +95,42 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
       });
   };
 
-  const handleLocationChange = (newLocationId: number) => {
-    axios
-      .patch('/user/updateLocation', { location_id: newLocationId })
-      .then((response) => {
-        return setUser(response.data);
-      })
-      .catch((error) => {
-        console.error('Update Location: Failed ', error);
-      });
+  // const handleLocationChange = (newLocationId: number) => {
+  //   axios
+  //     .patch('/user/updateLocation', { location_id: newLocationId })
+  //     .then((response) => {
+  //       return setUser(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Update Location: Failed ', error);
+  //     });
+  // };
+
+  const handleLatLonChange = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+
+          setLatitude(latitude);
+          setLongitude(longitude);
+
+          axios
+            .patch('/user/updateLatLon', { latitude, longitude })
+            .then((response) => {
+              setUser(response.data);
+            })
+            .catch((error) => {
+              console.error('Update GeoLocation: Failed ', error);
+            });
+        },
+        (error) => {
+          console.error('Error getting geolocation:', error);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
   };
 
   const handleBioChange = (newBio: string) => {
@@ -133,7 +164,13 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
 
   const goToPublicProfile = () => {
     navigate('/public-profile', {
-      state: { avatar, bio, location_id, userName },
+      state: {
+        avatar: user.avatar,
+        bio: user.bio,
+        latitude: user.latitude,
+        longitude: user.longitude,
+        userName: user.userName,
+      },
     });
   };
 
@@ -239,12 +276,15 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
             <UserInfo
               avatar={user.avatar}
               bio={user.bio}
-              location_id={user.location_id}
+              // location_id={user.location_id}
+              latitude={user.latitude}
+              longitude={user.longitude}
               userName={user.userName}
               EditableControls={EditableControls}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
-              handleLocationChange={handleLocationChange}
+              handleLatLonChange={handleLatLonChange}
+              // handleLocationChange={handleLocationChange}
               handleUserNameChange={handleUserNameChange}
             />
           )}

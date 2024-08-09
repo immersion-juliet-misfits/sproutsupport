@@ -1,10 +1,22 @@
-import { Box, Image, Text, VStack, HStack, Heading, Grid, GridItem, Button } from '@chakra-ui/react';
+import {
+  Box,
+  Image,
+  Text,
+  VStack,
+  HStack,
+  Heading,
+  Grid,
+  GridItem,
+  Button,
+} from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import NavBar from '../NavBar';
 
 const UserPublicProfile = ({ user }) => {
   let location = useLocation();
-  let { avatar, bio, location_id, userName } = location.state || { bio: 'No bio available' };
+  let { avatar, bio, latitude, longitude, userName } = location.state || {
+    bio: 'No bio available',
+  };
 
   return (
     <Grid
@@ -12,10 +24,10 @@ const UserPublicProfile = ({ user }) => {
       mx='auto'
       mt={10}
       p={5}
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      boxShadow="md"
+      borderWidth='1px'
+      borderRadius='lg'
+      overflow='hidden'
+      boxShadow='md'
     >
       <Grid
         className='header-grid'
@@ -67,7 +79,7 @@ const UserPublicProfile = ({ user }) => {
             alignItems='center'
             justifyContent='center'
           >
-             <NavBar />
+            <NavBar />
           </Box>
         </GridItem>
       </Grid>
@@ -82,25 +94,31 @@ const UserPublicProfile = ({ user }) => {
       >
         <VStack spacing={4} align='center'>
           <Image
-            borderRadius="full"
-            boxSize="150px"
+            borderRadius='full'
+            boxSize='150px'
             src={avatar}
             alt={`${userName}'s avatar`}
           />
-          <Heading as="h2" size="xl">
+          <Heading as='h2' size='xl'>
             {userName}
           </Heading>
-          <Text fontSize="md" color="white" textAlign="center">
+          <Text fontSize='md' color='white' textAlign='center'>
             {bio}
           </Text>
           <HStack spacing={4}>
-            {location_id && (
+            {latitude && longitude && (
+              <Text fontSize='sm' color='white'>
+                Coordinates: {latitude.toFixed(4)}, {longitude.toFixed(4)}
+              </Text>
+            )}
+
+            {/* {location_id && (
               <Text fontSize="sm" color="white">
                 Location: {location_id}
               </Text>
-            )}
+            )} */}
           </HStack>
-          <Button colorScheme="teal" variant="solid">
+          <Button colorScheme='teal' variant='solid'>
             Follow(?)
           </Button>
         </VStack>

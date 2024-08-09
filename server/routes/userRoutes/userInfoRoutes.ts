@@ -124,4 +124,33 @@ UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
     });
 });
 
+
+// GeoLocation data handler
+UserInfo.patch('/updateLatLon', (req: Request, res: Response) => {
+  const { latitude, longitude } = req.body;
+  const userId = req.user.id;
+
+  if (!userId || latitude === undefined || longitude === undefined) {
+    return res.status(400).send('User ID, Latitude, and Longitude are required');
+  }
+
+  prisma.user
+    .update({
+      where: { id: userId },
+      data: {
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+      },
+    })
+    .then((updatedUser) => {
+      res.send(updatedUser);
+    })
+    .catch((error) => {
+      console.error('Location Update: Failed ', error);
+      res.status(500).send('Location Update: Failed ');
+    });
+});
+
+
+
 export default UserInfo;
