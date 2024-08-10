@@ -1,13 +1,8 @@
 import {
-  // Box,
-  // Editable,
-  // EditableInput,
   Grid,
   GridItem,
   Heading,
-  // Input,
 } from '@chakra-ui/react';
-// import { CheckIcon, CloseIcon, EditIcon } from '@chakra-ui/icons';
 
 const UserPrivacy = () => {
   return (
