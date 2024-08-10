@@ -11,7 +11,8 @@ import LevelBar from './LevelBar';
 
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
-  const [score, setScore] = useState({})
+  const [score, setScore] = useState({points: 0, level: 1})
+  const [progress, setProgress] = useState(0)
 
   const getPlants = () => {
     axios.get(`/plants/all/${user.id}`)
@@ -37,10 +38,24 @@ const OwnedPlants = ({ user }) => {
       })
   }
 
+  const getNextPointReq = (currLvl) => {
+    console.log(currLvl, 50 + (currLvl * 50))
+    return 50 + (currLvl * 50)
+  }
+
+  const updateProgressBar = () => {
+    const progress = (score.points / getNextPointReq(score.level + 1)) * 100
+    setProgress(progress);
+  }
+
   useEffect(() => {
     console.log(score, 'score')
     getScore()
   }, [])
+
+  useEffect(() => {
+    updateProgressBar()
+  }, [score])
 
   // const handleDelete = () => {
   //   // let plantName = plant.
@@ -59,7 +74,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      <LevelBar user={user} score={score}/>
+      <LevelBar user={user} score={score} progress={progress}/>
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
@@ -68,7 +83,7 @@ const OwnedPlants = ({ user }) => {
       {/* make into seperate component */}
       {plants.length > 0 &&
         plants.map((plant) => (
-          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>

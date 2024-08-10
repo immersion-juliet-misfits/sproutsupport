@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { DeleteIcon } from '@chakra-ui/icons';
 import PlantCare from './PlantCare';
 
-const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore }) => {
+const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar }) => {
   const [tasks, setTasks] = useState([]);
   
   // console.log(plant)
@@ -54,7 +54,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore }) => {
         } */}
     <CardFooter>
       <DeleteIcon onClick={handleDelete}/>
-      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore}/>
+      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar}/>
     </CardFooter>
     </Card>
   )
