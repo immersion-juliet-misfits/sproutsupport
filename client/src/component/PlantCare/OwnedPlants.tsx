@@ -77,18 +77,19 @@ const OwnedPlants = ({ user }) => {
   return (
     <Box mx="auto" bg="green.200" p={5}>
       <NavBar />
+      <Heading textAlign={'center'}>{`Hey, ${user.userName}`}</Heading>
       <Box color='green.100' bg='green.400' p={2}>
       <Heading>Sprout Growth</Heading>
       <LevelBar user={user} score={score} progress={progress}/>
       </Box>
-      <Heading>{`${user.userName}'s Owned Plants`}</Heading>
+      <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
         <Button colorScheme={'green'}>Add a Plant { <AddIcon /> } </Button>
       </Link>
       {/* make into seperate component */}
       <Box bg={'green.700'} p={5}>
-      <Grid templateColumns="repeat(3, 1fr)" gap={5}>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {plants.length > 0 &&
         plants.map((plant) => (
           <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar}/>

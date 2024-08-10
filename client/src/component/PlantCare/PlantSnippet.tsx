@@ -53,7 +53,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
           ))
         } */}
     <CardFooter>
-      <DeleteIcon onClick={handleDelete}/>
+      <DeleteIcon color="tomato" onClick={handleDelete}/>
       <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar}/>
     </CardFooter>
     </Card>

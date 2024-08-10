@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Heading, Select } from '@chakra-ui/react'
+import { Input, Heading, Select, FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Button, Grid, GridItem} from '@chakra-ui/react'
 import axios from 'axios';
 import PlantImgUpload from './PlantImgUpload';
 
@@ -110,22 +110,51 @@ const PlantFinder = ({ user }) => {
   }, [selected, tasks, taskName])
 
   return (
-    <div>
-
-      <Heading>Plant Finder</Heading>
+    <Box mx="auto" bg="green.200" p={5}>
+      <Heading textAlign={'center'}>Plant Finder</Heading>
       <Link to={'/myplants'}>
-        <input type="button" value="My Plants"></input>
+        <Button colorScheme="green" value="My Plants">My Plants</Button>
       </Link>
-      <h3>{`Searched: ${input}`}</h3>
+      <FormControl>
+      <FormLabel>{`Search ${input}`}</FormLabel>
       {/* will eventually be used with cards... */}
       <Input
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
+        bgColor='green.400'
+        textColor="white"
         ></Input>
-      <Input type="button" value="Search" onClick={() => handleSubmit()}></Input><br></br>
+      <Button onClick={() => handleSubmit()}>Search</Button><br></br>
+      </FormControl>
+
+      <Grid templateColumns="1fr 2fr" gap={4}>
+      <GridItem>
+        {/* <VStack align="start" spacing={4}> */}
+
+      {results &&
+        results.map((result, i) => {
+          // look into simplifying this later
+          const scientificName = result.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
+          //   needs nicer looking display or possibly separate component
+          return (
+            
+            <div key={`${result}-${i}`}>
+          <h3 onClick={() => handlePlantSelect(result)}>{result.CommonName}</h3>
+          <h5>{scientificName}</h5>
+          {/* look for API image data */}
+          {/* <img src={result.ProfileImageFilename}></img> */}
+        </div>
+        )
+      })
+    }
+    {/* </VStack> */}
+    </GridItem>
+        <GridItem>
       {selected && selected.CommonName &&
-        <div>
+        <Box bg="green.700" p={7}>
+          <Box bg="green.200">
+
           <h3>Choose a name for your plant (optional)</h3>
           <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
@@ -144,25 +173,12 @@ const PlantFinder = ({ user }) => {
           }
           <Input type="button" value="Add Task" onClick={() => handleAddTask()}></Input>
           <Input type="button" value="Add New Plant" onClick={() => handleNicknameSubmit()}></Input>
-        </div>
+          </Box>
+        </Box>
       }
-      {results &&
-        results.map((result, i) => {
-            // look into simplifying this later
-            const scientificName = result.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
-        //   needs nicer looking display or possibly separate component
-        return (
-
-        <div key={`${result}-${i}`}>
-          <h3 onClick={() => handlePlantSelect(result)}>{result.CommonName}</h3>
-          <h5>{scientificName}</h5>
-          {/* look for API image data */}
-          {/* <img src={result.ProfileImageFilename}></img> */}
-        </div>
-        )
-})
-      }
-    </div>
+      </GridItem>
+    </Grid>
+    </Box>
   );
 };
 
