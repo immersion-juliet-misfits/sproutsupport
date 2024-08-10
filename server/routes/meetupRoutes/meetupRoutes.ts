@@ -1,9 +1,9 @@
 import express, {Request, Response } from 'express'
-//import axios from 'axios'
+import axios from 'axios'
 import { PrismaClient } from '@prisma/client'
 
+const { WEATHER_KEY } = process.env;
 const prisma = new PrismaClient()
-
 const routerMeetup = express.Router()
 
 routerMeetup.get('/all', (req: Request, res: Response): void =>{
@@ -126,5 +126,18 @@ routerMeetup.delete('/AttendeeLeave/:id',(req: Request, res: Response): void =>{
      res.sendStatus(500)
    })
  })
+
+ routerMeetup.get('/weather', (req: Request, res: Response): void =>{
+  const baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/64.7552,147.3534';
+  const dailyForecastUrl = `${baseUrl}?key=${WEATHER_KEY}&unitGroup=us&include=days`;
+axios.get(dailyForecastUrl)
+    .then((result: any)=>{
+      res.status(200).send(result)
+    })
+    .catch((err: any)=>{
+      console.error('Error meetup get line 92: ', err)
+      res.sendStatus(500)
+    })
+  })
 
 export default routerMeetup
