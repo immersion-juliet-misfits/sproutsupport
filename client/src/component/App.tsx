@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import axios from 'axios'
+import { ChakraProvider } from '@chakra-ui/react';
 import Home from "./Home";
 import CreatePost from "./CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
-import { ChakraProvider } from '@chakra-ui/react';
 import Login from './Login';
-import PrivateProfile from './UserProfile/privateProfile';
+import UserPrivateProfile from './UserProfile/UserPrivateProfile';
+import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
 import Post from './Post';
 import io from 'socket.io-client';
@@ -21,11 +23,9 @@ const App = () => {
 
   const toast = useToast()
 
-  useEffect(() => {
-    // Fetch Users authentication status
-    fetch('/api/checkAuth')
-      .then((res) => res.json())
-      .then((data) => {
+  const fetchUserData = () => {
+    axios.get('/api/checkAuth')
+      .then(({data}) => {
         setIsAuthenticated(data.isAuthenticated);
         setUser(data.currentUser);
         setLoading(false);
@@ -34,6 +34,11 @@ const App = () => {
         console.error('Login Status Fetch: Failed', err);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    // Fetch Users authentication status
+    fetchUserData()
 
       let notif = (task) => {
         console.log(task, 'hello')
@@ -66,7 +71,6 @@ const App = () => {
     <ChakraProvider>
       <div className='App'>
         Sprout Support
-        {isAuthenticated && <PrivateProfile onLogout={handleLogout} />}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
@@ -77,14 +81,16 @@ const App = () => {
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
           />
-          <Route path='/meetup' element={<Meetup />} />
+          <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
-     </ChakraProvider>
+   </ChakraProvider>
   );
 };
 
