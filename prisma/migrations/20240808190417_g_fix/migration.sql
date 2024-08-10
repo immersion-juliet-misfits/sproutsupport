@@ -69,10 +69,10 @@ CREATE TABLE `Task` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `taskName` VARCHAR(191) NULL,
     `frequency` VARCHAR(191) NULL,
-    `lastCompleted` DATETIME(3) NOT NULL,
-    `nextComplection` DATETIME(3) NOT NULL,
-    `active` BOOLEAN NOT NULL,
-    `plant_id` INTEGER NOT NULL,
+    `lastCompleted` DATETIME(3) NULL,
+    `nextComplection` DATETIME(3) NULL,
+    `plant_id` INTEGER NULL,
+    `overdue` BOOLEAN NULL,
 
     INDEX `Task_plant_id_fkey`(`plant_id`),
     PRIMARY KEY (`id`)
@@ -85,7 +85,6 @@ CREATE TABLE `Post` (
     `image_id` INTEGER NULL,
     `message` VARCHAR(191) NOT NULL,
 
-    INDEX `Post_image_id_fkey`(`image_id`),
     INDEX `Post_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -93,12 +92,7 @@ CREATE TABLE `Post` (
 -- CreateTable
 CREATE TABLE `Comment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
-    `message` VARCHAR(191) NOT NULL,
-    `post_id` INTEGER NOT NULL,
 
-    INDEX `Comment_post_id_fkey`(`post_id`),
-    INDEX `Comment_userId_fkey`(`userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -123,16 +117,10 @@ ALTER TABLE `Notification` ADD CONSTRAINT `Notification_userId_fkey` FOREIGN KEY
 ALTER TABLE `Plant` ADD CONSTRAINT `Plant_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Task` ADD CONSTRAINT `Task_plant_id_fkey` FOREIGN KEY (`plant_id`) REFERENCES `Plant`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Task` ADD CONSTRAINT `Task_plant_id_fkey` FOREIGN KEY (`plant_id`) REFERENCES `Plant`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Post` ADD CONSTRAINT `Post_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_post_id_fkey` FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Attendee` ADD CONSTRAINT `Attendee_meet_id_fkey` FOREIGN KEY (`meet_id`) REFERENCES `Meet`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

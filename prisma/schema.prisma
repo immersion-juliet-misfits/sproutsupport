@@ -37,6 +37,8 @@ model Meet {
   eventName   String
   description String
   imageUrl    String
+  status      String
+  message     String?
   userId      Int
   attendees   Attendee[]
   owner       User       @relation(fields: [userId], references: [id])

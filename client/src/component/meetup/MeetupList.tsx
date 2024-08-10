@@ -1,9 +1,9 @@
 import MeetupListItem from './MeetupListItem'
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Input, Button, SimpleGrid, Box } from '@chakra-ui/react';
 
-const MeetupList = ({list, refresh, createSwapUpdateCheck, user}: {list: Array<T>, refresh: any, createSwapUpdateCheck: any, user: object}) =>{
+const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>}) =>{
   const [swap, setSwap] = useState('none')
   const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
@@ -11,6 +11,8 @@ const MeetupList = ({list, refresh, createSwapUpdateCheck, user}: {list: Array<T
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
+  const [currentState, setCurrentState] = useState('yours')
+  const [joinCheck, setJoinCheck] = useState([])
 
   const edit = (name: string, value: string): void =>{
     switch(name){
@@ -71,12 +73,36 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
+const check = (): void =>{
+const checkList: Array<T> = []
+const edit: Array<T> = []
+for(let i = 0; i < join.length; i++){
+  if(!checkList.includes(join?.[i])){
+    checkList.push(join?.[i])
+  }
+}
+for(let i = 0; i < pub.length; i++){
+  if(!checkList.includes(pub?.[i].id)){
+    edit.push(pub?.[i])
+  }
+}
+}
+
+useEffect(()=>{
+  check()
+},[])
+
   return(
     <>
-    
-    {/* <Button onClick={()=>{meetupDelete(10)}}>delete</Button> */}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'yours' ? setCurrentState('yours') : 'none'}} top="-80px" left="175px">yours</Button></>}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'joined' ? setCurrentState('joined') : 'none'}} top="-80px" left="178px">joined</Button></>}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'public' ? setCurrentState('public') : 'none'}} top="-80px" left="180px">public</Button></>}
         <SimpleGrid columns={3} spacing={10}>
-        {swap === 'none' && <>{list.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck}/>)})}</>}
+        {swap === 'none' && <><>{currentState === 'yours' && yours.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
+        {swap === 'none' && <><>{currentState === 'joined' && join.map((group, i)=>{
+          return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={true} refresh={refresh}/>)
+          })}</></>}
+        {swap === 'none' && <><>{currentState === 'public' && pub.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
         </SimpleGrid>
     {swap === 'update' && <><Box w={'500px'}>
       <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>

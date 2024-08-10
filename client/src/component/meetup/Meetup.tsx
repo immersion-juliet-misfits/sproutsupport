@@ -7,19 +7,53 @@ import dayjs from 'dayjs';
 import Nav from '../NavBar';
 
 const Meetup = ({user}: {user: object}) => {
-// const [user, setUser] = useState('none')
 // const [weather, setWeather] = useState({})
-const [list, setList] = useState([])
+//  const [list, setList] = useState([])
 const [inputSwap, setInputSwap] = useState(false)
 const [currentTime, setCurrentTime] = useState('')
 const [dueDate, setDueDate] = useState('')
 const [timeLeft, setTimeLeft] = useState('')
 const [show, setShow] = useState(false)
+const [makeStatus, setMakeStatus] = useState('your meetup')
+const [yourMeetups, setYourMeetups] = useState([])
+   const [joinedMeetups, setJoinedMeetups] = useState([])
+  const [publicMeetups, setPublicMeetups] = useState([])
 
 const getMeetups = (): void => {
   axios.get('/meetup/all')
 .then(({data})=>{
-setList(data)
+// setList(data)
+const yours = [];
+const pub = []
+for(let i = 0; i < data.length; i++){
+  if(data[i].userId === user.id){
+    yours.push(data[i])
+  }else{
+  pub.push(data[i])
+  }
+  }
+axios.get('/meetup/Attendee')
+  .then((result)=>{
+    const meetTest: Array<T> = []
+    const editPub: Array<T> = []
+    const arr = result.data
+for(let i = 0; i < arr.length; i++){
+  if(arr[i].userId === user.id && !meetTest.includes(arr[i].meet_id) ){
+meetTest.push(arr[i].meet_id)
+  } 
+}
+for(let i = 0; i < pub.length; i++){
+  if(!meetTest.includes(pub[i].id)){
+editPub.push(pub[i])
+  } 
+}
+setPublicMeetups(editPub)
+})
+.catch((err)=>{
+  console.error('cant\'t find Attendee: ', err)
+})
+
+setYourMeetups(yours)
 if(data[0] !== undefined){
 setDueDate(data[0].time_date)
 }
@@ -27,6 +61,36 @@ setDueDate(data[0].time_date)
 .catch((err)=>{
   console.error('Error in Meetup.tsx can\'t get list of meetups: ', err)
 })
+}
+
+const getJoinMeetups = (): void =>{
+  axios.get('/meetup/Attendee')
+  .then(({data})=>{
+    const meetTest: Array<T> = []
+    const meetEvent: Array<T> = []
+for(let i = 0; i < data.length; i++){
+  if(data[i].userId === user.id && !meetTest.includes(data[i].meet_id) ){
+meetTest.push(data[i].meet_id)
+  }
+}
+axios.get('/meetup/all')
+.then(({data})=>{
+  for(let i = 0; i < data.length; i++){
+    if(meetTest.includes(data[i].id) ){
+  meetEvent.push(data[i])
+    }
+  }
+setJoinedMeetups(meetEvent)
+})
+.catch((err)=>{
+  console.error('Error in Meetup.tsx can\'t get list of meetups: ', err)
+})
+
+
+  })
+  .catch((err)=>{
+    console.error('can\'t get join meetups: ', err)
+  })
 }
 
 const createSwapUpdate = (): void =>{
@@ -54,7 +118,7 @@ setCurrentTime(time)
 }
 
 const compare = (): void =>{
-  if(currentTime.length !== 0 && dueDate.length !== 0){
+  if(currentTime.length !== 0 && dueDate.length !== 0 && yourMeetups[0] !== undefined){
   let cur: Array<T> = currentTime?.split(' ')
   const curDate: Array<T> = cur[0].split('/')
   cur = cur.slice(2)
@@ -99,34 +163,37 @@ const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseI
 
 setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')
 
-let str: string = 'HEY you have a meetup today for'
+let str: string = ''
+let range: string = 'not in range'
 
 if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
-str = 'Hey you have ' + dayDiff + ' left for the ' + list[0].eventName + ' meetup'
+str = 'Hey you have ' + dayDiff + ' days until the ' + yourMeetups[0].eventName + ' meetup'
+range = 'in range'
 }else{
-  str = 'HEY you have a meetup today for ' + list[0].eventName
+  str = 'HEY you have a meetup today for ' + yourMeetups[0].eventName
+  range = 'today'
 }
-console.log(str)
-
-// const obj: object = {time_date: list[0].time_date, location: list[0].location, eventName: list[0].eventName, description: list[0].description, imageUrl: list[0].imageUrl, id: list[0].id}
-// const url = 'meetup/update/' + id
-// axios.patch(url, obj)
-// .then(()=>{
-//   refresh()
-//   meetupSwap({})
-// })
-// .catch((err: any)=>{
-//   console.error('Error can\'t update: ', err)
-// })
-
+if(yourMeetups[0].status === 'none' || range === 'in range'){
+const obj: object = {time_date: yourMeetups[0].time_date, location: yourMeetups[0].location, eventName: yourMeetups[0].eventName, description: yourMeetups[0].description, imageUrl: yourMeetups[0].imageUrl, id: yourMeetups[0].id, status: range, message: str}
+const url = 'meetup/update/' + yourMeetups[0].id
+axios.patch(url, obj)
+.then(()=>{
+  getMeetups()
+})
+.catch((err: any)=>{
+  console.error('Error can\'t update in Meetup.tsx line 181: ', err)
+})
+}
   }
 }
 
 const showSwitch = (): void => {
   if(show === false){
     setShow(true)
+    setMakeStatus('your meetups')
   }else{
     setShow(false)
+    setMakeStatus('create meetup')
   }
 }
 
@@ -134,21 +201,26 @@ const doubleCall = (): void =>{
   getTime()
   compare()
 }
+const refresh = (): void  =>{
+  getMeetups()
+  getJoinMeetups()
+}
 
 useEffect(()=>{
   getMeetups()
   getTime()
+  getJoinMeetups()
 }, [])
 
   return (<div>
     <script>{window.setInterval(doubleCall, 60000)}</script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
-    <Button onClick={()=>{showSwitch()}}>create/show</Button>
+    <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === false && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>} 
-    {show === true && <MeetupList list={list} refresh={getMeetups} createSwapUpdateCheck={createSwapUpdate} user={user}/>} 
+    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>} 
+    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>} 
     </div>)
 };
 

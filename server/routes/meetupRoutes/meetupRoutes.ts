@@ -8,17 +8,17 @@ const routerMeetup = express.Router()
 
 routerMeetup.get('/all', (req: Request, res: Response): void =>{
   prisma.meet.findMany()
-  .then((result)=>{
+  .then((result: any)=>{
     res.status(200).send(result)
   })
-  .catch((err)=>{
-    console.error('Error meetup get line 13: ', err)
+  .catch((err: any)=>{
+    console.error('Error meetup get line 15: ', err)
     res.sendStatus(500)
   })
 })
 
 routerMeetup.post('/create',(req: Request, res: Response): void =>{
- const {time_date, location, eventName, description, imageUrl, userId}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string, userId: any} = req.body
+ const {time_date, location, eventName, description, imageUrl, userId, status}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string, userId: number, status: string} = req.body
   prisma.meet.create({
     data:{
       time_date,
@@ -26,20 +26,21 @@ routerMeetup.post('/create',(req: Request, res: Response): void =>{
       eventName,
       description,
       imageUrl,
-      userId
+      userId,
+      status
     }
   })
-  .then((result)=>{
+  .then((result: any)=>{
     res.status(201).send(result)
   })
-  .catch((err)=>{
-    console.error('Error meetup get line 28: ', err)
+  .catch((err: any)=>{
+    console.error('Error meetup get line 37: ', err)
     res.sendStatus(500)
   })
 })
 
 routerMeetup.patch('/update/:id',(req: Request, res: Response): void =>{
-  const {time_date, location, eventName, description, imageUrl}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string} = req.body
+  const {time_date, location, eventName, description, imageUrl, status, message}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string, status: string, message: string} = req.body
   const {id}: {id: string} = req.params
  const realId = parseInt(id)
   prisma.meet.update({
@@ -52,13 +53,15 @@ routerMeetup.patch('/update/:id',(req: Request, res: Response): void =>{
       eventName,
       description,
       imageUrl,
+      status,
+      message,
     }
   })
-  .then((result)=>{
+  .then((result: any)=>{
     res.status(200).send(result)
   })
-  .catch((err)=>{
-    console.error('Error meetup update line 60: ', err)
+  .catch((err: any)=>{
+    console.error('Error meetup update line 64: ', err)
     res.sendStatus(500)
   })
 })
@@ -71,13 +74,57 @@ routerMeetup.delete('/delete/:id',(req: Request, res: Response): void =>{
       id: realId
     }
   })
-  .then((result)=>{
+  .then((result: any)=>{
     res.status(200).send(result)
   })
-  .catch((err)=>{
-    console.error('Error meetup update line 60: ', err)
+  .catch((err: any)=>{
+    console.error('Error meetup update line 81: ', err)
     res.sendStatus(500)
   })
 })
+
+routerMeetup.get('/Attendee', (req: Request, res: Response): void =>{
+prisma.Attendee.findMany()
+  .then((result: any)=>{
+    res.status(200).send(result)
+  })
+  .catch((err: any)=>{
+    console.error('Error meetup get line 92: ', err)
+    res.sendStatus(500)
+  })
+})
+
+routerMeetup.post('/AttendeeCreate',(req: Request, res: Response): void =>{
+ const {userId, meet_id}: {userId: number, meet_id} = req.body
+  prisma.Attendee.create({
+    data:{
+      userId,
+      meet_id
+    }
+  })
+  .then((result: any)=>{
+    res.status(201).send(result)
+  })
+  .catch((err: any)=>{
+    console.error('Error meetup get line 109: ', err)
+    res.sendStatus(500)
+  })
+})
+
+routerMeetup.delete('/AttendeeLeave/:id',(req: Request, res: Response): void =>{
+  const {id}: {id: string} = req.params
+  const realId = parseInt(id)
+   prisma.Attendee.delete({
+    where:{
+      id: realId
+    }})
+   .then((result: any)=>{
+     res.status(200).send(result)
+   })
+   .catch((err: any)=>{
+     console.error('Error meetup get line 124: ', err)
+     res.sendStatus(500)
+   })
+ })
 
 export default routerMeetup
