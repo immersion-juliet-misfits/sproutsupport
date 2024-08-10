@@ -2,8 +2,8 @@ import { Progress, Heading } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
-const LevelBar = ({user}) => {
-  const [score, setScore] = useState(null)
+const LevelBar = ({user, score}) => {
+  // const [score, setScore] = useState(null) // source of issue
  
   // const getScore = () => {
   //   axios.get(`/plants/points/${user.id}`)
@@ -18,8 +18,8 @@ const LevelBar = ({user}) => {
 
   return (
     <div>
-        <Heading size="lg">{`Level ${user.level} ${user.points}`}</Heading>
-        <Progress colorScheme='green' height='22px' value={20} />
+        <Heading size="lg">{`Level ${score.level} ${score.points}`}</Heading>
+        <Progress colorScheme='green' height='22px' value={score.points} />
     </div>
   )
 }

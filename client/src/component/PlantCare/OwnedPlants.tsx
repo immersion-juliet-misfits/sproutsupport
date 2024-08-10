@@ -59,11 +59,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      {/* <LevelBar user={user} score={score}/> */}
-
-      {/* needed to backtrack to visualize better */}
-      <Heading size="lg">{`Level ${score.level} ${score.points}`}</Heading>
-      <Progress colorScheme='green' height='22px' value={score.points} />
+      <LevelBar user={user} score={score}/>
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
