@@ -1,4 +1,4 @@
-import {Button, Card, CardHeader, CardBody } from '@chakra-ui/react';
+import {Button, Card, CardHeader, CardBody, Image } from '@chakra-ui/react';
 import axios from 'axios';
 
 const MeetupListItem = ({group, remove, swap, createSwapUpdate, user, isJoined, refresh}: {group: object, remove: any, swap: any, createSwapUpdate: any, user: object, isJoined: boolean, refresh: any}) => {
@@ -40,12 +40,12 @@ axios.delete(url)
 
   return(<div>
     <Card>
-      <img src={group.imageUrl}></img>
-      <CardHeader><div>{group.eventName}</div></CardHeader>
-      <CardBody>
-<div>{group.location}</div>
-<div>{group.time_date}</div>
-<div>{group.imageUrl}</div>
+    <CardBody>
+      <Image src={group.imageUrl}></Image>
+      <CardHeader><b>{group.eventName}</b></CardHeader>
+    
+<b>{group.location}</b>
+<div>{'starts at ' + group.time_date}</div>
 <div>{group.description}</div>
 {user.id === group.userId && <>
   <Button onClick={()=>{

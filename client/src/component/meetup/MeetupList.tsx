@@ -10,11 +10,11 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   const [location, setLocation] = useState('')
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState({})
   const [currentState, setCurrentState] = useState('yours')
   const [joinCheck, setJoinCheck] = useState([])
 
-  const edit = (name: string, value: string): void =>{
+  const edit = (name: string, value: any): void =>{
     switch(name){
       case 'dt':
       setDateTime(value)
@@ -35,7 +35,13 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   }
 
 const meetupUpdate = (): void =>{
-const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: image, id}
+  axios.get('/upload/url', { params: {filename: image.name}})
+  .then(({data}) => {
+    return axios.put(data, image, {
+      headers: {'Content-Type': image.type}
+    })
+  }).then(()=>{
+const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{
@@ -43,6 +49,10 @@ axios.patch(url, obj)
   meetupSwap({})
 })
 .catch((err: any)=>{
+  console.error('Error can\'t update: ', err)
+})
+ })
+ .catch((err: any)=>{
   console.error('Error can\'t update: ', err)
 })
 }
@@ -110,7 +120,8 @@ useEffect(()=>{
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='img' value={image}></Input></Box></>}
+    <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
+    </Box></>}
     </>
   )
 } 
