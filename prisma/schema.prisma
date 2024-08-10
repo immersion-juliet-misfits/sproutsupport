@@ -39,6 +39,8 @@ model Meet {
   eventName   String
   description String
   imageUrl    String
+  status      String
+  message     String?
   userId      Int
   attendees   Attendee[]
   owner       User       @relation(fields: [userId], references: [id])
@@ -87,11 +89,9 @@ model Task {
 model Post {
   id       Int    @id @default(autoincrement())
   userId   Int
+  image_id Int?
   message  String
-  imageUrl String?
   owner    User   @relation(fields: [userId], references: [id])
-  // postImg   Image   @relation(fields: [imageId], references: [id])
-  // @@index([imageId], map: "Post_imageId_fkey")
 
   @@index([userId], map: "Post_userId_fkey")
 }

@@ -12,6 +12,7 @@ import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
+import sendEmail from './routes/meetupRoutes/cron';
 import Images from './routes/imgRoute';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
 
@@ -194,4 +195,7 @@ app.get('*', isAuthenticated, (req, res) => {
 app.listen(port, () => {
   console.info(`Listening on http://localhost:${port}`);
 });
+
+//cron
 job.start();
+//sendEmail.start()

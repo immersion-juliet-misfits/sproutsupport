@@ -1,18 +1,20 @@
 import MeetupListItem from './MeetupListItem'
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Input, Button, SimpleGrid, Box } from '@chakra-ui/react';
 
-const MeetupList = ({list, refresh, createSwapUpdateCheck}: {list: Array<T>, refresh: any, createSwapUpdateCheck: any}) =>{
+const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>}) =>{
   const [swap, setSwap] = useState('none')
   const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
-  const [image, setImage] = useState('')
+  const [image, setImage] = useState({})
+  const [currentState, setCurrentState] = useState('yours')
+  const [joinCheck, setJoinCheck] = useState([])
 
-  const edit = (name: string, value: string): void =>{
+  const edit = (name: string, value: any): void =>{
     switch(name){
       case 'dt':
       setDateTime(value)
@@ -33,7 +35,13 @@ const MeetupList = ({list, refresh, createSwapUpdateCheck}: {list: Array<T>, ref
   }
 
 const meetupUpdate = (): void =>{
-const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: image, id}
+  axios.get('/upload/url', { params: {filename: image.name}})
+  .then(({data}) => {
+    return axios.put(data, image, {
+      headers: {'Content-Type': image.type}
+    })
+  }).then(()=>{
+const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{
@@ -41,6 +49,10 @@ axios.patch(url, obj)
   meetupSwap({})
 })
 .catch((err: any)=>{
+  console.error('Error can\'t update: ', err)
+})
+ })
+ .catch((err: any)=>{
   console.error('Error can\'t update: ', err)
 })
 }
@@ -71,20 +83,45 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
+const check = (): void =>{
+const checkList: Array<T> = []
+const edit: Array<T> = []
+for(let i = 0; i < join.length; i++){
+  if(!checkList.includes(join?.[i])){
+    checkList.push(join?.[i])
+  }
+}
+for(let i = 0; i < pub.length; i++){
+  if(!checkList.includes(pub?.[i].id)){
+    edit.push(pub?.[i])
+  }
+}
+}
+
+useEffect(()=>{
+  check()
+},[])
+
   return(
     <>
-    
-    {/* <Button onClick={()=>{meetupDelete(10)}}>delete</Button> */}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'yours' ? setCurrentState('yours') : 'none'}} top="-80px" left="175px">yours</Button></>}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'joined' ? setCurrentState('joined') : 'none'}} top="-80px" left="178px">joined</Button></>}
+     {swap === 'none' && <><Button onClick={()=>{currentState !== 'public' ? setCurrentState('public') : 'none'}} top="-80px" left="180px">public</Button></>}
         <SimpleGrid columns={3} spacing={10}>
-        {swap === 'none' && <>{list.map((group, i)=>{return(<MeetupListItem key={i} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck}/>)})}</>}
+        {swap === 'none' && <><>{currentState === 'yours' && yours.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
+        {swap === 'none' && <><>{currentState === 'joined' && join.map((group, i)=>{
+          return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={true} refresh={refresh}/>)
+          })}</></>}
+        {swap === 'none' && <><>{currentState === 'public' && pub.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
         </SimpleGrid>
-    {swap === 'update' && <><Box>
+    {swap === 'update' && <><Box w={'500px'}>
       <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='img' value={image}></Input></Box></>}
+    <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
+    </Box></>}
     </>
   )
 } 
