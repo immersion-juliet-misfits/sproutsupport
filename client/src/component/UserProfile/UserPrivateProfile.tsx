@@ -26,7 +26,6 @@ interface User {
   email: string;
   avatar: string;
   bio: string;
-  // location_id: string;
   latitude: float;
   longitude: float;
 }
@@ -35,8 +34,13 @@ interface User {
 const UserPrivateProfile = ({ user, setUser, onLogout }) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
-  // const [latitude, setLatitude] = useState(null);
-  // const [longitude, setLongitude] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
+  const [dailyForecastData, setDailyForecastData] = useState(null);
+  const [alertsData, setAlertsData] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const EditableControls = () => {
     const {
@@ -56,6 +60,29 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
         <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
       </Flex>
     );
+  };
+
+  const fetchWeatherData = () => {
+    setLoading(true);
+    setError(null);
+
+    if (user.latitude && user.longitude) {
+      axios
+        .get('/user/weatherData')
+        .then((response) => {
+          const { currentWeather, dailyForecast, weatherAlerts } =
+            response.data;
+          setWeatherData(currentWeather);
+          setDailyForecastData(dailyForecast);
+          setAlertsData(weatherAlerts);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error('Error fetching weather data:', err);
+          setError('Failed to load weather data');
+          setLoading(false);
+        });
+    }
   };
 
   const handleAvatarChange = (event) => {
@@ -94,17 +121,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
         console.error('Update User Name: Failed ', error);
       });
   };
-
-  // const handleLocationChange = (newLocationId: number) => {
-  //   axios
-  //     .patch('/user/updateLocation', { location_id: newLocationId })
-  //     .then((response) => {
-  //       return setUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Update Location: Failed ', error);
-  //     });
-  // };
 
   const handleLatLonChange = () => {
     if (navigator.geolocation) {
@@ -170,12 +186,18 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
         latitude: user.latitude,
         longitude: user.longitude,
         userName: user.userName,
+        weatherData,
+        dailyForecastData,
+        alertsData,
       },
     });
   };
 
   useEffect(() => {
     // console.log('Use Effect User Check: ', user);
+    if (user.latitude && user.longitude) {
+      fetchWeatherData();
+    }
   }, [user]);
 
   if (!user) {
@@ -284,7 +306,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
               handleLatLonChange={handleLatLonChange}
-              // handleLocationChange={handleLocationChange}
               handleUserNameChange={handleUserNameChange}
             />
           )}

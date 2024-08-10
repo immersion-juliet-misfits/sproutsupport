@@ -1,8 +1,12 @@
 import express, { Request, Response } from 'express';
+import axios from 'axios';
 import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
 
 const prisma = new PrismaClient();
 const UserInfo = express.Router();
+const { WEATHER_KEY } = process.env;
+// console.log('Key Check: ', WEATHER_KEY);
 
 UserInfo.get('/getUserData', (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -124,14 +128,15 @@ UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
     });
 });
 
-
-// GeoLocation data handler
+// GeoLocation API
 UserInfo.patch('/updateLatLon', (req: Request, res: Response) => {
   const { latitude, longitude } = req.body;
   const userId = req.user.id;
 
   if (!userId || latitude === undefined || longitude === undefined) {
-    return res.status(400).send('User ID, Latitude, and Longitude are required');
+    return res
+      .status(400)
+      .send('User ID, Latitude, and Longitude are required');
   }
 
   prisma.user
@@ -151,6 +156,57 @@ UserInfo.patch('/updateLatLon', (req: Request, res: Response) => {
     });
 });
 
+// Weather API Route
+UserInfo.get('/weatherData', (req: Request, res: Response) => {
+  const user = req.user;
 
+  if (!user) {
+    console.log('User not authenticated or session not found');
+    return res.status(400).send('User not authenticated');
+  }
+
+  if (!user.latitude || !user.longitude) {
+    console.log('User location data missing:', {
+      latitude: user.latitude,
+      longitude: user.longitude,
+    });
+    return res.status(400).send('User latitude and longitude are required');
+  }
+
+  const baseUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${user.latitude},${user.longitude}`;
+  const currentWeatherUrl = `${baseUrl}/today?key=${WEATHER_KEY}`;
+  const dailyForecastUrl = `${baseUrl}?key=${WEATHER_KEY}&unitGroup=us&include=days`;
+  const alertsUrl = `${baseUrl}?key=${WEATHER_KEY}&include=alerts`;
+
+  // console.log('Current Weather API URL:', currentWeatherUrl);
+  // console.log('Daily Forecast API URL:', dailyForecastUrl);
+  // console.log('Weather Alerts API URL:', alertsUrl);
+
+  axios
+    .all([
+      axios.get(currentWeatherUrl),
+      axios.get(dailyForecastUrl),
+      axios.get(alertsUrl),
+    ])
+    .then(
+      axios.spread(
+        (currentWeatherResponse, dailyForecastResponse, alertsResponse) => {
+          // console.log('Current Weather Data:', currentWeatherResponse.data);
+          // console.log('Daily Forecast Data:', dailyForecastResponse.data.days);
+          // console.log('Weather Alerts Data:', alertsResponse.data.alerts);
+
+          res.json({
+            currentWeather: currentWeatherResponse.data,
+            dailyForecast: dailyForecastResponse.data.days,
+            weatherAlerts: alertsResponse.data.alerts || [],
+          });
+        }
+      )
+    )
+    .catch((error) => {
+      console.error('Error fetching weather data:', error);
+      res.status(500).send('Failed to fetch weather data');
+    });
+});
 
 export default UserInfo;
