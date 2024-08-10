@@ -158,26 +158,28 @@ const PlantFinder = ({ user }) => {
           <Box bg="green.200">
           <FormControl>
           <FormLabel>Choose a name for your plant (optional)</FormLabel>
-          <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
-          {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
+          <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
           <FormLabel>Choose a bio for your plant</FormLabel>
-          <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></Input><br></br>
+          <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
           <FormLabel>Choose a frequency for task</FormLabel>
           <Select placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
           </Select>
-          <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></Input><br></br>
-          <Input type="button" value="Add Task" onClick={() => handleAddTask()}></Input>
+          <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
+          <Button onClick={() => handleAddTask()} color="green">Add Task</Button>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
             tasks.map((task) => (
               <h4>{task}</h4>
             ))
           }
+          {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
           <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
-          <Input type="button" value="Add New Plant" onClick={() => handleNicknameSubmit()}></Input>
+            <Link to="/myplants">
+          <Button onClick={() => handleNicknameSubmit()} bgColor={"green.400"}>Add New Plant</Button>
+            </Link>
           </FormControl>
           </Box>
         </Box>
