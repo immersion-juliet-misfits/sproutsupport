@@ -122,8 +122,8 @@ const PlantFinder = ({ user }) => {
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
-        bgColor='green.400'
-        textColor="white"
+        bgColor='green.100'
+        textColor="green.900"
         ></Input>
       <Button onClick={() => handleSubmit()}>Search</Button><br></br>
       </FormControl>
@@ -150,29 +150,35 @@ const PlantFinder = ({ user }) => {
     }
     {/* </VStack> */}
     </GridItem>
+
+
         <GridItem>
       {selected && selected.CommonName &&
         <Box bg="green.700" p={7}>
           <Box bg="green.200">
-
-          <h3>Choose a name for your plant (optional)</h3>
+          <FormControl>
+          <FormLabel>Choose a name for your plant (optional)</FormLabel>
           <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
+          <FormLabel>Choose a bio for your plant</FormLabel>
           <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)}></Input><br></br>
+          <FormLabel>Choose a frequency for task</FormLabel>
           <Select placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
           </Select>
-          <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
           <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)}></Input><br></br>
+          <Input type="button" value="Add Task" onClick={() => handleAddTask()}></Input>
+          {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
             tasks.map((task) => (
               <h4>{task}</h4>
             ))
           }
-          <Input type="button" value="Add Task" onClick={() => handleAddTask()}></Input>
+          <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
           <Input type="button" value="Add New Plant" onClick={() => handleNicknameSubmit()}></Input>
+          </FormControl>
           </Box>
         </Box>
       }
