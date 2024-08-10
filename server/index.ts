@@ -12,6 +12,7 @@ import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
+import Images from './routes/imgRoute';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
 
 const prisma = new PrismaClient();
@@ -34,6 +35,7 @@ app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
+app.use('/image', Images)
 
 // GAuth Session middleware
 app.use(

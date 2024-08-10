@@ -52,7 +52,7 @@ const App = () => {
             path='/home'
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
-          <Route path='/createPost' element={<CreatePost />} />
+          <Route path='/createPost' element={<CreatePost user={user} />} />
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>

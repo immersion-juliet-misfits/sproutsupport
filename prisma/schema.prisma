@@ -72,24 +72,24 @@ model Plant {
 }
 
 model Task {
-  id              Int       @id @default(autoincrement())
-  taskName        String?
-  frequency       String?
-  lastCompleted   DateTime?
-  nextComplection DateTime?
-  overdue         Boolean?
-  plant_id        Int?
-  taskPlant       Plant?    @relation(fields: [plant_id], references: [id])
-
-  @@index([plant_id], map: "Task_plant_id_fkey")
+    id Int @id @default(autoincrement())
+    taskName String?
+    frequency String?
+    lastCompleted DateTime?
+    nextComplection DateTime?
+    overdue Boolean?
+    plant_id Int?
+    taskPlant Plant? @relation(fields: [plant_id], references: [id])
 }
 
 model Post {
   id       Int    @id @default(autoincrement())
   userId   Int
-  image_id Int?
   message  String
+  imageUrl String?
   owner    User   @relation(fields: [userId], references: [id])
+  // postImg   Image   @relation(fields: [imageId], references: [id])
+  // @@index([imageId], map: "Post_imageId_fkey")
 
   @@index([userId], map: "Post_userId_fkey")
 }
