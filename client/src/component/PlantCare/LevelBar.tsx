@@ -6,8 +6,9 @@ const LevelBar = ({user, score, progress}) => {
 
   return (
     <div>
-        <Heading size="lg">{`Level ${score.level} ${progress}`}</Heading>
-        <Progress colorScheme='green' height='22px' value={progress} />
+        <Heading size="lg">{`Level ${score.level}`}</Heading>
+        {/* look into min/max props */}
+        <Progress colorScheme='green' height='22px' value={progress} hasStripe={true} isAnimated={true}/>
     </div>
   )
 }

@@ -38,8 +38,8 @@ const App = () => {
       let notif = (task) => {
         console.log(task, 'hello')
         toast({
-          title: 'Task',
-          description: `${task.taskName} ${task.taskPlant.nickname}`,
+          title: `${task.taskPlant.nickname}`,
+          description: `${task.taskName}`,
           status: 'warning',
           duration: 5000,
           isClosable: true,
