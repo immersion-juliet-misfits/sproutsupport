@@ -1,4 +1,5 @@
 import express from 'express';
+import { createServer } from "http";
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
@@ -12,6 +13,7 @@ import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
+import { Server } from "socket.io";
 import sendEmail from './routes/meetupRoutes/cron';
 import Images from './routes/imgRoute';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
@@ -23,6 +25,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+const httpServer = createServer(app);
 const port = 8000;
 const DIST_PATH = path.resolve(__dirname, '../client/dist');
 
@@ -32,11 +35,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
-app.use('/plants', Plants);
-app.use('/meetup', routerMeetup);
-app.use('/upload', Upload);
-app.use('/post', Posts);
-app.use('/image', Images)
 
 // GAuth Session middleware
 app.use(
@@ -78,25 +76,27 @@ passport.use(
     ) => {
       // Prisma method for adding User to DB
       prisma.user
-        .findUnique({
-          where: { google_id: profile.id },
-        })
-        .then((user) => {
-          if (!user) {
-            return prisma.user.create({
-              data: {
-                google_id: profile.id,
-                userName: profile.displayName,
-                email: profile.emails?.[0].value,
-                avatar:
-                  'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
-              },
-            });
-          }
-          return user;
-        })
-        .then((user) => doneCB(null, user))
-        .catch((err) => doneCB(err));
+      .findUnique({
+        where: { google_id: profile.id },
+      })
+      .then((user) => {
+        if (!user) {
+          return prisma.user.create({
+            data: {
+              google_id: profile.id,
+              userName: profile.displayName,
+              email: profile.emails?.[0].value,
+              avatar:
+              'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
+              latitude: 64.7552,
+              longitude: 147.3534,
+            },
+          });
+        }
+        return user;
+      })
+      .then((user) => doneCB(null, user))
+      .catch((err) => doneCB(err));
     }
   )
 );
@@ -133,6 +133,11 @@ app.get('/api/checkAuth', (req, res) => {
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
 
+app.use('/plants', Plants);
+app.use('/meetup', routerMeetup);
+app.use('/upload', Upload);
+app.use('/post', Posts);
+app.use('/image', Images)
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
@@ -192,10 +197,20 @@ app.get('*', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, '../client', 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
-  console.info(`Listening on http://localhost:${port}`);
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+  // ...
+  console.log(`${socket.id} connected.`)
+
+  socket.on('disconnect', () => {
+    console.log(`${socket.id} disconnected.`);
+  });
 });
 
-//cron
+httpServer.listen(port, () => {
+  console.info(`Listening on http://localhost:${port}`);
+});
+// let test = 'hey'
 job.start();
-//sendEmail.start()
+export { io }

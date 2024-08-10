@@ -18,12 +18,14 @@ model User {
   password      String?
   avatar        String?
   bio           String?
-  level         Int?
-  attendees     Attendee[]
+  level         Int            @default(1)
+  points        Int            @default(0)
   meets         Meet[]
   notifications Notification[]
   plants        Plant[]
   posts         Post[]
+  // comments Comment[]
+  attendees     Attendee[]
 }
 
 model Image {

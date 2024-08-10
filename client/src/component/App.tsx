@@ -11,11 +11,17 @@ import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
 import Post from './Post';
+import io from 'socket.io-client';
+import { useToast } from '@chakra-ui/react'
+
+const socket = io('http://localhost:8000');
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
+
+  const toast = useToast()
 
   const fetchUserData = () => {
     axios.get('/api/checkAuth')
@@ -31,7 +37,26 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchUserData();
+    // Fetch Users authentication status
+    fetchUserData()
+
+      let notif = (task) => {
+        console.log(task, 'hello')
+        toast({
+          title: `${task.taskPlant.nickname}`,
+          description: `${task.taskName}`,
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right'
+        })
+      }
+
+      socket.on('overdue', notif) // task on
+
+      return (() => {
+        socket.off('overdue', notif) // then off to not double up upon re-render with update
+      })
   }, []);
 
   const handleLogout = () => {

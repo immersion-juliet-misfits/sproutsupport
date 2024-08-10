@@ -96,7 +96,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
           });
         })
         .then(() => {
-          const newAvatarUrl = `https://my1test1bucket.s3.amazonaws.com/${file.name}`;
+          const newAvatarUrl = `https://ssupportbucket.s3.amazonaws.com/${file.name}`;
           return axios
             .patch('/user/updateAvatar', {
               avatar: newAvatarUrl,

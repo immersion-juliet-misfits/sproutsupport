@@ -3,7 +3,7 @@ dotenv.config();
 import aws from 'aws-sdk';
 
 const region = "us-east-2"
-const bucketName = "my1test1bucket"
+const bucketName = "ssupportbucket"
 const accessKey = process.env.AWS_ACCESS_KEY
 const secret = process.env.AWS_SECRET
 
