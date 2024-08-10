@@ -12,8 +12,16 @@ Plants.get('/test', (req: Request, res: Response) => {
 })
 
 Plants.post('/newPlant', (req: Request, res: Response) => {
-  const { nickname, bio, ScientificName, CommonName, Id, userId } = req.body;
-  prisma.plant.create({data: {nickname, description:bio, species: ScientificName, commonName: CommonName, plantAPIID: Id, userId}})
+  const { nickname, bio, ScientificName, CommonName, Id, userId, imageUrl } = req.body;
+  prisma.plant.create({data: {
+    nickname,
+    description:bio,
+    species: ScientificName,
+    commonName: CommonName,
+    plantAPIID: Id,
+    userId,
+    imageUrl
+  }})
     .then((data) => {
       res.send(data)
     })
@@ -102,6 +110,86 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   //     console.error(err)
   //   })
 })
+
+Plants.post('/completeTask', (req: Request, res: Response) => {
+  const { id } = req.body
+
+  const getNextCompletionDate = (frequency) => {
+    const now = new Date();
+    let nextCompletion = new Date();
+
+    if (frequency === 'second') {
+      nextCompletion = new Date(now.getTime() + 1000);
+    } else if (frequency === 'minute') {
+      nextCompletion = new Date(now.getTime() + 60000);
+    } else if (frequency === 'hour') {
+      nextCompletion = new Date(now.getTime() + 3600000);
+    } else {
+      nextCompletion = now;
+    }
+
+    return nextCompletion;
+  };
+
+  const getNextPointReq = (currLvl) => {
+    return 50 + (currLvl * 50)
+  }
+
+  prisma.task.findUnique({
+    where: { id }, include: {taskPlant: true}
+  })
+  .then((task) => {
+    prisma.task.update({
+      where: { id },
+      data: {
+        lastCompleted: new Date(),
+        nextComplection: getNextCompletionDate(task.frequency),
+        overdue: false
+      }
+    })
+    .then((data) => {
+      console.log(data, 'task')
+      prisma.plant.findUnique({where: {id: data.plant_id}, select: {caregiver: true}})
+       .then((plant) => {
+        prisma.user.update({where: {id: plant.caregiver.id}, data: { points: { increment: 5}}, select: { points: true, level:true, id: true }})
+          .then((updatedUser) => {
+            let pointsNeeded = getNextPointReq(updatedUser.level)
+            console.log(updatedUser, pointsNeeded, 'hahahapple')
+
+            if(updatedUser.points >= pointsNeeded) {
+              console.log('LEVEL UP')
+              // Property 'id' does not exist on type
+              prisma.user.update({where: {id: updatedUser.id}, data: {level: {increment: 1}, points: updatedUser.points - pointsNeeded}})
+                .then((newLvl) => {
+                  console.log(newLvl, 'LVL UP FR UPDATE')
+                  res.send('lvl up')
+                })  
+            } else {
+              res.send('no lvl up')
+            }
+            // return null;
+            // res.send('ok')
+          })
+          // .then(() => {
+          //   res.send('no lvlup')
+          // })
+       })
+    })
+  })
+ // error handling additions
+})
+
+// feels repetetive
+Plants.get('/points/:userId', (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  prisma.user.findUnique({where: {id: Number(userId) } })
+    .then((data) => {
+      const { userName, level, points, id } = data
+      res.send({userName, level, points, id})
+    })
+})
+
 
 Plants.post('/search', (req: Request, res: Response) => {
   const { query } = req.body;

@@ -3,7 +3,11 @@ dotenv.config();
 import aws from 'aws-sdk';
 
 const region = "us-east-2"
+<<<<<<< HEAD
 const bucketName = "sproutsupportbucket"
+=======
+const bucketName = "ssupportbucket"
+>>>>>>> 0f060c550b98d835c8b349a1789e376a32adf2f7
 const accessKey = process.env.AWS_ACCESS_KEY
 const secret = process.env.AWS_SECRET
 
