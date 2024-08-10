@@ -40,7 +40,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
         <Heading size='md'>{plant.nickname}</Heading>
         {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
         {/* {tasks.length === 1 && <h3>!! {tasks.length} Task Due</h3>} */}
-        {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="red">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>No Tasks</h3> )}
+        {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="tomato">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>No Tasks</h3> )}
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody textAlign={'center'}>

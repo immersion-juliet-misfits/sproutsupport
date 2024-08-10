@@ -36,7 +36,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar }) =>
 
   return (
     <>
-      <Button onClick={onOpen}>Trigger modal</Button>
+      <Button onClick={onOpen}>View Tasks</Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
