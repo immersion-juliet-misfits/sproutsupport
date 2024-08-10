@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Progress, Heading } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PlantSnippet from './PlantSnippet';
@@ -11,6 +11,7 @@ import LevelBar from './LevelBar';
 
 const OwnedPlants = ({ user }) => {
   const [plants, setPlants] = useState([])
+  const [score, setScore] = useState({})
 
   const getPlants = () => {
     axios.get(`/plants/all/${user.id}`)
@@ -26,6 +27,20 @@ const OwnedPlants = ({ user }) => {
     console.log('selected plant', plant)
     // setSelected(selected);
   };
+
+ 
+  const getScore = () => {
+    axios.get(`/plants/points/${user.id}`)
+      .then((scorecard) => {
+        console.log(scorecard.data.points)
+        setScore(scorecard.data)
+      })
+  }
+
+  useEffect(() => {
+    console.log(score, 'score')
+    getScore()
+  }, [])
 
   // const handleDelete = () => {
   //   // let plantName = plant.
@@ -44,7 +59,11 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <div>
-      <LevelBar user={user}/>
+      {/* <LevelBar user={user} score={score}/> */}
+
+      {/* needed to backtrack to visualize better */}
+      <Heading size="lg">{`Level ${score.level} ${score.points}`}</Heading>
+      <Progress colorScheme='green' height='22px' value={score.points} />
       <Heading>{`${user.userName}'s Owned Plants`}</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
@@ -53,7 +72,7 @@ const OwnedPlants = ({ user }) => {
       {/* make into seperate component */}
       {plants.length > 0 &&
         plants.map((plant) => (
-          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>

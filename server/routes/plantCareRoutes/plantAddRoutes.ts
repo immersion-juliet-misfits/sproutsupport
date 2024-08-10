@@ -185,7 +185,8 @@ Plants.get('/points/:userId', (req: Request, res: Response) => {
 
   prisma.user.findUnique({where: {id: Number(userId) } })
     .then((data) => {
-      res.send({points: data.points, level: data.level})
+      const { userName, level, points, id } = data
+      res.send({userName, level, points, id})
     })
 })
 

@@ -17,7 +17,7 @@ import {
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const PlantCare = ({ plant, tasks, fetchTasks }) => {
+const PlantCare = ({ plant, tasks, fetchTasks, getScore }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCompletion = (task) => {
@@ -25,6 +25,7 @@ const PlantCare = ({ plant, tasks, fetchTasks }) => {
     axios.post('/plants/completeTask', { id: task.id })
       .then((data) => {
         console.log(data)
+        getScore()
       })
       .then(() => {
         fetchTasks()
