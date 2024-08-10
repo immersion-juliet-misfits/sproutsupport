@@ -37,8 +37,8 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const [latitude, setLatitude] = useState(64.7552);
+  const [longitude, setLongitude] = useState(147.3534);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -66,7 +66,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
     setLoading(true);
     setError(null);
 
-    if (user.latitude && user.longitude) {
+    // if (user.latitude && user.longitude) {
       axios
         .get('/user/weatherData')
         .then((response) => {
@@ -82,7 +82,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
           setError('Failed to load weather data');
           setLoading(false);
         });
-    }
+    // }
   };
 
   const handleAvatarChange = (event) => {
