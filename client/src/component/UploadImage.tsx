@@ -22,7 +22,7 @@ const UploadImage = () => {
         })
       })
       .then(() => {
-        setSignedUrl(`https://sproutsupportbucket.s3.amazonaws.com/${image.name}`)
+        setSignedUrl(`https://my1test1bucket.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
         console.error('Failed to get image url', err)

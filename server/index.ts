@@ -10,14 +10,14 @@ import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 import isAuthenticated from './routes/auth';
 import job from './routes/plantCareRoutes/cron';
-import routerMeetup from './routes/meetupRoutes/meetupRoutes'
+import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
 import sendEmail from './routes/meetupRoutes/cron';
 import Images from './routes/imgRoute';
+import UserInfo from './routes/userRoutes/userInfoRoutes';
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
-
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,8 +35,7 @@ app.use(express.static(DIST_PATH));
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
-
-app.use('/post', Posts)
+app.use('/post', Posts);
 app.use('/image', Images)
 
 // GAuth Session middleware
@@ -46,8 +45,8 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 365
-    }
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    },
   })
 );
 
@@ -77,7 +76,6 @@ passport.use(
       profile: Profile,
       doneCB: (error: User, user?: Express.User) => void
     ) => {
-
       // Prisma method for adding User to DB
       prisma.user
         .findUnique({
@@ -90,7 +88,8 @@ passport.use(
                 google_id: profile.id,
                 userName: profile.displayName,
                 email: profile.emails?.[0].value,
-                avatar: profile.photos?.[0].value,
+                avatar:
+                  'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
               },
             });
           }
@@ -131,6 +130,8 @@ app.get('/api/checkAuth', (req, res) => {
   res.json({ isAuthenticated: req.isAuthenticated(), currentUser: req.user });
 });
 
+// Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
+app.use('/user', UserInfo);
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
@@ -166,7 +167,10 @@ app.post('/api/logout', (req, res) => {
 // Initiates authentication - requests access to User profile & email
 app.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: 'consent',
+  })
 );
 
 // Authenticates User , handles Google callback, & redirects User to home on successful Google login
