@@ -3,3 +3,5 @@ dist
 .env
 *~Stashed changes
 .DS_Store
+
+*.txt

@@ -18,7 +18,6 @@ const CreatePost = ({user}) => {
   const [input, setInput] = useState('');
   const [image, setImage] = useState(null);
   const [signedUrl, setSignedUrl] = useState(null);
-  // console.log('signed data: ', signedUrl)
 
   const handleInputChange = (e: {
     target: { value: SetStateAction<string> };
