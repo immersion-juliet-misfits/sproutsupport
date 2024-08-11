@@ -16,6 +16,9 @@ import Upload from './routes/uploadImgRoutes';
 import { Server } from "socket.io";
 import Comments from './routes/commentRoutes';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
+import sendEmail from './routes/meetupRoutes/cron';
+import Images from './routes/imgRoute';
+
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
@@ -137,6 +140,7 @@ app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
 app.use('/comment', Comments);
+app.use('/image', Images)
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
