@@ -9,6 +9,11 @@ import {
   IconButton,
   Button,
   Flex,
+  Grid,
+  GridItem,
+  Box,
+  Center,
+  Text,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
@@ -31,7 +36,9 @@ const Comment = ({ postId }) => {
         // console.log('s', data)
         getComments();
       })
-      .then(() => { setInput('')})
+      .then(() => {
+        setInput('');
+      })
       .catch((err) => {
         console.error('Failed to POST comment: ', err);
       });
@@ -51,17 +58,22 @@ const Comment = ({ postId }) => {
 
   const renderComments = () => {
     return comments.map((comment: object) => (
-      <div key={comment.id}>
-        {comment.message}
-        <IconButton
-          mt={4}
-          onClick={() => {
-            deleteComment(comment.id);
-          }}
-        >
-          <DeleteIcon />
-        </IconButton>
-      </div>
+      <Flex color='white'>
+        <Box flex='1' >
+          <Text>{comment.message}</Text>
+        </Box>
+        <Center w='100px' >
+          <Text>
+            <IconButton
+              mt={4}
+              onClick={() => {
+                deleteComment(comment.id);
+              }}
+              icon={<DeleteIcon />}
+            />
+          </Text>
+        </Center>
+      </Flex>
     ));
   };
 
@@ -83,9 +95,14 @@ const Comment = ({ postId }) => {
 
   return (
     <div>
-      {renderComments()}
-
-      <Flex>
+      <Grid
+        h='200px'
+        templateRows='repeat(2, 1f)'
+        templateColumns='repeat(5, 1f)'
+        gap={4}
+      >
+        <GridItem colSpan={3} >{renderComments()}</GridItem>
+        <GridItem colSpan={1} >
         <FormControl isInvalid={isError}>
           <FormLabel>Comment</FormLabel>
           <Input type='post' value={input} onChange={handleInputChange} />
@@ -94,14 +111,13 @@ const Comment = ({ postId }) => {
           ) : (
             <FormErrorMessage>A comment is required.</FormErrorMessage>
           )}
-          <Button
-            mt={4}
-            onClick={addComment}
-          >
+          <Button mt={4} onClick={addComment}>
             Submit
           </Button>
         </FormControl>
-      </Flex>
+      </GridItem>
+      </Grid>
+
     </div>
   );
 };

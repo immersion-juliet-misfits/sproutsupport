@@ -3,7 +3,7 @@ import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 
-const Nav = () => {
+const NavBar = () => {
   return (
     <Box>
       <ChakraLink as={ReactRouterLink} to='/home'>
@@ -22,4 +22,4 @@ const Nav = () => {
   )
 }
 
-export default Nav;
+export default NavBar;
