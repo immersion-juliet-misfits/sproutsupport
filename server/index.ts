@@ -132,7 +132,6 @@ app.get('/api/checkAuth', (req, res) => {
 
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
-
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
@@ -201,10 +200,10 @@ const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
   // ...
-  console.log(`${socket.id} connected.`)
+  // console.log(`${socket.id} connected.`)
 
   socket.on('disconnect', () => {
-    console.log(`${socket.id} disconnected.`);
+    // console.log(`${socket.id} disconnected.`);
   });
 });
 
