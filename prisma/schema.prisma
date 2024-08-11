@@ -81,19 +81,19 @@ model Task {
   frequency       String?
   lastCompleted   DateTime?
   nextComplection DateTime?
-  plant_id        Int?
   overdue         Boolean?
+  plant_id        Int?
   taskPlant       Plant?    @relation(fields: [plant_id], references: [id])
 
   @@index([plant_id], map: "Task_plant_id_fkey")
 }
 
 model Post {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   userId   Int
-  image_id Int?
   message  String
-  owner    User   @relation(fields: [userId], references: [id])
+  imageUrl String?
+  owner    User    @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "Post_userId_fkey")
 }
