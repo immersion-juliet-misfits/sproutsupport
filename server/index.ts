@@ -14,7 +14,6 @@ import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
 import { Server } from "socket.io";
-import sendEmail from './routes/meetupRoutes/cron';
 import Comments from './routes/commentRoutes';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
 
@@ -137,7 +136,8 @@ app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
-app.use('/image', Images)
+app.use('/comment', Comments);
+
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {

@@ -160,20 +160,21 @@ const Home = () => {
       </Grid>
       {/* below are html for posts */}
 
-      <Grid bg='teal' py={4} >
+      <Box bg='teal' py={4} >
         <ChakraLink as={ReactRouterLink} to='/createPost'>
           Create Post
         </ChakraLink>
-        <ul>
+        <Flex alignItems='center' gap='2' direction='column-reverse'>
         {posts
           .map((post) => {
             return (
-              <li key={post.id}>
+              <li key={post.id} >
                 <Flex
-                  // flexDirection='column-reverse'
+                  // box-sizing='border-box'
                   alignItems='center'
                   justifyContent='space-between'
                   bg='#c1e3c9'
+                  // grow={3}
                 >
                   {/* <div>{post.imageUrl}</div> */}
                   <Box >
@@ -201,7 +202,7 @@ const Home = () => {
                     <IconButton
                       isRound={true}
                       variant='solid'
-                      colorScheme='red'
+                      colorScheme='yellow'
                       aria-label='Done'
                       fontSize='20px'
                       onClick={() => {
@@ -216,9 +217,9 @@ const Home = () => {
               </li>
             );
           })
-          .reverse()}
-      </ul>
-      </Grid>
+        }
+      </Flex>
+      </Box>
     </Grid>
   );
 };

@@ -66,7 +66,7 @@ const CreatePost = ({user}) => {
       <div>
       <input type="file" onChange={handleChooseFile}></input>
       <input type="button" onClick={handleUploadFile} value="Upload"></input>
-      {image && <box><img src={signedUrl} boxSize='100px'></img></box>}
+      {image && <Box boxSize='100px'><img src={signedUrl} ></img></Box>}
     </div>
       <FormControl isInvalid={isError}>
         <FormLabel>Post</FormLabel>

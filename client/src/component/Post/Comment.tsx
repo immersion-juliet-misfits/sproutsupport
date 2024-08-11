@@ -32,7 +32,7 @@ const Comment = ({ postId }) => {
   const addComment = () => {
     return axios
       .post('comment/comment', { message: input, postId })
-      .then(({ data }) => {
+      .then(() => {
         // console.log('s', data)
         getComments();
       })
@@ -58,7 +58,7 @@ const Comment = ({ postId }) => {
 
   const renderComments = () => {
     return comments.map((comment: object) => (
-      <Flex color='white'>
+      <Flex color='black' key={comment.id}>
         <Box flex='1' >
           <Text>{comment.message}</Text>
         </Box>
@@ -109,7 +109,7 @@ const Comment = ({ postId }) => {
           {!isError ? (
             <FormHelperText>Press Submit to create comment.</FormHelperText>
           ) : (
-            <FormErrorMessage>A comment is required.</FormErrorMessage>
+            <FormErrorMessage color='yellow'>A comment is required.</FormErrorMessage>
           )}
           <Button mt={4} onClick={addComment}>
             Submit
