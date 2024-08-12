@@ -14,9 +14,11 @@ import job from './routes/plantCareRoutes/cron';
 import routerMeetup from './routes/meetupRoutes/meetupRoutes';
 import Upload from './routes/uploadImgRoutes';
 import { Server } from "socket.io";
+import Comments from './routes/commentRoutes';
+import UserInfo from './routes/userRoutes/userInfoRoutes';
 import sendEmail from './routes/meetupRoutes/cron';
 import Images from './routes/imgRoute';
-import UserInfo from './routes/userRoutes/userInfoRoutes';
+
 
 const prisma = new PrismaClient();
 const { G_CLIENT_ID, G_CLIENT_SECRET } = process.env;
@@ -132,12 +134,13 @@ app.get('/api/checkAuth', (req, res) => {
 
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
-
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
+app.use('/comment', Comments);
 app.use('/image', Images)
+
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
   if (req.isAuthenticated()) {
@@ -201,10 +204,10 @@ const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
   // ...
-  console.log(`${socket.id} connected.`)
+  // console.log(`${socket.id} connected.`)
 
   socket.on('disconnect', () => {
-    console.log(`${socket.id} disconnected.`);
+    // console.log(`${socket.id} disconnected.`);
   });
 });
 

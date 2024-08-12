@@ -21,10 +21,8 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar }) =>
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCompletion = (task) => {
-    console.log(task, 'task')
     axios.post('/plants/completeTask', { id: task.id })
       .then((data) => {
-        console.log(data)
         getScore()
         updateProgressBar()
       })

@@ -87,17 +87,23 @@ model Task {
 }
 
 model Post {
-  id       Int    @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   userId   Int
   message  String
   image_id Int?
-  owner    User   @relation(fields: [userId], references: [id])
+  owner    User      @relation(fields: [userId], references: [id])
+  Comment  Comment[]
 
   @@index([userId], map: "Post_userId_fkey")
 }
 
 model Comment {
-  id Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
+  message String
+  postId  Int
+  post    Post   @relation(fields: [postId], references: [id])
+
+  @@index([postId], map: "Comment_postId_fkey")
 }
 
 model Attendee {

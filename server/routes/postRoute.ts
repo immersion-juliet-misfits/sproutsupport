@@ -25,7 +25,7 @@ Posts.post('/post', (req: Request, res: Response) => {
       data: {
         userId,
         message,
-        imageUrl
+        imageUrl,
       },
     })
     .then((data) => {
@@ -36,36 +36,47 @@ Posts.post('/post', (req: Request, res: Response) => {
     });
 });
 
-Posts.patch('/post:id', (req: Request, res: Response) => {
+Posts.patch('/post/:id', (req: Request, res: Response) => {
   const { id } = req.params;
 
   const { message } = req.body;
-    prisma.post.update({
+  prisma.post
+    .update({
       where: {
         id: Number(id),
       },
       data: {
-        message
-      }
+        message,
+      },
     })
-      .then(updatedPost => {
-        res.status(201).send(updatedPost);
-      })
-      .catch(() => res.sendStatus(404));
+    .then((updatedPost) => {
+      res.status(201).send(updatedPost);
+    })
+    .catch(() => res.sendStatus(404));
 });
 
-Posts.delete('/post:id', (req: Request, res: Response) => {
+Posts.delete('/post/:id', (req: Request, res: Response) => {
   const { id } = req.params;
-  const nId = parseInt(id);
-    prisma.post.delete({
-      where: {
-        id: nId
-      }
-    })
-      .then(() => res.sendStatus(201))
-      .catch((err) => {
-        console.error('Failed to delete post: ', err)
-        res.sendStatus(500)});
+
+  const deleteComment = prisma.comment.deleteMany({
+    where: {
+      postId: Number(id)
+    },
+  });
+
+  const deletePost = prisma.post.delete({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  prisma
+    .$transaction([deleteComment, deletePost])
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.error('Failed to delete post: ', err);
+      res.sendStatus(500);
+    });
 });
 
 export default Posts;

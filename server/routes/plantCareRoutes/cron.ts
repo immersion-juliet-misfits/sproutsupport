@@ -21,10 +21,10 @@ const job = new CronJob('*/9 * * * * *', () => { // wanna make this dynamic
      })
     // notify plant owner of their overdue task
     if (data.length > 0) {
-      console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
+      // console.log(data, 'OVERDUE') // count can be useful for displaying number of overdue tasks
       prisma.task.updateMany({where: { nextComplection: { lt: new Date() }, overdue: false }, data: {overdue: true}})
         .then(() => {
-          console.log('updated')
+          // console.log('updated')
         })
     }
    })
