@@ -41,7 +41,6 @@ const App = () => {
     fetchUserData()
 
       let notif = (task) => {
-        console.log(task, 'hello')
         toast({
           title: `${task.taskPlant.nickname}`,
           description: `${task.taskName}`,

@@ -27,7 +27,6 @@ const OwnedPlants = ({ user }) => {
   }
 
   const handlePlantClick = (plant) => {
-    console.log('selected plant', plant)
     // setSelected(selected);
   };
 
@@ -35,13 +34,12 @@ const OwnedPlants = ({ user }) => {
   const getScore = () => {
     axios.get(`/plants/points/${user.id}`)
       .then((scorecard) => {
-        console.log(scorecard.data.points)
         setScore(scorecard.data)
       })
   }
 
   const getNextPointReq = (currLvl) => {
-    console.log(currLvl, 50 + (currLvl * 50))
+    // console.log(currLvl, 50 + (currLvl * 50))
     return 50 + (currLvl * 50)
   }
 
@@ -51,7 +49,6 @@ const OwnedPlants = ({ user }) => {
   }
 
   useEffect(() => {
-    console.log(score, 'score')
     getScore()
   }, [])
 
