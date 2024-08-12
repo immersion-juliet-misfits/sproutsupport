@@ -128,10 +128,12 @@ routerMeetup.delete('/AttendeeLeave/:id',(req: Request, res: Response): void =>{
  })
 
  routerMeetup.get('/weather', (req: Request, res: Response): void =>{
+
   const baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/64.7552,147.3534';
   const dailyForecastUrl = `${baseUrl}?key=${WEATHER_KEY}&unitGroup=us&include=days`;
 axios.get(dailyForecastUrl)
     .then((result: any)=>{
+      console.log(result)
       res.status(200).send(result)
     })
     .catch((err: any)=>{

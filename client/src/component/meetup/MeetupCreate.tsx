@@ -57,6 +57,15 @@ if(image.name !== undefined){
   }
   }
 
+  const getweather = (): void => {
+    axios.get('/meetup/weather')
+    .then(({data})=>{
+      console.log(data)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
   useEffect(()=>{
     if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[12] === ':' && dateTime[15] === ' '){
       if(dateTime[16] + dateTime[17] === 'pm' || dateTime[16] + dateTime[17] === 'am'){
@@ -76,6 +85,7 @@ if(image.name !== undefined){
   },[edit])
 
   return (<div>
+    <Button onClick={()=>{getweather()}}>weather check</Button>
     {fillIn === true && <Button colorScheme="green" onClick={()=>{makeMeetup()}}>create</Button>}
     {fillIn === false && <Button colorScheme="red" onClick={()=>{alert('fill in all inputs and for time reference the clock')}}>can't create</Button>}
     <Box w={"500px"}>
@@ -84,6 +94,9 @@ if(image.name !== undefined){
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='fill in eventName'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='fill in description'></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
+    </Box>
+    <Box border='1px' borderColor='black' w={"400px"}>
+      <div >weather status: none</div>
     </Box>
   </div>)
 };

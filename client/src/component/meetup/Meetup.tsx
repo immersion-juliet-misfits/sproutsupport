@@ -14,10 +14,11 @@ const [currentTime, setCurrentTime] = useState('')
 const [dueDate, setDueDate] = useState('')
 const [timeLeft, setTimeLeft] = useState('')
 const [show, setShow] = useState(false)
-const [makeStatus, setMakeStatus] = useState('your meetup')
+const [makeStatus, setMakeStatus] = useState('create meetup')
 const [yourMeetups, setYourMeetups] = useState([])
-   const [joinedMeetups, setJoinedMeetups] = useState([])
-  const [publicMeetups, setPublicMeetups] = useState([])
+const [joinedMeetups, setJoinedMeetups] = useState([])
+const [publicMeetups, setPublicMeetups] = useState([])
+const [yourAndJoin, setYourAndJoin] = useState([])
 
 const getMeetups = (): void => {
   axios.get('/meetup/all')
@@ -37,6 +38,7 @@ axios.get('/meetup/Attendee')
     const meetTest: Array<T> = []
     const editPub: Array<T> = []
     const arr = result.data
+    let fuse: Array<T> = []
 for(let i = 0; i < arr.length; i++){
   if(arr[i].userId === user.id && !meetTest.includes(arr[i].meet_id) ){
 meetTest.push(arr[i].meet_id)
@@ -45,8 +47,12 @@ meetTest.push(arr[i].meet_id)
 for(let i = 0; i < pub.length; i++){
   if(!meetTest.includes(pub[i].id)){
 editPub.push(pub[i])
-  } 
+  }else{
+    fuse.push(pub[i])
+  }
 }
+fuse = yours.concat(fuse);
+setYourAndJoin(fuse)
 setPublicMeetups(editPub)
 })
 .catch((err)=>{
@@ -118,7 +124,8 @@ setCurrentTime(time)
 }
 
 const compare = (): void =>{
-  if(currentTime.length !== 0 && dueDate.length !== 0 && yourMeetups[0] !== undefined){
+  for(let i = 0; i < yourAndJoin.length; i++){
+  if(currentTime.length !== 0 && dueDate.length !== 0 && yourAndJoin[i] !== undefined){
   let cur: Array<T> = currentTime?.split(' ')
   const curDate: Array<T> = cur[0].split('/')
   cur = cur.slice(2)
@@ -161,21 +168,23 @@ if(du[4][0] === 0){
 }
 const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseInt(cur[4])) - (parseInt(du[4])) : ((parseInt(cur[4])) - (parseInt(du[4]))) * -1
 
+if(i === 0){
 setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')
+}
 
 let str: string = ''
 let range: string = 'not in range'
 
 if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
-str = 'Hey you have ' + dayDiff + ' days until the ' + yourMeetups[0].eventName + ' meetup'
+str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[0].eventName + ' meetup'
 range = 'in range'
 }else{
-  str = 'HEY you have a meetup today for ' + yourMeetups[0].eventName
+  str = 'HEY you have a meetup today for ' + yourAndJoin[0].eventName
   range = 'today'
 }
-if(yourMeetups[0].status === 'none' || range === 'in range'){
-const obj: object = {time_date: yourMeetups[0].time_date, location: yourMeetups[0].location, eventName: yourMeetups[0].eventName, description: yourMeetups[0].description, imageUrl: yourMeetups[0].imageUrl, id: yourMeetups[0].id, status: range, message: str}
-const url = 'meetup/update/' + yourMeetups[0].id
+if(yourAndJoin[i].status === 'none' || range === 'in range'){
+const obj: object = {time_date: yourAndJoin[i].time_date, location: yourAndJoin[i].location, eventName: yourAndJoin[i].eventName, description: yourAndJoin[i].description, imageUrl: yourAndJoin[i].imageUrl, id: yourAndJoin[i].id, status: range, message: str}
+const url = 'meetup/update/' + yourAndJoin[i].id
 axios.patch(url, obj)
 .then(()=>{
   getMeetups()
@@ -185,6 +194,9 @@ axios.patch(url, obj)
 })
 }
   }
+/////  
+}////end of loop
+/////
 }
 
 const showSwitch = (): void => {
@@ -200,6 +212,7 @@ const showSwitch = (): void => {
 const doubleCall = (): void =>{
   getTime()
   compare()
+  console.log(yourAndJoin)
 }
 const refresh = (): void  =>{
   getMeetups()

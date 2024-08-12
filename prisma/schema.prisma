@@ -11,19 +11,19 @@ model User {
   id            Int            @id @default(autoincrement())
   google_id     String         @unique
   location_id   Int?
+  latitude      Float?
+  longitude     Float?
   userName      String?
   email         String?        @unique
   password      String?
   avatar        String?
   bio           String?
-  level         Int            @default(1)
-  points        Int            @default(0)
+  level         Int?
+  attendees     Attendee[]
   meets         Meet[]
   notifications Notification[]
   plants        Plant[]
   posts         Post[]
-  // comments Comment[]
-  attendees     Attendee[]
 }
 
 model Image {
@@ -89,8 +89,8 @@ model Task {
 model Post {
   id       Int    @id @default(autoincrement())
   userId   Int
-  image_id Int?
   message  String
+  image_id Int?
   owner    User   @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "Post_userId_fkey")

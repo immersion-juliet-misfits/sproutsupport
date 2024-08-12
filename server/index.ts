@@ -213,4 +213,5 @@ httpServer.listen(port, () => {
 });
 // let test = 'hey'
 job.start();
+sendEmail.start()
 export { io }
