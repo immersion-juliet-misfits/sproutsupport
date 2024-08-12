@@ -29,6 +29,9 @@ const UserPrivacy = () => {
           Email/Password/Login Method Editing will be here
         </GridItem>
         <GridItem bg='green.500' h='150px'>
+          Links to Users various Social Media accounts (Twitter, Tumblr, Etc)
+        </GridItem>
+        <GridItem bg='green.500' h='150px'>
           Blocking - Enter the name of the User you want to block.
         </GridItem>
         <GridItem bg='green.500' h='150px'>

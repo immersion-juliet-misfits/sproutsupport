@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
-import UserPrivacy from './UserPrivacy';
+// import UserPrivacy from './UserPrivacy';
 import UserHelp from './UserHelp';
 
 // User context
@@ -31,7 +31,7 @@ interface User {
 }
 
 // Main component
-const UserPrivateProfile = ({ user, setUser, onLogout }) => {
+const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
   const [weatherData, setWeatherData] = useState(null);
@@ -96,7 +96,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
           });
         })
         .then(() => {
-          const newAvatarUrl = `https://my1test1bucket.s3.amazonaws.com/${file.name}`;
+          const newAvatarUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${file.name}`;
           return axios
             .patch('/user/updateAvatar', {
               avatar: newAvatarUrl,
@@ -298,7 +298,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
             <UserInfo
               avatar={user.avatar}
               bio={user.bio}
-              // location_id={user.location_id}
               latitude={user.latitude}
               longitude={user.longitude}
               userName={user.userName}
@@ -309,7 +308,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
               handleUserNameChange={handleUserNameChange}
             />
           )}
-          {currentView === 'privacy' && <UserPrivacy />}
           {currentView === 'help' && <UserHelp />}
         </Grid>
       </Grid>

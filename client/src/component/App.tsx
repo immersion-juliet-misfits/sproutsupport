@@ -22,6 +22,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast()
+  const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'sprout-support';
 
   const fetchUserData = () => {
     axios.get('/api/checkAuth')
@@ -40,7 +42,7 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData()
 
-      let notif = (task) => {
+      const notif = (task) => {
         console.log(task, 'hello')
         toast({
           title: `${task.taskPlant.nickname}`,
@@ -81,7 +83,7 @@ const App = () => {
           <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
-          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} />}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
           <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
           <Route
             path='/'
