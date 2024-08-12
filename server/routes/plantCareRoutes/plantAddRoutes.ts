@@ -148,20 +148,19 @@ Plants.post('/completeTask', (req: Request, res: Response) => {
       }
     })
     .then((data) => {
-      console.log(data, 'task')
       prisma.plant.findUnique({where: {id: data.plant_id}, select: {caregiver: true}})
        .then((plant) => {
         prisma.user.update({where: {id: plant.caregiver.id}, data: { points: { increment: 5}}, select: { points: true, level:true, id: true }})
           .then((updatedUser) => {
             let pointsNeeded = getNextPointReq(updatedUser.level)
-            console.log(updatedUser, pointsNeeded, 'hahahapple')
+            // console.log(updatedUser, pointsNeeded, 'hahahapple')
 
             if(updatedUser.points >= pointsNeeded) {
-              console.log('LEVEL UP')
+              // console.log('LEVEL UP')
               // Property 'id' does not exist on type
               prisma.user.update({where: {id: updatedUser.id}, data: {level: {increment: 1}, points: updatedUser.points - pointsNeeded}})
                 .then((newLvl) => {
-                  console.log(newLvl, 'LVL UP FR UPDATE')
+                  // console.log(newLvl, 'LVL UP FR UPDATE')
                   res.send('lvl up')
                 })  
             } else {

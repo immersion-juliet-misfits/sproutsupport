@@ -8,9 +8,7 @@ import PlantCare from './PlantCare';
 const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar }) => {
   const [tasks, setTasks] = useState([]);
   
-  // console.log(plant)
   const handleDelete = () => {
-    // let plantName = plant.
     axios.delete(`/plants/delete/${plant.id}`)
     .then(() => {
       console.info('Plant deleted')
@@ -22,16 +20,11 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     axios.get(`/plants/overdue/${plant.id}`)
       .then(({data}) => {
         setTasks(data)
-        // console.log(plant.nickname, data)
       })
   }
 
   useEffect(() => {
     fetchTasks()
-      // .then(() => [
-      //   getPlants()
-      // ])
-    // console.log(plant)
   }, [])
 
   return (
