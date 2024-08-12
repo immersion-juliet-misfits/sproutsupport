@@ -63,23 +63,17 @@ const CreatePost = ({user}) => {
 
   return (
     <Box>
-      {/* <Box>
-        <UploadImage onClick={handleImageChange} />
-        {image && <Image src={image} alt='Uploaded' boxSize='200px' mt={4} />}
-
-      </Box> */}
-      {/* <UploadImage image={image} /> */}
       <div>
       <input type="file" onChange={handleChooseFile}></input>
       <input type="button" onClick={handleUploadFile} value="Upload"></input>
-      {image && <box><img src={signedUrl} boxSize='100px'></img></box>}
+      {image && <Box boxSize='100px'><img src={signedUrl} ></img></Box>}
     </div>
       <FormControl isInvalid={isError}>
         <FormLabel>Post</FormLabel>
         <Input type='post' value={input} onChange={handleInputChange} />
         {!isError ? (
           <FormHelperText>
-            Select the green button to create post.
+            Press Submit to create post.
           </FormHelperText>
         ) : (
           <FormErrorMessage>A post is required.</FormErrorMessage>
