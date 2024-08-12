@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios'
 import { ChakraProvider } from '@chakra-ui/react';
 import Home from "./Home";
-import CreatePost from "./CreatePost";
+import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
 import PlantFinder from "./PlantCare/PlantFinder";
 import Login from './Login';
@@ -77,7 +77,6 @@ const App = () => {
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
           <Route path='/createPost' element={<CreatePost user={user} />} />
-          <Route path='/post' element={<Post />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
           <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} />}></Route>
