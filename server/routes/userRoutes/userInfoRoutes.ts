@@ -10,6 +10,7 @@ const { WEATHER_KEY } = process.env;
 
 UserInfo.get('/getUserData', (req: Request, res: Response) => {
   const userId = req.user?.id;
+  console.log('Req User Info: ', req.user);
 
   if (!userId) {
     return res.status(400).send('User ID is required');

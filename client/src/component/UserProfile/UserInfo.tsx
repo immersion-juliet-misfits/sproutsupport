@@ -1,5 +1,6 @@
 import {
   Button,
+  ChakraProvider,
   Checkbox,
   Editable,
   EditableInput,
@@ -31,8 +32,10 @@ const UserInfo = ({
 
   return (
     <>
-      <Grid>
+      <Grid className='TopGrids' border='2px solid red'
+      >
         <GridItem
+        className='UserAvatar'
           bg='yellow.500'
           display='flex'
           alignItems='center'
@@ -67,11 +70,14 @@ const UserInfo = ({
         </GridItem>
       </Grid>
       <Grid
+            border='2px solid orange'
+
+      className='MidGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
-        <GridItem bg='green.500' h='100px'>
+        <GridItem className='UserNameChange' bg='green.500' h='100px'>
           <Editable
             defaultValue={userName}
             onChange={(nextValue) => {
@@ -105,7 +111,7 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
-        <GridItem bg='green.500' h='150px'>
+        <GridItem className='UserLocationChange' bg='green.500' h='150px'>
           <Editable
             defaultValue={
               latitude && longitude
@@ -138,7 +144,7 @@ const UserInfo = ({
             </Button>
           </Editable>
         </GridItem>
-        <GridItem bg='green.500' h='200px'>
+        <GridItem className='UserBioChange' bg='green.500' h='200px'>
           <Editable
             defaultValue={bio}
             onSubmit={handleBioChange}
@@ -167,8 +173,16 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
-        {/* Add divider here?
+        </Grid>
+        {/* Put below inside an accordion?
          */}
+         <Grid
+      className='BottomGrids'
+      border='2px solid yellow'
+        templateColumns='repeat(1, 1fr)'
+        w='85%'
+        gap={4}
+      >
           <GridItem bg='green.500' h='150px'>
           {/* Change Placeholder */}
           Checkboxes for what you want displayed on your public profile

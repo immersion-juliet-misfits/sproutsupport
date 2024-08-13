@@ -72,7 +72,7 @@ const App = () => {
   return (
     <ChakraProvider>
       <div className='App'>
-        Sprout Support
+        {/* Sprout Support */}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
