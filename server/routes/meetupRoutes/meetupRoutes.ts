@@ -40,22 +40,21 @@ routerMeetup.post('/create',(req: Request, res: Response): void =>{
 })
 
 routerMeetup.patch('/update/:id',(req: Request, res: Response): void =>{
-  const {time_date, location, eventName, description, imageUrl, status, message}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string, status: string, message: string} = req.body
+  //const {time_date, location, eventName, description, imageUrl, status, message}: {time_date: string, location: string, eventName: string, description: string, imageUrl: string, status: string, message: string} = req.body
   const {id}: {id: string} = req.params
  const realId = parseInt(id)
+const data: object = {}
+for(const key in req.body){
+  if(req.body[key] !== undefined){
+    data[key] = req.body[key]
+  }
+}
+
   prisma.meet.update({
     where:{
       id: realId
     },
-    data:{
-      time_date,
-      location,
-      eventName,
-      description,
-      imageUrl,
-      status,
-      message,
-    }
+    data
   })
   .then((result: any)=>{
     res.status(200).send(result)

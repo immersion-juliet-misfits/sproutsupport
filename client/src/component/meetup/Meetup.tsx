@@ -169,7 +169,7 @@ if(du[4][0] === 0){
 const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseInt(cur[4])) - (parseInt(du[4])) : ((parseInt(cur[4])) - (parseInt(du[4]))) * -1
 
 if(i === 0){
-setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')
+  setTimeout((): void =>{setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')}, 30000)
 }
 
 let str: string = ''
@@ -182,18 +182,20 @@ range = 'in range'
   str = 'HEY you have a meetup today for ' + yourAndJoin[0].eventName
   range = 'today'
 }
+if(str !== yourAndJoin[i].message){
 if(yourAndJoin[i].status === 'none' || range === 'in range'){
-const obj: object = {time_date: yourAndJoin[i].time_date, location: yourAndJoin[i].location, eventName: yourAndJoin[i].eventName, description: yourAndJoin[i].description, imageUrl: yourAndJoin[i].imageUrl, id: yourAndJoin[i].id, status: range, message: str}
+const obj: object = {status: range, message: str}
 const url = 'meetup/update/' + yourAndJoin[i].id
 axios.patch(url, obj)
 .then(()=>{
-  getMeetups()
+setTimeout((): void =>{getMeetups()}, 5000)
 })
 .catch((err: any)=>{
   console.error('Error can\'t update in Meetup.tsx line 181: ', err)
 })
 }
   }
+}
 /////  
 }////end of loop
 /////
@@ -212,7 +214,6 @@ const showSwitch = (): void => {
 const doubleCall = (): void =>{
   getTime()
   compare()
-  console.log(yourAndJoin)
 }
 const refresh = (): void  =>{
   getMeetups()
