@@ -176,10 +176,10 @@ let str: string = ''
 let range: string = 'not in range'
 
 if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
-str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[0].eventName + ' meetup'
+str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[i].eventName + ' meetup'
 range = 'in range'
 }else{
-  str = 'HEY you have a meetup today for ' + yourAndJoin[0].eventName
+  str = 'HEY you have a meetup today for ' + yourAndJoin[i].eventName
   range = 'today'
 }
 if(str !== yourAndJoin[i].message){
