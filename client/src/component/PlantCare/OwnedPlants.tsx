@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid, GridItem } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PlantSnippet from './PlantSnippet';
 import LevelBar from './LevelBar';
+import PlantWarnings from './PlantWarnings';
 import NavBar from '../NavBar'
 // import UploadImage from '../UploadImage';
 // import io from 'socket.io-client';
@@ -17,6 +18,7 @@ const OwnedPlants = ({ user }) => {
   const [progress, setProgress] = useState(0)
 
   const getPlants = () => {
+    console.log('jet')
     axios.get(`/plants/all/${user.id}`)
       .then(({data}) => {
         setPlants(data)
@@ -25,6 +27,13 @@ const OwnedPlants = ({ user }) => {
         console.error(err)
       })
   }
+
+  // const getWarnings = () => {
+  //   axios.post(`/plants/warnings/2`)
+  //     .then((data) => {
+  //       console.log('lots of data', data)
+  //     })
+  // }
 
   const handlePlantClick = (plant) => {
     // setSelected(selected);
@@ -67,18 +76,31 @@ const OwnedPlants = ({ user }) => {
   //     })
   // }
 
+  // useEffect(() => {
+  //   getWarnings()
+  // }, [])
+
   useEffect(() => {
     getPlants();
-  }, [getPlants]) // stale reference || made everytime reran
+    // getWarnings();
+  }, []) // stale reference || made everytime reran
 
   return (
     <Box mx="auto" bg="green.200" p={5}>
       <NavBar />
       <Heading textAlign={'center'}>{`Hey, ${user.userName}`}</Heading>
+      <Grid templateColumns="1fr 2fr" gap={2}>
+        <GridItem>
+          <Box color='yellow.100' bg='orange.300' p={2}>
+           <PlantWarnings user={user}/>
+          </Box>
+      </GridItem>
+      <GridItem>
       <Box color='green.100' bg='green.400' p={2}>
-      <Heading>Sprout Growth</Heading>
       <LevelBar user={user} score={score} progress={progress}/>
       </Box>
+      </GridItem>
+      </Grid>
       <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>

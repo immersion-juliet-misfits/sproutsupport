@@ -211,4 +211,23 @@ Plants.post('/search', (req: Request, res: Response) => {
   })
 })
 
+Plants.post('/warnings/:userId', (req: Request, res: Response) => {
+  const { userId } = req.params;
+  // const { lat, long } = req.body;
+
+  // find user to get location
+  prisma.user.findUnique({where: {id: Number(userId)}})
+    .then((user) => {
+      const { latitude, longitude } = user;
+      axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}?key=${process.env.WEATHER_KEY}`)
+        .then(({data}) => {
+
+          // data.days[0] - most recent time, 
+          res.send(data)
+        })   
+      // res.send(user)
+    })
+
+})
+
 export default Plants;
