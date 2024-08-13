@@ -53,7 +53,7 @@ const OwnedPlants = ({ user }) => {
   }
 
   const updateProgressBar = () => {
-    const progress = (score.points / getNextPointReq(score.level + 1)) * 100
+    const progress = (score.points / getNextPointReq(score.level)) * 100
     setProgress(progress);
   }
 

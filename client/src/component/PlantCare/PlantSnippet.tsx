@@ -12,6 +12,8 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     axios.delete(`/plants/delete/${plant.id}`)
     .then(() => {
       console.info('Plant deleted')
+    })
+    .then(() => {
       getPlants()
     })
   }
