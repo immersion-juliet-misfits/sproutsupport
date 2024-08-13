@@ -2,6 +2,7 @@ import { CronJob } from 'cron';
 import { PrismaClient } from'@prisma/client';
 import 'dotenv/config'
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 const prisma = new PrismaClient()
 
@@ -68,13 +69,74 @@ if(joinMeetupMessages.length !== 0){
        email
     }
 };
-axios.post('https://api.emailjs.com/api/v1.0/email/send', obj)
-.then(()=>{
-console.log('sent')
+// axios.post('https://api.emailjs.com/api/v1.0/email/send', obj)
+// .then(()=>{
+// console.log('sent')
+// })
+// .catch((err: any)=>{
+//   console.log('Can\'t send email: ', err)
+// })
+}
+
+
+const check = (obj: object):void => {
+let day: number  = dayjs().date() 
+let month: number = dayjs().month() + 1
+let year: number = dayjs().year()
+let str: string = ''
+let range: string = 'not in range'
+
+let due: any = obj.time_date.split(' ')
+due = due[0].split('/')
+due = due.map((num: string)=>{
+  if(num[0] === '0'){
+    return parseInt(num.slice(1))
+  }else{
+    return parseInt(num)
+  }
 })
+
+day = day - due[1];
+month = month - due[0]
+year = year - due[2]
+if(day < 0){
+  day = day * -1
+}
+if(month < 0){
+  month = month * -1
+}
+if(year < 0){
+  year = year * -1
+}
+
+if(year === 0 && month === 0 && day === 0 ){
+  str = 'HEY you have a meetup today for ' + obj.eventName
+  range = 'today'
+}else if(year === 0 && month === 0 && day <= 7){
+ str = 'Hey you have ' + day + ' days until the ' + obj.eventName + ' meetup'
+ range = 'in range'
+}
+
+if(obj.status === 'today'){
+  if(year > 0 || month > 0 || day > 0)
+prisma.meet.delete({where:{id: obj.id}})
+.then(()=>{})
+  .catch((err)=>{console.log('can\'t delete over due meetup: ', err)})
+}else{
+if(str !== ''){
+  const data = {status: range, message: str}
+prisma.meet.update({
+  where:{
+    id: obj.id
+  },
+data
+})
+.then(()=>{})
 .catch((err: any)=>{
-  console.log('Can\'t send email: ', err)
+  console.error('Error can\'t update in Meetup.tsx line 124: ', err)
 })
+}
+}
 }
 
 
@@ -83,6 +145,7 @@ prisma.meet.findMany()
   .then(async (result)=>{
     const obj: object = {}     
     for(let i = 0; i < result.length; i++){
+      check(result[i])
       if(result[i].status === 'in range' || result[i].status === 'today'){
 if(!obj[result[i].userId]){
   obj[result[i].userId] = [result[i]]
@@ -90,6 +153,7 @@ if(!obj[result[i].userId]){
   obj[result[i].userId].push(result[i])
 }
       }
+     
     }
   for(const key in obj){
 prisma.user.findUnique({where:{id: obj[key][0].userId}})

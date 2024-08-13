@@ -172,30 +172,30 @@ if(i === 0){
   setTimeout((): void =>{setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')}, 30000)
 }
 
-let str: string = ''
-let range: string = 'not in range'
+// let str: string = ''
+// let range: string = 'not in range'
 
-if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
-str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[i].eventName + ' meetup'
-range = 'in range'
-}else{
-  str = 'HEY you have a meetup today for ' + yourAndJoin[i].eventName
-  range = 'today'
-}
-if(str !== yourAndJoin[i].message){
-if(yourAndJoin[i].status === 'none' || range === 'in range'){
-const obj: object = {status: range, message: str}
-const url = 'meetup/update/' + yourAndJoin[i].id
-axios.patch(url, obj)
-.then(()=>{
-setTimeout((): void =>{getMeetups()}, 5000)
-})
-.catch((err: any)=>{
-  console.error('Error can\'t update in Meetup.tsx line 181: ', err)
-})
-}
-  }
-}
+// if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
+// str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[i].eventName + ' meetup'
+// range = 'in range'
+// }else{
+//   str = 'HEY you have a meetup today for ' + yourAndJoin[i].eventName
+//   range = 'today'
+// }
+// if(str !== yourAndJoin[i].message){
+// if(yourAndJoin[i].status === 'none' || range === 'in range'){
+// const obj: object = {status: range, message: str}
+// const url = 'meetup/update/' + yourAndJoin[i].id
+// axios.patch(url, obj)
+// .then(()=>{
+// setTimeout((): void =>{getMeetups()}, 5000)
+// })
+// .catch((err: any)=>{
+//   console.error('Error can\'t update in Meetup.tsx line 181: ', err)
+// })
+// }
+//   }
+// }
 /////  
 }////end of loop
 /////
