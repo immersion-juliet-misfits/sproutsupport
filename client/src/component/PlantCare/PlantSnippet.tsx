@@ -5,17 +5,22 @@ import { Link } from 'react-router-dom';
 import { DeleteIcon } from '@chakra-ui/icons';
 import PlantCare from './PlantCare';
 
-const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar }) => {
+const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick }) => {
   const [tasks, setTasks] = useState([]);
   
-  const handleDelete = () => {
-    axios.delete(`/plants/delete/${plant.id}`)
-    .then(() => {
-      console.info('Plant deleted')
-    })
-    .then(() => {
-      getPlants()
-    })
+  // const handleDelete = () => {
+  //   axios.delete(`/plants/delete/${plant.id}`)
+  //   .then(() => {
+  //     getPlants()
+  //     console.info('Plant deleted')
+  //   })
+  //   .catch((err) => {
+  //     console.error(err)
+  //   })
+  // }
+
+  const deletePlant = () => {
+    handleDelete(plant.id)
   }
 
   const fetchTasks = () => {
@@ -48,7 +53,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
           ))
         } */}
     <CardFooter>
-      <DeleteIcon color="tomato" onClick={handleDelete}/>
+      <DeleteIcon color="tomato" onClick={deletePlant}/>
       <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar}/>
     </CardFooter>
     </Card>

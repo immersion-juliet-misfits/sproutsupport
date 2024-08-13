@@ -8,12 +8,12 @@ const PlantWarnings = ({ user }) => {
   const getWarnings = () => {
     if (user.longitude !== 147.3534 && user.latitude !== 64.7552) {
         console.log('beiung used TOKEN')
-        axios.post(`/plants/warnings/${user.id}`)
-        .then(({data}) => {
-            console.log('lots of data', data, data.currentConditions.conditions);
-            setAlerts(data.alerts)
-            setWeather(data.currentConditions)
-        });
+        // axios.post(`/plants/warnings/${user.id}`)
+        // .then(({data}) => {
+        //     console.log('lots of data', data, data.currentConditions.conditions);
+        //     setAlerts(data.alerts)
+        //     setWeather(data.currentConditions)
+        // });
     }
   };
 

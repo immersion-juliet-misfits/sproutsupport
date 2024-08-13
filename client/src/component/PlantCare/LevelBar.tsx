@@ -4,10 +4,6 @@ import axios from 'axios'
 
 const LevelBar = ({user, score, progress}) => {
 
-  useEffect(() => {
-    console.log(score, 'curr score' ,progress)
-  })
-
   return (
     <div>
         <Heading>Sprout Growth</Heading>

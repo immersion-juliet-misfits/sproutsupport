@@ -35,8 +35,8 @@ const OwnedPlants = ({ user }) => {
   //     })
   // }
 
-  const handlePlantClick = (plant) => {
-    // setSelected(selected);
+  const handlePlantClick = (selected) => {
+    console.log(selected);
   };
 
  
@@ -65,16 +65,18 @@ const OwnedPlants = ({ user }) => {
     updateProgressBar()
   }, [score])
 
-  // const handleDelete = () => {
-  //   // let plantName = plant.
-  //   axios.delete(`/plants/delete/${plant.id}`)
-  //     .then(() => {
-  //       console.info('Plant deleted')
-  //     })
-  //     .then(() => {
-  //       getPlants()
-  //     })
-  // }
+  const handleDelete = (plantId) => {
+    console.log('delete this', plantId)
+    axios.delete(`/plants/delete/${plantId}`)
+    .then(() => {
+      setPlants((prev) => prev.filter((sprout) => sprout.id !== plantId))
+      // getPlants()
+      console.info('Plant deleted')
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  }
 
   // useEffect(() => {
   //   getWarnings()
@@ -111,7 +113,7 @@ const OwnedPlants = ({ user }) => {
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {plants.length > 0 &&
         plants.map((plant) => (
-          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>
