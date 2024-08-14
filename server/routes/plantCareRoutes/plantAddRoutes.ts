@@ -111,6 +111,15 @@ Plants.put('/task/:plantId', (req: Request, res: Response) => {
   //   })
 })
 
+Plants.patch('/update/:plantId', (req: Request, res: Response) => {
+  const { plantId } = req.params;
+  const { nickname, description } = req.body;
+  prisma.plant.update({where: {id: Number(plantId)}, data: {nickname, description}})
+    .then((data) => {
+      res.send(data)
+    })
+})
+
 Plants.post('/completeTask', (req: Request, res: Response) => {
   const { id } = req.body
 
