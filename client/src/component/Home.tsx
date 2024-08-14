@@ -168,19 +168,18 @@ const Home = () => {
         {posts
           .map((post) => {
             return (
-              <li key={post.id} >
                 <Flex
-                  // box-sizing='border-box'
+                  box-sizing='content-box'
                   alignItems='center'
                   justifyContent='space-between'
                   bg='#c1e3c9'
-                  // grow={3}
+                  key={post.id}
+                  direction='row'
                 >
-                  {/* <div>{post.imageUrl}</div> */}
+
                   <Box >
                     <Image
                       src={post.imageUrl}
-                      // sizes='(max-width: 40px) 80px, 120px'
                       boxSize='180px'
                       />
                     <Editable
@@ -211,10 +210,11 @@ const Home = () => {
                       icon={<DeleteIcon />}
                     />
                   </Box>
-                  <Comment postId={post.id}/>
+                      <Box>
 
+                  <Comment postId={post.id}/>
+                      </Box>
                 </Flex>
-              </li>
             );
           })
         }
