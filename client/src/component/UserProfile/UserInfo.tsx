@@ -22,6 +22,7 @@ const UserInfo = ({
   handleAvatarChange,
   handleBioChange,
   handleLatLonChange,
+  handleLocationChange,
   handleUserNameChange,
 }) => {
   const [editableUserName, setEditableUserName] = useState(userName);
@@ -116,6 +117,63 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
+        {/* Line break  */}
+        <GridItem
+          className='UserLocationCityStateChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='200px'
+        >
+          <Editable
+            defaultValue='Enter City and State'
+            isPreviewFocusable={false}
+            mt={2}
+            minH='40px'
+          >
+            <Flex alignItems='center' gap='10'>
+              <EditableControls bottom='5px' left='5px' w='100px' />
+              <Text fontSize='xl' fontWeight='bold' ml='90px'>
+                City and State
+              </Text>
+            </Flex>
+            <p />
+            <Flex
+              direction='column'
+              alignItems='center'
+              justifyContent='center'
+              mt={4}
+            >
+              <Input
+                name='city'
+                placeholder='Enter City'
+                onChange={handleLocationChange}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='80%'
+              />
+              <Input
+                name='state'
+                placeholder='Enter State'
+                onChange={handleLocationChange}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='80%'
+              />
+              <Button
+                onClick={handleLocationChange}
+                colorScheme='teal'
+                size='md'
+              >
+                Get Weather
+              </Button>
+            </Flex>
+          </Editable>
+        </GridItem>
+        {/* Line break  */}
         <GridItem
           className='UserLocationChange'
           borderRadius='lg'

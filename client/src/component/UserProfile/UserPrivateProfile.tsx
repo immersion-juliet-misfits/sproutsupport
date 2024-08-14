@@ -41,6 +41,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
   const [longitude, setLongitude] = useState(147.3534);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [location, setLocation] = useState({ city: '', state: '' });
 
   const EditableControls = () => {
     const {
@@ -84,6 +85,20 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
     // }
   };
 
+
+  const fetchWeatherNew = (city, state) => {
+    axios
+      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+      .then((response) => {
+        console.log('Retrieved weather data:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data for city and state:', error);
+      });
+  };
+
+
+
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -120,6 +135,24 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         console.error('Update User Name: Failed ', error);
       });
   };
+
+
+  const handleLocationChange = (event) => {
+    event.preventDefault();
+
+    const { name, value } = event.target;
+
+    if (name === 'city' || name === 'state') {
+      setLocation((prevLocation) => ({
+        ...prevLocation,
+        [name]: value,
+      }));
+    } else {
+      fetchWeatherNew(location.city, location.state);
+    }
+  };
+
+
 
   const handleLatLonChange = () => {
     if (navigator.geolocation) {
@@ -194,9 +227,10 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
 
   useEffect(() => {
     // console.log('Use Effect User Check: ', user);
-    if (user.latitude && user.longitude) {
+    // fetchWeatherNew('Minden', 'LA');
+    // if (user.latitude && user.longitude) {
       // fetchWeatherData();
-    }
+    // }
   }, [user]);
 
   if (!user) {
@@ -206,7 +240,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
   return (
     <Grid className='bodyGrid' w='1100px' mx='auto'>
       <Grid
-        // border='5px solid yellow'
+        // border='5px solid blue'
         className='header-grid'
         mt={10}
         templateRows='repeat(1, 1fr)'
@@ -267,16 +301,13 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         </GridItem>
       </Grid>
       <Grid
-        border='5px solid yellow'
         className='bodyGrid'
-        // border='15px solid #D3FFEB'
+        border='15px solid #D3FFEB'
         borderBottom='0'
         bg='#D3FFEB'
         w='1100px'
         mx='auto'
-        mb='0'
-        pb='0'
-        borderRadius='lg'
+        borderRadius='lg lg 0 0'
         overflow='hidden'
         boxShadow='md'
         templateRows='1fr'
@@ -284,8 +315,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         display='flex'
         flexDirection='column'
         alignItems='center'
-        justifyContent='center'
-        py={4}
+        justifyContent='flex-end'
       >
         <UserTabs
           handleLogOut={handleLogOut}
@@ -297,7 +327,8 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         w='1100px'
         mx='auto'
         mt='0'
-        borderRadius='lg'
+        borderRadius='0 0 lg lg'
+        // border='15px solid red'
         border='15px solid #D3FFEB'
         borderTop='0'
         bg='#5AB78D'
@@ -323,6 +354,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
             handleAvatarChange={handleAvatarChange}
             handleBioChange={handleBioChange}
             handleLatLonChange={handleLatLonChange}
+            handleLocationChange={handleLocationChange}
             handleUserNameChange={handleUserNameChange}
           />
         )}
