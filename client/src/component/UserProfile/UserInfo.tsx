@@ -15,13 +15,12 @@ import { useState } from 'react';
 const UserInfo = ({
   avatar,
   bio,
-  latitude,
-  longitude,
+  city,
+  state,
   userName,
   EditableControls,
   handleAvatarChange,
   handleBioChange,
-  handleLatLonChange,
   handleLocationChange,
   handleUserNameChange,
 }) => {
@@ -35,7 +34,7 @@ const UserInfo = ({
       >
         <GridItem
           className='UserAvatar'
-          bg='yellow.500'
+          bg='black'
           display='flex'
           alignItems='center'
           justifyContent='center'
@@ -124,24 +123,21 @@ const UserInfo = ({
           bg='#BDE3FF'
           h='200px'
         >
-          <Editable
-            defaultValue='Enter City and State'
-            isPreviewFocusable={false}
-            mt={2}
-            minH='40px'
-          >
             <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
                 City and State
               </Text>
             </Flex>
             <p />
+            <Heading as='h2' size='lg' textAlign='center'>
+              {city && state ? `${city}, ${state}` : 'No Location Watched'}
+            </Heading>
             <Flex
-              direction='column'
+              direction='row'
               alignItems='center'
               justifyContent='center'
               mt={4}
+              gap={6}
             >
               <Input
                 name='city'
@@ -151,7 +147,7 @@ const UserInfo = ({
                 border='1px solid black'
                 borderRadius='md'
                 mb={4}
-                w='80%'
+                w='30%'
               />
               <Input
                 name='state'
@@ -161,8 +157,10 @@ const UserInfo = ({
                 border='1px solid black'
                 borderRadius='md'
                 mb={4}
-                w='80%'
+                w='30%'
               />
+            </Flex>
+            <Flex justifyContent='center' mt={4}>
               <Button
                 onClick={handleLocationChange}
                 colorScheme='teal'
@@ -171,47 +169,8 @@ const UserInfo = ({
                 Get Weather
               </Button>
             </Flex>
-          </Editable>
         </GridItem>
-        {/* Line break  */}
-        <GridItem
-          className='UserLocationChange'
-          borderRadius='lg'
-          bg='#BDE3FF'
-          h='150px'
-        >
-          <Editable
-            defaultValue={
-              latitude && longitude
-                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-                : 'Coordinates not set'
-            }
-            isPreviewFocusable={false}
-            mt={2}
-            minH='40px'
-          >
-            <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Coordinates
-              </Text>
-            </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {latitude && longitude
-                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-                : 'Coordinates not set'}
-            </Heading>
-            <Button
-              onClick={handleLatLonChange}
-              colorScheme='teal'
-              size='md'
-              mt={4}
-            >
-              Update My Location
-            </Button>
-          </Editable>
-        </GridItem>
+         {/* Break Here  */}
         <GridItem
           className='UserBioChange'
           borderRadius='lg'

@@ -6,25 +6,16 @@ import {
   Heading,
   Grid,
   GridItem,
-  Button,
 } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import NavBar from '../NavBar';
 
 const UserPublicProfile = () => {
   let location = useLocation();
-  let {
-    avatar,
-    bio,
-    latitude,
-    longitude,
-    userName,
-    weatherData,
-    dailyForecastData,
-    alertsData,
-  } = location.state || {
-    bio: 'No bio available',
-  };
+  let { avatar, bio, userName, weatherData, dailyForecastData, alertsData } =
+    location.state || {
+      bio: 'No bio available',
+    };
 
   // console.log('Weather Data:', weatherData);
   // console.log('Current Conditions:', weatherData?.currentConditions);
@@ -104,9 +95,9 @@ const UserPublicProfile = () => {
         py={4}
       >
         <VStack spacing={4} align='center'>
-          <Button colorScheme='teal' variant='solid'>
+          {/* <Button colorScheme='teal' variant='solid'>
             Follow(?)
-          </Button>
+          </Button> */}
           <Image
             borderRadius='full'
             boxSize='150px'
@@ -120,7 +111,7 @@ const UserPublicProfile = () => {
             {bio}
           </Text>
 
-          {weatherData && weatherData.currentConditions && (
+          {weatherData && (
             <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
               <Heading as='h2' size='lg' mb={4}>
                 Current Weather
@@ -133,22 +124,15 @@ const UserPublicProfile = () => {
                   day: 'numeric',
                 })}
               </Text>
-              <Text>
-                Temperature: {weatherData.currentConditions.temp ?? 'N/A'}°F
-              </Text>
-              <Text>
-                Condition: {weatherData.currentConditions.conditions ?? 'N/A'}
-              </Text>
-              <Text>
-                Wind Speed: {weatherData.currentConditions.windspeed ?? 'N/A'}{' '}
-                mph
-              </Text>
-              <Text>
-                Humidity: {weatherData.currentConditions.humidity ?? 'N/A'}%
-              </Text>
+              <Text>Temperature: {weatherData.temp ?? 'N/A'}°F</Text>
+              <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
+              <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
+              <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
+              <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
+              <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
+              <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
             </Box>
           )}
-
           {dailyForecastData && dailyForecastData.length > 0 && (
             <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
               <Heading as='h2' size='lg' mb={4}>

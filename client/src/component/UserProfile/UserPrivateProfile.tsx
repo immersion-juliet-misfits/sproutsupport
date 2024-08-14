@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Box,
-  Button,
   ButtonGroup,
   Flex,
   Grid,
@@ -26,8 +25,8 @@ interface User {
   email: string;
   avatar: string;
   bio: string;
-  latitude: float;
-  longitude: float;
+  city: string;
+  state: string;
 }
 
 // Main component
@@ -37,11 +36,12 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  const [latitude, setLatitude] = useState(64.7552);
-  const [longitude, setLongitude] = useState(147.3534);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [location, setLocation] = useState({ city: '', state: '' });
+  const [location, setLocation] = useState({
+    city: user.city || '',
+    state: user.state || '',
+  });
 
   const EditableControls = () => {
     const {
@@ -63,41 +63,26 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
     );
   };
 
-  const fetchWeatherData = () => {
-    setLoading(true);
-    setError(null);
-
-    // if (user.latitude && user.longitude) {
-    axios
-      .get('/user/weatherData')
-      .then((response) => {
-        const { currentWeather, dailyForecast, weatherAlerts } = response.data;
-        setWeatherData(currentWeather);
-        setDailyForecastData(dailyForecast);
-        setAlertsData(weatherAlerts);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching weather data:', err);
-        setError('Failed to load weather data');
-        setLoading(false);
-      });
-    // }
-  };
-
-
   const fetchWeatherNew = (city, state) => {
     axios
       .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
       .then((response) => {
         console.log('Retrieved weather data:', response.data);
+        const data = response.data;
+
+        setWeatherData(data.currentConditions);
+        setDailyForecastData(data.days);
+        setAlertsData(data.alerts || []);
+
+        // console.log('', weatherData);
+        // console.log('', dailyForecastData);
+        // console.log('', alertsData);
+
       })
       .catch((error) => {
         console.error('Error fetching weather data for city and state:', error);
       });
   };
-
-
 
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
@@ -152,35 +137,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
     }
   };
 
-
-
-  const handleLatLonChange = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-
-          setLatitude(latitude);
-          setLongitude(longitude);
-
-          axios
-            .patch('/user/updateLatLon', { latitude, longitude })
-            .then((response) => {
-              setUser(response.data);
-            })
-            .catch((error) => {
-              console.error('Update GeoLocation: Failed ', error);
-            });
-        },
-        (error) => {
-          console.error('Error getting geolocation:', error);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
-  };
-
   const handleBioChange = (newBio: string) => {
     axios
       .patch('/user/updateBio', { bio: newBio })
@@ -226,12 +182,13 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
   };
 
   useEffect(() => {
-    // console.log('Use Effect User Check: ', user);
-    // fetchWeatherNew('Minden', 'LA');
-    // if (user.latitude && user.longitude) {
-      // fetchWeatherData();
-    // }
-  }, [user]);
+    if (weatherData && dailyForecastData && alertsData) {
+      console.log('Updated weatherData:', weatherData);
+      console.log('Updated dailyForecastData:', dailyForecastData);
+      console.log('Updated alertsData:', alertsData);
+    }
+  }, [weatherData, dailyForecastData, alertsData, user]);
+
 
   if (!user) {
     return <div>Loading...</div>;
@@ -347,13 +304,12 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
           <UserInfo
             avatar={user.avatar}
             bio={user.bio}
-            latitude={user.latitude}
-            longitude={user.longitude}
+            city={location.city}
+            state={location.state}
             userName={user.userName}
             EditableControls={EditableControls}
             handleAvatarChange={handleAvatarChange}
             handleBioChange={handleBioChange}
-            handleLatLonChange={handleLatLonChange}
             handleLocationChange={handleLocationChange}
             handleUserNameChange={handleUserNameChange}
           />
