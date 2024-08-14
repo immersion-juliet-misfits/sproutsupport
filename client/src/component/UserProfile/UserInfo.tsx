@@ -1,7 +1,5 @@
 import {
   Button,
-  ChakraProvider,
-  Checkbox,
   Editable,
   EditableInput,
   Flex,
@@ -11,8 +9,6 @@ import {
   Image,
   Input,
   Text,
-  VStack,
-
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
@@ -32,10 +28,12 @@ const UserInfo = ({
 
   return (
     <>
-      <Grid className='TopGrids' border='2px solid red'
+      <Grid
+        className='AvatarGrid'
+        // border='2px solid red'
       >
         <GridItem
-        className='UserAvatar'
+          className='UserAvatar'
           bg='yellow.500'
           display='flex'
           alignItems='center'
@@ -43,8 +41,9 @@ const UserInfo = ({
           justifySelf='center'
           alignSelf='center'
           borderRadius='50%'
-          w='250px'
-          h='250px'
+          border='15px solid #BDE3FF'
+          w='300px'
+          h='300px'
           position='relative'
           overflow='hidden'
           cursor='pointer'
@@ -56,28 +55,34 @@ const UserInfo = ({
             w='100%'
             h='100%'
             borderRadius='50%'
-            bg='green.500'
+            // bg='#BDE3FF'
             display='flex'
             alignItems='center'
             justifyContent='center'
+            objectFit='cover'
           />
           <input
             type='file'
             id='avatarInput'
             style={{ display: 'none' }}
+            accept='.jpg, .jpeg, .png'
             onChange={handleAvatarChange}
           />
         </GridItem>
       </Grid>
       <Grid
-            border='2px solid orange'
-
-      className='MidGrids'
+        // border='2px solid orange'
+        className='InnerGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
-        <GridItem className='UserNameChange' bg='green.500' h='100px'>
+        <GridItem
+          className='UserNameChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='100px'
+        >
           <Editable
             defaultValue={userName}
             onChange={(nextValue) => {
@@ -93,7 +98,7 @@ const UserInfo = ({
             <Flex alignItems='center' gap='10'>
               <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Change Display name
+                Edit Display Name
               </Text>
             </Flex>
             <p />
@@ -111,7 +116,12 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
-        <GridItem className='UserLocationChange' bg='green.500' h='150px'>
+        <GridItem
+          className='UserLocationChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='150px'
+        >
           <Editable
             defaultValue={
               latitude && longitude
@@ -144,7 +154,12 @@ const UserInfo = ({
             </Button>
           </Editable>
         </GridItem>
-        <GridItem className='UserBioChange' bg='green.500' h='200px'>
+        <GridItem
+          className='UserBioChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='200px'
+        >
           <Editable
             defaultValue={bio}
             onSubmit={handleBioChange}
@@ -155,7 +170,7 @@ const UserInfo = ({
             <Flex alignItems='center' gap='10'>
               <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                User Bio
+                Edit User Bio
               </Text>
             </Flex>
             <p />
@@ -172,39 +187,6 @@ const UserInfo = ({
               placeholder='Update your bio'
             />
           </Editable>
-        </GridItem>
-        </Grid>
-        {/* Put below inside an accordion?
-         */}
-         <Grid
-      className='BottomGrids'
-      border='2px solid yellow'
-        templateColumns='repeat(1, 1fr)'
-        w='85%'
-        gap={4}
-      >
-          <GridItem bg='green.500' h='150px'>
-          {/* Change Placeholder */}
-          Checkboxes for what you want displayed on your public profile
-          <VStack align='start' pl={4}>
-            <Checkbox>My Plants</Checkbox>
-            <Checkbox>My Created Meetups</Checkbox>
-            <Checkbox>Meetups I will attend</Checkbox>
-            <Checkbox>My Forum Posts</Checkbox>
-          </VStack>
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          {/* Change Placeholder */}
-          Email/Password/Login Method Editing will be here
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          Links to Users various Social Media accounts (Twitter, Tumblr, Etc)
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          Blocking - Enter the name of the User you want to block.
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          Accept messages from strangers? Display link to your Forum posts? Display your plants? Your Meetups?
         </GridItem>
       </Grid>
     </>

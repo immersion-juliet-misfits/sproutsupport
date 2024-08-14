@@ -1,22 +1,24 @@
 import {
+  Button,
   Checkbox,
   Grid,
   GridItem,
-  VStack,
+  Heading,
+  VStack
 } from '@chakra-ui/react';
 
 const UserPrivacy = () => {
   return (
     <>
       <Grid
-        // border='5px solid red'
+        className='BottomGrids'
+        border='2px solid yellow'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
         <GridItem bg='green.500' h='150px'>
-          {/* Change Placeholder */}
-          Checkboxes for what you want displayed on your public profile
+          Toggle to choose what's displayed on your public profile
           <VStack align='start' pl={4}>
             <Checkbox>My Plants</Checkbox>
             <Checkbox>My Created Meetups</Checkbox>
@@ -25,7 +27,6 @@ const UserPrivacy = () => {
           </VStack>
         </GridItem>
         <GridItem bg='green.500' h='150px'>
-          {/* Change Placeholder */}
           Email/Password/Login Method Editing will be here
         </GridItem>
         <GridItem bg='green.500' h='150px'>
@@ -35,7 +36,22 @@ const UserPrivacy = () => {
           Blocking - Enter the name of the User you want to block.
         </GridItem>
         <GridItem bg='green.500' h='150px'>
-          Accept messages from strangers? Display link to your Forum posts? Display your plants? Your Meetups?
+          Accept messages from strangers? Display link to your Forum posts?
+          Display your plants? Your Meetups?
+        </GridItem>
+      </Grid>
+
+
+      <Grid
+        // border='5px solid red'
+        templateColumns='repeat(1, 1fr)'
+        w='85%'
+        gap={4}
+      >
+        <GridItem bg='green.500' h='100px'>
+          <Button colorScheme='red'>
+            Delete Account Placeholder
+          </Button>
         </GridItem>
       </Grid>
     </>

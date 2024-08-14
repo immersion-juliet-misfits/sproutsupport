@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios'
 import { ChakraProvider } from '@chakra-ui/react';
+import ssTheme from './ssTheme';
 import Home from "./Home";
 import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
@@ -70,7 +71,7 @@ const App = () => {
   }
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={ssTheme}>
       <div className='App'>
         {/* Sprout Support */}
         <Routes>
