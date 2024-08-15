@@ -8,23 +8,23 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  google_id     String         @unique
-  location_id   Int?
-  userName      String?
-  email         String?        @unique
-  password      String?
-  avatar        String?
-  bio           String?
-  level         Int            @default(1)
-  latitude      Float?
-  longitude     Float?
-  points        Int            @default(0)
-  attendees     Attendee[]
-  meets         Meet[]
-  notifications Notification[]
-  plants        Plant[]
-  posts         Post[]
+  id                Int            @id @default(autoincrement())
+  google_id         String         @unique
+  city              String?
+  state             String?
+  userName          String?
+  email             String?        @unique
+  password          String?
+  avatar            String?
+  bio               String?
+  level             Int            @default(1)
+  points            Int            @default(0)
+  meets             Meet[]
+  notifications     Notification[]
+  plants            Plant[]
+  posts             Post[]
+  // comments Comment[]
+  attendees         Attendee[]
 }
 
 model Image {
@@ -78,8 +78,8 @@ model Task {
   frequency       String?
   lastCompleted   DateTime?
   nextComplection DateTime?
-  plant_id        Int?
   overdue         Boolean?
+  plant_id        Int?
   taskPlant       Plant?    @relation(fields: [plant_id], references: [id])
 
   @@index([plant_id], map: "Task_plant_id_fkey")

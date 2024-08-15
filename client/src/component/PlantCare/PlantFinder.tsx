@@ -94,7 +94,7 @@ const PlantFinder = ({ user }) => {
         })
       })
       .then(() => {
-        setImageUrl(`https://ssupportbucket.s3.amazonaws.com/${image.name}`)
+        setImageUrl(`https://my1test1bucket.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
         console.error('Failed to get image url', err)
@@ -138,7 +138,7 @@ const PlantFinder = ({ user }) => {
           const scientificName = result.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
           //   needs nicer looking display or possibly separate component
           return (
-            
+
             <div key={`${result}-${i}`}>
           <h3 onClick={() => handlePlantSelect(result)}>{result.CommonName}</h3>
           <h5>{scientificName}</h5>

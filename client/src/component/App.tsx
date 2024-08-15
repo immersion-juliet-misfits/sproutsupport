@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios'
-// import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
+import ssTheme from './ssTheme';
 import Home from "./Home";
 import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
@@ -21,6 +22,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast()
+  const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'sprout-support';
 
   const fetchUserData = () => {
     axios.get('/api/checkAuth')
@@ -39,7 +42,8 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData()
 
-      let notif = (task) => {
+      const notif = (task) => {
+        // console.log(task, 'hello')
         toast({
           title: `${task.taskPlant.nickname}`,
           description: `${task.taskName}`,
@@ -66,9 +70,8 @@ const App = () => {
   }
 
   return (
-    // <ChakraProvider>
+    <ChakraProvider theme={ssTheme}>
       <div className='App'>
-        Sprout Support
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
@@ -78,8 +81,8 @@ const App = () => {
           <Route path='/createPost' element={<CreatePost user={user} />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
-          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} />}></Route>
-          <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile user={user} fetchUserData={fetchUserData} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile user={user} fetchUserData={fetchUserData} />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}

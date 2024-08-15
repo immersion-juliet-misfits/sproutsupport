@@ -5,7 +5,5 @@
 
 -- */
 -- -- AlterTable
--- ALTER TABLE `User` ADD COLUMN `latitude` DOUBLE NULL,
---     ADD COLUMN `longitude` DOUBLE NULL,
---     ADD COLUMN `points` INTEGER NOT NULL DEFAULT 0,
+-- ALTER TABLE `User` ADD COLUMN `points` INTEGER NOT NULL DEFAULT 0,
 --     MODIFY `level` INTEGER NOT NULL DEFAULT 1;

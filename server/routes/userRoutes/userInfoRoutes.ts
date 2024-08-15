@@ -10,6 +10,7 @@ const { WEATHER_KEY } = process.env;
 
 UserInfo.get('/getUserData', (req: Request, res: Response) => {
   const userId = req.user?.id;
+  // console.log('Req User Info: ', req.user);
 
   if (!userId) {
     return res.status(400).send('User ID is required');
@@ -23,7 +24,7 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
       if (!user) {
         return res.status(404).send('User not found');
       }
-      console.log('UIR User Check: ', user);
+      // console.log('UIR User Check: ', user);
       res.send(user);
     })
     .catch((error) => {
@@ -53,30 +54,6 @@ UserInfo.patch('/updateBio', (req: Request, res: Response) => {
     .catch((error) => {
       console.error('Error updating bio:', error);
       res.status(500).send('Failed to update bio');
-    });
-});
-
-UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
-  const { location_id } = req.body;
-  const userId = req.user.id;
-
-  if (!userId || !location_id) {
-    return res.status(400).send('User ID and Location ID are required');
-  }
-
-  req.user.location_id = location_id;
-
-  prisma.user
-    .update({
-      where: { id: userId },
-      data: { location_id: parseInt(location_id, 10) },
-    })
-    .then((updatedUser) => {
-      res.send(updatedUser);
-    })
-    .catch((error) => {
-      console.error('Error updating location:', error);
-      res.status(500).send('Failed to update location');
     });
 });
 
@@ -156,56 +133,43 @@ UserInfo.patch('/updateLatLon', (req: Request, res: Response) => {
     });
 });
 
-// Weather API Route
-UserInfo.get('/weatherData', (req: Request, res: Response) => {
-  const user = req.user;
+// Weather API City-State Route
+UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
+  const { city, state } = req.query;
+  // console.log('Query Verified: ', req.query);
+  const userId = req.user?.id;
 
-  if (!user) {
-    console.log('User not authenticated or session not found');
-    return res.status(400).send('User not authenticated');
+  if (!city || !state) {
+    return res.status(400).send('City and State are required');
   }
 
-  if (!user.latitude || !user.longitude) {
-    console.log('User location data missing:', {
-      latitude: user.latitude,
-      longitude: user.longitude,
-    });
-    return res.status(400).send('User latitude and longitude are required');
-  }
+  req.user.city = city;
+  req.user.state = state;
 
-  const baseUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${user.latitude},${user.longitude}`;
-  const currentWeatherUrl = `${baseUrl}/today?key=${WEATHER_KEY}`;
-  const dailyForecastUrl = `${baseUrl}?key=${WEATHER_KEY}&unitGroup=us&include=days`;
-  const alertsUrl = `${baseUrl}?key=${WEATHER_KEY}&include=alerts`;
+  prisma.user
+    .update({
+      where: { id: userId },
+      data: {
+        city: city as string,
+        state: state as string,
+      },
+    })
+    .then(() => {
+      const location = `${city},${state}`;
+      const weatherUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${WEATHER_KEY}`;
 
-  // console.log('Current Weather API URL:', currentWeatherUrl);
-  // console.log('Daily Forecast API URL:', dailyForecastUrl);
-  // console.log('Weather Alerts API URL:', alertsUrl);
-
-  axios
-    .all([
-      axios.get(currentWeatherUrl),
-      axios.get(dailyForecastUrl),
-      axios.get(alertsUrl),
-    ])
-    .then(
-      axios.spread(
-        (currentWeatherResponse, dailyForecastResponse, alertsResponse) => {
-          // console.log('Current Weather Data:', currentWeatherResponse.data);
-          // console.log('Daily Forecast Data:', dailyForecastResponse.data.days);
-          // console.log('Weather Alerts Data:', alertsResponse.data.alerts);
-
-          res.json({
-            currentWeather: currentWeatherResponse.data,
-            dailyForecast: dailyForecastResponse.data.days,
-            weatherAlerts: alertsResponse.data.alerts || [],
-          });
-        }
-      )
-    )
+      return axios.get(weatherUrl);
+    })
+    .then((response) => {
+      // console.log('Weather data retrieved successfully:', response.data);
+      res.json(response.data);
+    })
     .catch((error) => {
-      console.error('Error fetching weather data:', error);
-      res.status(500).send('Failed to fetch weather data');
+      console.error(
+        'Error updating user location or fetching weather data:',
+        error
+      );
+      res.status(500).send('Failed to update location or fetch weather data');
     });
 });
 

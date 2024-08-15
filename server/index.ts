@@ -37,6 +37,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
+//
+// app.use('/user', UserInfo);
+app.use('/plants', Plants);
+app.use('/meetup', routerMeetup);
+app.use('/upload', Upload);
+app.use('/post', Posts);
+app.use('/image', Images)
 
 // GAuth Session middleware
 app.use(
@@ -134,12 +141,12 @@ app.get('/api/checkAuth', (req, res) => {
 
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
-app.use('/plants', Plants);
-app.use('/meetup', routerMeetup);
-app.use('/upload', Upload);
-app.use('/post', Posts);
-app.use('/comment', Comments);
-app.use('/image', Images)
+// app.use('/plants', Plants);
+// app.use('/meetup', routerMeetup);
+// app.use('/upload', Upload);
+// app.use('/post', Posts);
+// app.use('/image', Images)
+
 
 // When User navigates to the root ('/') - If logged in, they will be directed to '/home'. If not, to '/login'
 app.get('/', (req, res) => {
