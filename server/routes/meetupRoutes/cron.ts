@@ -51,11 +51,9 @@ str = str + mess
   console.error('can\'t get attendees: ', err)
 })
 
-
 if(joinMeetupMessages.length !== 0){
   string = string + '\n' + joinMeetupMessages
 }
-
 
   const obj = {
     service_id: service,

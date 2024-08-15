@@ -7,11 +7,11 @@ import dayjs from 'dayjs';
 import Nav from '../NavBar';
 
 const Meetup = ({user}: {user: object}) => {
-// const [weather, setWeather] = useState({})
 //  const [list, setList] = useState([])
 const [inputSwap, setInputSwap] = useState(false)
 const [currentTime, setCurrentTime] = useState('')
 const [dueDate, setDueDate] = useState('')
+const [dueDelete, setDueDelete] = useState('')
 const [timeLeft, setTimeLeft] = useState('')
 const [show, setShow] = useState(false)
 const [makeStatus, setMakeStatus] = useState('create meetup')
@@ -19,6 +19,8 @@ const [yourMeetups, setYourMeetups] = useState([])
 const [joinedMeetups, setJoinedMeetups] = useState([])
 const [publicMeetups, setPublicMeetups] = useState([])
 const [yourAndJoin, setYourAndJoin] = useState([])
+const [zeroCheck, setZeroCheck] = useState(false)
+
 
 const getMeetups = (): void => {
   axios.get('/meetup/all')
@@ -62,6 +64,35 @@ setPublicMeetups(editPub)
 setYourMeetups(yours)
 if(data[0] !== undefined){
 setDueDate(data[0].time_date)
+let dueDe: any = data[0].time_date[11] + data[0].time_date[12]
+
+if(dueDe[0] === '0'){
+  dueDe.slice(1)
+}
+dueDe = parseInt(dueDe)
+if(dueDe === 12){
+  dueDe = '01'
+}else{
+  dueDe = (dueDe + 1)
+  if(dueDe <= 9){
+    dueDe = `0${dueDe}`
+  }
+}
+
+let date: any = data[0].time_date.split(' ')
+let hour: any = date[1].split(':')
+hour[0] = dueDe
+hour = hour.join(':')
+date[1] = hour
+
+if(dueDe === '01' && date[2] === 'am'){
+  date[2] = 'pm'
+}else if(dueDe === '01' && date[2] === 'pm'){
+date[2] = 'am'
+}
+
+date = date.join(' ')
+setDueDelete(date)
 }
 })
 .catch((err)=>{
@@ -110,30 +141,42 @@ const month: number | string = dayjs().month() > 9 ? dayjs().month() : `0${dayjs
 let hour: number | string = dayjs().hour() > 9 ? dayjs().hour() : `0${dayjs().hour()}`
 const minute: number | string = dayjs().minute() > 9 ? dayjs().minute() : `0${dayjs().minute()}`
 
-const am_pm: string = typeof hour !== 'string' ? ' pm' : ' am'
+let am_pm: string = ' am'
+if(hour !== 'string'){
+if(hour > 12){
+  am_pm = ' pm'
+}
+}
 
 if(typeof hour !== 'string'){
+  if(hour > 12){
   hour -= 12;
   if(hour < 0){
     hour *= -1
   }
+  if(hour < 9){
+    hour = `0${hour}`
+  }
+  }
+  if(typeof hour !== 'string' && hour < 0 ){
+    hour *= -1
+  }
 }
 
-const time: string = '' + month + '/' + day + '/' + dayjs().year() + '  ' + hour + ':' + minute + am_pm
+const time: string = '' + month + '/' + day + '/' + dayjs().year() + ' ' + hour + ':' + minute + am_pm
 setCurrentTime(time)
+return time
 }
 
 const compare = (): void =>{
-  for(let i = 0; i < yourAndJoin.length; i++){
-  if(currentTime.length !== 0 && dueDate.length !== 0 && yourAndJoin[i] !== undefined){
+  if(currentTime.length !== 0 && dueDate.length !== 0 && yourAndJoin[0] !== undefined){
   let cur: Array<T> = currentTime?.split(' ')
   const curDate: Array<T> = cur[0].split('/')
-  cur = cur.slice(2)
+  cur = cur.slice(1)
   const curTime: Array<T> = cur[0].split(':')
   cur = cur.slice(1)
   cur = curTime.concat(cur)
   cur = curDate.concat(cur)
-
     let du: Array<T> = dueDate?.split(' ')
     const duDate: Array<T> = du[0].split('/')
     du = du.slice(1)
@@ -149,6 +192,7 @@ if(cur[1][0] === 0){
 if(du[1][0] === 0){
   du[1] = du[1].slice(1)
 }
+
 const dayDiff: number = (parseInt(cur[1])) - (parseInt(du[1])) >= 0 ? (parseInt(cur[1])) - (parseInt(du[1])) : ((parseInt(cur[1])) - (parseInt(du[1]))) * -1
 if(cur[0][0] === 0){
   cur[0] = cur[0].slice(1)
@@ -156,10 +200,10 @@ if(cur[0][0] === 0){
 if(du[0][0] === 0){
   du[0] = du[0].slice(1)
 }
+
 const monthDiff: number = (parseInt(cur[0])) - (parseInt(du[0])) >= 0 ? (parseInt(cur[0])) - (parseInt(du[0])) : ((parseInt(cur[0])) - (parseInt(du[0]))) * -1
 
 const hourDiff: number = (parseInt(cur[3])) - (parseInt(du[3])) >= 0 ? (parseInt(cur[3])) - (parseInt(du[3])) : ((parseInt(cur[3])) - (parseInt(du[3]))) * -1
-
 if(cur[4][0] === 0){
   cur[4] = cur[4].slice(1)
 }
@@ -167,39 +211,49 @@ if(du[4][0] === 0){
   du[4] = du[4].slice(1)
 }
 const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseInt(cur[4])) - (parseInt(du[4])) : ((parseInt(cur[4])) - (parseInt(du[4]))) * -1
+  let timeLeftForMeetup: string = '' 
+  if(yearDiff > 0){
+    timeLeftForMeetup = 'Still have ' + yearDiff + ' years left to go' 
+  }else if(monthDiff > 0){
+    timeLeftForMeetup = 'Still have ' + monthDiff + ' months left to go'
+  }else if(dayDiff > 0){
+    timeLeftForMeetup = 'Still have ' + dayDiff + ' days left to go'
+  }else if(hourDiff > 0){
+    timeLeftForMeetup = 'You have ' + hourDiff + ' hours left'
+  }else if(minuteDiff > 0){
+timeLeftForMeetup = 'You have ' + minuteDiff + ' minutes left'
+  }else{
+timeLeftForMeetup = 'Right Now'
+  }
+  // console.log(`current ${currentTime}\n due${dueDate}\n delete${dueDelete}`)
+  // console.log(`zeroCheck equal ${zeroCheck}`)
+   console.log(`currentTime in compare function ${currentTime}`)
+  if(timeLeft !== timeLeftForMeetup){
+    if(yourAndJoin[0].status === 'today' && timeLeftForMeetup === 'Right Now' && currentTime === dueDate && zeroCheck === false){
+      console.log('zeroCheck ran')
+setZeroCheck(true)
+setTimeLeft(timeLeftForMeetup)
+    }
+    if(zeroCheck !== true){
+    setTimeLeft(timeLeftForMeetup)
+      }
+   }
+    if(zeroCheck === true && currentTime === dueDelete && yourAndJoin[0].status === 'today'){
+      console.log('time to delete')
+      const url = 'meetup/delete/' + yourAndJoin[0].id
+  axios.delete(url)
+  .then(()=>{
+    refresh()
+    setZeroCheck(false);
+    console.log('delete')
+  })
+  .catch((err: any)=>{
+    console.error('Error can\'t update: ', err)
+  })
+    }
+  }
+  }
 
-if(i === 0){
-  setTimeout((): void =>{setTimeLeft(yearDiff + ' years, ' + monthDiff + ' month, ' + dayDiff + ' days, ' + hourDiff + ' hours, and ' + minuteDiff + ' minute left')}, 30000)
-}
-
-// let str: string = ''
-// let range: string = 'not in range'
-
-// if(yearDiff === 0 && monthDiff === 0 && dayDiff <= 7){
-// str = 'Hey you have ' + dayDiff + ' days until the ' + yourAndJoin[i].eventName + ' meetup'
-// range = 'in range'
-// }else{
-//   str = 'HEY you have a meetup today for ' + yourAndJoin[i].eventName
-//   range = 'today'
-// }
-// if(str !== yourAndJoin[i].message){
-// if(yourAndJoin[i].status === 'none' || range === 'in range'){
-// const obj: object = {status: range, message: str}
-// const url = 'meetup/update/' + yourAndJoin[i].id
-// axios.patch(url, obj)
-// .then(()=>{
-// setTimeout((): void =>{getMeetups()}, 5000)
-// })
-// .catch((err: any)=>{
-//   console.error('Error can\'t update in Meetup.tsx line 181: ', err)
-// })
-// }
-//   }
-}
-/////  
-}////end of loop
-/////
-}
 
 const showSwitch = (): void => {
   if(show === false){
@@ -212,8 +266,11 @@ const showSwitch = (): void => {
 }
 
 const doubleCall = (): void =>{
-  getTime()
+ const test: any = getTime()
+ console.log(test)
+  if(yourAndJoin.length !== 0){
   compare()
+  }
 }
 const refresh = (): void  =>{
   getMeetups()
@@ -227,8 +284,7 @@ useEffect(()=>{
 }, [])
 
   return (<div>
-    <script>{window.setInterval(doubleCall, 60000)}</script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    {window.setInterval(doubleCall, 60000)}
     <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 

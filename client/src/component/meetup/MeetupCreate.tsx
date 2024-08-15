@@ -66,9 +66,10 @@ if(image.name !== undefined){
       console.log(err)
     })
   }
+
   useEffect(()=>{
-    if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[12] === ':' && dateTime[15] === ' '){
-      if(dateTime[16] + dateTime[17] === 'pm' || dateTime[16] + dateTime[17] === 'am'){
+    if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
+      if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
         if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.name !== undefined ){
           setFillIn(true)
         }else{
@@ -80,8 +81,6 @@ if(image.name !== undefined){
     }else{
  setFillIn(false)
     }
-
-
   },[edit])
 
   return (<div>

@@ -12,7 +12,7 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   const [description, setDescription] = useState('')
   const [image, setImage] = useState({})
   const [currentState, setCurrentState] = useState('yours')
-  const [joinCheck, setJoinCheck] = useState([])
+  const [fillIn, setFillIn] = useState(false)
 
   const edit = (name: string, value: any): void =>{
     switch(name){
@@ -64,7 +64,7 @@ const meetupDelete = (id: number): void =>{
     refresh()
   })
   .catch((err: any)=>{
-    console.error('Error can\'t update: ', err)
+    console.error('Error can\'t delete: ', err)
   })
 }
 
@@ -83,24 +83,40 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
-const check = (): void =>{
-const checkList: Array<T> = []
-const edit: Array<T> = []
-for(let i = 0; i < join.length; i++){
-  if(!checkList.includes(join?.[i])){
-    checkList.push(join?.[i])
-  }
-}
-for(let i = 0; i < pub.length; i++){
-  if(!checkList.includes(pub?.[i].id)){
-    edit.push(pub?.[i])
-  }
-}
-}
+// const check = (): void =>{
+// const checkList: Array<T> = []
+// const edit: Array<T> = []
+// for(let i = 0; i < join.length; i++){
+//   if(!checkList.includes(join?.[i])){
+//     checkList.push(join?.[i])
+//   }
+// }
+// for(let i = 0; i < pub.length; i++){
+//   if(!checkList.includes(pub?.[i].id)){
+//     edit.push(pub?.[i])
+//   }
+// }
+// }
 
+// useEffect(()=>{
+//   check()
+// },[])
 useEffect(()=>{
-  check()
-},[])
+  if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
+    if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
+      if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.name !== undefined ){
+        setFillIn(true)
+      }else{
+          setFillIn(false)
+        }
+    }else{
+      setFillIn(false)
+    }
+  }else{
+setFillIn(false)
+  }
+},[edit])
+
 
   return(
     <>
@@ -115,7 +131,8 @@ useEffect(()=>{
         {swap === 'none' && <><>{currentState === 'public' && pub.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
         </SimpleGrid>
     {swap === 'update' && <><Box w={'500px'}>
-      <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>
+      {fillIn === true && <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>}
+      {fillIn === false && <Button colorScheme="red" onClick={()=>{alert('fill in all inputs and for time reference the clock')}}>can't create</Button>}
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
