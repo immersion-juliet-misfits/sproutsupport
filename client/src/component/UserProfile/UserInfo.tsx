@@ -10,37 +10,49 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const UserInfo = ({
+  fetchUserData,
+  user,
   avatar,
   bio,
-  // location_id,
-  latitude,
-  longitude,
+  city,
+  state,
   userName,
   EditableControls,
   handleAvatarChange,
   handleBioChange,
-  handleLatLonChange,
-  // handleLocationChange,
+  handleLocationChange,
+  handleInputChange,
   handleUserNameChange,
 }) => {
   const [editableUserName, setEditableUserName] = useState(userName);
 
+  useEffect(() => {
+    fetchUserData();
+    // fetchWeather(user.city, user.state);
+  }, [user]);
+
+
   return (
     <>
-      <Grid>
+      <Grid
+        className='AvatarGrid'
+        // border='2px solid red'
+      >
         <GridItem
-          bg='yellow.500'
+          className='UserAvatar'
+          bg='black'
           display='flex'
           alignItems='center'
           justifyContent='center'
           justifySelf='center'
           alignSelf='center'
           borderRadius='50%'
-          w='250px'
-          h='250px'
+          border='15px solid #BDE3FF'
+          w='300px'
+          h='300px'
           position='relative'
           overflow='hidden'
           cursor='pointer'
@@ -49,31 +61,37 @@ const UserInfo = ({
           <Image
             src={avatar}
             alt='Click to Edit Avatar'
-            // w='90%' // Temp 90% so I can see
-            // h='90%' // This too
             w='100%'
             h='100%'
             borderRadius='50%'
-            bg='green.500'
+            // bg='#BDE3FF'
             display='flex'
             alignItems='center'
             justifyContent='center'
+            objectFit='cover'
           />
           <input
             type='file'
             id='avatarInput'
             style={{ display: 'none' }}
+            accept='.jpg, .jpeg, .png'
             onChange={handleAvatarChange}
           />
         </GridItem>
       </Grid>
       <Grid
-        // border='5px solid red'
+        // border='2px solid orange'
+        className='InnerGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
-        <GridItem bg='green.500' h='100px'>
+        <GridItem
+          className='UserNameChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='100px'
+        >
           <Editable
             defaultValue={userName}
             onChange={(nextValue) => {
@@ -89,7 +107,7 @@ const UserInfo = ({
             <Flex alignItems='center' gap='10'>
               <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Change Display name
+                Edit Display Name
               </Text>
             </Flex>
             <p />
@@ -107,40 +125,67 @@ const UserInfo = ({
             />
           </Editable>
         </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          <Editable
-            defaultValue={
-              latitude && longitude
-                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-                : 'Coordinates not set'
-            }
-            isPreviewFocusable={false}
-            mt={2}
-            minH='40px'
-          >
+        {/* Line break  */}
+        <GridItem
+          className='UserLocationCityStateChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='200px'
+        >
             <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Coordinates
+                City and State
               </Text>
             </Flex>
             <p />
             <Heading as='h2' size='lg' textAlign='center'>
-              {latitude && longitude
-                ? `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
-                : 'Coordinates not set'}
+              {city && state ? `${city}, ${state}` : 'No Location Watched'}
             </Heading>
-            <Button
-              onClick={handleLatLonChange}
-              colorScheme='teal'
-              size='md'
+            <Flex
+              direction='row'
+              alignItems='center'
+              justifyContent='center'
               mt={4}
+              gap={6}
             >
-              Update My Location
-            </Button>
-          </Editable>
+              <Input
+                name='city'
+                placeholder='Enter City'
+                onChange={handleInputChange}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='30%'
+              />
+              <Input
+                name='state'
+                placeholder='Enter State'
+                onChange={handleInputChange}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='30%'
+              />
+            </Flex>
+            <Flex justifyContent='center' mt={4}>
+              <Button
+                onClick={handleLocationChange}
+                colorScheme='teal'
+                size='md'
+              >
+                Get Weather
+              </Button>
+            </Flex>
         </GridItem>
-        <GridItem bg='green.500' h='200px'>
+         {/* Break Here  */}
+        <GridItem
+          className='UserBioChange'
+          borderRadius='lg'
+          bg='#BDE3FF'
+          h='200px'
+        >
           <Editable
             defaultValue={bio}
             onSubmit={handleBioChange}
@@ -151,7 +196,7 @@ const UserInfo = ({
             <Flex alignItems='center' gap='10'>
               <EditableControls bottom='5px' left='5px' w='100px' />
               <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                User Bio
+                Edit User Bio
               </Text>
             </Flex>
             <p />
