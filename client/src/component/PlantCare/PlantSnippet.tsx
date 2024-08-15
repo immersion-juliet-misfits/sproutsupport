@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
@@ -7,8 +7,11 @@ import PlantCare from './PlantCare';
 
 const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick }) => {
   const [tasks, setTasks] = useState([]);
-  const [newName, setNewName] = useState('')
-  const [newDescription, setNewDescription] = useState('')
+  const [allTasks, setAll] = useState([]);
+  const [newName, setNewName] = useState(plant.nickname)
+  const [newDescription, setNewDescription] = useState(plant.description)
+  const [progress, setProgress] = useState({})
+
   
   // const handleDelete = () => {
   //   axios.delete(`/plants/delete/${plant.id}`)
@@ -52,9 +55,44 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       })
   }
 
+  const fetchTaskProgress = () => {
+    axios.get(`/plants/allTasks/${plant.id}`)
+      .then(({data}) => {
+        setAll(data)
+      })
+  }
+
   useEffect(() => {
     fetchTasks()
+    fetchTaskProgress()
   }, [])
+
+  const getProgress = (lastCompleted, nextCompletion) => {
+    const now = new Date().getTime();
+  
+    if (now >= new Date(nextCompletion).getTime()) {
+      return 100;
+    }
+  
+    const totalDuration = new Date(nextCompletion).getTime() - new Date(lastCompleted).getTime();
+    const elapsed = now - new Date(lastCompleted).getTime();
+    const progress = (elapsed / totalDuration) * 100;
+    // console.log(progress)
+  
+    return progress.toFixed(2);
+  };
+
+  useEffect(() => {
+    // let interval;
+      let interval = setInterval(() => {
+        const updating = {}
+        allTasks.forEach((task) => {
+          updating[task.id] = getProgress(task.lastCompleted, task.nextComplection)
+        })
+        setProgress(updating)
+      }, 1000)
+    return () => clearInterval(interval)
+  }, [tasks]) // **look into logic later**
 
   return (
     <Card bg="green.200">
@@ -116,15 +154,21 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       <Input as={EditableInput} />
       <EditableControls />
     </Editable>
+      {allTasks.length > 0 &&
+        allTasks.map((task) => (
+          <div>
+
+          <p key={task.id} style={{color:"red"}}>{task.taskName}</p>
+    <CircularProgress value={progress[task.id]}>
+                  
+    </CircularProgress>
+          </div>
+        ))
+      }
     </CardBody>
-        {/* {tasks.length > 0 &&
-          tasks.map((task) => (
-            <p key={task.id} style={{color:"red"}}>{task.taskName}</p>
-          ))
-        } */}
     <CardFooter>
       <DeleteIcon color="tomato" onClick={deletePlant}/>
-      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar}/>
+      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar} fetchTaskProgress={fetchTaskProgress} allTasks={allTasks}/>
     </CardFooter>
     </Card>
   )

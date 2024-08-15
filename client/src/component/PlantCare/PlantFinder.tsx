@@ -171,8 +171,8 @@ const PlantFinder = ({ user }) => {
           <Button onClick={() => handleAddTask()} color="green">Add Task</Button>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
-            tasks.map((task) => (
-              <h4>{task}</h4>
+            tasks.map((task, i) => (
+              <h4 key={`${task}-${i}`}>{task}</h4>
             ))
           }
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}

@@ -13,23 +13,60 @@ import {
   Heading,
   Flex,
   Image,
+  CircularProgress,
+  CircularProgressLabel,
+  Progress,
+  ProgressLabel
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar }) => {
+const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetchTaskProgress, allTasks }) => {
+  const [progress, setProgress] = useState({})
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleCompletion = (task) => {
     axios.post('/plants/completeTask', { id: task.id })
-      .then((data) => {
+      .then(({data}) => {
+        console.log(data)
         getScore()
         updateProgressBar()
       })
       .then(() => {
+        fetchTaskProgress()
         fetchTasks()
       })
   }
+
+  const getProgress = (lastCompleted, nextCompletion) => {
+    const now = new Date().getTime();
+  
+    if (now >= new Date(nextCompletion).getTime()) {
+      return 100;
+    }
+  
+    const totalDuration = new Date(nextCompletion).getTime() - new Date(lastCompleted).getTime();
+    const elapsed = now - new Date(lastCompleted).getTime();
+    const progress = (elapsed / totalDuration) * 100;
+    console.log(progress)
+  
+    return progress.toFixed(2);
+  };
+
+  // useEffect(() => {
+  //   console.log('once, maybe twice')
+  // }, [])
+  useEffect(() => {
+    // let interval;
+      let interval = setInterval(() => {
+        const updating = {}
+        allTasks.forEach((task) => {
+          updating[task.id] = getProgress(task.lastCompleted, task.nextComplection)
+        })
+        setProgress(updating)
+      }, 1000)
+    return () => clearInterval(interval)
+  }, [isOpen, allTasks]) // **look into logic later**
   
 
   return (
@@ -50,12 +87,19 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar }) =>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Heading as="h3" size="md">Tasks</Heading>
-          {tasks.length > 0 &&
-              tasks.map((task) => (
+          <Heading as="h2" size="lg">Tasks</Heading>
+          {allTasks.length > 0 &&
+              allTasks.map((task) => (
+                <div>
+                <Progress variant="tesrt" colorScheme="green" bgGradient='linear(to-r, green.300, green.200, green.100)' height='32px' value={progress[task.id]}>
+                  <ProgressLabel>
+                    <Heading as="h2" size="md">{task.taskName}</Heading>
+                  </ProgressLabel>
+                </Progress>
                 <p key={task.id} style={{ color: 'red' }} onClick={() => handleCompletion(task)}>
                   {task.taskName}
                 </p>
+                </div>
               ))}
           </ModalBody>
           <ModalFooter>
