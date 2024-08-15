@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 import {
   Box,
   Image,
@@ -7,18 +10,37 @@ import {
   Grid,
   GridItem,
 } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
 import NavBar from '../NavBar';
 
-const UserPublicProfile = () => {
-  let location = useLocation();
-  let { avatar, bio, userName, weatherData, dailyForecastData, alertsData } =
-    location.state || {
-      bio: 'No bio available',
-    };
+const UserPublicProfile = ({
+  user,
+  weatherData,
+  dailyForecastData,
+  alertsData,
+}) => {
+  const [weatherData, setWeatherData] = useState(null);
+  const [dailyForecastData, setDailyForecastData] = useState(null);
+  const [alertsData, setAlertsData] = useState(null);
 
-  // console.log('Weather Data:', weatherData);
-  // console.log('Current Conditions:', weatherData?.currentConditions);
+  const fetchWeather = (city, state) => {
+    axios
+      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+      .then((response) => {
+        console.log('Retrieved weather data:', response.data);
+        const data = response.data;
+
+        setWeatherData(data.currentConditions);
+        setDailyForecastData(data.days);
+        setAlertsData(data.alerts || []);
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data for city and state:', error);
+      });
+  };
+
+  useEffect(() => {
+    fetchWeather(user.city, user.state);
+  }, []);
 
   return (
     <Grid
@@ -99,22 +121,26 @@ const UserPublicProfile = () => {
             Follow(?)
           </Button> */}
           <Image
-            borderRadius='full'
-            boxSize='150px'
-            src={avatar}
-            alt={`${userName}'s avatar`}
+            src={user.avatar}
+            alt={`${user.userName}'s avatar`}
+            // borderRadius='full'
+            // boxSize='150px'
+            w='300px' // Fixed width
+            h='300px' // Fixed height
+            borderRadius='50%' // Makes it circular
+            objectFit='cover'
           />
           <Heading as='h2' size='xl'>
-            {userName}
+            {user.userName}
           </Heading>
           <Text fontSize='md' color='white' textAlign='center'>
-            {bio}
+            {user.bio}
           </Text>
 
           {weatherData && (
             <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
               <Heading as='h2' size='lg' mb={4}>
-                Current Weather
+                Current Weather for {user.city}, {user.state}:
               </Heading>
               <Text fontSize='lg' fontWeight='bold'>
                 {new Date().toLocaleDateString('en-US', {

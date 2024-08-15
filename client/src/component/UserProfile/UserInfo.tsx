@@ -22,6 +22,7 @@ const UserInfo = ({
   handleAvatarChange,
   handleBioChange,
   handleLocationChange,
+  handleInputChange,
   handleUserNameChange,
 }) => {
   const [editableUserName, setEditableUserName] = useState(userName);
@@ -142,7 +143,7 @@ const UserInfo = ({
               <Input
                 name='city'
                 placeholder='Enter City'
-                onChange={handleLocationChange}
+                onChange={handleInputChange}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'
@@ -152,7 +153,7 @@ const UserInfo = ({
               <Input
                 name='state'
                 placeholder='Enter State'
-                onChange={handleLocationChange}
+                onChange={handleInputChange}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'

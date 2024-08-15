@@ -8,23 +8,23 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  google_id     String         @unique
-  city          String?
-  state         String?
-  userName      String?
-  email         String?        @unique
-  password      String?
-  avatar        String?
-  bio           String?
-  level         Int            @default(1)
-  points        Int            @default(0)
-  meets         Meet[]
-  notifications Notification[]
-  plants        Plant[]
-  posts         Post[]
+  id                Int            @id @default(autoincrement())
+  google_id         String         @unique
+  city              String?
+  state             String?
+  userName          String?
+  email             String?        @unique
+  password          String?
+  avatar            String?
+  bio               String?
+  level             Int            @default(1)
+  points            Int            @default(0)
+  meets             Meet[]
+  notifications     Notification[]
+  plants            Plant[]
+  posts             Post[]
   // comments Comment[]
-  attendees     Attendee[]
+  attendees         Attendee[]
 }
 
 model Image {

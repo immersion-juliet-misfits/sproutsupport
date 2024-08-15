@@ -83,7 +83,7 @@ const App = () => {
           <Route path='/createPost' element={<CreatePost user={user} />} />
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
-          <Route path='/userprofile' element={<UserPrivateProfile user={user} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
+          <Route path='/userprofile' element={<UserPrivateProfile user={user} fetchUserData={fetchUserData} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
           <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
           <Route
             path='/'

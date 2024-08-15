@@ -155,8 +155,6 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
       },
     })
     .then(() => {
-      // console.log('User location updated successfully');
-
       const location = `${city},${state}`;
       const weatherUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${WEATHER_KEY}`;
 

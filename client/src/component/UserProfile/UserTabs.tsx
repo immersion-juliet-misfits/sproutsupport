@@ -14,9 +14,9 @@ const UserTabs = ({ handleLogOut, goToPublicProfile, setCurrentView }) => {
         <Tab className='uTab' onClick={handleLogOut}>
           Log Out
         </Tab>
-        <Tab className='uTab' onClick={goToPublicProfile}>
+        {/* <Tab className='uTab' onClick={goToPublicProfile}>
           Profile
-        </Tab>
+        </Tab> */}
         <Tab className='uTab' onClick={() => setCurrentView('help')}>
           Privacy
         </Tab>

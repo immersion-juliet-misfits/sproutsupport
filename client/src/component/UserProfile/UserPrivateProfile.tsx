@@ -30,7 +30,13 @@ interface User {
 }
 
 // Main component
-const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
+const UserPrivateProfile = ({
+  user,
+  setUser,
+  onLogout,
+  BUCKET_NAME,
+  fetchUserData,
+}) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
   const [weatherData, setWeatherData] = useState(null);
@@ -63,7 +69,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
     );
   };
 
-  const fetchWeatherNew = (city, state) => {
+  const fetchWeather = (city, state) => {
     axios
       .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
       .then((response) => {
@@ -73,11 +79,6 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         setWeatherData(data.currentConditions);
         setDailyForecastData(data.days);
         setAlertsData(data.alerts || []);
-
-        // console.log('', weatherData);
-        // console.log('', dailyForecastData);
-        // console.log('', alertsData);
-
       })
       .catch((error) => {
         console.error('Error fetching weather data for city and state:', error);
@@ -121,21 +122,33 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
       });
   };
 
-
   const handleLocationChange = (event) => {
     event.preventDefault();
-
-    const { name, value } = event.target;
-
-    if (name === 'city' || name === 'state') {
-      setLocation((prevLocation) => ({
-        ...prevLocation,
-        [name]: value,
-      }));
-    } else {
-      fetchWeatherNew(location.city, location.state);
-    }
+    fetchWeather(location.city, location.state); // Only invoke when button is clicked
   };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLocation((prevLocation) => ({
+      ...prevLocation,
+      [name]: value,
+    }));
+  };
+
+  // const handleLocationChange = (event) => {
+  //   event.preventDefault();
+
+  //   const { name, value } = event.target;
+
+  //   if (name === 'city' || name === 'state') {
+  //     setLocation((prevLocation) => ({
+  //       ...prevLocation,
+  //       [name]: value,
+  //     }));
+  //   } else {
+  //     fetchWeather(location.city, location.state);
+  //   }
+  // };
 
   const handleBioChange = (newBio: string) => {
     axios
@@ -166,29 +179,24 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
       });
   };
 
-  const goToPublicProfile = () => {
-    navigate('/public-profile', {
-      state: {
-        avatar: user.avatar,
-        bio: user.bio,
-        latitude: user.latitude,
-        longitude: user.longitude,
-        userName: user.userName,
-        weatherData,
-        dailyForecastData,
-        alertsData,
-      },
-    });
-  };
+  // const goToPublicProfile = () => {
+  //   navigate('/public-profile', {
+  //     state: {
+  //       avatar: user.avatar,
+  //       bio: user.bio,
+  //       userName: user.userName,
+  //       city: location.city,
+  //       state: location.state,
+  //       weatherData,
+  //       dailyForecastData,
+  //       alertsData,
+  //     },
+  //   });
+  // };
 
-  useEffect(() => {
-    if (weatherData && dailyForecastData && alertsData) {
-      console.log('Updated weatherData:', weatherData);
-      console.log('Updated dailyForecastData:', dailyForecastData);
-      console.log('Updated alertsData:', alertsData);
-    }
-  }, [weatherData, dailyForecastData, alertsData, user]);
-
+  // useEffect(() => {
+  //   fetchWeather(user.city, user.state);
+  // }, []);
 
   if (!user) {
     return <div>Loading...</div>;
@@ -277,7 +285,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
         <UserTabs
           handleLogOut={handleLogOut}
           setCurrentView={setCurrentView}
-          goToPublicProfile={goToPublicProfile}
+          // goToPublicProfile={goToPublicProfile}
         />
       </Grid>
       <Grid
@@ -304,13 +312,14 @@ const UserPrivateProfile = ({ user, setUser, onLogout, BUCKET_NAME }) => {
           <UserInfo
             avatar={user.avatar}
             bio={user.bio}
-            city={location.city}
-            state={location.state}
+            city={user.city}
+            state={user.state}
             userName={user.userName}
             EditableControls={EditableControls}
             handleAvatarChange={handleAvatarChange}
             handleBioChange={handleBioChange}
             handleLocationChange={handleLocationChange}
+            handleInputChange={handleInputChange}
             handleUserNameChange={handleUserNameChange}
           />
         )}
