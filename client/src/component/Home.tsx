@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
+  Card,
+  Container,
   Flex,
   Box,
   Image,
@@ -44,7 +46,7 @@ const Home = () => {
         <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
       </ButtonGroup>
     ) : (
-      <Flex >
+      <Flex>
         <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
       </Flex>
     );
@@ -93,95 +95,91 @@ const Home = () => {
   }, []);
 
   return (
-    <Grid
-      w='1100px'
-      mx='auto'
-      mt={10}
-      p={5}
-      borderWidth='1px'
-      borderRadius='lg'
-      overflow='hidden'
-      boxShadow='md'
-    >
+    <Box>
       <Grid
-        className='header-grid'
-        templateRows='repeat(1, 1fr)'
-        templateColumns='repeat(5, 1fr)'
-        h='100px'
-        gap={4}
-        mb={4}
+        w='1100px'
+        mx='auto'
+        mt={10}
+        p={5}
+        borderWidth='1px'
+        borderRadius='lg'
+        overflow='hidden'
+        boxShadow='md'
       >
-        <GridItem
-          colSpan={1}
-          bg='teal'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
+        <Grid
+          className='header-grid'
+          templateRows='repeat(1, 1fr)'
+          templateColumns='repeat(5, 1fr)'
+          h='100px'
+          gap={4}
+          mb={4}
         >
-          <Box
-            w='100px'
-            h='100px'
+          <GridItem
+            colSpan={1}
+            bg='teal'
             display='flex'
             alignItems='center'
             justifyContent='center'
           >
-            Site Logo
-          </Box>
-        </GridItem>
-        <GridItem
-          colSpan={3}
-          bg='#c1e3c9'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Heading as='h1' size='2xl'>
-            Posts
-          </Heading>
-        </GridItem>
-        <GridItem
-          colSpan={1}
-          bg='teal'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Box
-            w='100px'
-            h='100px'
+            <Box
+              w='100px'
+              h='100px'
+              display='flex'
+              alignItems='center'
+              justifyContent='center'
+            >
+              Site Logo
+            </Box>
+          </GridItem>
+          <GridItem
+            colSpan={3}
+            bg='#c1e3c9'
             display='flex'
             alignItems='center'
             justifyContent='center'
           >
-            <NavBar />
+            <Heading as='h1' size='2xl'>
+              Posts
+            </Heading>
+          </GridItem>
+          <GridItem
+            colSpan={1}
+            bg='teal'
+            display='flex'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Box
+              w='100px'
+              h='100px'
+              display='flex'
+              alignItems='center'
+              justifyContent='center'
+            >
+              <NavBar />
+            </Box>
+          </GridItem>
+        </Grid>
+        {/* below are html for posts */}
 
-          </Box>
-        </GridItem>
-      </Grid>
-      {/* below are html for posts */}
-
-      <Box bg='teal' py={4} >
-        <ChakraLink as={ReactRouterLink} to='/createPost'>
-          Create Post
-        </ChakraLink>
-        <Flex alignItems='center' gap='2' direction='column-reverse'>
-        {posts
-          .map((post) => {
-            return (
-                <Flex
-                  box-sizing='content-box'
+        <Flex bg='teal' py={4} direction='column'>
+          <ChakraLink as={ReactRouterLink} to='/createPost'>
+            Create Post
+          </ChakraLink>
+          <Flex alignItems='center' gap='2' direction='column-reverse' justify='center'>
+            {posts.map((post) => {
+              return (
+                <Card
+                  box-sizing='large'
                   alignItems='center'
-                  justifyContent='space-between'
                   bg='#c1e3c9'
                   key={post.id}
-                  direction='row'
+                  direction='column'
                 >
-
-                  <Box >
-                    <Image
-                      src={post.imageUrl}
-                      boxSize='180px'
-                      />
+                  <Box boxSize='180px'>
+                    <Image src={post.imageUrl} />
+                  </Box>
+                  <Box>
                     <Editable
                       textAlign='center'
                       defaultValue={post.message}
@@ -210,19 +208,17 @@ const Home = () => {
                       icon={<DeleteIcon />}
                     />
                   </Box>
-                      <Box>
-
-                  <Comment postId={post.id}/>
-                      </Box>
-                </Flex>
-            );
-          })
-        }
-      </Flex>
-      </Box>
-    </Grid>
+                  <Flex direction='column'>
+                    <Comment postId={post.id} />
+                  </Flex>
+                </Card>
+              );
+            })}
+          </Flex>
+        </Flex>
+      </Grid>
+    </Box>
   );
 };
 
 export default Home;
-

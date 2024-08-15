@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios'
-import { ChakraProvider } from '@chakra-ui/react';
+// import { ChakraProvider } from '@chakra-ui/react';
 import Home from "./Home";
 import CreatePost from "./Post/CreatePost";
 import OwnedPlants from "./PlantCare/OwnedPlants";
@@ -10,7 +10,6 @@ import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
-import Post from './Post';
 import io from 'socket.io-client';
 import { useToast } from '@chakra-ui/react'
 
@@ -67,7 +66,7 @@ const App = () => {
   }
 
   return (
-    <ChakraProvider>
+    // <ChakraProvider>
       <div className='App'>
         Sprout Support
         <Routes>
@@ -88,7 +87,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
-   </ChakraProvider>
+  //  </ChakraProvider>
   );
 };
 
