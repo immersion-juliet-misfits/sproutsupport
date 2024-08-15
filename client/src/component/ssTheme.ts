@@ -17,14 +17,14 @@ const ssTheme = extendTheme({
           pb: '0',
         },
         tablist: {
-          h: '150px',
+          h: '75px',
           gap: 5,
         },
       },
       variants: {
         enclosed: {
           tab: {
-            fontSize: '50px',
+            fontSize: '30px',
             _selected: {
               bg: '#A3EECC',
               color: 'white',

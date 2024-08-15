@@ -1,6 +1,6 @@
 import { Tabs, TabList, Tab } from '@chakra-ui/react';
 
-const UserTabs = ({ handleLogOut, goToPublicProfile, setCurrentView }) => {
+const UserTabs = ({ handleLogOut, setCurrentView }) => {
   return (
     <Tabs
       className='UserTabs'

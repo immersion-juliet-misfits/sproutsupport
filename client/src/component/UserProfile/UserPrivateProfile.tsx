@@ -1,21 +1,25 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import {
-  Box,
+  // useEffect,
+  useState,
+} from 'react';
+import {
+  // Box,
   ButtonGroup,
   Flex,
   Grid,
-  GridItem,
-  Heading,
+  // GridItem,
+  // Heading,
   IconButton,
   useEditableControls,
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../NavBar';
+// import NavBar from '../NavBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserPrivacy from './UserPrivacy';
+import TopBar from './TopBar';
 
 // User context
 interface User {
@@ -42,8 +46,8 @@ const UserPrivateProfile = ({
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
   const [location, setLocation] = useState({
     city: user.city || '',
     state: user.state || '',
@@ -124,7 +128,7 @@ const UserPrivateProfile = ({
 
   const handleLocationChange = (event) => {
     event.preventDefault();
-    fetchWeather(location.city, location.state); // Only invoke when button is clicked
+    fetchWeather(location.city, location.state);
   };
 
   const handleInputChange = (event) => {
@@ -179,92 +183,13 @@ const UserPrivateProfile = ({
       });
   };
 
-  // const goToPublicProfile = () => {
-  //   navigate('/public-profile', {
-  //     state: {
-  //       avatar: user.avatar,
-  //       bio: user.bio,
-  //       userName: user.userName,
-  //       city: location.city,
-  //       state: location.state,
-  //       weatherData,
-  //       dailyForecastData,
-  //       alertsData,
-  //     },
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchWeather(user.city, user.state);
-  // }, []);
-
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Grid className='bodyGrid' w='1100px' mx='auto'>
-      <Grid
-        // border='5px solid blue'
-        className='header-grid'
-        mt={10}
-        templateRows='repeat(1, 1fr)'
-        templateColumns='repeat(5, 1fr)'
-        h='100px'
-        gap={4}
-        mb={4}
-      >
-        <GridItem
-          colSpan={1}
-          bg='#5AB78D'
-          borderRadius='lg'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Box
-            w='100px'
-            h='100px'
-            color='white'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            Logo
-          </Box>
-        </GridItem>
-        <GridItem
-          colSpan={3}
-          bg='#D3FFEB'
-          boxShadow='md'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Heading as='h1' size='2xl'>
-            USER SETTINGS
-          </Heading>
-        </GridItem>
-        <GridItem
-          colSpan={1}
-          bg='#5AB78D'
-          borderRadius='lg'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Box
-            w='100px'
-            h='100px'
-            color='white'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <NavBar />
-          </Box>
-        </GridItem>
-      </Grid>
+    <Grid className='privateBodyGrid' w='1100px' mx='auto'>
+      <TopBar />
       <Grid
         className='bodyGrid'
         border='15px solid #D3FFEB'
@@ -282,11 +207,7 @@ const UserPrivateProfile = ({
         alignItems='center'
         justifyContent='flex-end'
       >
-        <UserTabs
-          handleLogOut={handleLogOut}
-          setCurrentView={setCurrentView}
-          // goToPublicProfile={goToPublicProfile}
-        />
+        <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} />
       </Grid>
       <Grid
         w='1100px'
@@ -310,6 +231,8 @@ const UserPrivateProfile = ({
       >
         {currentView === 'info' && (
           <UserInfo
+            fetchUserData={fetchUserData}
+            user={user}
             avatar={user.avatar}
             bio={user.bio}
             city={user.city}

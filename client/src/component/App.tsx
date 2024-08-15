@@ -44,7 +44,7 @@ const App = () => {
     fetchUserData()
 
       const notif = (task) => {
-        console.log(task, 'hello')
+        // console.log(task, 'hello')
         toast({
           title: `${task.taskPlant.nickname}`,
           description: `${task.taskName}`,
@@ -73,7 +73,6 @@ const App = () => {
   return (
     <ChakraProvider theme={ssTheme}>
       <div className='App'>
-        {/* Sprout Support */}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route
@@ -84,7 +83,7 @@ const App = () => {
           <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
           <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
           <Route path='/userprofile' element={<UserPrivateProfile user={user} fetchUserData={fetchUserData} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
-          <Route path='/public-profile' element={<UserPublicProfile user={user} />}></Route>
+          <Route path='/public-profile' element={<UserPublicProfile user={user} fetchUserData={fetchUserData} />}></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}

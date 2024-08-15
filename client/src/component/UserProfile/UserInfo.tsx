@@ -10,9 +10,11 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const UserInfo = ({
+  fetchUserData,
+  user,
   avatar,
   bio,
   city,
@@ -26,6 +28,12 @@ const UserInfo = ({
   handleUserNameChange,
 }) => {
   const [editableUserName, setEditableUserName] = useState(userName);
+
+  useEffect(() => {
+    fetchUserData();
+    // fetchWeather(user.city, user.state);
+  }, [user]);
+
 
   return (
     <>
