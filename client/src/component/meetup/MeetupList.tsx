@@ -41,7 +41,7 @@ const meetupUpdate = (): void =>{
       headers: {'Content-Type': image.type}
     })
   }).then(()=>{
-const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://my1test1bucket.s3.amazonaws.com/${image.name}`, id}
+const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{
@@ -83,24 +83,6 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
-// const check = (): void =>{
-// const checkList: Array<T> = []
-// const edit: Array<T> = []
-// for(let i = 0; i < join.length; i++){
-//   if(!checkList.includes(join?.[i])){
-//     checkList.push(join?.[i])
-//   }
-// }
-// for(let i = 0; i < pub.length; i++){
-//   if(!checkList.includes(pub?.[i].id)){
-//     edit.push(pub?.[i])
-//   }
-// }
-// }
-
-// useEffect(()=>{
-//   check()
-// },[])
 useEffect(()=>{
   if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
     if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){

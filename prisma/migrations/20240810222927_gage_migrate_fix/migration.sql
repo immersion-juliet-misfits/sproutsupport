@@ -7,9 +7,9 @@
 
 */
 -- AlterTable
-ALTER TABLE `Post` DROP COLUMN `imageUrl`,
-    ADD COLUMN `image_id` INTEGER NULL;
+-- ALTER TABLE `Post` DROP COLUMN `imageUrl`,
+--     ADD COLUMN `image_id` INTEGER NULL;
 
 -- AlterTable
-ALTER TABLE `User` DROP COLUMN `latitude`,
-    DROP COLUMN `longitude`;
+-- ALTER TABLE `User` DROP COLUMN `latitude`,
+--     DROP COLUMN `longitude`;

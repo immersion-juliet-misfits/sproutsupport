@@ -7,15 +7,15 @@
 
 */
 -- AlterTable
-ALTER TABLE `Comment` ADD COLUMN `message` VARCHAR(191) NOT NULL,
-    ADD COLUMN `postId` INTEGER NOT NULL;
+-- ALTER TABLE `Comment` ADD COLUMN `message` VARCHAR(191) NOT NULL,
+--     ADD COLUMN `postId` INTEGER NOT NULL;
 
 -- AlterTable
-ALTER TABLE `User` DROP COLUMN `points`,
-    MODIFY `level` INTEGER NULL;
+-- ALTER TABLE `User` DROP COLUMN `points`,
+--     MODIFY `level` INTEGER NULL;
 
 -- CreateIndex
-CREATE INDEX `Comment_postId_fkey` ON `Comment`(`postId`);
+-- CREATE INDEX `Comment_postId_fkey` ON `Comment`(`postId`);
 
 -- AddForeignKey
-ALTER TABLE `Comment` ADD CONSTRAINT `Comment_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+-- ALTER TABLE `Comment` ADD CONSTRAINT `Comment_postId_fkey` FOREIGN KEY (`postId`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

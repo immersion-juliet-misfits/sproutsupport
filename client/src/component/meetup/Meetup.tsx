@@ -29,46 +29,14 @@ const getMeetups = (): void => {
   const url: string = `/meetup/all/${user.id}`
   axios.get(url)
 .then(({data})=>{
-// setList(data)
-const yours = [];
-const pub = []
-for(let i = 0; i < data.length; i++){
-  if(data[i].userId === user.id){
-    yours.push(data[i])
-  }else{
-  pub.push(data[i])
-  }
-  }
-axios.get('/meetup/Attendee')
-  .then(async (result)=>{
-    const meetTest: Array<T> = []
-    const editPub: Array<T> = []
-    const arr = result.data
-    let fuse: Array<T> = []
-for(let i = 0; i < arr.length; i++){
-  if(arr[i].userId === user.id && !meetTest.includes(arr[i].meet_id) ){
-meetTest.push(arr[i].meet_id)
-  } 
-}
-for(let i = 0; i < pub.length; i++){
-  if(!meetTest.includes(pub[i].id)){
-editPub.push(pub[i])
-  }else{
-    fuse.push(pub[i])
-  }
-}
-fuse = yours.concat(fuse);
-setYourAndJoin(fuse)
-setPublicMeetups(editPub)
-})
-.catch((err)=>{
-  console.error('cant\'t find Attendee: ', err)
-})
+setYourMeetups(data.yours)
+setJoinedMeetups(data.join)
+setPublicMeetups(data.pub)
+setYourAndJoin(data.combined)
 
-setYourMeetups(yours)
-if(data[0] !== undefined){
-setDueDate(data[0].time_date)
-let dueDe: any = data[0].time_date[14] + data[0].time_date[15]
+if(data.combined[0] !== undefined){
+setDueDate(data.combined[0].time_date)
+let dueDe: any = data.combined[0].time_date[14] + data.combined[0].time_date[15]
 if(dueDe[0] === '0'){
   dueDe.slice(1)
 }
@@ -82,7 +50,7 @@ dueDe = parseInt(dueDe)
 //  }
 }
 
-let date: any = data[0].time_date.split(' ')
+let date: any = data.combined[0].time_date.split(' ')
 let hour: any = date[1].split(':')
 hour[1] = dueDe
 hour = hour.join(':')
@@ -103,35 +71,7 @@ setDueDelete(date)
 })
 }
 
-const getJoinMeetups = (): void =>{
-  axios.get('/meetup/Attendee')
-  .then(({data})=>{
-    const meetTest: Array<T> = []
-    const meetEvent: Array<T> = []
-for(let i = 0; i < data.length; i++){
-  if(data[i].userId === user.id && !meetTest.includes(data[i].meet_id) ){
-meetTest.push(data[i].meet_id)
-  }
-}
-axios.get('/meetup/all')
-.then(({data})=>{
-  for(let i = 0; i < data.length; i++){
-    if(meetTest.includes(data[i].id) ){
-  meetEvent.push(data[i])
-    }
-  }
-setJoinedMeetups(meetEvent)
-})
-.catch((err)=>{
-  console.error('Error in Meetup.tsx can\'t get list of meetups: ', err)
-})
 
-
-  })
-  .catch((err)=>{
-    console.error('can\'t get join meetups: ', err)
-  })
-}
 
 const createSwapUpdate = (): void =>{
   const change = inputSwap ? false : true;
@@ -148,16 +88,19 @@ const compare = (): void =>{
   const timeleft: string = dayjs(time).to(dueDate)
   const todayOrAfter: boolean = dayjs(time).isSameOrAfter(dueDate)
   const passDueDate: boolean = dayjs(time).isSameOrAfter(dueDelete)
+  let fromJoin = 'your meetup '
 
-  setTimeLeft(timeleft)
+if(yourAndJoin[0].userId !== user.id){
+  fromJoin = 'joined meetup '
+}
+
+  setTimeLeft(timeleft + ' for ' + fromJoin + yourAndJoin[0].eventName)
 
 if(todayOrAfter === true && passDueDate === true){
-  console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
       const url = 'meetup/delete/' + yourAndJoin[0].id
   axios.delete(url)
   .then(()=>{
     refresh()
-    console.log('delete')
   })
   .catch((err: any)=>{
     console.error('Error can\'t update: ', err)
@@ -182,19 +125,18 @@ getTime()
  compare()
   }
 }
+
 const refresh = (): void  =>{
   getMeetups()
-  getJoinMeetups()
 }
 
 useEffect(()=>{
   getMeetups()
   getTime()
-  getJoinMeetups()
 }, [])
 
   return (<div>
-    <script>{window.setInterval(doubleCall, 30000)}</script>
+    <script>{window.setInterval(doubleCall, 10000)}</script>
     <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 

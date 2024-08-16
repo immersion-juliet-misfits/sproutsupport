@@ -5,5 +5,5 @@
 
 */
 -- AlterTable
-ALTER TABLE `User` DROP COLUMN `points`,
-    MODIFY `level` INTEGER NULL;
+-- ALTER TABLE `User` DROP COLUMN `points`,
+--     MODIFY `level` INTEGER NULL;
