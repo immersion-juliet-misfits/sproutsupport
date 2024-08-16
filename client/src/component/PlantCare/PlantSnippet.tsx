@@ -10,6 +10,7 @@ const socket = io('http://localhost:8000');
 
 const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick }) => {
   const [tasks, setTasks] = useState([]);
+  const [doneTasks, setDoneTasks] = useState([]);
   const [allTasks, setAll] = useState([]);
   const [newName, setNewName] = useState(plant.nickname)
   const [newDescription, setNewDescription] = useState(plant.description)
@@ -65,18 +66,28 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       })
   }
 
+  const fetchDoneTasks = () => {
+    axios.get(`/plants/doneTasks/${plant.id}`)
+      .then(({data}) => {
+        setDoneTasks(data)
+      })
+  }
+
   useEffect(() => {
     fetchTasks()
     fetchTaskProgress()
+    fetchDoneTasks()
     socket.on('overdue', () => {
       fetchTasks()
       fetchTaskProgress()
+      fetchDoneTasks()
     }) // task on
 
       return (() => {
         socket.off('overdue', () => {
           fetchTasks()
           fetchTaskProgress()
+          fetchDoneTasks()
         })
       })
   }, [])
@@ -171,12 +182,12 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     <Box>
       {allTasks.length > 0 &&
       <Flex gap={4} justifyContent={"center"} wrap="wrap">
-       {allTasks.map((task) => (
+       {doneTasks.map((task) => (
          <div>
 
           {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
     <CircularProgress trackColor='green.100' color='green.600' size={67} value={progress[task.id]}>
-      {tasks.some((currTask) => currTask.id === task.id) ? (<CircularProgressLabel color={"tomato"}>{task.taskName}</CircularProgressLabel>) : (<CircularProgressLabel>{task.taskName}</CircularProgressLabel>)}
+      <CircularProgressLabel>{task.taskName}</CircularProgressLabel>
     </CircularProgress>
           </div>
         ))}
@@ -186,7 +197,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     </CardBody>
     <CardFooter>
       <DeleteIcon color="tomato" onClick={deletePlant}/>
-      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} getScore={getScore} updateProgressBar={updateProgressBar} fetchTaskProgress={fetchTaskProgress} allTasks={allTasks}/>
+      <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} fetchDoneTasks={fetchDoneTasks} getScore={getScore} updateProgressBar={updateProgressBar} fetchTaskProgress={fetchTaskProgress} allTasks={allTasks} doneTasks={doneTasks}/>
     </CardFooter>
     </Card>
   )

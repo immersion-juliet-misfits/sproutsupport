@@ -19,9 +19,10 @@ import {
   ProgressLabel
 } from '@chakra-ui/react';
 import axios from 'axios';
+import { motion } from "framer-motion"
 import { Link } from 'react-router-dom';
 
-const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetchTaskProgress, allTasks }) => {
+const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetchTaskProgress, allTasks, fetchDoneTasks, doneTasks }) => {
   const [progress, setProgress] = useState({})
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -34,6 +35,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
       })
       .then(() => {
         fetchTaskProgress()
+        fetchDoneTasks()
         fetchTasks()
       })
   }
@@ -88,19 +90,26 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
           <ModalCloseButton />
           <ModalBody>
           <Heading as="h2" size="lg">Tasks</Heading>
-          {allTasks.length > 0 &&
-              allTasks.map((task) => (
-                <div>
-                <Progress colorScheme="green" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]}>
+          {!tasks.length && <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{'No tasks due :)'}</Heading>}
+          {tasks.length > 0 && // no awkward spacing now
+              tasks.map((task) => (
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                {progress[task.id] >= 100 &&
+                  <Progress colorScheme="green" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
                   <ProgressLabel>
-                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"} onClick={() => handleCompletion(task)}>{task.taskName}</Heading>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{task.taskName}</Heading>
                   </ProgressLabel>
                 </Progress>
-                <br></br>
-                {/* <p key={task.id} style={{ color: 'red' }}>
-                  {task.taskName}
-                </p> */}
-                </div>
+                }
+                  <br></br>
+                {/* {progress[task.id] < 100 &&
+                  <Progress opacity={50} colorScheme="green" hasStripe={true} isAnimated={true} bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
+                  <ProgressLabel>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{task.taskName}</Heading>
+                  </ProgressLabel>
+                </Progress>
+                } */}
+                </motion.div>
               ))}
           </ModalBody>
           <ModalFooter>
