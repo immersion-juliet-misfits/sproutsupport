@@ -133,10 +133,10 @@ const refresh = (): void  =>{
 useEffect(()=>{
   getMeetups()
   getTime()
+  window.setInterval(doubleCall, 10000)
 }, [])
 
   return (<div>
-    <script>{window.setInterval(doubleCall, 10000)}</script>
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}

@@ -81,7 +81,13 @@ const meetupSwap = (event: object): void =>{
   if(swap === 'none'){
     setId(event.id)
     setDateTime(event.time_date)
-    setLocation(event.location)
+    const arr = event.location.split('\n')
+    for(let i = 0; i < arr.length; i++){
+      arr[i] = arr[i].split(':')
+    }
+    setLocation(arr[0][1])
+    setCity(arr[2][1])
+    setSt(arr[1][1])
     setDescription(event.description)
     setImage(event.imageUrl)
     setEventName(event.eventName)
@@ -126,8 +132,8 @@ setFillIn(false)
       {fillIn === false && <Button colorScheme="red" onClick={()=>{alert('fill in all inputs and for time reference the clock')}}>can't create</Button>}
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' placeholder='fill in city'></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' placeholder='fill in state'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' value={city}></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' value={st}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
