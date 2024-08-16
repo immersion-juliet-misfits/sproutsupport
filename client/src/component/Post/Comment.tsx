@@ -33,8 +33,8 @@ const Comment = ({ postId }) => {
   const addComment = () => {
     return axios
       .post('comment/comment', { message: input, postId })
-      .then(() => {
-        // console.log('s', data)
+      .then((data) => {
+        console.log('s', data)
         getComments();
       })
       .then(() => {
@@ -75,8 +75,8 @@ const Comment = ({ postId }) => {
 
   return (
     <Container>
-      {comments.map((comment: object) => (
-        <Flex key={comment.id} boxSize='large' >
+      { comments.map((comment: object) => (
+        <Flex boxSize='large' key={comment.id}>
           <Box flex='1'>
             <Text>{comment.message}</Text>
           </Box>

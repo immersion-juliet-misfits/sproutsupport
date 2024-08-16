@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Card,
+  CardBody,
+  CardFooter,
   Container,
+  Divider,
   Flex,
   Box,
   Image,
@@ -12,6 +15,7 @@ import {
   Grid,
   GridItem,
   IconButton,
+  Stack,
 } from '@chakra-ui/react';
 import {
   Input,
@@ -56,7 +60,7 @@ const Home = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
-        // console.log('data', data);
+        console.log('data', data);
         setPosts(data);
       })
       .catch((err) => {
@@ -166,51 +170,62 @@ const Home = () => {
           <ChakraLink as={ReactRouterLink} to='/createPost'>
             Create Post
           </ChakraLink>
-          <Flex alignItems='center' gap='2' direction='column-reverse' justify='center'>
+          <Flex
+            alignItems='center'
+            gap='2'
+            direction='column-reverse'
+            justify='center'
+          >
             {posts.map((post) => {
               return (
                 <Card
-                  box-sizing='large'
+                  // box-sizing='large'
                   alignItems='center'
                   bg='#c1e3c9'
                   key={post.id}
                   direction='column'
                 >
-                  <Box boxSize='180px'>
-                    <Image src={post.imageUrl} />
-                  </Box>
-                  <Box>
-                    <Editable
-                      textAlign='center'
-                      defaultValue={post.message}
-                      onSubmit={() => {
-                        updateMessage(post.id);
-                      }}
-                      onChange={(newMessage) => {
-                        setMessage(newMessage);
-                      }}
-                      fontSize='2xl'
-                      isPreviewFocusable={false}
-                    >
-                      <EditablePreview />
-                      <Input as={EditableInput} />
-                      <EditableControls />
-                    </Editable>
-                    <IconButton
-                      isRound={true}
-                      variant='solid'
-                      colorScheme='yellow'
-                      aria-label='Done'
-                      fontSize='20px'
-                      onClick={() => {
-                        handleDelete(post.id);
-                      }}
-                      icon={<DeleteIcon />}
-                    />
-                  </Box>
-                  <Flex direction='column'>
-                    <Comment postId={post.id} />
-                  </Flex>
+                  <CardBody boxSize='380px'>
+                    {/* <CardBody > */}
+                    <Image src={post.imageUrl} boxSize='360'/>
+                  </CardBody>
+                  <Stack mt='6' spacing='3'>
+                    <Flex flexDirection='row' align='left'>
+                      <Editable
+                        textAlign='center'
+                        defaultValue={post.message}
+                        onSubmit={() => {
+                          updateMessage(post.id);
+                        }}
+                        onChange={(newMessage) => {
+                          setMessage(newMessage);
+                        }}
+                        fontSize='2xl'
+                        isPreviewFocusable={false}
+                      >
+                        <EditablePreview />
+                        <Input as={EditableInput} />
+                        <EditableControls />
+                      </Editable>
+                      <IconButton
+                        size='small'
+                        isRound={true}
+                        variant='solid'
+                        // colorScheme='yellow'
+                        aria-label='Done'
+                        fontSize='15px'
+                        onClick={() => {
+                          handleDelete(post.id);
+                        }}
+                        icon={<DeleteIcon />}
+                      />
+                    </Flex>
+                  </Stack>
+                  <CardFooter>
+                    <Flex direction='column'>
+                      <Comment postId={post.id} />
+                    </Flex>
+                  </CardFooter>
                 </Card>
               );
             })}
