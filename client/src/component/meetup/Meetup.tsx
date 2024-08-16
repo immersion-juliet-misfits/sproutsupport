@@ -5,6 +5,7 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
+import TopBar from '../UserProfile/TopBar';
 
 const Meetup = ({user}: {user: object}) => {
 // const [weather, setWeather] = useState({})
@@ -40,12 +41,12 @@ axios.get('/meetup/Attendee')
 for(let i = 0; i < arr.length; i++){
   if(arr[i].userId === user.id && !meetTest.includes(arr[i].meet_id) ){
 meetTest.push(arr[i].meet_id)
-  } 
+  }
 }
 for(let i = 0; i < pub.length; i++){
   if(!meetTest.includes(pub[i].id)){
 editPub.push(pub[i])
-  } 
+  }
 }
 setPublicMeetups(editPub)
 })
@@ -212,15 +213,17 @@ useEffect(()=>{
   getJoinMeetups()
 }, [])
 
-  return (<div>
-    <script>{window.setInterval(doubleCall, 60000)}</script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
+  return (
+  <div>
+     <Box w='1100px' mx='auto' >
+     <TopBar/>
+    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box>
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
-    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
+    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>}
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>} 
-    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>} 
+    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>}
+    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>}
+    </Box>
     </div>)
 };
 

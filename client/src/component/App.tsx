@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import ssTheme from './ssTheme';
 import Home from './Home';
 import CreatePost from './Post/CreatePost';
@@ -22,8 +22,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast();
-  const BUCKET_NAME = 'my1test1bucket';
-  // const BUCKET_NAME = 'sprout-support';
+  // const BUCKET_NAME = 'my1test1bucket';
+  const BUCKET_NAME = 'sprout-support';
 
   const fetchUserData = () => {
     axios
@@ -73,6 +73,7 @@ const App = () => {
   return (
 
     <ChakraProvider theme={ssTheme}>
+      <ColorModeScript initialColorMode={ssTheme.config.initialColorMode} />
       <div className='App'>
         <Routes>
           <Route path='/login' element={<Login />} />

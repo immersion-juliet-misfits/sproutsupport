@@ -30,7 +30,8 @@ import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import Comment from './Post/Comment';
-import NavBar from './NavBar';
+// import NavBar from './NavBar';
+import TopBar from './UserProfile/TopBar';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -99,7 +100,8 @@ const Home = () => {
   }, []);
 
   return (
-    <Box>
+    <Box w='1100px' mx='auto' >
+      <TopBar/>
       <Grid
         w='1100px'
         mx='auto'
@@ -109,64 +111,11 @@ const Home = () => {
         borderRadius='lg'
         overflow='hidden'
         boxShadow='md'
+        bg='#D3FFEB'
       >
-        <Grid
-          className='header-grid'
-          templateRows='repeat(1, 1fr)'
-          templateColumns='repeat(5, 1fr)'
-          h='100px'
-          gap={4}
-          mb={4}
-        >
-          <GridItem
-            colSpan={1}
-            bg='teal'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Box
-              w='100px'
-              h='100px'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-            >
-              Site Logo
-            </Box>
-          </GridItem>
-          <GridItem
-            colSpan={3}
-            bg='#c1e3c9'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Heading as='h1' size='2xl'>
-              Posts
-            </Heading>
-          </GridItem>
-          <GridItem
-            colSpan={1}
-            bg='teal'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Box
-              w='100px'
-              h='100px'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-            >
-              <NavBar />
-            </Box>
-          </GridItem>
-        </Grid>
         {/* below are html for posts */}
 
-        <Flex bg='teal' py={4} direction='column'>
+        <Flex  py={4} direction='column'>
           <ChakraLink as={ReactRouterLink} to='/createPost'>
             Create Post
           </ChakraLink>
@@ -175,13 +124,14 @@ const Home = () => {
             gap='2'
             direction='column-reverse'
             justify='center'
+            bg='#5AB78D'
           >
             {posts.map((post) => {
               return (
                 <Card
                   // box-sizing='large'
                   alignItems='center'
-                  bg='#c1e3c9'
+                  bg='#A3EECC'
                   key={post.id}
                   direction='column'
                 >
