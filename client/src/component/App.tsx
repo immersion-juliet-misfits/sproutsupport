@@ -21,9 +21,10 @@ const App = () => {
   const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
 
-  const toast = useToast();
-  // const BUCKET_NAME = 'my1test1bucket';
-  const BUCKET_NAME = 'sprout-support';
+  const toast = useToast()
+  //const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'sprout-support';
+  const BUCKET_NAME = 'sproutsupportbucket'
 
   const fetchUserData = () => {
     axios
@@ -43,7 +44,7 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData();
 
-      let notif = (task) => {
+      const notif = (task) => {
 
         toast({
           title: `${task.taskPlant.nickname}`,
