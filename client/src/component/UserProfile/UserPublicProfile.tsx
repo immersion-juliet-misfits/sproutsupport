@@ -23,7 +23,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
     axios
       .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
       .then((response) => {
-        console.log('Retrieved weather data:', response.data);
+        // console.log('Retrieved weather data:', response.data);
         const data = response.data;
 
         setWeatherData(data.currentConditions);

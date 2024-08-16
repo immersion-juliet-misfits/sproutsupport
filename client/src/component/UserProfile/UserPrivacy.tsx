@@ -1,9 +1,8 @@
 import {
   Button,
-  Checkbox,
   Grid,
   GridItem,
-  Heading,
+  Switch,
   VStack
 } from '@chakra-ui/react';
 
@@ -20,18 +19,15 @@ const UserPrivacy = () => {
         <GridItem bg='green.500' p='10px'>
           Toggle to choose what's displayed on your public profile
           <VStack align='start' pl={4}>
-            <Checkbox>My Plants</Checkbox>
-            <Checkbox>My Created Meetups</Checkbox>
-            <Checkbox>Meetups I will attend</Checkbox>
-            <Checkbox>My Forum Posts</Checkbox>
-            <Checkbox>Light VS Dark mode</Checkbox>
-            <Checkbox>Display your plants?</Checkbox>
-            <Checkbox>Display your Meetups??</Checkbox>
-            <Checkbox>Display link to your Forum posts?</Checkbox>
-            <Checkbox> Accept messages from strangers?</Checkbox>
+            <Switch>Display Site In Dark Mode?</Switch>
+            <Switch>Display Your Plants?</Switch>
+            <Switch>Display Your Created Meetups?</Switch>
+            <Switch>Display Your RSVP'd Meetups?</Switch>
+            <Switch>Display Your Forum Posts?</Switch>
+            {/* <Switch> Accept messages from strangers?</Switch> */}
           </VStack>
         </GridItem>
-        <GridItem bg='green.500' h='150px'>
+        {/* <GridItem bg='green.500' h='150px'>
           Blocking - Enter the name of the User you want to block. <p>
             You will no longer see each others: profiles, forum posts, or Meet Ups. </p>
         </GridItem>
@@ -40,10 +36,10 @@ const UserPrivacy = () => {
         </GridItem>
         <GridItem bg='green.500' h='150px'>
           Email/Password/Login Method Editing will be here
-        </GridItem>
+        </GridItem> */}
         <GridItem bg='green.500' h='100px'>
           <Button colorScheme='red'>
-            Delete Account Placeholder
+            Delete Account
           </Button>
         </GridItem>
       </Grid>

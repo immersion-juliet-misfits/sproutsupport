@@ -1,15 +1,9 @@
 import axios from 'axios';
+import { useState } from 'react';
 import {
-  // useEffect,
-  useState,
-} from 'react';
-import {
-  // Box,
   ButtonGroup,
   Flex,
   Grid,
-  // GridItem,
-  // Heading,
   IconButton,
   useEditableControls,
 } from '@chakra-ui/react';
@@ -139,21 +133,6 @@ const UserPrivateProfile = ({
     }));
   };
 
-  // const handleLocationChange = (event) => {
-  //   event.preventDefault();
-
-  //   const { name, value } = event.target;
-
-  //   if (name === 'city' || name === 'state') {
-  //     setLocation((prevLocation) => ({
-  //       ...prevLocation,
-  //       [name]: value,
-  //     }));
-  //   } else {
-  //     fetchWeather(location.city, location.state);
-  //   }
-  // };
-
   const handleBioChange = (newBio: string) => {
     axios
       .patch('/user/updateBio', { bio: newBio })
@@ -197,7 +176,7 @@ const UserPrivateProfile = ({
         bg='#D3FFEB'
         w='1100px'
         mx='auto'
-        borderRadius='lg lg 0 0'
+        borderRadius='lg'
         overflow='hidden'
         boxShadow='md'
         templateRows='1fr'
@@ -208,45 +187,41 @@ const UserPrivateProfile = ({
         justifyContent='flex-end'
       >
         <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} />
-      </Grid>
-      <Grid
-        w='1100px'
-        mx='auto'
-        mt='0'
-        borderRadius='0 0 lg lg'
-        // border='15px solid red'
-        border='15px solid #D3FFEB'
-        borderTop='0'
-        bg='#5AB78D'
-        gap={10}
-        overflow='hidden'
-        boxShadow='md'
-        templateRows='1fr'
-        templateColumns='1fr'
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        justifyContent='center'
-        py={4}
-      >
-        {currentView === 'info' && (
-          <UserInfo
-            fetchUserData={fetchUserData}
-            user={user}
-            avatar={user.avatar}
-            bio={user.bio}
-            city={user.city}
-            state={user.state}
-            userName={user.userName}
-            EditableControls={EditableControls}
-            handleAvatarChange={handleAvatarChange}
-            handleBioChange={handleBioChange}
-            handleLocationChange={handleLocationChange}
-            handleInputChange={handleInputChange}
-            handleUserNameChange={handleUserNameChange}
-          />
-        )}
-        {currentView === 'help' && <UserPrivacy />}
+        <Grid
+          w='1085px'
+          mx='auto'
+          mt='0'
+          bg='#5AB78D'
+          gap={10}
+          overflow='hidden'
+          boxShadow='md'
+          templateRows='1fr'
+          templateColumns='1fr'
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          py={4}
+        >
+          {currentView === 'info' && (
+            <UserInfo
+              fetchUserData={fetchUserData}
+              user={user}
+              avatar={user.avatar}
+              bio={user.bio}
+              city={user.city}
+              state={user.state}
+              userName={user.userName}
+              EditableControls={EditableControls}
+              handleAvatarChange={handleAvatarChange}
+              handleBioChange={handleBioChange}
+              handleLocationChange={handleLocationChange}
+              handleInputChange={handleInputChange}
+              handleUserNameChange={handleUserNameChange}
+            />
+          )}
+          {currentView === 'help' && <UserPrivacy />}
+        </Grid>
       </Grid>
     </Grid>
   );

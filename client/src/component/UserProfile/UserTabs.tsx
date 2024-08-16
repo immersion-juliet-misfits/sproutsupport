@@ -6,17 +6,13 @@ const UserTabs = ({ handleLogOut, setCurrentView }) => {
       className='UserTabs'
       variant='enclosed'
       isFitted
-      w='95%'
-      defaultIndex={3}
-      // border='5px solid purple'
+      w='100%'
+      defaultIndex={2}
     >
       <TabList className='UserTabList'>
         <Tab className='uTab' onClick={handleLogOut}>
           Log Out
         </Tab>
-        {/* <Tab className='uTab' onClick={goToPublicProfile}>
-          Profile
-        </Tab> */}
         <Tab className='uTab' onClick={() => setCurrentView('help')}>
           Privacy
         </Tab>
