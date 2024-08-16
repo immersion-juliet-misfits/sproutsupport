@@ -43,7 +43,7 @@ app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
-app.use('/image', Images)
+app.use('/comment', Comments)
 
 // GAuth Session middleware
 app.use(
@@ -97,8 +97,6 @@ passport.use(
               email: profile.emails?.[0].value,
               avatar:
               'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
-              latitude: 64.7552,
-              longitude: 147.3534,
             },
           });
         }
@@ -224,4 +222,5 @@ httpServer.listen(port, () => {
 });
 // let test = 'hey'
 job.start();
+//sendEmail.start()
 export { io }

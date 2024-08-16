@@ -8,23 +8,23 @@ datasource db {
 }
 
 model User {
-  id                Int            @id @default(autoincrement())
-  google_id         String         @unique
-  city              String?
-  state             String?
-  userName          String?
-  email             String?        @unique
-  password          String?
-  avatar            String?
-  bio               String?
-  level             Int            @default(1)
-  points            Int            @default(0)
-  meets             Meet[]
-  notifications     Notification[]
-  plants            Plant[]
-  posts             Post[]
+  id            Int            @id @default(autoincrement())
+  google_id     String         @unique
+  city          String?
+  state         String?
+  userName      String?
+  email         String?        @unique
+  password      String?
+  avatar        String?
+  bio           String?
+  level         Int            @default(1)
+  points        Int            @default(0)
+  meets         Meet[]
+  notifications Notification[]
+  plants        Plant[]
+  posts         Post[]
   // comments Comment[]
-  attendees         Attendee[]
+  attendees     Attendee[]
 }
 
 model Image {
@@ -41,6 +41,8 @@ model Meet {
   description String
   imageUrl    String
   userId      Int
+  message     String?
+  status      String
   attendees   Attendee[]
   owner       User       @relation(fields: [userId], references: [id])
 
@@ -89,9 +91,9 @@ model Post {
   id       Int       @id @default(autoincrement())
   userId   Int
   message  String
-  imageUrl String
-  comment  Comment[]
+  image_id Int?
   owner    User      @relation(fields: [userId], references: [id])
+  Comment  Comment[]
 
   @@index([userId], map: "Post_userId_fkey")
 }

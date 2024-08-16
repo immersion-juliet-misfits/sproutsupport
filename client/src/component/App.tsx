@@ -22,8 +22,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast()
-  const BUCKET_NAME = 'my1test1bucket';
+  //const BUCKET_NAME = 'my1test1bucket';
   // const BUCKET_NAME = 'sprout-support';
+  const BUCKET_NAME = 'sproutsupportbucket'
 
   const fetchUserData = () => {
     axios.get('/api/checkAuth')
@@ -42,7 +43,7 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData()
 
-      let notif = (task) => {
+      const notif = (task) => {
 
         toast({
           title: `${task.taskPlant.nickname}`,
@@ -91,7 +92,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
-  //  </ChakraProvider>
+    </ChakraProvider>
   );
 };
 
