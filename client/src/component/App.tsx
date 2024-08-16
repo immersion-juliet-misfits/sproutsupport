@@ -11,7 +11,6 @@ import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
-import Post from './Post';
 import io from 'socket.io-client';
 import { useToast } from '@chakra-ui/react'
 
@@ -43,8 +42,8 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData()
 
-      const notif = (task) => {
-        // console.log(task, 'hello')
+      let notif = (task) => {
+
         toast({
           title: `${task.taskPlant.nickname}`,
           description: `${task.taskName}`,
@@ -71,6 +70,7 @@ const App = () => {
   }
 
   return (
+
     <ChakraProvider theme={ssTheme}>
       <div className='App'>
         <Routes>
@@ -91,7 +91,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
-   </ChakraProvider>
+  //  </ChakraProvider>
   );
 };
 

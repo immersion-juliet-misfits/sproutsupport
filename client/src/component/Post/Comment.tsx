@@ -14,6 +14,7 @@ import {
   Box,
   Center,
   Text,
+  Container,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
@@ -56,27 +57,6 @@ const Comment = ({ postId }) => {
       });
   };
 
-  const renderComments = () => {
-    return comments.map((comment: object) => (
-      <Flex color='black' key={comment.id}>
-        <Box flex='1' >
-          <Text>{comment.message}</Text>
-        </Box>
-        <Center w='100px' >
-          <Text>
-            <IconButton
-              mt={4}
-              onClick={() => {
-                deleteComment(comment.id);
-              }}
-              icon={<DeleteIcon />}
-            />
-          </Text>
-        </Center>
-      </Flex>
-    ));
-  };
-
   const deleteComment = (id: string) => {
     return axios
       .delete(`/comment/comment/${id}`)
@@ -94,31 +74,43 @@ const Comment = ({ postId }) => {
   }, []);
 
   return (
-    <div>
-      <Grid
-        h='200px'
-        templateRows='repeat(2, 1f)'
-        templateColumns='repeat(5, 1f)'
-        gap={4}
-      >
-        <GridItem colSpan={3} >{renderComments()}</GridItem>
-        <GridItem colSpan={1} >
+    <Container>
+      {comments.map((comment: object) => (
+        <Flex key={comment.id} boxSize='large' >
+          <Box flex='1'>
+            <Text>{comment.message}</Text>
+          </Box>
+          <Center w='100px'>
+            <Text>
+              <IconButton
+              size='small'
+                mt={2}
+                onClick={() => {
+                  deleteComment(comment.id);
+                }}
+                icon={<DeleteIcon />}
+              />
+            </Text>
+          </Center>
+        </Flex>
+      ))}
+      <Box>
         <FormControl isInvalid={isError}>
           <FormLabel>Comment</FormLabel>
           <Input type='post' value={input} onChange={handleInputChange} />
           {!isError ? (
             <FormHelperText>Press Submit to create comment.</FormHelperText>
           ) : (
-            <FormErrorMessage color='yellow'>A comment is required.</FormErrorMessage>
+            <FormErrorMessage color='yellow'>
+              A comment is required.
+            </FormErrorMessage>
           )}
           <Button mt={4} onClick={addComment}>
             Submit
           </Button>
         </FormControl>
-      </GridItem>
-      </Grid>
-
-    </div>
+      </Box>
+    </Container>
   );
 };
 
