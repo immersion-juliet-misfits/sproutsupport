@@ -43,19 +43,19 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData();
 
-    let notif = (task) => {
-      // console.log(task, 'hello')
-      toast({
-        title: `${task.taskPlant.nickname}`,
-        description: `${task.taskName}`,
-        status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'top-right',
-      });
-    };
+      let notif = (task) => {
 
-    socket.on('overdue', notif); // task on
+        toast({
+          title: `${task.taskPlant.nickname}`,
+          description: `${task.taskName}`,
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right'
+        })
+      }
+
+      socket.on('overdue', notif) // task on
 
     return () => {
       socket.off('overdue', notif); // then off to not double up upon re-render with update
@@ -71,8 +71,8 @@ const App = () => {
   }
 
   return (
+
     <ChakraProvider theme={ssTheme}>
-    {/* <ChakraProvider > */}
       <div className='App'>
         <Routes>
           <Route path='/login' element={<Login />} />

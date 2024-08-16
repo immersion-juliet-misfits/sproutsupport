@@ -139,6 +139,7 @@ app.get('/api/checkAuth', (req, res) => {
 
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
+
 // app.use('/plants', Plants);
 // app.use('/meetup', routerMeetup);
 // app.use('/upload', Upload);
