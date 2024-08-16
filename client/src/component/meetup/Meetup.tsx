@@ -134,6 +134,7 @@ const refresh = (): void  =>{
 useEffect(()=>{
   getMeetups()
   getTime()
+  window.setInterval(doubleCall, 10000)
 }, [])
 
   return (
