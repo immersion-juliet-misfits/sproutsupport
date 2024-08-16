@@ -26,7 +26,8 @@ const [publicMeetups, setPublicMeetups] = useState([])
 const [yourAndJoin, setYourAndJoin] = useState([])
 
 const getMeetups = (): void => {
-  axios.get('/meetup/all')
+  const url: string = `/meetup/all/${user.id}`
+  axios.get(url)
 .then(({data})=>{
 // setList(data)
 const yours = [];
@@ -149,13 +150,6 @@ const compare = (): void =>{
   const passDueDate: boolean = dayjs(time).isSameOrAfter(dueDelete)
 
   setTimeLeft(timeleft)
-
- //console.log(`current time ${time} \n dueDate ${dueDate} \n time left ${timeleft}`)
-//  console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
-// console.log(todayOrAfter ? 'it today or after' : 'it not today')
-// console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
-// console.log(dueDelete)
-console.log(yourAndJoin)
 
 if(todayOrAfter === true && passDueDate === true){
   console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')

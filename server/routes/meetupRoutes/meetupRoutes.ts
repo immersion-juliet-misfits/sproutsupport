@@ -6,7 +6,9 @@ const { WEATHER_KEY } = process.env;
 const prisma = new PrismaClient()
 const routerMeetup = express.Router()
 
-routerMeetup.get('/all', (req: Request, res: Response): void =>{
+routerMeetup.get('/all/:id', (req: Request, res: Response): void =>{
+  const {id} = req.params
+ const realId = parseInt(id)
   prisma.meet.findMany()
   .then((result: any)=>{
     res.status(200).send(result)
