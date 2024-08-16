@@ -8,6 +8,8 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
+  const [city, setCity] = useState('')
+  const [st, setSt] = useState('')
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState({})
@@ -31,17 +33,24 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
       case 'img':
       setImage(value)
       break;
+      case 'c':
+      setCity(value)
+      break;
+      case 's':
+      setSt(value)
+      break;
     }
   }
 
 const meetupUpdate = (): void =>{
+    const combine = `Location: ${location}\n State: ${st}\n City: ${city}`
   axios.get('/upload/url', { params: {filename: image.name}})
   .then(({data}) => {
     return axios.put(data, image, {
       headers: {'Content-Type': image.type}
     })
   }).then(()=>{
-const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
+const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{
@@ -117,6 +126,8 @@ setFillIn(false)
       {fillIn === false && <Button colorScheme="red" onClick={()=>{alert('fill in all inputs and for time reference the clock')}}>can't create</Button>}
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' placeholder='fill in city'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' placeholder='fill in state'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>

@@ -5,6 +5,8 @@ import React, {useState, useEffect} from 'react'
 const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, showSwitch: any}) => {
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
+  const [city, setCity] = useState('')
+  const [st, setSt] = useState('')
   const [eventName, setEventName] = useState('')
   const [description, setDescription] = useState('')
   const [image, setImage] = useState({})
@@ -27,11 +29,18 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
       case 'img':
       setImage(value)
       break;
+      case 'c':
+      setCity(value)
+      break;
+      case 's':
+      setSt(value)
+      break;
     }
   }
 
   const makeMeetup = (): void =>{
 if(image.name !== undefined){
+  const combine = `Location: ${location}\n State: ${st}\n City: ${city}`
   axios.get('/upload/url', { params: {filename: image.name}})
   .then(({data}) => {
     return axios.put(data, image, {
@@ -39,7 +48,7 @@ if(image.name !== undefined){
     })
   })
   .then(() => {
-    axios.post('/meetup/create', {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
+    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
     .then(()=>{
      refresh()
      showSwitch()
@@ -90,6 +99,8 @@ if(image.name !== undefined){
     <Box w={"500px"}>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder='mm/dd/year h:mm am/pm'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='fill in location'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' placeholder='fill in city'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' placeholder='fill in state'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='fill in eventName'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='fill in description'></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
