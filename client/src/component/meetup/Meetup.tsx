@@ -5,6 +5,7 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
+import TopBar from '../UserProfile/TopBar';
 import relativeTime from "dayjs/plugin/relativeTime"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 
@@ -135,13 +136,17 @@ useEffect(()=>{
   getTime()
 }, [])
 
-  return (<div>
-    <script>{window.setInterval(doubleCall, 10000)}</script>
+  return (
+  <div>
+     <Box w='1100px' mx='auto' >
+     <TopBar/>
+    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box>
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
-    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
+    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>}
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>} 
-    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>} 
+    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>}
+    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>}
+    </Box>
     </div>)
 };
 

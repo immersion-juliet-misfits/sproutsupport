@@ -130,7 +130,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                     day: 'numeric',
                   })}
                 </Text>
-                <Text>Temperature: {weatherData.temp ?? 'N/A'}°F</Text>
+                <Text>Temperature: { ((weatherData.temp * 9/5) + 32) ?? 'N/A'}°F</Text>
                 <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
                 <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
                 <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>

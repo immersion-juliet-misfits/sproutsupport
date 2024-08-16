@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import axios from 'axios'
-import { ChakraProvider } from '@chakra-ui/react';
+import axios from 'axios';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import ssTheme from './ssTheme';
-import Home from "./Home";
-import CreatePost from "./Post/CreatePost";
-import OwnedPlants from "./PlantCare/OwnedPlants";
-import PlantFinder from "./PlantCare/PlantFinder";
+import Home from './Home';
+import CreatePost from './Post/CreatePost';
+import OwnedPlants from './PlantCare/OwnedPlants';
+import PlantFinder from './PlantCare/PlantFinder';
 import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
-import Meetup from "./meetup/Meetup";
+import Meetup from './meetup/Meetup';
 import io from 'socket.io-client';
-import { useToast } from '@chakra-ui/react'
+import { useToast } from '@chakra-ui/react';
 
 const socket = io('http://localhost:8000');
 
@@ -27,8 +27,9 @@ const App = () => {
   const BUCKET_NAME = 'sproutsupportbucket'
 
   const fetchUserData = () => {
-    axios.get('/api/checkAuth')
-      .then(({data}) => {
+    axios
+      .get('/api/checkAuth')
+      .then(({ data }) => {
         setIsAuthenticated(data.isAuthenticated);
         setUser(data.currentUser);
         setLoading(false);
@@ -41,7 +42,7 @@ const App = () => {
 
   useEffect(() => {
     // Fetch Users authentication status
-    fetchUserData()
+    fetchUserData();
 
       const notif = (task) => {
 
@@ -57,9 +58,9 @@ const App = () => {
 
       socket.on('overdue', notif) // task on
 
-      return (() => {
-        socket.off('overdue', notif) // then off to not double up upon re-render with update
-      })
+    return () => {
+      socket.off('overdue', notif); // then off to not double up upon re-render with update
+    };
   }, []);
 
   const handleLogout = () => {
@@ -73,6 +74,7 @@ const App = () => {
   return (
 
     <ChakraProvider theme={ssTheme}>
+      <ColorModeScript initialColorMode={ssTheme.config.initialColorMode} />
       <div className='App'>
         <Routes>
           <Route path='/login' element={<Login />} />
@@ -81,15 +83,34 @@ const App = () => {
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
           <Route path='/createPost' element={<CreatePost user={user} />} />
-          <Route path='/myplants' element={<OwnedPlants user={user}/>}></Route>
-          <Route path='/plantfinder' element={<PlantFinder user={user}/>}></Route>
-          <Route path='/userprofile' element={<UserPrivateProfile user={user} fetchUserData={fetchUserData} setUser={setUser} onLogout={handleLogout} BUCKET_NAME={BUCKET_NAME} />}></Route>
-          <Route path='/public-profile' element={<UserPublicProfile user={user} fetchUserData={fetchUserData} />}></Route>
+          <Route path='/myplants' element={<OwnedPlants user={user} />}></Route>
+          <Route
+            path='/plantfinder'
+            element={<PlantFinder user={user} />}
+          ></Route>
+          <Route
+            path='/userprofile'
+            element={
+              <UserPrivateProfile
+                user={user}
+                fetchUserData={fetchUserData}
+                setUser={setUser}
+                onLogout={handleLogout}
+                BUCKET_NAME={BUCKET_NAME}
+              />
+            }
+          ></Route>
+          <Route
+            path='/public-profile'
+            element={
+              <UserPublicProfile user={user} fetchUserData={fetchUserData} />
+            }
+          ></Route>
           <Route
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
           />
-          <Route path='/meetup' element={<Meetup user={user}/>} />
+          <Route path='/meetup' element={<Meetup user={user} />} />
         </Routes>
       </div>
     </ChakraProvider>

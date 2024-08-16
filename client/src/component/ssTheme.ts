@@ -1,6 +1,19 @@
 import { extendTheme } from '@chakra-ui/react';
 
+const config = {
+  initialColorMode: "light", // or "dark" or "system"
+  useSystemColorMode: true, // If you want to use the system color mode preference
+};
+
+const colors = {
+  brand: {
+    500: "#f00", // Light mode
+    900: "#c00", // Dark mode
+  },
+};
+
 const ssTheme = extendTheme({
+  config,
   styles: {
     global: {
       'html, body': {

@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
   Card,
+  CardBody,
+  CardFooter,
   Container,
+  Divider,
   Flex,
   Box,
   Image,
@@ -12,6 +15,7 @@ import {
   Grid,
   GridItem,
   IconButton,
+  Stack,
 } from '@chakra-ui/react';
 import {
   Input,
@@ -26,7 +30,8 @@ import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import Comment from './Post/Comment';
-import NavBar from './NavBar';
+// import NavBar from './NavBar';
+import TopBar from './UserProfile/TopBar';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -56,7 +61,7 @@ const Home = () => {
     axios
       .get('/post/post')
       .then(({ data }) => {
-        // console.log('data', data);
+        console.log('data', data);
         setPosts(data);
       })
       .catch((err) => {
@@ -95,7 +100,8 @@ const Home = () => {
   }, []);
 
   return (
-    <Box>
+    <Box w='1100px' mx='auto' >
+      <TopBar/>
       <Grid
         w='1100px'
         mx='auto'
@@ -105,112 +111,71 @@ const Home = () => {
         borderRadius='lg'
         overflow='hidden'
         boxShadow='md'
+        bg='#D3FFEB'
       >
-        <Grid
-          className='header-grid'
-          templateRows='repeat(1, 1fr)'
-          templateColumns='repeat(5, 1fr)'
-          h='100px'
-          gap={4}
-          mb={4}
-        >
-          <GridItem
-            colSpan={1}
-            bg='teal'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Box
-              w='100px'
-              h='100px'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-            >
-              Site Logo
-            </Box>
-          </GridItem>
-          <GridItem
-            colSpan={3}
-            bg='#c1e3c9'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Heading as='h1' size='2xl'>
-              Posts
-            </Heading>
-          </GridItem>
-          <GridItem
-            colSpan={1}
-            bg='teal'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <Box
-              w='100px'
-              h='100px'
-              display='flex'
-              alignItems='center'
-              justifyContent='center'
-            >
-              <NavBar />
-            </Box>
-          </GridItem>
-        </Grid>
         {/* below are html for posts */}
 
-        <Flex bg='teal' py={4} direction='column'>
+        <Flex  py={4} direction='column'>
           <ChakraLink as={ReactRouterLink} to='/createPost'>
             Create Post
           </ChakraLink>
-          <Flex alignItems='center' gap='2' direction='column-reverse' justify='center'>
+          <Flex
+            alignItems='center'
+            gap='2'
+            direction='column-reverse'
+            justify='center'
+            bg='#5AB78D'
+          >
             {posts.map((post) => {
               return (
                 <Card
-                  box-sizing='large'
+                  // box-sizing='large'
                   alignItems='center'
-                  bg='#c1e3c9'
+                  bg='#A3EECC'
                   key={post.id}
                   direction='column'
                 >
-                  <Box boxSize='180px'>
-                    <Image src={post.imageUrl} />
-                  </Box>
-                  <Box>
-                    <Editable
-                      textAlign='center'
-                      defaultValue={post.message}
-                      onSubmit={() => {
-                        updateMessage(post.id);
-                      }}
-                      onChange={(newMessage) => {
-                        setMessage(newMessage);
-                      }}
-                      fontSize='2xl'
-                      isPreviewFocusable={false}
-                    >
-                      <EditablePreview />
-                      <Input as={EditableInput} />
-                      <EditableControls />
-                    </Editable>
-                    <IconButton
-                      isRound={true}
-                      variant='solid'
-                      colorScheme='yellow'
-                      aria-label='Done'
-                      fontSize='20px'
-                      onClick={() => {
-                        handleDelete(post.id);
-                      }}
-                      icon={<DeleteIcon />}
-                    />
-                  </Box>
-                  <Flex direction='column'>
-                    <Comment postId={post.id} />
-                  </Flex>
+                  <CardBody boxSize='380px'>
+                    {/* <CardBody > */}
+                    <Image src={post.imageUrl} boxSize='360'/>
+                  </CardBody>
+                  <Stack mt='6' spacing='3'>
+                    <Flex flexDirection='row' align='left'>
+                      <Editable
+                        textAlign='center'
+                        defaultValue={post.message}
+                        onSubmit={() => {
+                          updateMessage(post.id);
+                        }}
+                        onChange={(newMessage) => {
+                          setMessage(newMessage);
+                        }}
+                        fontSize='2xl'
+                        isPreviewFocusable={false}
+                      >
+                        <EditablePreview />
+                        <Input as={EditableInput} />
+                        <EditableControls />
+                      </Editable>
+                      <IconButton
+                        size='small'
+                        isRound={true}
+                        variant='solid'
+                        // colorScheme='yellow'
+                        aria-label='Done'
+                        fontSize='15px'
+                        onClick={() => {
+                          handleDelete(post.id);
+                        }}
+                        icon={<DeleteIcon />}
+                      />
+                    </Flex>
+                  </Stack>
+                  <CardFooter>
+                    <Flex direction='column'>
+                      <Comment postId={post.id} />
+                    </Flex>
+                  </CardFooter>
                 </Card>
               );
             })}
