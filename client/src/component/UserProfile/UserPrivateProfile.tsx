@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { useState } from 'react';
 import {
+  // Box,
+  Button,
   ButtonGroup,
   Flex,
   Grid,
   IconButton,
   useEditableControls,
+  useColorMode,
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +49,7 @@ const UserPrivateProfile = ({
     city: user.city || '',
     state: user.state || '',
   });
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const EditableControls = () => {
     const {
@@ -220,7 +224,9 @@ const UserPrivateProfile = ({
               handleUserNameChange={handleUserNameChange}
             />
           )}
-          {currentView === 'help' && <UserPrivacy />}
+          <p>Current color mode: {colorMode}</p>
+        <Button onClick={toggleColorMode}>Toggle color mode</Button>
+        {currentView === 'help' && <UserPrivacy />}
         </Grid>
       </Grid>
     </Grid>

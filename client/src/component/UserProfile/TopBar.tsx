@@ -50,7 +50,7 @@ const TopBar = () => {
         justifyContent='center'
       >
         <Heading as='h1' size='2xl'>
-          USER SETTINGS
+          Sprout Support
         </Heading>
       </GridItem>
       <GridItem
