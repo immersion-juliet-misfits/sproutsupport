@@ -5,6 +5,11 @@ import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
 import Nav from '../NavBar';
+import relativeTime from "dayjs/plugin/relativeTime"
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
+
+dayjs.extend(relativeTime)
+dayjs.extend(isSameOrAfter)
 
 const Meetup = ({user}: {user: object}) => {
 //  const [list, setList] = useState([])
@@ -19,8 +24,6 @@ const [yourMeetups, setYourMeetups] = useState([])
 const [joinedMeetups, setJoinedMeetups] = useState([])
 const [publicMeetups, setPublicMeetups] = useState([])
 const [yourAndJoin, setYourAndJoin] = useState([])
-const [zeroCheck, setZeroCheck] = useState(false)
-
 
 const getMeetups = (): void => {
   axios.get('/meetup/all')
@@ -36,7 +39,7 @@ for(let i = 0; i < data.length; i++){
   }
   }
 axios.get('/meetup/Attendee')
-  .then((result)=>{
+  .then(async (result)=>{
     const meetTest: Array<T> = []
     const editPub: Array<T> = []
     const arr = result.data
@@ -64,24 +67,23 @@ setPublicMeetups(editPub)
 setYourMeetups(yours)
 if(data[0] !== undefined){
 setDueDate(data[0].time_date)
-let dueDe: any = data[0].time_date[11] + data[0].time_date[12]
-
+let dueDe: any = data[0].time_date[14] + data[0].time_date[15]
 if(dueDe[0] === '0'){
   dueDe.slice(1)
 }
 dueDe = parseInt(dueDe)
-if(dueDe === 12){
-  dueDe = '01'
-}else{
-  dueDe = (dueDe + 1)
+// if(dueDe === 12){
+//   dueDe = '01'
+// }else{
+  dueDe = (dueDe + 10)/////////////////////////
   if(dueDe <= 9){
     dueDe = `0${dueDe}`
-  }
+//  }
 }
 
 let date: any = data[0].time_date.split(' ')
 let hour: any = date[1].split(':')
-hour[0] = dueDe
+hour[1] = dueDe
 hour = hour.join(':')
 date[1] = hour
 
@@ -136,123 +138,38 @@ const createSwapUpdate = (): void =>{
 }
 
 const getTime = (): void =>{
-const day: number | string = dayjs().date() > 9 ? dayjs().date() : `0${dayjs().date()}`
-const month: number | string = dayjs().month() > 9 ? dayjs().month() : `0${dayjs().month() + 1}`
-let hour: number | string = dayjs().hour() > 9 ? dayjs().hour() : `0${dayjs().hour()}`
-const minute: number | string = dayjs().minute() > 9 ? dayjs().minute() : `0${dayjs().minute()}`
-
-let am_pm: string = ' am'
-if(hour !== 'string'){
-if(hour > 12){
-  am_pm = ' pm'
-}
-}
-
-if(typeof hour !== 'string'){
-  if(hour > 12){
-  hour -= 12;
-  if(hour < 0){
-    hour *= -1
-  }
-  if(hour < 9){
-    hour = `0${hour}`
-  }
-  }
-  if(typeof hour !== 'string' && hour < 0 ){
-    hour *= -1
-  }
-}
-
-const time: string = '' + month + '/' + day + '/' + dayjs().year() + ' ' + hour + ':' + minute + am_pm
+const time: string = dayjs().format('MM/DD/YYYY hh:mm a')
 setCurrentTime(time)
-return time
 }
 
 const compare = (): void =>{
-  if(currentTime.length !== 0 && dueDate.length !== 0 && yourAndJoin[0] !== undefined){
-  let cur: Array<T> = currentTime?.split(' ')
-  const curDate: Array<T> = cur[0].split('/')
-  cur = cur.slice(1)
-  const curTime: Array<T> = cur[0].split(':')
-  cur = cur.slice(1)
-  cur = curTime.concat(cur)
-  cur = curDate.concat(cur)
-    let du: Array<T> = dueDate?.split(' ')
-    const duDate: Array<T> = du[0].split('/')
-    du = du.slice(1)
-    const duTime: Array<T> = du[0].split(':')
-    du = du.slice(1)
-    du = duTime.concat(du)
-    du = duDate.concat(du)
+  const time: string = dayjs().format('MM/DD/YYYY hh:mm a')
+  const timeleft: string = dayjs(time).to(dueDate)
+  const todayOrAfter: boolean = dayjs(time).isSameOrAfter(dueDate)
+  const passDueDate: boolean = dayjs(time).isSameOrAfter(dueDelete)
 
-const yearDiff: number = (parseInt(cur[2])) - (parseInt(du[2])) >= 0 ? (parseInt(cur[2])) - (parseInt(du[2])) : ((parseInt(cur[2])) - (parseInt(du[2]))) * -1
-if(cur[1][0] === 0){
-  cur[1] = cur[1].slice(1)
-}
-if(du[1][0] === 0){
-  du[1] = du[1].slice(1)
-}
+  setTimeLeft(timeleft)
 
-const dayDiff: number = (parseInt(cur[1])) - (parseInt(du[1])) >= 0 ? (parseInt(cur[1])) - (parseInt(du[1])) : ((parseInt(cur[1])) - (parseInt(du[1]))) * -1
-if(cur[0][0] === 0){
-  cur[0] = cur[0].slice(1)
-}
-if(du[0][0] === 0){
-  du[0] = du[0].slice(1)
-}
+ //console.log(`current time ${time} \n dueDate ${dueDate} \n time left ${timeleft}`)
+//  console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
+// console.log(todayOrAfter ? 'it today or after' : 'it not today')
+// console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
+// console.log(dueDelete)
+console.log(yourAndJoin)
 
-const monthDiff: number = (parseInt(cur[0])) - (parseInt(du[0])) >= 0 ? (parseInt(cur[0])) - (parseInt(du[0])) : ((parseInt(cur[0])) - (parseInt(du[0]))) * -1
-
-const hourDiff: number = (parseInt(cur[3])) - (parseInt(du[3])) >= 0 ? (parseInt(cur[3])) - (parseInt(du[3])) : ((parseInt(cur[3])) - (parseInt(du[3]))) * -1
-if(cur[4][0] === 0){
-  cur[4] = cur[4].slice(1)
-}
-if(du[4][0] === 0){
-  du[4] = du[4].slice(1)
-}
-const minuteDiff: number = (parseInt(cur[4])) - (parseInt(du[4])) >= 0 ? (parseInt(cur[4])) - (parseInt(du[4])) : ((parseInt(cur[4])) - (parseInt(du[4]))) * -1
-  let timeLeftForMeetup: string = '' 
-  if(yearDiff > 0){
-    timeLeftForMeetup = 'Still have ' + yearDiff + ' years left to go' 
-  }else if(monthDiff > 0){
-    timeLeftForMeetup = 'Still have ' + monthDiff + ' months left to go'
-  }else if(dayDiff > 0){
-    timeLeftForMeetup = 'Still have ' + dayDiff + ' days left to go'
-  }else if(hourDiff > 0){
-    timeLeftForMeetup = 'You have ' + hourDiff + ' hours left'
-  }else if(minuteDiff > 0){
-timeLeftForMeetup = 'You have ' + minuteDiff + ' minutes left'
-  }else{
-timeLeftForMeetup = 'Right Now'
-  }
-  // console.log(`current ${currentTime}\n due${dueDate}\n delete${dueDelete}`)
-  // console.log(`zeroCheck equal ${zeroCheck}`)
-   console.log(`currentTime in compare function ${currentTime}`)
-  if(timeLeft !== timeLeftForMeetup){
-    if(yourAndJoin[0].status === 'today' && timeLeftForMeetup === 'Right Now' && currentTime === dueDate && zeroCheck === false){
-      console.log('zeroCheck ran')
-setZeroCheck(true)
-setTimeLeft(timeLeftForMeetup)
-    }
-    if(zeroCheck !== true){
-    setTimeLeft(timeLeftForMeetup)
-      }
+// if(todayOrAfter === true && passDueDate === true){
+//   console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
+//       const url = 'meetup/delete/' + yourAndJoin[0].id
+//   axios.delete(url)
+//   .then(()=>{
+//     refresh()
+//     console.log('delete')
+//   })
+//   .catch((err: any)=>{
+//     console.error('Error can\'t update: ', err)
+//   })
+// }
    }
-    if(zeroCheck === true && currentTime === dueDelete && yourAndJoin[0].status === 'today'){
-      console.log('time to delete')
-      const url = 'meetup/delete/' + yourAndJoin[0].id
-  axios.delete(url)
-  .then(()=>{
-    refresh()
-    setZeroCheck(false);
-    console.log('delete')
-  })
-  .catch((err: any)=>{
-    console.error('Error can\'t update: ', err)
-  })
-    }
-  }
-  }
 
 
 const showSwitch = (): void => {
@@ -266,10 +183,9 @@ const showSwitch = (): void => {
 }
 
 const doubleCall = (): void =>{
- const test: any = getTime()
- console.log(test)
+getTime()
   if(yourAndJoin.length !== 0){
-  compare()
+ compare()
   }
 }
 const refresh = (): void  =>{
@@ -284,7 +200,7 @@ useEffect(()=>{
 }, [])
 
   return (<div>
-    {window.setInterval(doubleCall, 60000)}
+    <script>{window.setInterval(doubleCall, 30000)}</script>
     <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
