@@ -137,7 +137,6 @@ useEffect(()=>{
 
   return (<div>
     <script>{window.setInterval(doubleCall, 10000)}</script>
-    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box> 
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>} 
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
