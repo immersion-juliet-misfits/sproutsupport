@@ -41,7 +41,7 @@ const meetupUpdate = (): void =>{
       headers: {'Content-Type': image.type}
     })
   }).then(()=>{
-const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
+const obj: object = {time_date: dateTime, location, eventName, description, imageUrl: `https://my1test1bucket.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{
@@ -141,6 +141,6 @@ setFillIn(false)
     </Box></>}
     </>
   )
-} 
+}
 
 export default MeetupList
