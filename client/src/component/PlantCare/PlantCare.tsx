@@ -75,14 +75,14 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent maxWidth="900px" width="90%">
+        <ModalContent maxWidth="900px" width="50%">
           <ModalHeader>
             <Flex direction="column" alignItems="center" width="100%">
               <Heading as="h1" size="lg">{plant.nickname}</Heading>
               {plant.nickname !== plant.commonName && (
                 <h3>{<strong>{plant.commonName}</strong>}</h3>
               )}
-              <img src={plant.imageUrl}></img>
+              <Image width="50%" src={plant.imageUrl}></Image>
             </Flex>
           </ModalHeader>
           <ModalCloseButton />

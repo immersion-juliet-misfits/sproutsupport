@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading, Text, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
@@ -142,7 +142,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody textAlign={'center'}>
-    {plant.imageUrl && <Center><img width={250} height={250} src={plant.imageUrl}></img></Center>}
+    {plant.imageUrl && <Center><Image width={250} height={250} src={plant.imageUrl}></Image></Center>}
         <h3><em>{plant.description}</em></h3>
       <Editable
       textAlign='center'
@@ -167,18 +167,22 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       {/* Here is the custom input */}
       <Input as={EditableInput} />
       <EditableControls />
-    </Editable>
+    </Editable><br></br>
+    <Box>
       {allTasks.length > 0 &&
-        allTasks.map((task) => (
-          <div>
+      <Flex gap={4} justifyContent={"center"} wrap="wrap">
+       {allTasks.map((task) => (
+         <div>
 
           {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
-    <CircularProgress value={progress[task.id]}>
+    <CircularProgress trackColor='green.100' color='green.600' size={67} value={progress[task.id]}>
       {tasks.some((currTask) => currTask.id === task.id) ? (<CircularProgressLabel color={"tomato"}>{task.taskName}</CircularProgressLabel>) : (<CircularProgressLabel>{task.taskName}</CircularProgressLabel>)}
     </CircularProgress>
           </div>
-        ))
+        ))}
+      </Flex>
       }
+      </Box>
     </CardBody>
     <CardFooter>
       <DeleteIcon color="tomato" onClick={deletePlant}/>

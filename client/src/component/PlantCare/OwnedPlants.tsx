@@ -93,7 +93,7 @@ const OwnedPlants = ({ user }) => {
       <Heading textAlign={'center'}>{`Hey, ${user.userName}`}</Heading>
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
-          <Box color='yellow.100' bg='orange.300' p={2}>
+          <Box color='yellow.100' bg='yellow.500' p={2}>
            <PlantWarnings user={user}/>
           </Box>
       </GridItem>
