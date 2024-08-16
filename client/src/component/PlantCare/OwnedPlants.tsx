@@ -88,25 +88,25 @@ const OwnedPlants = ({ user }) => {
   }, []) // stale reference || made everytime reran
 
   return (
-    <Box mx="auto" bg="green.200" p={5}>
+    <Box color='green.500' mx="auto" bg="green.200" p={5}>
       <NavBar />
-      <Heading textAlign={'center'}>{`Hey, ${user.userName}`}</Heading>
+      <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading>
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
-          <Box color='yellow.100' bg='yellow.500' p={2}>
+          <Box color='yellow.100' bg='yellow.500' p={2} height="100%">
            <PlantWarnings user={user}/>
           </Box>
       </GridItem>
       <GridItem>
-      <Box color='green.100' bg='green.400' p={2}>
+      <Box color='green.100' bg='green.400' p={2} height="100%">
       <LevelBar user={user} score={score} progress={progress}/>
       </Box>
       </GridItem>
-      </Grid>
+      </Grid><br></br>
       <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
-        <Button colorScheme={'green'}>Add a Plant { <AddIcon /> } </Button>
+        <Button colorScheme={'green'}>New Plant { <AddIcon /> } </Button>
       </Link>
       {/* make into seperate component */}
       <Box bg={'green.700'} p={5}>

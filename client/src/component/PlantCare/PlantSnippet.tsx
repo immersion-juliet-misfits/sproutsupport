@@ -154,7 +154,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     </CardHeader>
     <CardBody textAlign={'center'}>
     {plant.imageUrl && <Center><Image width={250} height={250} src={plant.imageUrl}></Image></Center>}
-        <h3><em>{plant.description}</em></h3>
+        {/* <h3><em>{plant.description}</em></h3> */}
       <Editable
       textAlign='center'
       defaultValue={plant.description}
@@ -195,9 +195,10 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       }
       </Box>
     </CardBody>
-    <CardFooter>
-      <DeleteIcon color="tomato" onClick={deletePlant}/>
+    <CardFooter justify={"space-between"} alignContent={"center"}>
       <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} fetchDoneTasks={fetchDoneTasks} getScore={getScore} updateProgressBar={updateProgressBar} fetchTaskProgress={fetchTaskProgress} allTasks={allTasks} doneTasks={doneTasks}/>
+      <IconButton aria-label='Delete plant' icon={<DeleteIcon color="tomato" />} onClick={deletePlant}/>
+      {/* <DeleteIcon color="tomato" onClick={deletePlant}/> */}
     </CardFooter>
     </Card>
   )

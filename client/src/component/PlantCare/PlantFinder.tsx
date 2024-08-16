@@ -116,19 +116,21 @@ const PlantFinder = ({ user }) => {
         <Button colorScheme="green" value="My Plants">My Plants</Button>
       </Link>
       <FormControl>
-      <FormLabel>{`Search ${input}`}</FormLabel>
+      {/* <FormLabel>{`Search ${input}`}</FormLabel> */}
       {/* will eventually be used with cards... */}
+      <br></br>
       <Input
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
         bgColor='green.100'
         textColor="green.900"
+        width='auto'
         ></Input>
       <Button onClick={() => handleSubmit()}>Search</Button><br></br>
       </FormControl>
 
-      <Grid templateColumns="1fr 2fr" gap={4}>
+      <Grid templateColumns="2fr 2fr" gap={4}>
       <GridItem>
         {/* <VStack align="start" spacing={4}> */}
 

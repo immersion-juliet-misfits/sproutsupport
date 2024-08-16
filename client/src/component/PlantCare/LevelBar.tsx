@@ -6,7 +6,7 @@ const LevelBar = ({user, score, progress}) => {
 
   return (
     <div>
-        <Heading>Sprout Growth</Heading>
+        <Heading size="lg">Sprout Growth</Heading>
         {/* <Heading size="lg">{`Level ${score.level}`}</Heading> */}
         {progress < 90 ? (<Heading size="lg">{`Level ${score.level}`}</Heading>) : (<Heading  bgGradient='linear(to-br, green.100, yellow.300)' bgClip='text' size="lg">{`Level ${score.level}`}</Heading>)}
         {/* look into min/max props */}
