@@ -43,7 +43,7 @@ app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);
 app.use('/upload', Upload);
 app.use('/post', Posts);
-app.use('/image', Images)
+app.use('/comment', Comments)
 
 // GAuth Session middleware
 app.use(
@@ -139,6 +139,7 @@ app.get('/api/checkAuth', (req, res) => {
 
 // Must be beneath Google Auth middleware to get access to `isAuthenticated` and `req.user/req.session`
 app.use('/user', UserInfo);
+
 // app.use('/plants', Plants);
 // app.use('/meetup', routerMeetup);
 // app.use('/upload', Upload);
@@ -221,4 +222,5 @@ httpServer.listen(port, () => {
 });
 // let test = 'hey'
 job.start();
+//sendEmail.start()
 export { io }

@@ -11,7 +11,6 @@ import Login from './Login';
 import UserPrivateProfile from './UserProfile/UserPrivateProfile';
 import UserPublicProfile from './UserProfile/UserPublicProfile';
 import Meetup from "./meetup/Meetup";
-import Post from './Post';
 import io from 'socket.io-client';
 import { useToast } from '@chakra-ui/react'
 
@@ -23,8 +22,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast()
-  const BUCKET_NAME = 'my1test1bucket';
+  //const BUCKET_NAME = 'my1test1bucket';
   // const BUCKET_NAME = 'sprout-support';
+  const BUCKET_NAME = 'sproutsupportbucket'
 
   const fetchUserData = () => {
     axios.get('/api/checkAuth')
@@ -44,7 +44,7 @@ const App = () => {
     fetchUserData()
 
       const notif = (task) => {
-        // console.log(task, 'hello')
+
         toast({
           title: `${task.taskPlant.nickname}`,
           description: `${task.taskName}`,
@@ -71,6 +71,7 @@ const App = () => {
   }
 
   return (
+
     <ChakraProvider theme={ssTheme}>
       <div className='App'>
         <Routes>
@@ -91,7 +92,7 @@ const App = () => {
           <Route path='/meetup' element={<Meetup user={user}/>} />
         </Routes>
       </div>
-   </ChakraProvider>
+    </ChakraProvider>
   );
 };
 

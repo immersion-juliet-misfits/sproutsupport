@@ -46,6 +46,8 @@ model Meet {
   description String
   imageUrl    String
   userId      Int
+  message     String?
+  status      String
   attendees   Attendee[]
   owner       User       @relation(fields: [userId], references: [id])
 
@@ -94,9 +96,9 @@ model Post {
   id       Int       @id @default(autoincrement())
   userId   Int
   message  String
-  imageUrl String
-  comment  Comment[]
+  image_id Int?
   owner    User      @relation(fields: [userId], references: [id])
+  Comment  Comment[]
 
   @@index([userId], map: "Post_userId_fkey")
 }
