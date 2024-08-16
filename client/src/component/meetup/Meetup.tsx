@@ -157,18 +157,18 @@ const compare = (): void =>{
 // console.log(dueDelete)
 console.log(yourAndJoin)
 
-// if(todayOrAfter === true && passDueDate === true){
-//   console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
-//       const url = 'meetup/delete/' + yourAndJoin[0].id
-//   axios.delete(url)
-//   .then(()=>{
-//     refresh()
-//     console.log('delete')
-//   })
-//   .catch((err: any)=>{
-//     console.error('Error can\'t update: ', err)
-//   })
-// }
+if(todayOrAfter === true && passDueDate === true){
+  console.log(passDueDate ? 'deleting now' : 'it not time to delete yet')
+      const url = 'meetup/delete/' + yourAndJoin[0].id
+  axios.delete(url)
+  .then(()=>{
+    refresh()
+    console.log('delete')
+  })
+  .catch((err: any)=>{
+    console.error('Error can\'t update: ', err)
+  })
+}
    }
 
 
