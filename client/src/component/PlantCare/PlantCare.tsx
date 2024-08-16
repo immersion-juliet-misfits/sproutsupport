@@ -48,7 +48,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
     const totalDuration = new Date(nextCompletion).getTime() - new Date(lastCompleted).getTime();
     const elapsed = now - new Date(lastCompleted).getTime();
     const progress = (elapsed / totalDuration) * 100;
-    console.log(progress)
+    // console.log(progress)
   
     return progress.toFixed(2);
   };
@@ -91,14 +91,15 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
           {allTasks.length > 0 &&
               allTasks.map((task) => (
                 <div>
-                <Progress variant="tesrt" colorScheme="green" bgGradient='linear(to-r, green.300, green.200, green.100)' height='32px' value={progress[task.id]}>
+                <Progress colorScheme="green" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]}>
                   <ProgressLabel>
-                    <Heading as="h2" size="md">{task.taskName}</Heading>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"} onClick={() => handleCompletion(task)}>{task.taskName}</Heading>
                   </ProgressLabel>
                 </Progress>
-                <p key={task.id} style={{ color: 'red' }} onClick={() => handleCompletion(task)}>
+                <br></br>
+                {/* <p key={task.id} style={{ color: 'red' }}>
                   {task.taskName}
-                </p>
+                </p> */}
                 </div>
               ))}
           </ModalBody>

@@ -4,6 +4,9 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import PlantCare from './PlantCare';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8000');
 
 const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick }) => {
   const [tasks, setTasks] = useState([]);
@@ -65,6 +68,17 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   useEffect(() => {
     fetchTasks()
     fetchTaskProgress()
+    socket.on('overdue', () => {
+      fetchTasks()
+      fetchTaskProgress()
+    }) // task on
+
+      return (() => {
+        socket.off('overdue', () => {
+          fetchTasks()
+          fetchTaskProgress()
+        })
+      })
   }, [])
 
   const getProgress = (lastCompleted, nextCompletion) => {
@@ -158,9 +172,9 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
         allTasks.map((task) => (
           <div>
 
-          <p key={task.id} style={{color:"red"}}>{task.taskName}</p>
+          {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
     <CircularProgress value={progress[task.id]}>
-                  
+      {tasks.some((currTask) => currTask.id === task.id) ? (<CircularProgressLabel color={"tomato"}>{task.taskName}</CircularProgressLabel>) : (<CircularProgressLabel>{task.taskName}</CircularProgressLabel>)}
     </CircularProgress>
           </div>
         ))
