@@ -37,7 +37,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 // Server to Serve Client
 app.use(express.static(DIST_PATH));
-//
 // app.use('/user', UserInfo);
 app.use('/plants', Plants);
 app.use('/meetup', routerMeetup);

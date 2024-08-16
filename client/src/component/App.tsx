@@ -22,9 +22,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast()
-  //const BUCKET_NAME = 'my1test1bucket';
+  const BUCKET_NAME = 'my1test1bucket';
   // const BUCKET_NAME = 'sprout-support';
-  const BUCKET_NAME = 'sproutsupportbucket'
+  // const BUCKET_NAME = 'sproutsupportbucket'
 
   const fetchUserData = () => {
     axios
@@ -82,7 +82,7 @@ const App = () => {
             path='/home'
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
-          <Route path='/createPost' element={<CreatePost user={user} />} />
+          <Route path='/createPost' element={<CreatePost user={user} BUCKET_NAME={BUCKET_NAME} />} />
           <Route path='/myplants' element={<OwnedPlants user={user} />}></Route>
           <Route
             path='/plantfinder'
