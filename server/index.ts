@@ -97,8 +97,6 @@ passport.use(
               email: profile.emails?.[0].value,
               avatar:
               'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
-              latitude: 64.7552,
-              longitude: 147.3534,
             },
           });
         }

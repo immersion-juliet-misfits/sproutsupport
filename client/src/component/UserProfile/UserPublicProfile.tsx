@@ -1,16 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {
-  Box,
-  Image,
-  Text,
-  VStack,
-  Heading,
-  Grid,
-  GridItem,
-} from '@chakra-ui/react';
+import { Box, Image, Text, VStack, Heading, Grid } from '@chakra-ui/react';
 import TopBar from './TopBar';
-import NavBar from '../NavBar';
 
 interface User {
   id: number;
@@ -45,56 +36,51 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   };
 
   useEffect(() => {
-    fetchUserData();
-    fetchWeather(user.city, user.state);
+    if (user.city && user.state) {
+      fetchUserData();
+      fetchWeather(user.city, user.state);
+    }
   }, []);
 
   return (
     <Grid className='publicBodyGrid' w='1100px' mx='auto'>
       <TopBar />
       <Grid
-      className='bodyGrid'
-      border='15px solid #D3FFEB'
-      bg='#D3FFEB'
-      borderBottom='0'
-      w='1100px'
-      mx='auto'
-      borderRadius='lg lg 0 0'
-      overflow='hidden'
-      boxShadow='md'
-      templateRows='1fr'
-      templateColumns='1fr'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='flex-end'
+        className='bodyGrid'
+        border='15px solid #D3FFEB'
+        bg='#D3FFEB'
+        borderBottom='0'
+        w='1100px'
+        mx='auto'
+        borderRadius='lg lg 0 0'
+        overflow='hidden'
+        boxShadow='md'
+        templateRows='1fr'
+        templateColumns='1fr'
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='flex-end'
       >
         <Grid
-         w='1100px'
-         mx='auto'
-         mt='0'
-         borderRadius='0 0 lg lg'
-         // border='15px solid red'
-         border='15px solid #D3FFEB'
-         borderTop='0'
-         bg='#5AB78D'
-         gap={10}
-         overflow='hidden'
-         boxShadow='md'
-         templateRows='1fr'
-         templateColumns='1fr'
-         display='flex'
-         flexDirection='column'
-         alignItems='center'
-         justifyContent='center'
-         py={4}
-          // className='content-grid'
-          // templateRows='1fr'
-          // templateColumns='1fr'
-          // bg='teal'
-          // alignItems='center'
-          // justifyContent='center'
-          // py={4}
+          w='1100px'
+          mx='auto'
+          mt='0'
+          borderRadius='0 0 lg lg'
+          // border='15px solid red'
+          border='15px solid #D3FFEB'
+          borderTop='0'
+          bg='#5AB78D'
+          gap={10}
+          overflow='hidden'
+          boxShadow='md'
+          templateRows='1fr'
+          templateColumns='1fr'
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          py={4}
         >
           <VStack spacing={4} align='center'>
             {/* <Button colorScheme='teal' variant='solid'>
@@ -130,7 +116,10 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                     day: 'numeric',
                   })}
                 </Text>
-                <Text>Temperature: {weatherData.temp ?? 'N/A'}°F</Text>
+                <Text>
+                  Temperature:{' '}
+                  {Math.floor((weatherData.temp * 9) / 5 + 32) ?? 'N/A'}°F
+                </Text>
                 <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
                 <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
                 <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
@@ -168,8 +157,15 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                         <Text fontSize='lg' fontWeight='bold'>
                           {dayOfWeek} - {day.datetime}
                         </Text>
-                        <Text>High: {day.tempmax ?? 'N/A'}°F</Text>
-                        <Text>Low: {day.tempmin ?? 'N/A'}°F</Text>
+
+                        <Text>
+                          High:{' '}
+                          {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}°F
+                        </Text>
+                        <Text>
+                          Low: {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
+                          °F
+                        </Text>
                         <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
                       </Box>
                     );
