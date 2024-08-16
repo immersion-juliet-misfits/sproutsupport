@@ -18,7 +18,6 @@ const OwnedPlants = ({ user }) => {
   const [progress, setProgress] = useState(0)
 
   const getPlants = () => {
-    console.log('jet')
     axios.get(`/plants/all/${user.id}`)
       .then(({data}) => {
         setPlants(data)
@@ -27,13 +26,6 @@ const OwnedPlants = ({ user }) => {
         console.error(err)
       })
   }
-
-  // const getWarnings = () => {
-  //   axios.post(`/plants/warnings/2`)
-  //     .then((data) => {
-  //       console.log('lots of data', data)
-  //     })
-  // }
 
   const handlePlantClick = (selected) => {
     console.log(selected);
@@ -48,7 +40,6 @@ const OwnedPlants = ({ user }) => {
   }
 
   const getNextPointReq = (currLvl) => {
-    // console.log(currLvl, 50 + (currLvl * 50))
     return 50 + (currLvl * 50)
   }
 
@@ -66,7 +57,6 @@ const OwnedPlants = ({ user }) => {
   }, [score])
 
   const handleDelete = (plantId) => {
-    console.log('delete this', plantId)
     axios.delete(`/plants/delete/${plantId}`)
     .then(() => {
       setPlants((prev) => prev.filter((sprout) => sprout.id !== plantId))

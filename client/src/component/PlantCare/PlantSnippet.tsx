@@ -102,7 +102,6 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     const totalDuration = new Date(nextCompletion).getTime() - new Date(lastCompleted).getTime();
     const elapsed = now - new Date(lastCompleted).getTime();
     const progress = (elapsed / totalDuration) * 100;
-    // console.log(progress)
   
     return progress.toFixed(2);
   };
@@ -129,13 +128,10 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       isPreviewFocusable={false}
       onChange={(editName) => {
         setNewName(editName)
-        console.log(editName)
       }}
       onSubmit={(newName) => {
-        console.log('final input', newName)
         axios.patch(`/plants/update/${plant.id}`, {nickname: newName, description: newDescription})
           .then(({data}) => {
-            console.log('wake up', data)
             getPlants()
           })
       }}
@@ -162,13 +158,10 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       isPreviewFocusable={false}
       onChange={(editDesc) => {
         setNewDescription(editDesc)
-        console.log(editDesc)
       }}
       onSubmit={(newDesc) => {
-        console.log('final input', newName)
         axios.patch(`/plants/update/${plant.id}`, {nickname: newName, description: newDesc})
           .then(({data}) => {
-            console.log('wake up', data)
             getPlants()
           })
       }}

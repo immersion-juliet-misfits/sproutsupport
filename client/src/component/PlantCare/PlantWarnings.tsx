@@ -8,7 +8,6 @@ const PlantWarnings = ({ user }) => {
 
   const decideWarning = (alert) => {
     // make sure your sprouts are nice and cozy
-    console.log(alert, 'alert in func')
     if (alert.toLowerCase().includes('freeze') || alert.toLowerCase().includes('chill')) { // too cold
       return 'Make sure your sprouts are cozy during this cold time.'
     } else if (alert.toLowerCase().includes('heat')) { // too hot
@@ -20,10 +19,8 @@ const PlantWarnings = ({ user }) => {
 
   const getWarnings = () => {
     if (user.longitude !== 147.3534 && user.latitude !== 64.7552) {
-        console.log('beiung used TOKEN')
         axios.post(`/plants/warnings/${user.id}`)
         .then(({data}) => {
-            console.log('lots of data', data, data.currentConditions.conditions);
             setAlerts(data.alerts)
             // setWeather(data.currentConditions)
         });

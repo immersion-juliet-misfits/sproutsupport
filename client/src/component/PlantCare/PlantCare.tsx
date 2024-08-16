@@ -29,7 +29,6 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
   const handleCompletion = (task) => {
     axios.post('/plants/completeTask', { id: task.id })
       .then(({data}) => {
-        console.log(data)
         getScore()
         updateProgressBar()
       })
@@ -55,9 +54,6 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
     return progress.toFixed(2);
   };
 
-  // useEffect(() => {
-  //   console.log('once, maybe twice')
-  // }, [])
   useEffect(() => {
     // let interval;
       let interval = setInterval(() => {
