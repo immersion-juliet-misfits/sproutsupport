@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Input, Heading, Select, FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Button, Grid, GridItem} from '@chakra-ui/react'
 import axios from 'axios';
 import PlantImgUpload from './PlantImgUpload';
+import TopBar from '../UserProfile/TopBar';
 
 type Plant = {
     CommonName: string;
@@ -111,6 +112,7 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
 
   return (
     <Box mx="auto" bg="green.200" p={5}>
+      <TopBar />
       <Heading textAlign={'center'}>Plant Finder</Heading>
       <Link to={'/myplants'}>
         <Button colorScheme="green" value="My Plants">My Plants</Button>

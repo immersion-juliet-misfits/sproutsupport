@@ -7,6 +7,7 @@ import PlantSnippet from './PlantSnippet';
 import LevelBar from './LevelBar';
 import PlantWarnings from './PlantWarnings';
 import NavBar from '../NavBar'
+import TopBar from '../UserProfile/TopBar';
 // import UploadImage from '../UploadImage';
 // import io from 'socket.io-client';
 
@@ -79,7 +80,7 @@ const OwnedPlants = ({ user }) => {
 
   return (
     <Box color='green.500' mx="auto" bg="green.200" p={5}>
-      <NavBar />
+      <TopBar />
       <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading>
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
