@@ -10,7 +10,7 @@ type Plant = {
     Id: number;
 }
 
-const PlantFinder = ({ user }) => {
+const PlantFinder = ({ user, BUCKET_NAME }) => {
   const [input, setInput] = useState('');
   const [results, setResults] = useState([]);
   const [selected, setSelected] = useState<Plant | null>(null);
@@ -94,7 +94,7 @@ const PlantFinder = ({ user }) => {
         })
       })
       .then(() => {
-        setImageUrl(`https://my1test1bucket.s3.amazonaws.com/${image.name}`)
+        setImageUrl(`https://${BUCKET_NAME}.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
         console.error('Failed to get image url', err)

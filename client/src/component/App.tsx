@@ -88,7 +88,7 @@ const App = () => {
           <Route path='/myplants' element={<OwnedPlants user={user} />}></Route>
           <Route
             path='/plantfinder'
-            element={<PlantFinder user={user} />}
+            element={<PlantFinder user={user} BUCKET_NAME={BUCKET_NAME} />}
           ></Route>
           <Route
             path='/userprofile'
@@ -112,7 +112,7 @@ const App = () => {
             path='/'
             element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
           />
-          <Route path='/meetup' element={<Meetup user={user} />} />
+          <Route path='/meetup' element={<Meetup user={user} BUCKET_NAME={BUCKET_NAME} />} />
         </Routes>
       </div>
     </ChakraProvider>

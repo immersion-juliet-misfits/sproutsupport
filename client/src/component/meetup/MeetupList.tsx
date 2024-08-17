@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, {useState, useEffect} from 'react'
 import { Input, Button, SimpleGrid, Box } from '@chakra-ui/react';
 
-const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>}) =>{
+const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join, BUCKET_NAME}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>, BUCKET_NAME: string}) =>{
   const [swap, setSwap] = useState('none')
   const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
@@ -50,7 +50,7 @@ const meetupUpdate = (): void =>{
       headers: {'Content-Type': image.type}
     })
   }).then(()=>{
-const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
+const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://${BUCKET_NAME}.s3.amazonaws.com/${image.name}`, id}
 const url = 'meetup/update/' + id
 axios.patch(url, obj)
 .then(()=>{

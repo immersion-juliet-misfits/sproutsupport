@@ -31,6 +31,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
   const [plants, setPlants] = useState([]);
+  const [myMeetups, setMyMeetups] = useState([]);
 
   const fetchWeather = (city, state) => {
     axios
@@ -54,7 +55,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
     axios
       .get(`/plants/all/${user.id}`)
       .then(({ data }) => {
-        console.log('Plant Data: ', data);
+        // console.log('Plant Data: ', data);
         setPlants(data);
       })
       .catch((err) => {
@@ -62,11 +63,28 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
       });
   };
 
+  const getMeetups = (): void => {
+    axios
+      .get(`/meetup/all/${user.id}`)
+      .then(({ data }) => {
+        // console.log('Meetups data:', data);
+        setMyMeetups(data.yours);
+      })
+      .catch((err) => {
+        console.error('Error fetching meetups:', err);
+      });
+  };
+
   useEffect(() => {
     fetchUserData();
-    getPlants();
     if (user?.showWeather && user.city && user.state) {
       fetchWeather(user.city, user.state);
+    }
+    if (user?.showPlants) {
+      getPlants();
+    }
+    if (user?.showMyMeetups) {
+      getMeetups();
     }
   }, []);
 
@@ -133,10 +151,12 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             {/* ***************************************  */}
             {user?.showPlants && (
               <Box className='plantBox'>
-                <Heading textAlign='center'>My Plants</Heading>
+                <Heading textAlign='center' mb={4}>
+                  My Plants
+                </Heading>
                 {plants.length > 0 ? (
                   <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-                    {plants.map((plant) => (
+                    {plants.slice(-6).map((plant) => (
                       <Card key={plant.id} bg='green.200'>
                         <CardHeader textAlign={'center'}>
                           <Heading size='md'>{plant.nickname}</Heading>
@@ -171,30 +191,77 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             )}
 
             {/* ***************************************  */}
+
             {user?.showMyMeetups && (
               <Box className='myMeetupsBox'>
-                <Heading textAlign='center'>My Hosted Meetups</Heading>
-                {/* Render hosted meetups here */}
+                <Heading textAlign='center' mb={4}>
+                  My Hosted Meetups
+                </Heading>
+                {myMeetups.length > 0 ? (
+                  <Grid
+                    templateColumns={`repeat(${Math.min(
+                      myMeetups.length,
+                      3
+                    )}, 1fr)`}
+                    gap={6}
+                    justifyContent='center'
+                    alignItems='center'
+                  >
+                    {myMeetups.slice(-6).map((meetup) => (
+                      <Card key={meetup.id} bg='green.200'>
+                        <CardHeader textAlign={'center'}>
+                          <Heading size='md'>{meetup.eventName}</Heading>
+                        </CardHeader>
+                        <CardBody textAlign={'center'}>
+                          {meetup.imageUrl && (
+                            <Center>
+                              <Image
+                                width={250}
+                                height={250}
+                                src={meetup.imageUrl}
+                                alt={meetup.eventName}
+                                objectFit='cover'
+                              />
+                            </Center>
+                          )}
+                          <Text>{meetup.description}</Text>
+                          <Text>
+                            {meetup.location
+                              .replace('State:', '-')
+                              .replace('City:', '-')
+                              .trim()}
+                          </Text>
+                          <Text>Date & Time: {meetup.time_date}</Text>
+                        </CardBody>
+                      </Card>
+                    ))}
+                  </Grid>
+                ) : (
+                  <Text>No Meetups Available</Text>
+                )}
               </Box>
             )}
+
             {/* ***************************************  */}
+            {/* Can't Implement without access to other Users data  */}
+            {/*
             {user?.showOtherMeetups && (
               <Box className='rsvpMeetupsBox'>
-                <Heading textAlign='center'>Meetups I'm Attending</Heading>
-                {/* Render RSVP'd meetups here */}
+                <Heading textAlign='center' mb={4}>
+                  Meetups I'm Attending
+                </Heading>
               </Box>
             )}
+            */}
+
             {/* ***************************************  */}
             {user?.showForumPosts && (
               <Box className='forumBox'>
-                <Heading textAlign='center'>My Recent Posts</Heading>
-                {/* Render forum posts here */}
+                <Heading textAlign='center' mb={4}>
+                  My Recent Posts
+                </Heading>
               </Box>
             )}
-            {/* ***************************************  */}
-            {/* <Box className='weatherBox'></Box> */}
-            {/* ***************************************  */}
-            {/* <Box className='weatherBox'></Box> */}
             {/* ***************************************  */}
             {user?.showWeather && (
               <Box className='weatherBox'>

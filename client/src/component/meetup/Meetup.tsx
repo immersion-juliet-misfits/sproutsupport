@@ -12,7 +12,7 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
 dayjs.extend(relativeTime)
 dayjs.extend(isSameOrAfter)
 
-const Meetup = ({user}: {user: object}) => {
+const Meetup = ({user, BUCKET_NAME}: {user: object, BUCKET_NAME: string}) => {
 //  const [list, setList] = useState([])
 const [inputSwap, setInputSwap] = useState(false)
 const [currentTime, setCurrentTime] = useState('')
@@ -145,8 +145,8 @@ useEffect(()=>{
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>}
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
-    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>}
-    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>}
+    {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch} BUCKET_NAME={BUCKET_NAME} />} </>}
+    {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups} BUCKET_NAME={BUCKET_NAME} />}
     </Box>
     </div>)
 };

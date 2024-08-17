@@ -99,7 +99,8 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                 </label>
               </HStack>
 
-              <HStack>
+              {/* Hide Below until I have access to other Users profiles & Meetups  */}
+              {/* <HStack>
                 <Switch
                   id='showOtherMeetups'
                   isChecked={settings.showOtherMeetups}
@@ -110,7 +111,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                 <label htmlFor='showOtherMeetups'>
                   Display Your RSVP'd Meetups?
                 </label>
-              </HStack>
+              </HStack> */}
 
               <HStack>
                 <Switch
@@ -135,7 +136,6 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                 />
                 <label htmlFor='showWeather'>Display Your Weather?</label>
               </HStack>
-
             </VStack>
           </Box>
         </GridItem>
