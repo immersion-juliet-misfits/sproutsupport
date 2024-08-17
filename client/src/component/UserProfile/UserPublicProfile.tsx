@@ -1,6 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Box, Image, Text, VStack, Heading, Grid } from '@chakra-ui/react';
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Image,
+  Text,
+  VStack,
+  Heading,
+  Grid,
+} from '@chakra-ui/react';
 import TopBar from './TopBar';
 
 interface User {
@@ -15,9 +26,11 @@ interface User {
 }
 
 const UserPublicProfile = ({ fetchUserData, user }) => {
+  const [apiError, setApiError] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
+  const [plants, setPlants] = useState([]);
 
   const fetchWeather = (city, state) => {
     axios
@@ -29,15 +42,30 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
         setWeatherData(data.currentConditions);
         setDailyForecastData(data.days);
         setAlertsData(data.alerts || []);
+        setApiError(false);
       })
-      .catch((error) => {
-        console.error('Error fetching weather data for city and state:', error);
+      .catch((err) => {
+        setApiError(true);
+        // console.error('Error fetching weather data for city and state:', err);
+      });
+  };
+
+  const getPlants = () => {
+    axios
+      .get(`/plants/all/${user.id}`)
+      .then(({ data }) => {
+        console.log('Plant Data: ', data);
+        setPlants(data);
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
 
   useEffect(() => {
-    if (user.city && user.state) {
-      fetchUserData();
+    fetchUserData();
+    getPlants();
+    if (user?.showWeather && user.city && user.state) {
       fetchWeather(user.city, user.state);
     }
   }, []);
@@ -102,94 +130,204 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             <Text fontSize='md' color='white' textAlign='center'>
               {user.bio}
             </Text>
-
-            {weatherData && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Current Weather for {user.city}, {user.state}:
-                </Heading>
-                <Text fontSize='lg' fontWeight='bold'>
-                  {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </Text>
-                <Text>Temperature: { ((weatherData.temp * 9/5) + 32) ?? 'N/A'}°F</Text>
-                <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
-                <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
-                <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
-                <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
-                <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
-                <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
-              </Box>
-            )}
-            {dailyForecastData && dailyForecastData.length > 0 && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Daily Forecast
-                </Heading>
-                <Grid
-                  templateRows='repeat(2, 1fr)'
-                  templateColumns='repeat(3, 1fr)'
-                  gap={6}
-                >
-                  {dailyForecastData.slice(1, 7).map((day, index) => {
-                    const date = new Date(day.datetime);
-                    date.setDate(date.getDate() + 1);
-                    const dayOfWeek = date.toLocaleDateString('en-US', {
-                      weekday: 'long',
-                    });
-
-                    return (
-                      <Box
-                        key={index}
-                        mb={4}
-                        p={3}
-                        borderWidth='1px'
-                        borderRadius='lg'
-                        shadow='md'
-                      >
-                        <Text fontSize='lg' fontWeight='bold'>
-                          {dayOfWeek} - {day.datetime}
-                        </Text>
-
-                        <Text>
-                          High:{' '}
-                          {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}°F
-                        </Text>
-                        <Text>
-                          Low: {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
-                          °F
-                        </Text>
-                        <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
-                      </Box>
-                    );
-                  })}
-                </Grid>
-              </Box>
-            )}
-
-            {alertsData && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Weather Alerts
-                </Heading>
-                {alertsData.length > 0 ? (
-                  alertsData.map((alert, index) => (
-                    <Box key={index} mb={4}>
-                      <Text>Alert: {alert.event}</Text>
-                      <Text>Description: {alert.description}</Text>
-                      <Text>Effective: {alert.effective}</Text>
-                      <Text>Expires: {alert.expires}</Text>
-                    </Box>
-                  ))
+            {/* ***************************************  */}
+            {user?.showPlants && (
+              <Box className='plantBox'>
+                <Heading textAlign='center'>My Plants</Heading>
+                {plants.length > 0 ? (
+                  <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+                    {plants.map((plant) => (
+                      <Card key={plant.id} bg='green.200'>
+                        <CardHeader textAlign={'center'}>
+                          <Heading size='md'>{plant.nickname}</Heading>
+                          {plant.nickname !== plant.commonName && (
+                            <Text>
+                              <strong>{plant.commonName}</strong>
+                            </Text>
+                          )}
+                        </CardHeader>
+                        <CardBody textAlign={'center'}>
+                          {plant.imageUrl && (
+                            <Center>
+                              <img
+                                width={250}
+                                height={250}
+                                src={plant.imageUrl}
+                                alt={`${plant.nickname}`}
+                              />
+                            </Center>
+                          )}
+                          <Text>
+                            <em>{plant.description}</em>
+                          </Text>
+                        </CardBody>
+                      </Card>
+                    ))}
+                  </Grid>
                 ) : (
-                  <Text>There Are No Alerts At This Time</Text>
+                  <Text>No Plants Available</Text>
                 )}
               </Box>
             )}
+
+            {/* ***************************************  */}
+            {user?.showMyMeetups && (
+              <Box className='myMeetupsBox'>
+                <Heading textAlign='center'>My Hosted Meetups</Heading>
+                {/* Render hosted meetups here */}
+              </Box>
+            )}
+            {/* ***************************************  */}
+            {user?.showOtherMeetups && (
+              <Box className='rsvpMeetupsBox'>
+                <Heading textAlign='center'>Meetups I'm Attending</Heading>
+                {/* Render RSVP'd meetups here */}
+              </Box>
+            )}
+            {/* ***************************************  */}
+            {user?.showForumPosts && (
+              <Box className='forumBox'>
+                <Heading textAlign='center'>My Recent Posts</Heading>
+                {/* Render forum posts here */}
+              </Box>
+            )}
+            {/* ***************************************  */}
+            {/* <Box className='weatherBox'></Box> */}
+            {/* ***************************************  */}
+            {/* <Box className='weatherBox'></Box> */}
+            {/* ***************************************  */}
+            {user?.showWeather && (
+              <Box className='weatherBox'>
+                <Heading textAlign='center'>My Weather</Heading>
+
+                {apiError ? (
+                  <Text>No Weather Update Currently Available</Text>
+                ) : (
+                  <>
+                    {weatherData && (
+                      <Box
+                        p={5}
+                        shadow='md'
+                        borderWidth='1px'
+                        borderRadius='lg'
+                      >
+                        <Heading as='h2' size='lg' mb={4}>
+                          Current Weather for {user.city}, {user.state}:
+                        </Heading>
+                        <Text fontSize='lg' fontWeight='bold'>
+                          {new Date().toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })}
+                        </Text>
+                        <Text>
+                          Temperature:{' '}
+                          {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
+                        </Text>
+                        <Text>
+                          Condition: {weatherData.conditions ?? 'N/A'}
+                        </Text>
+                        <Text>
+                          Wind Speed: {weatherData.windspeed ?? 'N/A'} mph
+                        </Text>
+                        <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
+                        <Text>
+                          Feels Like: {weatherData.feelslike ?? 'N/A'}°F
+                        </Text>
+                        <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
+                        <Text>
+                          Visibility: {weatherData.visibility ?? 'N/A'} km
+                        </Text>
+                      </Box>
+                    )}
+                    {dailyForecastData && dailyForecastData.length > 0 && (
+                      <Box
+                        p={5}
+                        shadow='md'
+                        borderWidth='1px'
+                        borderRadius='lg'
+                      >
+                        <Heading as='h2' size='lg' mb={4}>
+                          Daily Forecast
+                        </Heading>
+                        <Grid
+                          templateRows='repeat(2, 1fr)'
+                          templateColumns='repeat(3, 1fr)'
+                          gap={6}
+                        >
+                          {dailyForecastData.slice(1, 7).map((day, index) => {
+                            const date = new Date(day.datetime);
+                            date.setDate(date.getDate() + 1);
+                            const dayOfWeek = date.toLocaleDateString('en-US', {
+                              weekday: 'long',
+                            });
+
+                            return (
+                              <Box
+                                key={index}
+                                mb={4}
+                                p={3}
+                                borderWidth='1px'
+                                borderRadius='lg'
+                                shadow='md'
+                              >
+                                <Text fontSize='lg' fontWeight='bold'>
+                                  {dayOfWeek} - {day.datetime}
+                                </Text>
+
+                                <Text>
+                                  High:{' '}
+                                  {Math.floor((day.tempmax * 9) / 5 + 32) ??
+                                    'N/A'}
+                                  °F
+                                </Text>
+                                <Text>
+                                  Low:{' '}
+                                  {Math.floor((day.tempmin * 9) / 5 + 32) ??
+                                    'N/A'}
+                                  °F
+                                </Text>
+                                <Text>
+                                  Conditions: {day.conditions ?? 'N/A'}
+                                </Text>
+                              </Box>
+                            );
+                          })}
+                        </Grid>
+                      </Box>
+                    )}
+
+                    {alertsData && (
+                      <Box
+                        p={5}
+                        shadow='md'
+                        borderWidth='1px'
+                        borderRadius='lg'
+                      >
+                        <Heading as='h2' size='lg' mb={4}>
+                          Weather Alerts
+                        </Heading>
+                        {alertsData.length > 0 ? (
+                          alertsData.map((alert, index) => (
+                            <Box key={index} mb={4}>
+                              <Text>Alert: {alert.event}</Text>
+                              <Text>Description: {alert.description}</Text>
+                              <Text>Effective: {alert.effective}</Text>
+                              <Text>Expires: {alert.expires}</Text>
+                            </Box>
+                          ))
+                        ) : (
+                          <Text>There Are No Alerts At This Time</Text>
+                        )}
+                      </Box>
+                    )}
+                  </>
+                )}
+              </Box>
+            )}
+            {/* ***************************************  */}
           </VStack>
         </Grid>
       </Grid>

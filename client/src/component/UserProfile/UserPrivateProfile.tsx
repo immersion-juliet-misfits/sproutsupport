@@ -41,8 +41,6 @@ const UserPrivateProfile = ({
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
   const [location, setLocation] = useState({
     city: user.city || '',
     state: user.state || '',
@@ -213,7 +211,6 @@ const UserPrivateProfile = ({
               city={user.city}
               state={user.state}
               userName={user.userName}
-              EditableControls={EditableControls}
               fetchUserData={fetchUserData}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
@@ -223,7 +220,7 @@ const UserPrivateProfile = ({
               setLocation={setLocation}
             />
           )}
-          {currentView === 'help' && <UserPrivacy />}
+          {currentView === 'help' && <UserPrivacy user={user} fetchUserData={fetchUserData} />}
         </Grid>
       </Grid>
     </Grid>

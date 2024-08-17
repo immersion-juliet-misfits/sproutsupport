@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -10,8 +12,37 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-const UserPrivacy = () => {
+const UserPrivacy = ({ user, fetchUserData }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const [settings, setSettings] = useState({
+    showWeather: user?.showWeather || false,
+    showPlants: user?.showPlants || false,
+    showMyMeetups: user?.showMyMeetups || false,
+    showOtherMeetups: user?.showOtherMeetups || false,
+    showForumPosts: user?.showForumPosts || false,
+  });
+
+  // **************
+
+  const handleToggle = (field, value) => {
+    setSettings((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+
+    axios
+      .patch('/user/updateUserField', { field, value })
+      .then((status) => {
+        // console.log('Update Field: Success ', status);
+      })
+      .catch((err) => {
+        console.error('Error updating: ', err);
+      });
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   return (
     <>
@@ -25,7 +56,7 @@ const UserPrivacy = () => {
         <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
           {/* This appears to change the entire site whether logged in or out?  Will tying it to the option in the User table fix this? */}
           <Heading textAlign='center' w='100%'>
-            Choose what's displayed on your Profile
+            Public Profile Presentation
           </Heading>
           <Box
             w='80%'
@@ -42,35 +73,69 @@ const UserPrivacy = () => {
                   onChange={toggleColorMode}
                 />
                 <label htmlFor='showDarkLight'>
-                  Change Site Display? Current Mode: {colorMode}
+                  Change Site Color Mode? Current: {colorMode}
                 </label>
               </HStack>
 
               <HStack>
-                <Switch id='showPlants' />
+                <Switch
+                  id='showPlants'
+                  isChecked={settings.showPlants}
+                  onChange={(e) => handleToggle('showPlants', e.target.checked)}
+                />
                 <label htmlFor='showPlants'>Display Your Plants?</label>
               </HStack>
 
               <HStack>
-                <Switch id='showMyMeetUps' />
-                <label htmlFor='showMyMeetUps'>
+                <Switch
+                  id='showMyMeetups'
+                  isChecked={settings.showMyMeetups}
+                  onChange={(e) =>
+                    handleToggle('showMyMeetups', e.target.checked)
+                  }
+                />
+                <label htmlFor='showMyMeetups'>
                   Display Your Created Meetups?
                 </label>
               </HStack>
 
               <HStack>
-                <Switch id='showOtherMeetups' />
+                <Switch
+                  id='showOtherMeetups'
+                  isChecked={settings.showOtherMeetups}
+                  onChange={(e) =>
+                    handleToggle('showOtherMeetups', e.target.checked)
+                  }
+                />
                 <label htmlFor='showOtherMeetups'>
                   Display Your RSVP'd Meetups?
                 </label>
               </HStack>
 
               <HStack>
-                <Switch id='showForumPosts' />
+                <Switch
+                  id='showForumPosts'
+                  isChecked={settings.showForumPosts}
+                  onChange={(e) =>
+                    handleToggle('showForumPosts', e.target.checked)
+                  }
+                />
                 <label htmlFor='showForumPosts'>
                   Display Your Forum Posts?
                 </label>
               </HStack>
+
+              <HStack>
+                <Switch
+                  id='showWeather'
+                  isChecked={settings.showWeather}
+                  onChange={(e) =>
+                    handleToggle('showWeather', e.target.checked)
+                  }
+                />
+                <label htmlFor='showWeather'>Display Your Weather?</label>
+              </HStack>
+
             </VStack>
           </Box>
         </GridItem>

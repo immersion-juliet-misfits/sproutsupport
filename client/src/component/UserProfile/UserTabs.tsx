@@ -7,7 +7,7 @@ const UserTabs = ({ handleLogOut, setCurrentView }) => {
       variant='enclosed'
       isFitted
       w='100%'
-      defaultIndex={2}
+      // defaultIndex={2}
     >
       <TabList className='UserTabList'>
         <Tab className='uTab' onClick={handleLogOut}>

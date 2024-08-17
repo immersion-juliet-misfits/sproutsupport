@@ -30,6 +30,7 @@ model User {
   showMyMeetups    Boolean        @default(false)
   showOtherMeetups Boolean        @default(false)
   showForumPosts   Boolean        @default(false)
+  showWeather      Boolean        @default(false)
 }
 
 model Image {

@@ -173,4 +173,33 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
     });
 });
 
+// Update all Privacy Toggles
+UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
+  const { field, value } = req.body;
+  const userId = req.user.id;
+
+  const validFields = ['showWeather', 'showPlants', 'showMyMeetups', 'showOtherMeetups', 'showForumPosts'];
+  if (!userId || !validFields.includes(field) || typeof value !== 'boolean') {
+    return res.status(400).send('User ID, a valid field, and a boolean value are required');
+  }
+
+  req.user[field] = value;
+
+  prisma.user
+    .update({
+      where: { id: userId },
+      data: { [field]: value },
+    })
+    .then((updatedUser) => {
+      res.send(updatedUser);
+    })
+    .catch((error) => {
+      console.error(`Error updating ${field}:`, error);
+      res.status(500).send(`Failed to update ${field}`);
+    });
+});
+
+
+
+
 export default UserInfo;
