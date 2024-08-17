@@ -1,14 +1,12 @@
 import axios from 'axios';
 import { useState } from 'react';
 import {
-  // Box,
   Button,
   ButtonGroup,
   Flex,
   Grid,
   IconButton,
   useEditableControls,
-  useColorMode,
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +47,6 @@ const UserPrivateProfile = ({
     city: user.city || '',
     state: user.state || '',
   });
-  const { colorMode, toggleColorMode } = useColorMode();
 
   const EditableControls = () => {
     const {
@@ -125,8 +122,9 @@ const UserPrivateProfile = ({
   };
 
   const handleLocationChange = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
     fetchWeather(location.city, location.state);
+    setLocation({ city: '', state: '' });
   };
 
   const handleInputChange = (event) => {
@@ -209,7 +207,6 @@ const UserPrivateProfile = ({
         >
           {currentView === 'info' && (
             <UserInfo
-              fetchUserData={fetchUserData}
               user={user}
               avatar={user.avatar}
               bio={user.bio}
@@ -217,16 +214,16 @@ const UserPrivateProfile = ({
               state={user.state}
               userName={user.userName}
               EditableControls={EditableControls}
+              fetchUserData={fetchUserData}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
               handleLocationChange={handleLocationChange}
               handleInputChange={handleInputChange}
               handleUserNameChange={handleUserNameChange}
+              setLocation={setLocation}
             />
           )}
-          <p>Current color mode: {colorMode}</p>
-        <Button onClick={toggleColorMode}>Toggle color mode</Button>
-        {currentView === 'help' && <UserPrivacy />}
+          {currentView === 'help' && <UserPrivacy />}
         </Grid>
       </Grid>
     </Grid>

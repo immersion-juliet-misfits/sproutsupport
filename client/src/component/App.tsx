@@ -21,9 +21,9 @@ const App = () => {
   const [user, setUser] = useState(null); // use react context later
   const [loading, setLoading] = useState(true);
 
-  const toast = useToast()
-  // const BUCKET_NAME = 'my1test1bucket';
-  const BUCKET_NAME = 'sprout-support';
+  const toast = useToast();
+  const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'sprout-support';
   // const BUCKET_NAME = 'sproutsupportbucket'
   // const BUCKET_NAME = 'ssupportbucket'
 
@@ -45,19 +45,18 @@ const App = () => {
     // Fetch Users authentication status
     fetchUserData();
 
-      const notif = (task) => {
+    const notif = (task) => {
+      toast({
+        title: `${task.taskPlant.nickname}`,
+        description: `${task.taskName}`,
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    };
 
-        toast({
-          title: `${task.taskPlant.nickname}`,
-          description: `${task.taskName}`,
-          status: 'warning',
-          duration: 5000,
-          isClosable: true,
-          position: 'top-right'
-        })
-      }
-
-      socket.on('overdue', notif) // task on
+    socket.on('overdue', notif); // task on
 
     return () => {
       socket.off('overdue', notif); // then off to not double up upon re-render with update
@@ -73,7 +72,6 @@ const App = () => {
   }
 
   return (
-
     <ChakraProvider theme={ssTheme}>
       <ColorModeScript initialColorMode={ssTheme.config.initialColorMode} />
       <div className='App'>
@@ -83,7 +81,10 @@ const App = () => {
             path='/home'
             element={isAuthenticated ? <Home /> : <Navigate to='/login' />}
           />
-          <Route path='/createPost' element={<CreatePost user={user} BUCKET_NAME={BUCKET_NAME} />} />
+          <Route
+            path='/createPost'
+            element={<CreatePost user={user} BUCKET_NAME={BUCKET_NAME} />}
+          />
           <Route path='/myplants' element={<OwnedPlants user={user} />}></Route>
           <Route
             path='/plantfinder'

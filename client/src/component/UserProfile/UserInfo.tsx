@@ -1,7 +1,5 @@
 import {
   Button,
-  Editable,
-  EditableInput,
   Flex,
   Grid,
   GridItem,
@@ -13,27 +11,27 @@ import {
 import { useEffect, useState } from 'react';
 
 const UserInfo = ({
-  fetchUserData,
   user,
   avatar,
   bio,
   city,
   state,
   userName,
-  EditableControls,
+  fetchUserData,
   handleAvatarChange,
   handleBioChange,
   handleLocationChange,
   handleInputChange,
   handleUserNameChange,
 }) => {
-  const [editableUserName, setEditableUserName] = useState(userName);
+  const [editableUserName, setEditableUserName] = useState('');
+  const [editableCity, setEditableCity] = useState('');
+  const [editableState, setEditableState] = useState('');
+  const [editableBio, setEditableBio] = useState('');
 
   useEffect(() => {
     fetchUserData();
-    // fetchWeather(user.city, user.state);
   }, [user]);
-
 
   return (
     <>
@@ -64,7 +62,6 @@ const UserInfo = ({
             w='100%'
             h='100%'
             borderRadius='50%'
-            // bg='#BDE3FF'
             display='flex'
             alignItems='center'
             justifyContent='center'
@@ -86,61 +83,76 @@ const UserInfo = ({
         w='85%'
         gap={4}
       >
+        {/* ************************** */}
         <GridItem
           className='UserNameChange'
           borderRadius='lg'
           bg='#BDE3FF'
-          h='100px'
+          h='200px'
         >
-          <Editable
-            defaultValue={userName}
-            onChange={(nextValue) => {
-              setEditableUserName(nextValue);
-            }}
-            onSubmit={() => {
+          <Flex alignItems='center' gap='10'>
+            <Text fontSize='xl' fontWeight='bold' ml='90px'>
+              Display Name
+            </Text>
+          </Flex>
+          <Heading as='h2' size='lg' textAlign='center'>
+            {userName}
+          </Heading>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
               handleUserNameChange(editableUserName);
+              setEditableUserName('');
             }}
-            mt={2}
-            minH='40px'
-            isPreviewFocusable={false}
           >
-            <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Edit Display Name
-              </Text>
+            <Flex
+              direction='row'
+              alignItems='center'
+              justifyContent='center'
+              mt={4}
+              gap={6}
+            >
+              <Input
+                name='username'
+                value={editableUserName}
+                placeholder='Enter new User Name here'
+                onChange={(e) => setEditableUserName(e.target.value)}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='50%'
+              />
             </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {userName}
-            </Heading>
-            <Input
-              as={EditableInput}
-              border='1px solid black'
-              bg='white'
-              placeholder='Update your User Name'
-              borderRadius='md'
-              minH='40px'
-              p={2}
-            />
-          </Editable>
+            <Flex justifyContent='center' mt={4}>
+              <Button type='submit' colorScheme='teal' size='md'>
+                Save Display Name
+              </Button>
+            </Flex>
+          </form>
         </GridItem>
-        {/* Line break  */}
+        {/* ************************** */}
         <GridItem
           className='UserLocationCityStateChange'
           borderRadius='lg'
           bg='#BDE3FF'
           h='200px'
         >
-            <Flex alignItems='center' gap='10'>
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                City and State
-              </Text>
-            </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {city && state ? `${city}, ${state}` : 'No Location Watched'}
-            </Heading>
+          <Flex alignItems='center' gap='10'>
+            <Text fontSize='xl' fontWeight='bold' ml='90px'>
+              City and State
+            </Text>
+          </Flex>
+          <p />
+          <Heading as='h2' size='lg' textAlign='center'>
+            {city && state ? `${city}, ${state}` : 'No Location Watched'}
+          </Heading>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleLocationChange();
+            }}
+          >
             <Flex
               direction='row'
               alignItems='center'
@@ -170,50 +182,61 @@ const UserInfo = ({
               />
             </Flex>
             <Flex justifyContent='center' mt={4}>
-              <Button
-                onClick={handleLocationChange}
-                colorScheme='teal'
-                size='md'
-              >
+              <Button type='submit' colorScheme='teal' size='md'>
                 Get Weather
               </Button>
             </Flex>
+          </form>
         </GridItem>
-         {/* Break Here  */}
+        {/* ************************** */}
         <GridItem
           className='UserBioChange'
           borderRadius='lg'
           bg='#BDE3FF'
           h='200px'
         >
-          <Editable
-            defaultValue={bio}
-            onSubmit={handleBioChange}
-            mt={2}
-            minH='40px'
-            isPreviewFocusable={false}
+          <Flex alignItems='center' gap='10'>
+            <Text fontSize='xl' fontWeight='bold' ml='90px'>
+              Edit User Bio
+            </Text>
+          </Flex>
+          <Heading as='h2' size='lg' textAlign='center'>
+            {bio}
+          </Heading>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleBioChange(editableBio);
+              setEditableBio('');
+            }}
           >
-            <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Edit User Bio
-              </Text>
+            <Flex
+              direction='row'
+              alignItems='center'
+              justifyContent='center'
+              mt={4}
+              gap={6}
+            >
+              <Input
+                name='bio'
+                value={editableBio}
+                placeholder='Enter new Bio'
+                onChange={(e) => setEditableBio(e.target.value)}
+                bg='white'
+                border='1px solid black'
+                borderRadius='md'
+                mb={4}
+                w='50%'
+              />
             </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {bio}
-            </Heading>
-            <Input
-              as={EditableInput}
-              border='1px solid black'
-              bg='white'
-              p={2}
-              borderRadius='md'
-              minH='40px'
-              placeholder='Update your bio'
-            />
-          </Editable>
+            <Flex justifyContent='center' mt={4}>
+              <Button type='submit' colorScheme='teal' size='md'>
+                Save Bio
+              </Button>
+            </Flex>
+          </form>
         </GridItem>
+        {/* ************************** */}
       </Grid>
     </>
   );
