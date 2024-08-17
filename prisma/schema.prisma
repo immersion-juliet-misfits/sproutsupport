@@ -10,9 +10,8 @@ datasource db {
 model User {
   id            Int            @id @default(autoincrement())
   google_id     String         @unique
-  location_id   Int?
-  latitude      Float?
-  longitude     Float?
+  city          String?
+  state         String?
   userName      String?
   email         String?        @unique
   password      String?
@@ -41,9 +40,9 @@ model Meet {
   eventName   String
   description String
   imageUrl    String
-  status      String
-  message     String?
   userId      Int
+  message     String?
+  status      String
   attendees   Attendee[]
   owner       User       @relation(fields: [userId], references: [id])
 
@@ -81,25 +80,31 @@ model Task {
   frequency       String?
   lastCompleted   DateTime?
   nextComplection DateTime?
-  plant_id        Int?
   overdue         Boolean?
+  plant_id        Int?
   taskPlant       Plant?    @relation(fields: [plant_id], references: [id])
 
   @@index([plant_id], map: "Task_plant_id_fkey")
 }
 
 model Post {
-  id       Int    @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   userId   Int
-  image_id Int?
   message  String
-  owner    User   @relation(fields: [userId], references: [id])
+  image_url String?
+  owner    User      @relation(fields: [userId], references: [id])
+  Comment  Comment[]
 
   @@index([userId], map: "Post_userId_fkey")
 }
 
 model Comment {
-  id Int @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
+  message String
+  postId  Int
+  post    Post   @relation(fields: [postId], references: [id])
+
+  @@index([postId], map: "Comment_postId_fkey")
 }
 
 model Attendee {

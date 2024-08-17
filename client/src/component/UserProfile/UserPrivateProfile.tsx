@@ -1,22 +1,27 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import {
-  Box,
+  // useEffect,
+  useState,
+} from 'react';
+import {
+  // Box,
+  Button,
   ButtonGroup,
   Flex,
   Grid,
-  GridItem,
-  Heading,
+  // GridItem,
+  // Heading,
   IconButton,
   useEditableControls,
+  useColorMode,
 } from '@chakra-ui/react';
 import { EditIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import NavBar from '../NavBar';
+// import NavBar from '../NavBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserPrivacy from './UserPrivacy';
-import UserHelp from './UserHelp';
+import TopBar from './TopBar';
 
 // User context
 interface User {
@@ -26,21 +31,30 @@ interface User {
   email: string;
   avatar: string;
   bio: string;
-  latitude: float;
-  longitude: float;
+  city: string;
+  state: string;
 }
 
 // Main component
-const UserPrivateProfile = ({ user, setUser, onLogout }) => {
+const UserPrivateProfile = ({
+  user,
+  setUser,
+  onLogout,
+  BUCKET_NAME,
+  fetchUserData,
+}) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  const [latitude, setLatitude] = useState(64.7552);
-  const [longitude, setLongitude] = useState(147.3534);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
+  const [location, setLocation] = useState({
+    city: user.city || '',
+    state: user.state || '',
+  });
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const EditableControls = () => {
     const {
@@ -62,27 +76,20 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
     );
   };
 
-  const fetchWeatherData = () => {
-    setLoading(true);
-    setError(null);
+  const fetchWeather = (city, state) => {
+    axios
+      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+      .then((response) => {
+        console.log('Retrieved weather data:', response.data);
+        const data = response.data;
 
-    // if (user.latitude && user.longitude) {
-      axios
-        .get('/user/weatherData')
-        .then((response) => {
-          const { currentWeather, dailyForecast, weatherAlerts } =
-            response.data;
-          setWeatherData(currentWeather);
-          setDailyForecastData(dailyForecast);
-          setAlertsData(weatherAlerts);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error('Error fetching weather data:', err);
-          setError('Failed to load weather data');
-          setLoading(false);
-        });
-    // }
+        setWeatherData(data.currentConditions);
+        setDailyForecastData(data.days);
+        setAlertsData(data.alerts || []);
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data for city and state:', error);
+      });
   };
 
   const handleAvatarChange = (event) => {
@@ -96,7 +103,7 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
           });
         })
         .then(() => {
-          const newAvatarUrl = `https://ssupportbucket.s3.amazonaws.com/${file.name}`;
+          const newAvatarUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${file.name}`;
           return axios
             .patch('/user/updateAvatar', {
               avatar: newAvatarUrl,
@@ -122,32 +129,33 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
       });
   };
 
-  const handleLatLonChange = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-
-          setLatitude(latitude);
-          setLongitude(longitude);
-
-          axios
-            .patch('/user/updateLatLon', { latitude, longitude })
-            .then((response) => {
-              setUser(response.data);
-            })
-            .catch((error) => {
-              console.error('Update GeoLocation: Failed ', error);
-            });
-        },
-        (error) => {
-          console.error('Error getting geolocation:', error);
-        }
-      );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-    }
+  const handleLocationChange = (event) => {
+    event.preventDefault();
+    fetchWeather(location.city, location.state);
   };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setLocation((prevLocation) => ({
+      ...prevLocation,
+      [name]: value,
+    }));
+  };
+
+  // const handleLocationChange = (event) => {
+  //   event.preventDefault();
+
+  //   const { name, value } = event.target;
+
+  //   if (name === 'city' || name === 'state') {
+  //     setLocation((prevLocation) => ({
+  //       ...prevLocation,
+  //       [name]: value,
+  //     }));
+  //   } else {
+  //     fetchWeather(location.city, location.state);
+  //   }
+  // };
 
   const handleBioChange = (newBio: string) => {
     axios
@@ -178,140 +186,72 @@ const UserPrivateProfile = ({ user, setUser, onLogout }) => {
       });
   };
 
-  const goToPublicProfile = () => {
-    navigate('/public-profile', {
-      state: {
-        avatar: user.avatar,
-        bio: user.bio,
-        latitude: user.latitude,
-        longitude: user.longitude,
-        userName: user.userName,
-        weatherData,
-        dailyForecastData,
-        alertsData,
-      },
-    });
-  };
-
-  useEffect(() => {
-    // console.log('Use Effect User Check: ', user);
-    if (user.latitude && user.longitude) {
-      fetchWeatherData();
-    }
-  }, [user]);
-
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
-    <Grid
-      // border='5px solid purple'
-      w='1100px'
-      mx='auto'
-      mt={10}
-      p={5}
-      borderWidth='1px'
-      borderRadius='lg'
-      overflow='hidden'
-      boxShadow='md'
-    >
+    <Grid className='privateBodyGrid' w='1100px' mx='auto'>
+      <TopBar />
       <Grid
-        // border='5px solid yellow'
-        className='header-grid'
-        templateRows='repeat(1, 1fr)'
-        templateColumns='repeat(5, 1fr)'
-        h='100px'
-        gap={4}
-        mb={4}
-      >
-        <GridItem
-          colSpan={1}
-          bg='teal'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Box
-            w='100px'
-            h='100px'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            Site Logo
-          </Box>
-        </GridItem>
-        <GridItem
-          colSpan={3}
-          bg='#c1e3c9'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Heading as='h1' size='2xl'>
-            USER SETTINGS
-          </Heading>
-        </GridItem>
-        <GridItem
-          colSpan={1}
-          bg='teal'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <Box
-            w='100px'
-            h='100px'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-          >
-            <NavBar />
-          </Box>
-        </GridItem>
-      </Grid>
-      <Grid
-        className='content-grid'
+        className='bodyGrid'
+        border='15px solid #D3FFEB'
+        borderBottom='0'
+        bg='#D3FFEB'
+        w='1100px'
+        mx='auto'
+        borderRadius='lg lg 0 0'
+        overflow='hidden'
+        boxShadow='md'
         templateRows='1fr'
         templateColumns='1fr'
-        bg='teal'
+        display='flex'
+        flexDirection='column'
+        alignItems='center'
+        justifyContent='flex-end'
+      >
+        <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} />
+      </Grid>
+      <Grid
+        w='1100px'
+        mx='auto'
+        mt='0'
+        borderRadius='0 0 lg lg'
+        // border='15px solid red'
+        border='15px solid #D3FFEB'
+        borderTop='0'
+        bg='#5AB78D'
+        gap={10}
+        overflow='hidden'
+        boxShadow='md'
+        templateRows='1fr'
+        templateColumns='1fr'
+        display='flex'
+        flexDirection='column'
         alignItems='center'
         justifyContent='center'
         py={4}
       >
-        <Grid
-          // border='5px solid red'
-          // bg='blue.500'
-          gap={10}
-          display='flex'
-          flexDirection='column'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <UserTabs
-            handleLogOut={handleLogOut}
-            setCurrentView={setCurrentView}
-            goToPublicProfile={goToPublicProfile}
+        {currentView === 'info' && (
+          <UserInfo
+            fetchUserData={fetchUserData}
+            user={user}
+            avatar={user.avatar}
+            bio={user.bio}
+            city={user.city}
+            state={user.state}
+            userName={user.userName}
+            EditableControls={EditableControls}
+            handleAvatarChange={handleAvatarChange}
+            handleBioChange={handleBioChange}
+            handleLocationChange={handleLocationChange}
+            handleInputChange={handleInputChange}
+            handleUserNameChange={handleUserNameChange}
           />
-          {currentView === 'info' && (
-            <UserInfo
-              avatar={user.avatar}
-              bio={user.bio}
-              // location_id={user.location_id}
-              latitude={user.latitude}
-              longitude={user.longitude}
-              userName={user.userName}
-              EditableControls={EditableControls}
-              handleAvatarChange={handleAvatarChange}
-              handleBioChange={handleBioChange}
-              handleLatLonChange={handleLatLonChange}
-              handleUserNameChange={handleUserNameChange}
-            />
-          )}
-          {currentView === 'privacy' && <UserPrivacy />}
-          {currentView === 'help' && <UserHelp />}
-        </Grid>
+        )}
+        <p>Current color mode: {colorMode}</p>
+        <Button onClick={toggleColorMode}>Toggle color mode</Button>
+        {currentView === 'help' && <UserPrivacy />}
       </Grid>
     </Grid>
   );

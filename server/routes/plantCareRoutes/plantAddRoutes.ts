@@ -246,8 +246,8 @@ Plants.post('/warnings/:userId', (req: Request, res: Response) => {
   // find user to get location
   prisma.user.findUnique({where: {id: Number(userId)}})
     .then((user) => {
-      const { latitude, longitude } = user;
-      axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude},${longitude}?key=${process.env.WEATHER_KEY}`)
+      const { city, state } = user;
+      axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city},${state}?key=${process.env.WEATHER_KEY}`)
         .then(({data}) => {
 
           // data.days[0] - most recent time, 

@@ -18,13 +18,11 @@ const PlantWarnings = ({ user }) => {
   }
 
   const getWarnings = () => {
-    if (user.longitude !== 147.3534 && user.latitude !== 64.7552) {
         axios.post(`/plants/warnings/${user.id}`)
         .then(({data}) => {
             setAlerts(data.alerts)
             // setWeather(data.currentConditions)
         });
-    }
   };
 
   useEffect(() => {
@@ -34,12 +32,12 @@ const PlantWarnings = ({ user }) => {
   return (
     <div>
       <Heading size="lg">{`Warnings`}</Heading>
-      {user.longitude === 147.3534 && user.latitude === 64.7552 && <h1>No location found. Please visit settings to allow for location access.</h1>}
+      {!user.city || !user.state && <h1>No location found. Please visit settings to allow for location access.</h1>}
       {/* {currWeather && <h2>{currWeather.conditions}</h2>} */}
       {alerts.length > 0 && alerts.map((alert, i) => {
         return (
-          <div>
-          <Heading key={`${alert}-${i}`} size="s">{alert.event}</Heading>
+          <div key={`${alert}-${i}`}>
+          <Heading size="s">{alert.event}</Heading>
           <h1>{decideWarning(alert.event)}</h1>
           </div>
         )
