@@ -27,9 +27,23 @@ export default (env) => {
     },
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
-      path: path.resolve(__dirname, './client/dist/'),
-      publicPath: '/',
-      filename: 'bundle.js',
+      filename: '[name].[contenthash].js',
+      path: path.resolve(__dirname, 'dist'),
+      clean: true,
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+        }),
+      ],
+      splitChunks: {
+        chunks: 'all',
+      },
+    },
+    cache: {
+      type: 'filesystem',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
@@ -39,7 +53,14 @@ export default (env) => {
       rules: [
         {
           test: /\.(js|tsx)$/,
+          include: path.resolve(__dirname, 'client/src'),
           use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+              },
+            },
             {
               loader: 'ts-loader',
               options: {
@@ -83,8 +104,9 @@ export default (env) => {
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),
       }),
-      // new BundleAnalyzerPlugin(),
       new NodePolyfillPlugin(),
+
+      // new BundleAnalyzerPlugin(),
     ],
   };
 };
