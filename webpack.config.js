@@ -9,7 +9,8 @@ import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
-
+import TerserPlugin from 'terser-webpack-plugin';
+import  ProgressPlugin  from 'progress-webpack-plugin';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -105,7 +106,7 @@ export default (env) => {
         template: path.resolve(__dirname, './client/index.html'),
       }),
       new NodePolyfillPlugin(),
-
+      new ProgressPlugin(true),
       // new BundleAnalyzerPlugin(),
     ],
   };
