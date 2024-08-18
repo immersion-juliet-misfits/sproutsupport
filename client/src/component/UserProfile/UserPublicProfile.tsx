@@ -89,16 +89,16 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   }, []);
 
   return (
-    <Grid className='publicBodyGrid' w='1100px' mx='auto'>
+    <Grid className='publicBodyGrid' w='1100px' mx='auto' >
       <TopBar />
       <Grid
         className='bodyGrid'
-        border='15px solid #D3FFEB'
+        // border='2px solid red'
         bg='#D3FFEB'
         borderBottom='0'
         w='1100px'
         mx='auto'
-        borderRadius='lg lg 0 0'
+        borderRadius='lg'
         overflow='hidden'
         boxShadow='md'
         templateRows='1fr'
@@ -106,16 +106,15 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
         display='flex'
         flexDirection='column'
         alignItems='center'
-        justifyContent='flex-end'
+        // justifyContent='flex-end'
       >
         <Grid
           w='1100px'
           mx='auto'
           mt='0'
-          borderRadius='0 0 lg lg'
+          borderRadius='lg'
           // border='15px solid red'
           border='15px solid #D3FFEB'
-          borderTop='0'
           bg='#5AB78D'
           gap={10}
           overflow='hidden'
@@ -135,12 +134,11 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             <Image
               src={user.avatar}
               alt={`${user.userName}'s avatar`}
-              // borderRadius='full'
-              // boxSize='150px'
-              w='300px' // Fixed width
-              h='300px' // Fixed height
-              borderRadius='50%' // Makes it circular
+              w='300px'
+              h='300px'
               objectFit='cover'
+              borderRadius='50%'
+              border='15px solid #D3FFEB'
             />
             <Heading as='h2' size='xl'>
               {user.userName}

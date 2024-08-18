@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import path, { dirname } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -8,9 +8,8 @@ import autoprefixer from 'autoprefixer'; // Parses CSS
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
-
-
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,9 +26,10 @@ export default (env) => {
     },
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
+      filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, './client/dist/'),
       publicPath: '/',
-      filename: 'bundle.js',
+      clean: true,
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
@@ -39,7 +39,14 @@ export default (env) => {
       rules: [
         {
           test: /\.(js|tsx)$/,
+          include: path.resolve(__dirname, 'client/src'),
           use: [
+            {
+              loader: 'babel-loader',
+              options: {
+                cacheDirectory: true,
+              },
+            },
             {
               loader: 'ts-loader',
               options: {
@@ -79,12 +86,34 @@ export default (env) => {
         },
       ],
     },
+
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          parallel: true,
+        }),
+      ],
+      splitChunks: {
+        chunks: 'all',
+      },
+      runtimeChunk: 'single',
+    },
+
+    cache: {
+      type: 'filesystem',
+    },
+
     plugins: [
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),
       }),
-      // new BundleAnalyzerPlugin(),
       new NodePolyfillPlugin(),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        generateStatsFile: true,
+        statsFilename: 'stats.json',
+      }),
     ],
   };
 };
