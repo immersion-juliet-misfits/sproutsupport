@@ -19,7 +19,8 @@ interface User {
   state: string;
 }
 
-const CACHE_TIME = 1800000;
+// const CACHE_TIME = 1800000;
+const CACHE_TIME = 0;
 
 // Main component
 const UserPrivateProfile = ({
@@ -42,59 +43,59 @@ const UserPrivateProfile = ({
   const cachedLocation = JSON.parse(localStorage.getItem('cachedLocation'));
   const lastFetched = localStorage.getItem('lastFetched');
 
-  const fetchWeather = (city, state) => {
-    const currentTime = new Date().getTime();
-    const cachedWeatherData = JSON.parse(localStorage.getItem('weatherData'));
-    const cachedLocation = JSON.parse(localStorage.getItem('cachedLocation'));
-    const lastFetched = localStorage.getItem('lastFetched');
-
-    if (
-      cachedWeatherData &&
-      cachedLocation &&
-      cachedLocation.city === city &&
-      cachedLocation.state === state &&
-      lastFetched &&
-      currentTime - lastFetched < CACHE_TIME
-    ) {
-      // console.log('Using cached weather data from localStorage');
-      setWeatherData(cachedWeatherData.currentConditions);
-      setDailyForecastData(cachedWeatherData.days);
-      setAlertsData(cachedWeatherData.alerts || []);
-      return;
-    }
-
-    axios
-      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-      .then((response) => {
-        const data = response.data;
-        setWeatherData(data.currentConditions);
-        setDailyForecastData(data.days);
-        setAlertsData(data.alerts || []);
-
-        localStorage.setItem('weatherData', JSON.stringify(data));
-        localStorage.setItem('cachedLocation', JSON.stringify({ city, state }));
-        localStorage.setItem('lastFetched', currentTime);
-      })
-      .catch((error) => {
-        console.error('Error fetching weather data for city and state:', error);
-      });
-  };
-
   // const fetchWeather = (city, state) => {
+  //   const currentTime = new Date().getTime();
+  //   const cachedWeatherData = JSON.parse(localStorage.getItem('weatherData'));
+  //   const cachedLocation = JSON.parse(localStorage.getItem('cachedLocation'));
+  //   const lastFetched = localStorage.getItem('lastFetched');
+
+  //   if (
+  //     cachedWeatherData &&
+  //     cachedLocation &&
+  //     cachedLocation.city === city &&
+  //     cachedLocation.state === state &&
+  //     lastFetched &&
+  //     currentTime - lastFetched < CACHE_TIME
+  //   ) {
+  //     // console.log('Using cached weather data from localStorage');
+  //     setWeatherData(cachedWeatherData.currentConditions);
+  //     setDailyForecastData(cachedWeatherData.days);
+  //     setAlertsData(cachedWeatherData.alerts || []);
+  //     return;
+  //   }
+
   //   axios
   //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
   //     .then((response) => {
-  //       console.log('Retrieved weather data:', response.data);
   //       const data = response.data;
-
   //       setWeatherData(data.currentConditions);
   //       setDailyForecastData(data.days);
   //       setAlertsData(data.alerts || []);
+
+  //       localStorage.setItem('weatherData', JSON.stringify(data));
+  //       localStorage.setItem('cachedLocation', JSON.stringify({ city, state }));
+  //       localStorage.setItem('lastFetched', currentTime);
   //     })
   //     .catch((error) => {
   //       console.error('Error fetching weather data for city and state:', error);
   //     });
   // };
+
+  const fetchWeather = (city, state) => {
+    axios
+      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+      .then((response) => {
+        // console.log('Retrieved weather data:', response.data);
+        const data = response.data;
+
+        setWeatherData(data.currentConditions);
+        setDailyForecastData(data.days);
+        setAlertsData(data.alerts || []);
+      })
+      .catch((error) => {
+        console.error('Error fetching weather data for city and state:', error);
+      });
+  };
 
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
@@ -184,7 +185,7 @@ const UserPrivateProfile = ({
     if (user?.city && user?.state) {
       fetchWeather(user.city, user.state);
     }
-  }, []);
+  }, [user.city, user.state]);
 
   return (
     <Grid className='privateBodyGrid' w='1100px' mx='auto'>
@@ -232,6 +233,7 @@ const UserPrivateProfile = ({
               state={user.state}
               userName={user.userName}
               fetchUserData={fetchUserData}
+              // fetchWeather={fetchWeather}
               handleAvatarChange={handleAvatarChange}
               handleBioChange={handleBioChange}
               handleLocationChange={handleLocationChange}

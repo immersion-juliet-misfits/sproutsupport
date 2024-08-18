@@ -149,9 +149,9 @@ const UserPrivacy = ({ user, fetchUserData }) => {
         <GridItem bg='green.500' h='150px'>
           Email/Password/Login Method Editing will be here
         </GridItem> */}
-        <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
+        {/* <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
           <Button colorScheme='red'>Delete Account</Button>
-        </GridItem>
+        </GridItem> */}
       </Grid>
     </>
   );
