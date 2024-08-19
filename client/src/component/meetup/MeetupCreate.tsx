@@ -11,6 +11,7 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
   const [description, setDescription] = useState('')
   const [image, setImage] = useState({})
   const [fillIn, setFillIn] = useState(false)
+  const [weather, setWeather] = useState('')
 
   const edit = (name: string, value: React.ChangeEvent<HTMLInputElement>): void =>{
     switch(name){
@@ -67,13 +68,18 @@ if(image.name !== undefined){
   }
 
   const getweather = (): void => {
-    axios.get('/meetup/weather')
+    if(city === '' || st === ''){
+      alert('please fill in city and state')
+    }else{
+    axios.get(`/meetup/weather?city=${city}&state=${st}`)
     .then(({data})=>{
       console.log(data)
+      setWeather(data.days[0].description)
     })
     .catch((err)=>{
       console.log(err)
     })
+  }
   }
 
   useEffect(()=>{
@@ -106,7 +112,7 @@ if(image.name !== undefined){
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
     </Box>
     <Box border='1px' borderColor='black' w={"400px"}>
-      <div >weather status: none</div>
+      <div >weather status: {weather}</div>
     </Box>
   </div>)
 };

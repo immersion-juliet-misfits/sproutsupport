@@ -141,7 +141,6 @@ useEffect(()=>{
   <div>
      <Box w='1100px' mx='auto' >
      <TopBar/>
-    <Box m={2} color='white'  backgroundColor='green'><Nav /></Box>
     <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
     {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>}
     {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
