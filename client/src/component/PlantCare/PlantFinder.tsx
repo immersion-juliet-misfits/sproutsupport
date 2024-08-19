@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Input, Heading, Select, FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Button, Grid, GridItem} from '@chakra-ui/react'
 import axios from 'axios';
 import PlantImgUpload from './PlantImgUpload';
+import TopBar from '../UserProfile/TopBar';
 
 type Plant = {
     CommonName: string;
@@ -111,24 +112,27 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
 
   return (
     <Box mx="auto" bg="green.200" p={5}>
+      <TopBar />
       <Heading textAlign={'center'}>Plant Finder</Heading>
       <Link to={'/myplants'}>
         <Button colorScheme="green" value="My Plants">My Plants</Button>
       </Link>
       <FormControl>
-      <FormLabel>{`Search ${input}`}</FormLabel>
+      {/* <FormLabel>{`Search ${input}`}</FormLabel> */}
       {/* will eventually be used with cards... */}
+      <br></br>
       <Input
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
         bgColor='green.100'
         textColor="green.900"
+        width='auto'
         ></Input>
       <Button onClick={() => handleSubmit()}>Search</Button><br></br>
       </FormControl>
 
-      <Grid templateColumns="1fr 2fr" gap={4}>
+      <Grid templateColumns="2fr 2fr" gap={4}>
       <GridItem>
         {/* <VStack align="start" spacing={4}> */}
 
@@ -171,8 +175,8 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
           <Button onClick={() => handleAddTask()} color="green">Add Task</Button>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
-            tasks.map((task) => (
-              <h4>{task}</h4>
+            tasks.map((task, i) => (
+              <h4 key={`${task}-${i}`}>{task}</h4>
             ))
           }
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}

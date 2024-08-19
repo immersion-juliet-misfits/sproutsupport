@@ -97,7 +97,7 @@ model Post {
   id       Int       @id @default(autoincrement())
   userId   Int
   message  String
-  imageUrl String?
+  imageUrl String
   owner    User      @relation(fields: [userId], references: [id])
   Comment  Comment[]
 

@@ -8,7 +8,7 @@ import { io } from '../../index'
 const prisma = new PrismaClient();
 // const io = new Server(httpServer);
 
-const job = new CronJob('*/9 * * * * *', () => { // wanna make this dynamic 
+const job = new CronJob('*/1 * * * * *', () => { // wanna make this dynamic 
   // console.log('rn', new Date());
 
   // overdue tasks || find them and update active to false(needs to be clicked to be true again/not overdue)
