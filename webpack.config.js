@@ -9,7 +9,7 @@ import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
-
+import TerserPlugin from 'terser-webpack-plugin'
 
 
 const __filename = fileURLToPath(import.meta.url);
