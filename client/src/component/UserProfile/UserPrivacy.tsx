@@ -21,6 +21,8 @@ const UserPrivacy = ({ user, fetchUserData }) => {
     showOtherMeetups: user?.showOtherMeetups || false,
     showForumPosts: user?.showForumPosts || false,
   });
+  
+  const [isEditing, setIsEditing] = useState(false);
 
   // **************
 

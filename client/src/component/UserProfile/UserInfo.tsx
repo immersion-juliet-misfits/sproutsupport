@@ -20,7 +20,7 @@ const UserInfo = ({
   state,
   userName,
   fetchUserData,
-  // fetchWeather,
+  fetchWeather,
   handleAvatarChange,
   handleBioChange,
   handleLocationChange,
@@ -36,24 +36,24 @@ const UserInfo = ({
   const [editableState, setEditableState] = useState('');
   const [editableBio, setEditableBio] = useState('');
 
-  //  This needs to be replaced by the passed in Version
-  const fetchWeather = (city, state) => {
-    axios
-      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-      .then((response) => {
-        // console.log('Retrieved weather data:', response.data);
-        const data = response.data;
+  // //  This needs to be replaced by the passed in Version
+  // const fetchWeather = (city, state) => {
+  //   axios
+  //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+  //     .then((response) => {
+  //       // console.log('Retrieved weather data:', response.data);
+  //       const data = response.data;
 
-        setWeatherData(data.currentConditions);
-        setDailyForecastData(data.days);
-        setAlertsData(data.alerts || []);
-        setApiError(false);
-      })
-      .catch((err) => {
-        setApiError(true);
-        // console.error('Error fetching weather data for city and state:', err);
-      });
-  };
+  //       setWeatherData(data.currentConditions);
+  //       setDailyForecastData(data.days);
+  //       setAlertsData(data.alerts || []);
+  //       setApiError(false);
+  //     })
+  //     .catch((err) => {
+  //       setApiError(true);
+  //       // console.error('Error fetching weather data for city and state:', err);
+  //     });
+  // };
 
   useEffect(() => {
     console.log('Invoked');
