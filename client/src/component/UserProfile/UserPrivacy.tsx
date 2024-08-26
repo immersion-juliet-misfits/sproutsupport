@@ -21,7 +21,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
     showOtherMeetups: user?.showOtherMeetups || false,
     showForumPosts: user?.showForumPosts || false,
   });
-  
+
   const [isEditing, setIsEditing] = useState(false);
 
   // **************
@@ -102,7 +102,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               </HStack>
 
               {/* Hide Below until I have access to other Users profiles & Meetups  */}
-              {/* <HStack>
+               {/* <HStack>
                 <Switch
                   id='showOtherMeetups'
                   isChecked={settings.showOtherMeetups}
@@ -128,16 +128,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                 </label>
               </HStack>
 
-              <HStack>
-                <Switch
-                  id='showWeather'
-                  isChecked={settings.showWeather}
-                  onChange={(e) =>
-                    handleToggle('showWeather', e.target.checked)
-                  }
-                />
-                <label htmlFor='showWeather'>Display Your Weather?</label>
-              </HStack>
+
             </VStack>
           </Box>
         </GridItem>
@@ -151,9 +142,9 @@ const UserPrivacy = ({ user, fetchUserData }) => {
         <GridItem bg='green.500' h='150px'>
           Email/Password/Login Method Editing will be here
         </GridItem> */}
-        {/* <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
+         <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
           <Button colorScheme='red'>Delete Account</Button>
-        </GridItem> */}
+        </GridItem>
       </Grid>
     </>
   );

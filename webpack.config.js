@@ -8,10 +8,9 @@ import autoprefixer from 'autoprefixer'; // Parses CSS
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import  ProgressPlugin  from 'progress-webpack-plugin';
-
+import ProgressPlugin from 'progress-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +28,7 @@ export default (env) => {
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, './client/dist/'),
       clean: true,
     },
     optimization: {
@@ -42,6 +41,7 @@ export default (env) => {
       splitChunks: {
         chunks: 'all',
       },
+      runtimeChunk: 'single',
     },
     cache: {
       type: 'filesystem',
@@ -101,24 +101,6 @@ export default (env) => {
         },
       ],
     },
-
-    optimization: {
-      minimize: true,
-      minimizer: [
-        new TerserPlugin({
-          parallel: true,
-        }),
-      ],
-      splitChunks: {
-        chunks: 'all',
-      },
-      runtimeChunk: 'single',
-    },
-
-    cache: {
-      type: 'filesystem',
-    },
-
     plugins: [
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, './client/index.html'),

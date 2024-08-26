@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Box,
@@ -11,20 +11,21 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
+import UserControls from './UserControls';
 
 const UserInfo = ({
   user,
   avatar,
   bio,
-  city,
-  state,
+  // city,
+  // state,
   userName,
   fetchUserData,
-  fetchWeather,
+  // fetchWeather,
   handleAvatarChange,
   handleBioChange,
-  handleLocationChange,
-  handleInputChange,
+  // handleLocationChange,
+  // handleInputChange,
   handleUserNameChange,
 }) => {
   const [apiError, setApiError] = useState(false);
@@ -35,33 +36,29 @@ const UserInfo = ({
   const [editableCity, setEditableCity] = useState('');
   const [editableState, setEditableState] = useState('');
   const [editableBio, setEditableBio] = useState('');
-
-  // //  This needs to be replaced by the passed in Version
-  // const fetchWeather = (city, state) => {
-  //   axios
-  //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-  //     .then((response) => {
-  //       // console.log('Retrieved weather data:', response.data);
-  //       const data = response.data;
-
-  //       setWeatherData(data.currentConditions);
-  //       setDailyForecastData(data.days);
-  //       setAlertsData(data.alerts || []);
-  //       setApiError(false);
-  //     })
-  //     .catch((err) => {
-  //       setApiError(true);
-  //       // console.error('Error fetching weather data for city and state:', err);
-  //     });
-  // };
+  const [location, setLocation] = useState({
+    city: user.city || '',
+    state: user.state || '',
+  });
 
   useEffect(() => {
-    console.log('Invoked');
     fetchUserData();
-    if (user.city && user.state) {
-      fetchWeather(user.city, user.state);
+
+    if (
+      user.city !== 'undefined' &&
+      user.state !== 'undefined' &&
+      user.city !== '' &&
+      user.state !== ''
+    ) {
+      UserControls.fetchWeather(
+        user.city,
+        user.state,
+        setWeatherData,
+        setDailyForecastData,
+        setAlertsData
+      );
     }
-  }, []);
+  }, [user.city, user.state]);
 
   return (
     <>
@@ -113,7 +110,7 @@ const UserInfo = ({
         w='85%'
         gap={4}
       >
-        {/* ************************** */}
+        {/* Edit Username ************************** */}
         <GridItem
           className='UserNameChange'
           borderRadius='lg'
@@ -161,7 +158,7 @@ const UserInfo = ({
             </Flex>
           </form>
         </GridItem>
-        {/* ************************** */}
+        {/* Edit Bio ************************** */}
         <GridItem
           className='UserBioChange'
           borderRadius='lg'
@@ -209,7 +206,7 @@ const UserInfo = ({
             </Flex>
           </form>
         </GridItem>
-        {/* ************************** */}
+        {/* Edit Location ************************** */}
         <GridItem
           className='UserLocationCityStateChange'
           borderRadius='lg'
@@ -223,12 +220,25 @@ const UserInfo = ({
           </Flex>
           <p />
           <Heading as='h2' size='lg' textAlign='center'>
-            {city && state ? `${city}, ${state}` : 'No Location Watched'}
+            {/* {city && state ? `${city}, ${state}` : 'No Location Watched'} */}
+            {location.city && location.state
+              ? `${location.city}, ${location.state}`
+              : 'No Location Watched'}
           </Heading>
           <form
+            // onSubmit={(e) => {
+            //   e.preventDefault();
+            //   handleLocationChange();
+            // }}
             onSubmit={(e) => {
               e.preventDefault();
-              handleLocationChange();
+              UserControls.fetchWeather(
+                editableCity,
+                editableState,
+                setWeatherData,
+                setDailyForecastData,
+                setAlertsData
+              );
             }}
           >
             <Flex
@@ -241,7 +251,8 @@ const UserInfo = ({
               <Input
                 name='city'
                 placeholder='Enter City'
-                onChange={handleInputChange}
+                // onChange={handleInputChange}
+                onChange={(e) => setEditableCity(e.target.value)}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'
@@ -251,7 +262,8 @@ const UserInfo = ({
               <Input
                 name='state'
                 placeholder='Enter State'
-                onChange={handleInputChange}
+                // onChange={handleInputChange}
+                onChange={(e) => setEditableState(e.target.value)}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'

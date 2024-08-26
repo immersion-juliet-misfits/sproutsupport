@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+// import axios from 'axios';
+import { useState } from 'react';
 import { Grid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
-import controls from './UserControls';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserPrivacy from './UserPrivacy';
 import TopBar from './TopBar';
+import UserControls from './UserControls';
 
 // User context
 interface User {
@@ -20,9 +20,6 @@ interface User {
   state: string;
 }
 
-// const CACHE_TIME = 1800000;
-const CACHE_TIME = 0;
-
 // Main component
 const UserPrivateProfile = ({
   user,
@@ -31,164 +28,21 @@ const UserPrivateProfile = ({
   BUCKET_NAME,
   fetchUserData,
 }) => {
+  // const { user, setUser, loading } = useUser();
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
+  // const [apiError, setApiError] = useState(false);
   // const [weatherData, setWeatherData] = useState(null);
   // const [dailyForecastData, setDailyForecastData] = useState(null);
   // const [alertsData, setAlertsData] = useState(null);
-  // const [location, setLocation] = useState({
-  //   city: user.city || '',
-  //   state: user.state || '',
-  // });
-  // const cachedWeatherData = JSON.parse(localStorage.getItem('weatherData'));
-  // const cachedLocation = JSON.parse(localStorage.getItem('cachedLocation'));
-  // const lastFetched = localStorage.getItem('lastFetched');
-
-  // controls.useWeatherEffect(user, controls.fetchWeather);
-
-  // const fetchWeather = (city, state) => {
-  //   const currentTime = new Date().getTime();
-  //   const cachedWeatherData = JSON.parse(localStorage.getItem('weatherData'));
-  //   const cachedLocation = JSON.parse(localStorage.getItem('cachedLocation'));
-  //   const lastFetched = localStorage.getItem('lastFetched');
-
-  //   if (
-  //     cachedWeatherData &&
-  //     cachedLocation &&
-  //     cachedLocation.city === city &&
-  //     cachedLocation.state === state &&
-  //     lastFetched &&
-  //     currentTime - lastFetched < CACHE_TIME
-  //   ) {
-  //     // console.log('Using cached weather data from localStorage');
-  //     setWeatherData(cachedWeatherData.currentConditions);
-  //     setDailyForecastData(cachedWeatherData.days);
-  //     setAlertsData(cachedWeatherData.alerts || []);
-  //     return;
-  //   }
-
-  //   axios
-  //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setWeatherData(data.currentConditions);
-  //       setDailyForecastData(data.days);
-  //       setAlertsData(data.alerts || []);
-
-  //       localStorage.setItem('weatherData', JSON.stringify(data));
-  //       localStorage.setItem('cachedLocation', JSON.stringify({ city, state }));
-  //       localStorage.setItem('lastFetched', currentTime);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching weather data for city and state:', error);
-  //     });
-  // };
-
-  // const fetchWeather = (city, state) => {
-  //   axios
-  //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-  //     .then((response) => {
-  //       // console.log('Retrieved weather data:', response.data);
-  //       const data = response.data;
-
-  //       setWeatherData(data.currentConditions);
-  //       setDailyForecastData(data.days);
-  //       setAlertsData(data.alerts || []);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching weather data for city and state:', error);
-  //     });
-  // };
-
-  // const handleAvatarChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     axios
-  //       .get('/upload/url', { params: { filename: file.name } })
-  //       .then(({ data }) => {
-  //         return axios.put(data, file, {
-  //           headers: { 'Content-Type': file.type },
-  //         });
-  //       })
-  //       .then(() => {
-  //         const newAvatarUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${file.name}`;
-  //         return axios
-  //           .patch('/user/updateAvatar', {
-  //             avatar: newAvatarUrl,
-  //           })
-  //           .then((response) => {
-  //             return setUser(response.data);
-  //           });
-  //       })
-  //       .catch((err) => {
-  //         console.error('Failed to get image url', err);
-  //       });
-  //   }
-  // };
-
-  // const handleUserNameChange = (newUserName: string) => {
-  //   axios
-  //     .patch('/user/updateUserName', { userName: newUserName })
-  //     .then((response) => {
-  //       return setUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Update User Name: Failed ', error);
-  //     });
-  // };
-
-  // const handleLocationChange = (event) => {
-  //   fetchWeather(location.city, location.state);
-  //   setLocation({ city: '', state: '' });
-  // };
-
-  // const handleInputChange = (event) => {
-  //   const { name, value } = event.target;
-  //   setLocation((prevLocation) => ({
-  //     ...prevLocation,
-  //     [name]: value,
-  //   }));
-  // };
-
-  // const handleBioChange = (newBio: string) => {
-  //   axios
-  //     .patch('/user/updateBio', { bio: newBio })
-  //     .then((response) => {
-  //       return setUser(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Update Bio: Failed ', error);
-  //     });
-  // };
-
-  // const handleLogOut = () => {
-  //   fetch('/api/logout', {
-  //     method: 'POST',
-  //     credentials: 'include',
-  //   })
-  //     .then((response) => {
-  //       if (response.ok) {
-  //         onLogout();
-  //         navigate('/login');
-  //       } else {
-  //         console.error('Logout: Failed');
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.error('Logout: Failed', err);
-  //     });
-  // };
+  const [location, setLocation] = useState({
+    city: user.city || '',
+    state: user.state || '',
+  });
 
   if (!user) {
     return <div>Loading...</div>;
   }
-
-  // May not need
-  useEffect(() => {
-    // if (user?.city && user?.state) {
-    //   fetchWeather(user.city, user.state);
-    // }
-  }, [user.city, user.state]);
 
   return (
     <Grid className='privateBodyGrid' w='1100px' mx='auto'>
@@ -211,7 +65,10 @@ const UserPrivateProfile = ({
         justifyContent='flex-end'
       >
         {/* <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} /> */}
-        <UserTabs handleLogOut={() => controls.handleLogOut(onLogout, navigate)} setCurrentView={setCurrentView} />
+        <UserTabs
+          handleLogOut={() => UserControls.handleLogOut(onLogout, navigate)}
+          setCurrentView={setCurrentView}
+        />
         <Grid
           w='1085px'
           mx='auto'
@@ -237,17 +94,23 @@ const UserPrivateProfile = ({
               state={user.state}
               userName={user.userName}
               fetchUserData={fetchUserData}
-              // handleAvatarChange={handleAvatarChange}
-              // handleBioChange={handleBioChange}
-              // handleLocationChange={handleLocationChange}
-              // handleInputChange={handleInputChange}
-              // handleUserNameChange={handleUserNameChange}
-              fetchWeather={controls.fetchWeather}
-              handleAvatarChange={(event) => controls.handleAvatarChange(event, setUser, BUCKET_NAME)}
-              handleBioChange={(newBio) => controls.handleBioChange(newBio, setUser)}
-              handleLocationChange={() => controls.handleLocationChange(controls.fetchWeather)}
-              handleInputChange={controls.handleInputChange}
-              handleUserNameChange={(newUserName) => controls.handleUserNameChange(newUserName, setUser)}
+              fetchWeather={UserControls.fetchWeather}
+              handleAvatarChange={(event) =>
+                UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
+              }
+              handleBioChange={(newBio) =>
+                UserControls.handleBioChange(newBio, setUser)
+              }
+              handleLocationChange={() =>
+                UserControls.handleLocationChange(
+                  user,
+                  UserControls.fetchWeather
+                )
+              }
+              handleInputChange={UserControls.handleInputChange}
+              handleUserNameChange={(newUserName) =>
+                UserControls.handleUserNameChange(newUserName, setUser)
+              }
             />
           )}
           {currentView === 'help' && (

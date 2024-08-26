@@ -1,51 +1,65 @@
 import axios from 'axios';
 
-let weatherData = null;
-let dailyForecastData = null;
-let alertsData = null;
-let location = {};
-
-const setLocation = (newLocation) => {
-  location = { ...location, ...newLocation };
-};
-
 // *******************************************
 
-// const fetchWeather = (city, state, setWeatherData, setDailyForecastData, setAlertsData) => {
+const fetchWeather = (
+  city,
+  state,
+  setWeatherData,
+  setDailyForecastData,
+  setAlertsData
+) => {
+  if (!city || !state) {
+    console.error('City or State is undefined.');
+    return;
+  }
+
+  axios
+    .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
+    .then((response) => {
+      const data = response.data;
+
+      // Update the calling component's states using the setters
+      setWeatherData(data.currentConditions);
+      setDailyForecastData(data.days);
+      setAlertsData(data.alerts || []);
+    })
+    .catch((err) => {
+      console.error('Error fetching weather data for city and state:', err);
+    });
+};
+
+// ********
+
+// ** This needs to be replaced by the passed in Version
+// const fetchWeather = (city, state) => {
+//   if (!city || !state) {
+//     console.error('City or State is undefined.');
+//     return;
+//   }
+
 //   axios
 //     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
 //     .then((response) => {
+//       // console.log('Retrieved weather data:', response.data);
 //       const data = response.data;
+
 //       setWeatherData(data.currentConditions);
 //       setDailyForecastData(data.days);
 //       setAlertsData(data.alerts || []);
+//       // setApiError(false);
 //     })
-//     .catch((error) => {
-//       console.error('Error fetching weather data for city and state:', error);
+//     .catch((err) => {
+//       // setApiError(true);
+//       // console.error('Error fetching weather data for city and state:', err);
 //     });
 // };
 
 // ********
 
-  //  This needs to be replaced by the passed in Version
-  const fetchWeather = (city, state) => {
-    axios
-      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-      .then((response) => {
-        // console.log('Retrieved weather data:', response.data);
-        const data = response.data;
-
-        setWeatherData(data.currentConditions);
-        setDailyForecastData(data.days);
-        setAlertsData(data.alerts || []);
-        setApiError(false);
-      })
-      .catch((err) => {
-        setApiError(true);
-        // console.error('Error fetching weather data for city and state:', err);
-      });
-  };
-
+const setLocation = (newLocation) => {
+  location = { ...location, ...newLocation };
+};
 
 // *******************************************
 
@@ -73,6 +87,8 @@ const handleAvatarChange = (event, setUser, BUCKET_NAME) => {
   }
 };
 
+// *******************************************
+
 const handleUserNameChange = (newUserName, setUser) => {
   axios
     .patch('/user/updateUserName', { userName: newUserName })
@@ -84,10 +100,16 @@ const handleUserNameChange = (newUserName, setUser) => {
     });
 };
 
-const handleLocationChange = (fetchWeather) => {
-  fetchWeather(location.city, location.state);
+// ************************************
+
+const handleLocationChange = (user, fetchWeather) => {
+  // const { user } = useUser();
+  // fetchWeather(user.city, user.state, setWeatherData, setDailyForecastData, setAlertsData);
+  fetchWeather(user.city, user.state);
   setLocation({ city: '', state: '' });
 };
+
+// ************************************
 
 const handleInputChange = (event) => {
   const { name, value } = event.target;
@@ -96,6 +118,8 @@ const handleInputChange = (event) => {
     [name]: value,
   }));
 };
+
+// *******
 
 const handleBioChange = (newBio, setUser) => {
   axios
@@ -107,6 +131,8 @@ const handleBioChange = (newBio, setUser) => {
       console.error('Update Bio: Failed ', error);
     });
 };
+
+// *******
 
 const handleLogOut = (onLogout, navigate) => {
   fetch('/api/logout', {
@@ -126,17 +152,30 @@ const handleLogOut = (onLogout, navigate) => {
     });
 };
 
-// const useWeatherEffect = (user, fetchWeather) => {
-//   useEffect(() => {
-//     if (user?.city && user?.state) {
-//       fetchWeather(user.city, user.state);
-//     }
-//   }, [user.city, user.state]);
+// *******
+
+// const handleLogOut = () => {
+//   fetch('/api/logout', {
+//     method: 'POST',
+//     credentials: 'include',
+//   })
+//     .then((response) => {
+//       if (response.ok) {
+//         onLogout();
+//         navigate('/login');
+//       } else {
+//         console.error('Logout: Failed');
+//       }
+//     })
+//     .catch((err) => {
+//       console.error('Logout: Failed', err);
+//     });
 // };
 
+// ****************************************
+
 // Export all functions in a single object
-const controls = {
-  setLocation,
+export default {
   fetchWeather,
   handleAvatarChange,
   handleUserNameChange,
@@ -145,5 +184,3 @@ const controls = {
   handleBioChange,
   handleLogOut,
 };
-
-export default controls;
