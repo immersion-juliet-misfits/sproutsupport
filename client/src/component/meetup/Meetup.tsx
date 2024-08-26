@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import { Box, Button } from "@chakra-ui/react"
 import axios from 'axios';
 import MeetupCreate from './MeetupCreate';
 import MeetupList from './MeetupList';
 import dayjs from 'dayjs';
-import Nav from '../NavBar';
 import TopBar from '../UserProfile/TopBar';
 import relativeTime from "dayjs/plugin/relativeTime"
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter"
+import {AddIcon} from '@chakra-ui/icons'
 
 dayjs.extend(relativeTime)
 dayjs.extend(isSameOrAfter)
@@ -25,6 +25,8 @@ const [yourMeetups, setYourMeetups] = useState([])
 const [joinedMeetups, setJoinedMeetups] = useState([])
 const [publicMeetups, setPublicMeetups] = useState([])
 const [yourAndJoin, setYourAndJoin] = useState([])
+const [hide, setHide] = useState(false)
+const savedCallback = useRef()
 
 const getMeetups = (): void => {
   const url: string = `/meetup/all/${user.id}`
@@ -76,11 +78,14 @@ setDueDelete(date)
 
 const createSwapUpdate = (): void =>{
   const change = inputSwap ? false : true;
+  const otherChange = hide ? false : true;
   setInputSwap(change)
+  setHide(otherChange)
 }
 
 const getTime = (): void =>{
 const time: string = dayjs().format('MM/DD/YYYY hh:mm a')
+setCurrentTime(time + ' ')
 setCurrentTime(time)
 }
 
@@ -102,6 +107,7 @@ if(todayOrAfter === true && passDueDate === true){
   axios.delete(url)
   .then(()=>{
     refresh()
+    setTimeLeft('')
   })
   .catch((err: any)=>{
     console.error('Error can\'t update: ', err)
@@ -120,32 +126,38 @@ const showSwitch = (): void => {
   }
 }
 
-const doubleCall = (): void =>{
-getTime()
-  if(yourAndJoin.length !== 0){
- compare()
-  }
-}
 
 const refresh = (): void  =>{
   getMeetups()
 }
 
 useEffect(()=>{
+  savedCallback.current = compare;
+})
+
+useEffect(()=>{
   getMeetups()
   getTime()
-  window.setInterval(doubleCall, 10000)
+  const tick = ()=>{
+    getTime()
+savedCallback.current()
+  }
+
+
+  setInterval(tick, 10000)
 }, [])
 
   return (
   <div>
-     <Box w='1100px' mx='auto' >
+     <Box w='1100px' mx='auto' bg={'green.100'}>
      <TopBar/>
-    <Button onClick={()=>{showSwitch()}}>{makeStatus}</Button>
-    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{currentTime}</Box>}
-    {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' backgroundColor='green'>{timeLeft}</Box>}
+    {hide === false && <Button left={show === false ? "1260px" : '1185px'} top={show === false ? '680px' : '510px'} position="fixed" onClick={()=>{showSwitch()}}>{makeStatus === 'your meetups' ? makeStatus : (<AddIcon/>)}</Button>}
+    <Box bg={'green.200'}>
+    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' bg={"green.500"}>{currentTime}</Box>}
+    {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' bg={"green.500"}>{timeLeft}</Box>}
     {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>}
     {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>}
+    </Box>
     </Box>
     </div>)
 };

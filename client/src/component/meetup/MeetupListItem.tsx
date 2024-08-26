@@ -1,7 +1,9 @@
-import {Button, Card, CardHeader, CardBody, Image } from '@chakra-ui/react';
+import {Button, Card, CardHeader, CardBody, Image, Center, useToast} from '@chakra-ui/react';
 import axios from 'axios';
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
 const MeetupListItem = ({group, remove, swap, createSwapUpdate, user, isJoined, refresh}: {group: object, remove: any, swap: any, createSwapUpdate: any, user: object, isJoined: boolean, refresh: any}) => {
+const toast = useToast
 
 const joinMeetup = (): void =>{
 axios.post('meetup/AttendeeCreate',{userId: user.id, meet_id: group.id})
@@ -9,6 +11,13 @@ axios.post('meetup/AttendeeCreate',{userId: user.id, meet_id: group.id})
   refresh()
 })
 .catch((err)=>{
+  toast({
+    title: 'Can\'t join',
+    description: "Error some thing went wrong",
+    duration: 5000,
+    isClosable: true,
+    position: 'top'
+  })
   console.error('cant\'t join: ', err)
 })
 }
@@ -29,33 +38,51 @@ axios.delete(url)
   refresh()
 })
 .catch((err)=>{
+  toast({
+    title: 'Can\'t leave',
+    description: "Error some thing went wrong",
+    duration: 5000,
+    isClosable: true,
+    status: "error",
+    position: 'top'
+  })
   console.error('cant\'t join: ', err)
 })
 
 })
 .catch((err)=>{
+  toast({
+    title: 'Can\'t leave',
+    description: "Error some thing went wrong",
+    duration: 5000,
+    isClosable: true,
+    status: "error",
+    position: 'top'
+  })
   console.error('cant\'t find Attende for this meetUp: ', err)
 })
   }
 
   return(<div>
     <Card>
-    <CardBody>
-      <Image src={group.imageUrl}></Image>
-      <CardHeader><b>{group.eventName}</b></CardHeader>
+    <CardBody bg={"green.100"}>
+      <Image mx={"auto"} objectFit={'cover'} src={group.imageUrl}></Image>
+      <CardHeader><Center><b>{group.eventName}</b></Center></CardHeader>
     
 <b>{group.location}</b>
 <div>{'starts at ' + group.time_date}</div>
 <div>{group.description}</div>
-{user.id === group.userId && <>
+{user.id === group.userId && <Center>
   <Button onClick={()=>{
   swap(group); 
   createSwapUpdate();
-  }}>Update</Button>
-<Button onClick={()=>{remove(group.id)}}>Delete</Button>
-</>}
+  }}><EditIcon/></Button>
+<Button onClick={()=>{remove(group.id)}}><DeleteIcon/></Button>
+</Center>}
+<Center>
 {group.userId !== user.id && <>{isJoined === false && <Button onClick={()=>{joinMeetup()}}>Join</Button>}</>}
 {group.userId !== user.id && <>{isJoined === true && <Button onClick={()=>{leaveMeetup()}}>Leave</Button>}</>}
+</Center>
 </CardBody>
 </Card>
 </div>)

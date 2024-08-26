@@ -41,7 +41,6 @@
     "express-session": "^1.18.0",
     "framer-motion": "^11.3.28",
     "mysql2": "^3.10.3",
-    "nginx": "^1.0.8",
     "node-polyfill-webpack-plugin": "^4.0.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",

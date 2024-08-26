@@ -29,7 +29,7 @@ export default (env) => {
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, 'client/dist'),
       clean: true,
     },
     optimization: {
@@ -107,7 +107,7 @@ export default (env) => {
       }),
       new NodePolyfillPlugin(),
       new ProgressPlugin(true),
-      // new BundleAnalyzerPlugin(),
+     //new BundleAnalyzerPlugin(),
     ],
   };
 };
