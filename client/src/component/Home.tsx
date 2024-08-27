@@ -29,14 +29,16 @@ import {
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
+import { GrAddCircle } from 'react-icons/gr';
 import Comment from './Post/Comment';
 // import NavBar from './NavBar';
 import TopBar from './UserProfile/TopBar';
 
-const Home = () => {
+const Home = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState('');
-
+  const [post, setPost] = useState('')
+  console.log('user', user)
   function EditableControls() {
     const {
       isEditing,
@@ -47,12 +49,12 @@ const Home = () => {
 
     return isEditing ? (
       <ButtonGroup justifyContent='center' size='sm'>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
         <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
       </ButtonGroup>
     ) : (
       <Flex>
-        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+        <IconButton  variant='contained' size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
       </Flex>
     );
   }
@@ -100,83 +102,114 @@ const Home = () => {
   }, []);
 
   return (
-    <Box w='1100px' mx='auto' >
-      <TopBar/>
+    <Box w='1100px' mx='auto'>
+      <TopBar />
       <Grid
+        className='bodyGrid'
+        border='15px solid #D3FFEB'
+        bg='#D3FFEB'
+        borderBottom='0'
         w='1100px'
         mx='auto'
-        mt={10}
-        p={5}
-        borderWidth='1px'
-        borderRadius='lg'
+        borderRadius='lg lg 0 0'
         overflow='hidden'
         boxShadow='md'
-        bg='#D3FFEB'
+        display='flex'
+        alignItems='center'
       >
         {/* below are html for posts */}
-
-        <Flex  py={4} direction='column'>
-          <ChakraLink as={ReactRouterLink} to='/createPost'>
-            Create Post
+        <Flex
+          w='1100px'
+          mx='auto'
+          mt='0'
+          borderRadius='0 0 lg lg'
+          border='15px solid #D3FFEB'
+          borderTop='0'
+          bg='#5AB78D'
+          gap={10}
+          overflow='hidden'
+          boxShadow='md'
+          display='flex'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          py={4}
+        >
+          <ChakraLink as={ReactRouterLink} to='/createPost' position='right'>
+            <GrAddCircle />
           </ChakraLink>
-          <Flex
-            alignItems='center'
-            gap='2'
-            direction='column-reverse'
-            justify='center'
-            bg='#5AB78D'
-          >
+          <Flex direction='column-reverse'>
             {posts.map((post) => {
               return (
-                <Card
-                  // box-sizing='large'
-                  alignItems='center'
-                  bg='#A3EECC'
-                  key={post.id}
+                <Flex
                   direction='column'
+                  bg='#A3EECC'
+                  borderRadius='0 0 lg lg'
+                  w='900px'
+                  mx='auto'
+                  mt='0'
+                  alignItems='left'
+                  gap={5}
+                  key={post.id}
                 >
-                  <CardBody boxSize='380px'>
-                    {/* <CardBody > */}
-                    <Image src={post.imageUrl} boxSize='360'/>
-                  </CardBody>
-                  <Stack mt='6' spacing='3'>
-                    <Flex flexDirection='row' align='left'>
-                      <Editable
-                        textAlign='center'
-                        defaultValue={post.message}
-                        onSubmit={() => {
-                          updateMessage(post.id);
-                        }}
-                        onChange={(newMessage) => {
-                          setMessage(newMessage);
-                        }}
-                        fontSize='2xl'
-                        isPreviewFocusable={false}
-                      >
-                        <EditablePreview />
-                        <Input as={EditableInput} />
-                        <EditableControls />
-                      </Editable>
-                      <IconButton
-                        size='small'
-                        isRound={true}
-                        variant='solid'
-                        // colorScheme='yellow'
-                        aria-label='Done'
-                        fontSize='15px'
-                        onClick={() => {
-                          handleDelete(post.id);
-                        }}
-                        icon={<DeleteIcon />}
+                  <Card
+                    // box-sizing='large'
+                    // alignItems='left'
+                    bg='#A3EECC'
+                    key={post.id}
+                    direction={{ base: 'column', sm: 'row' }}
+                    overflow='hidden'
+                    variant='outline'
+                  >
+                      <Image
+                        src={post.imageUrl}
+                        objectFit='cover'
+                        maxW={{ base: '100%', sm: '100px' }}
                       />
-                    </Flex>
-                  </Stack>
-                  <CardFooter>
-                    <Flex direction='column'>
-                      <Comment postId={post.id} />
-                    </Flex>
-                  </CardFooter>
-                </Card>
+                    <CardBody >
+                      {/* <Flex> */}
+                        <ChakraLink as={ReactRouterLink} to=''>
+                          <Text>{post.username}</Text>
+                        </ChakraLink>
+                        <Editable
+                          textAlign='left'
+                          defaultValue={post.message}
+                          onSubmit={() => {
+                            updateMessage(post.id);
+                          }}
+                          onChange={(newMessage) => {
+                            setMessage(newMessage);
+                          }}
+                          fontSize='2xl'
+                          isPreviewFocusable={false}
+                        >
+                          <EditablePreview />
+                          <Input as={EditableInput} />
+                          <EditableControls isDisabled={user.id !== post.userId}/>
+                        </Editable>
+                      {/* </Flex> */}
+                      </CardBody>
+                      <CardFooter>
+                          <IconButton
+                            // size='small'
+                            position='top-right'
+                            isRound={true}
+                            variant='contained'
+                            aria-label='Done'
+                            fontSize='15px'
+                            onClick={() => {
+                              handleDelete(post.id);
+                            }}
+                            icon={<DeleteIcon />}
+                            isDisabled={user.id !== post.userId}
+                          />
+
+                    </CardFooter>
+                  </Card>
+                  <Flex direction='column'>
+                    <Comment postId={post.id} user={user}/>
+                  </Flex>
+                </Flex>
               );
             })}
           </Flex>

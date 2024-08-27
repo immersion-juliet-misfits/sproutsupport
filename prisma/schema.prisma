@@ -12,7 +12,7 @@ model User {
   google_id     String         @unique
   city          String?
   state         String?
-  userName      String?
+  userName      String?        @unique
   email         String?        @unique
   password      String?
   avatar        String?
@@ -23,8 +23,9 @@ model User {
   notifications Notification[]
   plants        Plant[]
   posts         Post[]
-  // comments Comment[]
+  comments Comment[]
   attendees     Attendee[]
+  @@unique([id, userName])
 }
 
 model Image {
@@ -92,19 +93,22 @@ model Post {
   userId   Int
   message  String
   imageUrl String
-  owner    User      @relation(fields: [userId], references: [id])
+  username String
+  owner    User      @relation(fields: [userId, username], references: [id, userName])
   Comment  Comment[]
-
-  @@index([userId], map: "Post_userId_fkey")
+  @@index([userId, username], map: "Post_userId_fkey")
 }
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  message String
-  postId  Int
-  post    Post   @relation(fields: [postId], references: [id])
-
+  id        Int    @id @default(autoincrement())
+  message   String
+  postId    Int
+  userId    Int
+  username  String
+  post      Post   @relation(fields: [postId], references: [id])
+  owner  User   @relation(fields: [userId, username], references: [id, userName])
   @@index([postId], map: "Comment_postId_fkey")
+  @@index([userId, username], map: "Comment_userId_fkey")
 }
 
 model Attendee {

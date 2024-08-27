@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 
-const Comment = ({ postId }) => {
+const Comment = ({ postId, user }) => {
   const [input, setInput] = useState('');
   const [comments, setComments] = useState([]);
 
@@ -32,7 +32,7 @@ const Comment = ({ postId }) => {
 
   const addComment = () => {
     return axios
-      .post('comment/comment', { message: input, postId })
+      .post('comment/comment', { message: input, postId, userId: user.id, username: user.userName })
       .then((data) => {
         console.log('s', data)
         getComments();
@@ -49,7 +49,7 @@ const Comment = ({ postId }) => {
     axios
       .get(`/comment/comment/${postId}`)
       .then(({ data }) => {
-        // console.log('data', data);
+        // console.log('Cdata', data);
         setComments(data);
       })
       .catch((err) => {
@@ -73,44 +73,49 @@ const Comment = ({ postId }) => {
     getComments();
   }, []);
 
+// const isEmpty = (input: string) => { return input === '' }
+
   return (
-    <Container>
+    <Flex direction='column'>
       { comments.map((comment: object) => (
         <Flex boxSize='large' key={comment.id}>
-          <Box flex='1'>
+          <Box flex='1' alignSelf='left'>
+            <Text>{comment.username}</Text>
             <Text>{comment.message}</Text>
           </Box>
-          <Center w='100px'>
+          {/* <Center w='100px'> */}
             <Text>
               <IconButton
-              size='small'
+              // boxSize='small'
+                variant='contained'
                 mt={2}
                 onClick={() => {
                   deleteComment(comment.id);
                 }}
                 icon={<DeleteIcon />}
+                isDisabled={user.id !== comment.userId}
               />
             </Text>
-          </Center>
+          {/* </Center> */}
         </Flex>
       ))}
-      <Box>
+      <Box flexDirection='column'>
         <FormControl isInvalid={isError}>
-          <FormLabel>Comment</FormLabel>
+          {/* <FormLabel>Comment</FormLabel> */}
           <Input type='post' value={input} onChange={handleInputChange} />
           {!isError ? (
             <FormHelperText>Press Submit to create comment.</FormHelperText>
           ) : (
-            <FormErrorMessage color='yellow'>
+            <FormErrorMessage>
               A comment is required.
             </FormErrorMessage>
           )}
-          <Button mt={4} onClick={addComment}>
+          <Button mt={4} onClick={addComment} boxSize='small' isDisabled={input === ''}>
             Submit
           </Button>
         </FormControl>
       </Box>
-    </Container>
+    </Flex>
   );
 };
 

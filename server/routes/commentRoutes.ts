@@ -24,12 +24,14 @@ Comments.get('/comment/:postId', (req: Request, res: Response) => {
 });
 
 Comments.post('/comment', (req: Request, res: Response) => {
-  const { postId, message } = req.body;
+  const { postId, message, userId, username } = req.body;
   prisma.comment
     .create({
       data: {
         postId,
         message,
+        userId,
+        username
       },
     })
     .then((data) => {

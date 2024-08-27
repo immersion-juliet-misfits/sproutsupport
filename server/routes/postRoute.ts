@@ -19,13 +19,14 @@ Posts.get('/post', (req: Request, res: Response) => {
 });
 
 Posts.post('/post', (req: Request, res: Response) => {
-  const { userId, message, imageUrl } = req.body;
+  const { userId, message, imageUrl, username } = req.body;
   prisma.post
     .create({
       data: {
         userId,
         message,
         imageUrl,
+        username,
       },
     })
     .then((data) => {

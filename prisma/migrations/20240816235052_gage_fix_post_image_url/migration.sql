@@ -6,5 +6,5 @@
 
 */
 -- AlterTable
-ALTER TABLE `Post` DROP COLUMN `image_id`,
-    ADD COLUMN `imageURL` VARCHAR(191) NOT NULL;
+-- ALTER TABLE `Post` DROP COLUMN `image_id`,
+--     ADD COLUMN `imageURL` VARCHAR(191) NOT NULL;

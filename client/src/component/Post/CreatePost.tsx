@@ -14,7 +14,7 @@ import axios from 'axios';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-const CreatePost = ({user}) => {
+const CreatePost = ({user, BUCKET_NAME}) => {
   const [input, setInput] = useState('');
   const [image, setImage] = useState(null);
   const [signedUrl, setSignedUrl] = useState(null);
@@ -43,7 +43,7 @@ const CreatePost = ({user}) => {
         })
       })
       .then(() => {
-        setSignedUrl(`https://sprout-support.s3.amazonaws.com/${image.name}`)
+        setSignedUrl(`https://${BUCKET_NAME}.s3.amazonaws.com/${image.name}`)
       })
       .catch((err) => {
         console.error('Failed to get image url', err)
@@ -53,7 +53,7 @@ const CreatePost = ({user}) => {
 
   const addMessage = () => {
     return axios
-      .post('/post/post', { message: input, userId: user.id, imageUrl: signedUrl})
+      .post('/post/post', { message: input, userId: user.id, imageUrl: signedUrl, username: user.userName })
       .then(() => {
       })
       .catch((err) => {

@@ -29,7 +29,7 @@ export default (env) => {
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, 'dist'),
+      path: path.resolve(__dirname, './client/dist'),
       clean: true,
     },
     optimization: {
@@ -45,6 +45,7 @@ export default (env) => {
     },
     cache: {
       type: 'filesystem',
+      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
