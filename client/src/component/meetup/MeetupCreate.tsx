@@ -1,4 +1,4 @@
-import { Input, Button, Box, Center, Select, useToast, Alert, AlertIcon, AlertDescription } from '@chakra-ui/react';
+import { Input, Button, Box, Center, Select, useToast, Alert, AlertIcon, AlertDescription} from '@chakra-ui/react';
 import axios from 'axios';
 import React, {useState, useEffect} from 'react'
 import {AddIcon} from '@chakra-ui/icons'
@@ -16,7 +16,7 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
   const [selecDate, setSelecDate] = useState('')
   const toast = useToast()
   const [warn, setWarn] = useState('warning')
-  const [warnMessage, setWarnMessage] = useState('city and state exist')
+  const [warnMessage, setWarnMessage] = useState('please fill in both city and state')
 
   const edit = (name: string, value: React.ChangeEvent<HTMLInputElement>): void =>{
     switch(name){
@@ -109,7 +109,7 @@ if(image.name !== undefined){
      setWarn('')
     })
   }else{
-    setWarn('error')
+    setWarn('warning')
   }
   }
 
@@ -145,12 +145,9 @@ for(let i = 0; i < weather.length; i++){
   },[edit])
 
   return (<div>
-    <Button onClick={()=>{getweather()}}>weather check</Button>
- <Button colorScheme="green" onClick={()=>{makeMeetup()}} isDisabled={fillIn}><AddIcon/></Button>
- 
   <Center>
-    <Box w={"500px"} bg={'green.100'}>
-    <Select placeholder='Select date' w={'500px'} onChange={(e)=>{selectedDate(e.target.value)}}>{weather.map((day, i)=>{
+    <Box w={"800px"} bg={'green.100'}>
+    <Select  bg={'green.300'} placeholder='Select date' w={'200px'} onChange={(e)=>{selectedDate(e.target.value)}}>{weather.map((day, i)=>{
        let arr = day.datetime.split('-')
        const month = arr[2]
        arr[2] = arr[1]
@@ -159,7 +156,6 @@ for(let i = 0; i < weather.length; i++){
        arr = arr.join('/')
 return(<option key={i}>date: {arr}</option>)
       })}</Select>
-<div>{selecDate}</div>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder='mm/dd/year h:mm am/pm'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='location'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )
@@ -171,14 +167,16 @@ return(<option key={i}>date: {arr}</option>)
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='event Name'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='description'></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
-    </Box>
-    </Center>
     {warn !== '' && 
     <Alert status={warn}>
   <AlertIcon />
   <AlertDescription>{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
 </Alert>
 }
+    </Box>
+    </Center>
+    <Button colorScheme="green" onClick={()=>{makeMeetup()}} isDisabled={fillIn} position='relative' left="902px" top="-368px"><AddIcon/></Button>
+    <Box position="relative" left='360px' top="-410px" w={'450px'}>{selecDate}</Box>
   </div>)
 };
 

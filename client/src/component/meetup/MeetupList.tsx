@@ -1,7 +1,7 @@
 import MeetupListItem from './MeetupListItem'
 import axios from 'axios';
 import React, {useState, useEffect} from 'react'
-import { Input, Button, SimpleGrid, Box, useToast, Alert, AlertIcon, AlertDescription, Center } from '@chakra-ui/react';
+import { Input, Button, SimpleGrid, Box, useToast, Alert, AlertIcon, AlertDescription, Center, Select } from '@chakra-ui/react';
 
 const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>}) =>{
   const [swap, setSwap] = useState('none')
@@ -16,6 +16,10 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   const [currentState, setCurrentState] = useState('yours')
   const [fillIn, setFillIn] = useState(false)
   const toast = useToast()
+  const [warn, setWarn] = useState('warning')
+  const [warnMessage, setWarnMessage] = useState('please fill in both city and state')
+  const [selecDate, setSelecDate] = useState('')
+  const [weather, setWeather] = useState([])
 
   const edit = (name: string, value: any): void =>{
     switch(name){
@@ -123,6 +127,38 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
+const getweather = (): void => {
+  if(city.length >= 4 && st.length >= 4){
+  axios.get(`/meetup/weather?city=${city}&state=${st}`)
+  .then(({data})=>{
+    setWeather(data.days)
+    setWarnMessage('city and state exist')
+    setWarn('success')
+  })
+  .catch((err)=>{
+    setWarnMessage('pleas fill in both city and state')
+   setWarn('')
+  })
+}else{
+  setWarn('warning')
+}
+}
+
+const selectedDate = (target: string): void =>{
+  target = target.slice(6)
+for(let i = 0; i < weather.length; i++){
+let arr = weather?.[i].datetime.split('-')
+     const month = arr[2]
+     arr[2] = arr[1]
+     arr[1] = month
+     arr.reverse()
+     arr = arr.join('/')
+ if(arr === target){
+  setSelecDate(weather?.[i].description)
+ }
+}
+}
+
 useEffect(()=>{
   if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
     if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
@@ -142,11 +178,12 @@ setFillIn(true)
 
   return(
     <>
-     {swap === 'none' && <><Button isActive={currentState === 'yours' ? false : true} onClick={()=>{currentState !== 'yours' ? setCurrentState('yours') : 'none'}} top="-10px" left="115px">yours</Button>
-     <Button isActive={currentState === 'joined' ? false : true} onClick={()=>{currentState !== 'joined' ? setCurrentState('joined') : 'none'}} top="-10px" left="418px">joined</Button>
-     <Button isActive={currentState === 'public' ? false : true} onClick={()=>{currentState !== 'public' ? setCurrentState('public') : 'none'}} top="-10px" left="730px">public</Button>
+     {swap === 'none' && <><Box bg={"green.500"} position="relative" top="-40px" h={'45px'}><Button isActive={currentState === 'yours' ? false : true} onClick={()=>{currentState !== 'yours' ? setCurrentState('yours') : 'none'}} top="-0px" left="195px">yours</Button>
+     <Button isActive={currentState === 'joined' ? false : true} onClick={()=>{currentState !== 'joined' ? setCurrentState('joined') : 'none'}} top="0px" left="436px">joined</Button>
+     <Button isActive={currentState === 'public' ? false : true} onClick={()=>{currentState !== 'public' ? setCurrentState('public') : 'none'}} top="0px" left="680px">public</Button>
+    </Box>
      <Center>
-     <SimpleGrid columns={3} spacing={4} w={'1040px'} >
+     <SimpleGrid position="relative" top="-38px" columns={3} spacing={4} w={'940px'} >
       <>{currentState === 'yours' && yours.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</>
       <>{currentState === 'joined' && join.map((group, i)=>{
         return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={true} refresh={refresh}/>)
@@ -157,20 +194,41 @@ setFillIn(true)
     <>{currentState === 'joined' && <>{join.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription>you don't have any meetups you planing to join</AlertDescription></Alert>}</>}</>
     <>{currentState === 'yours' && <>{yours.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription>you don't have any meetup events</AlertDescription></Alert>}</>}</>
      </>}
-    {swap === 'update' && <><Box w={'500px'}>
+    {swap === 'update' && <Center><Box w={'800px'} bg={'green.100'}>
     <Button colorScheme="green" onClick={()=>{meetupUpdate()}} isDisabled={fillIn} >Confirm Update</Button>
     <Button onClick={()=>{
       setSwap('none')
       createSwapUpdateCheck()
       }}>Cancel Update</Button>
+     <Select  bg={'green.300'} placeholder='Select date' w={'200px'} onChange={(e)=>{selectedDate(e.target.value)}}>{weather.map((day, i)=>{
+       let arr = day.datetime.split('-')
+       const month = arr[2]
+       arr[2] = arr[1]
+       arr[1] = month
+       arr.reverse()
+       arr = arr.join('/')
+return(<option key={i}>date: {arr}</option>)
+      })}</Select>
+
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' value={city}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' value={st}></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
+      getweather()
+    }} name='c' placeholder='city'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
+      getweather()
+    }} name='s' placeholder='state'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
     <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
-    </Box></>}
+    {warn !== '' && 
+    <Alert status={warn}>
+  <AlertIcon />
+  <AlertDescription>{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
+</Alert>
+}
+    </Box></Center>}
+    {swap === 'update' &&  <Box position="relative" left='360px' top="-362px">{selecDate}</Box>}
     </>
   )
 }

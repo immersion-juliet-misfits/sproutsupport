@@ -66,7 +66,7 @@ axios.delete(url)
   return(<div>
     <Card>
     <CardBody bg={"green.100"}>
-      <Image mx={"auto"} objectFit={'cover'} src={group.imageUrl}></Image>
+      <Image mx={"auto"} objectFit={'cover'} src={group.imageUrl} h={"140px"} w={"130px"}></Image>
       <CardHeader><Center><b>{group.eventName}</b></Center></CardHeader>
     
 <b>{group.location}</b>

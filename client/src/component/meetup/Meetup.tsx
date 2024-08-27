@@ -151,10 +151,11 @@ savedCallback.current()
   <div>
      <Box w='1100px' mx='auto' bg={'green.100'}>
      <TopBar/>
-    {hide === false && <Button left={show === false ? "1260px" : '1185px'} top={show === false ? '680px' : '510px'} position="fixed" onClick={()=>{showSwitch()}}>{makeStatus === 'your meetups' ? makeStatus : (<AddIcon/>)}</Button>}
+   
     <Box bg={'green.200'}>
-    {timeLeft.length === 0 && <Box m={2} w={'450px'} color='white' bg={"green.500"}>{currentTime}</Box>}
-    {timeLeft.length > 0 && <Box m={2} w={'450px'} color='white' bg={"green.500"}>{timeLeft}</Box>}
+       {timeLeft.length === 0 && <Box m={2} w={'1100px'} position={'relative'} top={'8px'} h={"30px"} left={"-2"} color='white' bg={"green.500"}>{currentTime}</Box>}
+    {timeLeft.length > 0 && <Box m={2} w={'1100px'} position={'relative'} top={'8px'} h={"30px"} left={"-2"}color='white' bg={"green.500"}>{timeLeft}</Box>}
+       {hide === false && <Button left={show === false ? "1260px" : '1185px'} top={window.innerHeight}  position="sticky" onClick={()=>{showSwitch()}}>{makeStatus === 'your meetups' ? makeStatus : (<AddIcon/>)}</Button>}
     {show === true && <>{inputSwap === false && <MeetupCreate refresh={getMeetups} user={user} showSwitch={showSwitch}/>} </>}
     {show === false && <MeetupList refresh={refresh} createSwapUpdateCheck={createSwapUpdate} user={user} yours={yourMeetups} pub={publicMeetups} join={joinedMeetups}/>}
     </Box>
