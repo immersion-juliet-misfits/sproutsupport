@@ -28,17 +28,9 @@ const UserPrivateProfile = ({
   BUCKET_NAME,
   fetchUserData,
 }) => {
-  // const { user, setUser, loading } = useUser();
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
-  // const [apiError, setApiError] = useState(false);
-  // const [weatherData, setWeatherData] = useState(null);
-  // const [dailyForecastData, setDailyForecastData] = useState(null);
-  // const [alertsData, setAlertsData] = useState(null);
-  const [location, setLocation] = useState({
-    city: user.city || '',
-    state: user.state || '',
-  });
+
 
   if (!user) {
     return <div>Loading...</div>;
@@ -64,7 +56,6 @@ const UserPrivateProfile = ({
         alignItems='center'
         justifyContent='flex-end'
       >
-        {/* <UserTabs handleLogOut={handleLogOut} setCurrentView={setCurrentView} /> */}
         <UserTabs
           handleLogOut={() => UserControls.handleLogOut(onLogout, navigate)}
           setCurrentView={setCurrentView}
@@ -101,13 +92,6 @@ const UserPrivateProfile = ({
               handleBioChange={(newBio) =>
                 UserControls.handleBioChange(newBio, setUser)
               }
-              handleLocationChange={() =>
-                UserControls.handleLocationChange(
-                  user,
-                  UserControls.fetchWeather
-                )
-              }
-              handleInputChange={UserControls.handleInputChange}
               handleUserNameChange={(newUserName) =>
                 UserControls.handleUserNameChange(newUserName, setUser)
               }

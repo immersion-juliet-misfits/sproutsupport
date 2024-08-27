@@ -17,25 +17,18 @@ const UserInfo = ({
   user,
   avatar,
   bio,
-  // city,
-  // state,
   userName,
   fetchUserData,
-  // fetchWeather,
   handleAvatarChange,
   handleBioChange,
-  // handleLocationChange,
-  // handleInputChange,
   handleUserNameChange,
 }) => {
+  const [editableUserName, setEditableUserName] = useState('');
+  const [editableBio, setEditableBio] = useState('');
   const [apiError, setApiError] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
   const [alertsData, setAlertsData] = useState(null);
-  const [editableUserName, setEditableUserName] = useState('');
-  const [editableCity, setEditableCity] = useState('');
-  const [editableState, setEditableState] = useState('');
-  const [editableBio, setEditableBio] = useState('');
   const [location, setLocation] = useState({
     city: user.city || '',
     state: user.state || '',
@@ -58,7 +51,7 @@ const UserInfo = ({
         setAlertsData
       );
     }
-  }, [user.city, user.state]);
+  }, [user.city, user.state, location]);
 
   return (
     <>
@@ -220,21 +213,14 @@ const UserInfo = ({
           </Flex>
           <p />
           <Heading as='h2' size='lg' textAlign='center'>
-            {/* {city && state ? `${city}, ${state}` : 'No Location Watched'} */}
-            {location.city && location.state
-              ? `${location.city}, ${location.state}`
-              : 'No Location Watched'}
+             {user.city && user.state ? `${user.city}, ${user.state}` : 'No Location Watched'}
           </Heading>
           <form
-            // onSubmit={(e) => {
-            //   e.preventDefault();
-            //   handleLocationChange();
-            // }}
             onSubmit={(e) => {
               e.preventDefault();
               UserControls.fetchWeather(
-                editableCity,
-                editableState,
+                location.city,
+                location.state,
                 setWeatherData,
                 setDailyForecastData,
                 setAlertsData
@@ -251,8 +237,10 @@ const UserInfo = ({
               <Input
                 name='city'
                 placeholder='Enter City'
-                // onChange={handleInputChange}
-                onChange={(e) => setEditableCity(e.target.value)}
+                onChange={(e) => setLocation((prevLocation) => ({
+                  ...prevLocation,
+                  city: e.target.value,
+                }))}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'
@@ -262,8 +250,10 @@ const UserInfo = ({
               <Input
                 name='state'
                 placeholder='Enter State'
-                // onChange={handleInputChange}
-                onChange={(e) => setEditableState(e.target.value)}
+                onChange={(e) => setLocation((prevLocation) => ({
+                  ...prevLocation,
+                  state: e.target.value,
+                }))}
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'

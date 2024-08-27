@@ -19,7 +19,6 @@ const fetchWeather = (
     .then((response) => {
       const data = response.data;
 
-      // Update the calling component's states using the setters
       setWeatherData(data.currentConditions);
       setDailyForecastData(data.days);
       setAlertsData(data.alerts || []);
@@ -27,38 +26,6 @@ const fetchWeather = (
     .catch((err) => {
       console.error('Error fetching weather data for city and state:', err);
     });
-};
-
-// ********
-
-// ** This needs to be replaced by the passed in Version
-// const fetchWeather = (city, state) => {
-//   if (!city || !state) {
-//     console.error('City or State is undefined.');
-//     return;
-//   }
-
-//   axios
-//     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-//     .then((response) => {
-//       // console.log('Retrieved weather data:', response.data);
-//       const data = response.data;
-
-//       setWeatherData(data.currentConditions);
-//       setDailyForecastData(data.days);
-//       setAlertsData(data.alerts || []);
-//       // setApiError(false);
-//     })
-//     .catch((err) => {
-//       // setApiError(true);
-//       // console.error('Error fetching weather data for city and state:', err);
-//     });
-// };
-
-// ********
-
-const setLocation = (newLocation) => {
-  location = { ...location, ...newLocation };
 };
 
 // *******************************************
@@ -102,25 +69,6 @@ const handleUserNameChange = (newUserName, setUser) => {
 
 // ************************************
 
-const handleLocationChange = (user, fetchWeather) => {
-  // const { user } = useUser();
-  // fetchWeather(user.city, user.state, setWeatherData, setDailyForecastData, setAlertsData);
-  fetchWeather(user.city, user.state);
-  setLocation({ city: '', state: '' });
-};
-
-// ************************************
-
-const handleInputChange = (event) => {
-  const { name, value } = event.target;
-  setLocation((prevLocation) => ({
-    ...prevLocation,
-    [name]: value,
-  }));
-};
-
-// *******
-
 const handleBioChange = (newBio, setUser) => {
   axios
     .patch('/user/updateBio', { bio: newBio })
@@ -132,7 +80,7 @@ const handleBioChange = (newBio, setUser) => {
     });
 };
 
-// *******
+// ************************************
 
 const handleLogOut = (onLogout, navigate) => {
   fetch('/api/logout', {
@@ -152,26 +100,6 @@ const handleLogOut = (onLogout, navigate) => {
     });
 };
 
-// *******
-
-// const handleLogOut = () => {
-//   fetch('/api/logout', {
-//     method: 'POST',
-//     credentials: 'include',
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         onLogout();
-//         navigate('/login');
-//       } else {
-//         console.error('Logout: Failed');
-//       }
-//     })
-//     .catch((err) => {
-//       console.error('Logout: Failed', err);
-//     });
-// };
-
 // ****************************************
 
 // Export all functions in a single object
@@ -179,8 +107,6 @@ export default {
   fetchWeather,
   handleAvatarChange,
   handleUserNameChange,
-  handleLocationChange,
-  handleInputChange,
   handleBioChange,
   handleLogOut,
 };
