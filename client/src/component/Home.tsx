@@ -42,13 +42,11 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import { GrAddCircle } from 'react-icons/gr';
 import Comment from './Post/Comment';
-// import NavBar from './NavBar';
 import TopBar from './UserProfile/TopBar';
 
 const Home = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState('');
-  const [comments, setComments] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
@@ -71,6 +69,9 @@ const Home = ({ user }) => {
           variant='contained'
           size='sm'
           icon={<EditIcon />}
+          // isDisabled={user.id !== post.userId}
+          position='sticky'
+          top={0}
           {...getEditButtonProps()}
         />
       </Flex>
@@ -111,10 +112,6 @@ const Home = ({ user }) => {
       });
   };
 
-  // const handleDelete = (id: string) => {
-  //   deleteMessage(id);
-  // };
-
   useEffect(() => {
     getPosts();
   }, []);
@@ -153,7 +150,13 @@ const Home = ({ user }) => {
           justifyContent='center'
           py={4}
         >
-          <ChakraLink as={ReactRouterLink} to='/createPost' position='fixed' bottom={5} right={40}  >
+          <ChakraLink
+            as={ReactRouterLink}
+            to='/createPost'
+            position='fixed'
+            bottom={5}
+            right={40}
+          >
             <GrAddCircle />
           </ChakraLink>
           <Flex direction='column-reverse' gap={5}>
@@ -186,10 +189,6 @@ const Home = ({ user }) => {
                       maxW={{ base: '100%', sm: '100px' }}
                     />
                     <CardBody>
-                      {/* <Flex> */}
-                      <ChakraLink as={ReactRouterLink} to=''>
-                        <Text>{post.username}</Text>
-                      </ChakraLink>
                       <Editable
                         textAlign='left'
                         defaultValue={post.message}
@@ -202,16 +201,17 @@ const Home = ({ user }) => {
                         fontSize='2xl'
                         isPreviewFocusable={false}
                       >
-                        <EditablePreview />
+                        <EditableControls />
                         <Input as={EditableInput} />
-                        <EditableControls
-                          isDisabled={user.id !== post.userId}
-                        />
+                      <ChakraLink as={ReactRouterLink} to=''>
+                        <Text fontSize={16}>{post.username}</Text>
+                      </ChakraLink>
+                        <EditablePreview />
                       </Editable>
                     </CardBody>
                     <CardFooter>
                       <IconButton
-                        position='top-right'
+                        // position='top-right'
                         isRound={true}
                         variant='contained'
                         aria-label='Done'
@@ -242,7 +242,9 @@ const Home = ({ user }) => {
                               </Button>
                               <Button
                                 colorScheme='red'
-                                onClick={() => {deleteMessage(post.id)}}
+                                onClick={() => {
+                                  deleteMessage(post.id);
+                                }}
                                 onChange={onClose}
                                 ml={3}
                               >
@@ -255,7 +257,13 @@ const Home = ({ user }) => {
                     </CardFooter>
                   </Card>
                   <Flex direction='column'>
-                    <Comment postId={post.id} user={user} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+                    <Comment
+                      postId={post.id}
+                      user={user}
+                      isOpen={isOpen}
+                      onOpen={onOpen}
+                      onClose={onClose}
+                    />
                   </Flex>
                 </Flex>
               );
