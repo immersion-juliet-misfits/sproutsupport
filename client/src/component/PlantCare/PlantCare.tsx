@@ -69,7 +69,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
 
   return (
     <>
-      <Button onClick={onOpen}>View Tasks</Button>
+      <Button bgColor="#d5e8ce" color="#4AAD52" onClick={onOpen}>View Tasks</Button>
 
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
@@ -89,11 +89,11 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
           {!tasks.length && <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{'No tasks due :)'}</Heading>}
           {tasks.length > 0 && // no awkward spacing now
               tasks.map((task) => (
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.9 }}>
                 {progress[task.id] >= 100 &&
-                  <Progress colorScheme="green" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
+                  <Progress sx={{'& > div': {backgroundColor: '#6EB257'}}}  borderRadius="lg" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
                   <ProgressLabel>
-                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{task.taskName}</Heading>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, #4AAD52, #C5E063, white)' bgClip={"text"}>{task.taskName}</Heading>
                   </ProgressLabel>
                 </Progress>
                 }
@@ -109,7 +109,6 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
               ))}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

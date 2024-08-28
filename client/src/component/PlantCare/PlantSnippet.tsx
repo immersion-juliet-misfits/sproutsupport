@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel, EditableTextarea } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
@@ -15,6 +15,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   const [newName, setNewName] = useState(plant.nickname)
   const [newDescription, setNewDescription] = useState(plant.description)
   const [progress, setProgress] = useState({})
+  const [editing, setEditing] = useState(false)
 
   
   // const handleDelete = () => {
@@ -28,25 +29,61 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   //   })
   // }
 
-  const EditableControls = () => {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls()
-
-    return isEditing ? (
-      <ButtonGroup justifyContent='center' size='sm'>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
-        <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
-      </ButtonGroup>
-    ) : (
-      <Flex justifyContent='center'>
-        <IconButton size='xs' icon={<EditIcon />} {...getEditButtonProps()} />
-      </Flex>
-    )
+  const handleEdit = () => {
+    setEditing(!editing)
   }
+
+  const handleCancel = () => {
+    setNewName(plant.nickname)
+    setNewDescription(plant.description)
+    setEditing(false)
+  }
+
+  // const handleApprove = () => {
+  //   if (newName.trim() === '') {
+  //     console.error('emptry name')
+  //   }
+  //   // setNewName()
+  //   // setNewDescription(plant.)
+  // }
+
+  const handleChanges = () => {
+    let actualName = newName.trim() === '' ? plant.commonName : newName
+    setNewName(actualName)
+    axios.patch(`/plants/update/${plant.id}`, {nickname: actualName, description: newDescription})
+      .then(({data}) => {
+        getPlants()
+        setEditing(false)
+      })
+  }
+
+  const determineName = () => {
+    if(newName.trim() === '') {
+      return plant.commonName
+    } else {
+      return newName
+    }
+  }
+
+  // const EditableControls = () => {
+  //   const {
+  //     isEditing,
+  //     getSubmitButtonProps,
+  //     getCancelButtonProps,
+  //     getEditButtonProps,
+  //   } = useEditableControls()
+
+  //   return isEditing ? (
+  //     <ButtonGroup justifyContent='center' size='sm'>
+  //       <IconButton icon={<CloseIcon color="tomato"/>} {...getCancelButtonProps()} />
+  //       <IconButton icon={<CheckIcon color="green.600"/>} {...getSubmitButtonProps()} />
+  //     </ButtonGroup>
+  //   ) : (
+  //     <Flex justifyContent='center'>
+  //       <IconButton size='xs' icon={<EditIcon />} {...getEditButtonProps()} />
+  //     </Flex>
+  //   )
+  // }
 
   const deletePlant = () => {
     handleDelete(plant.id)
@@ -119,58 +156,64 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   }, [tasks]) // **look into logic later**
 
   return (
-    <Card bg="green.200">
+    <Card bg="#6EB257" borderRadius="xl">
     <CardHeader onClick={() => handlePlantClick(plant)} textAlign={'center'}>
       <Editable
       textAlign='center'
+      value={determineName()}
       defaultValue={plant.nickname}
       fontSize='2xl'
-      isPreviewFocusable={false}
-      onChange={(editName) => {
-        setNewName(editName)
-      }}
-      onSubmit={(newName) => {
-        axios.patch(`/plants/update/${plant.id}`, {nickname: newName, description: newDescription})
-          .then(({data}) => {
-            getPlants()
-          })
-      }}
+      isPreviewFocusable={true}
+      isDisabled={!editing}
+      onChange={setNewName}
+      // onSubmit={handleChanges}
       submitOnBlur={false} // so user doesn't accidentally change plant name 
       >
-      <EditablePreview />
+      <strong>
+        <Heading color='#d5e8ce' size="md">
+
+        <EditablePreview />
+        </Heading>
+      </strong>
       {/* Here is the custom input */}
-      <Input as={EditableInput} />
-      <EditableControls />
+      {/* <Input as={EditableInput} /> */}
+      <EditableInput />
+      {/* <EditableControls /> */}
     </Editable>
         {/* <Heading size='md'>{plant.nickname}</Heading> */}
-        {plant.nickname !== plant.commonName && <h3>{<strong>{plant.commonName}</strong>}</h3>}
+        {plant.nickname !== plant.commonName && <Heading color='#d5e8ce' size="sm">{<em>{plant.commonName}</em>}</Heading>}
+        {/* {!plant.nickname.length !} */}
         {/* {tasks.length === 1 && <h3>!! {tasks.length} Task Due</h3>} */}
         {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="tomato">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>No Tasks</h3> )}
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody textAlign={'center'}>
-    {plant.imageUrl && <Center><Image width={250} height={250} src={plant.imageUrl}></Image></Center>}
+    {plant.imageUrl && <Center><Image width={200} height={200} src={plant.imageUrl} borderRadius="md"></Image></Center>}
         {/* <h3><em>{plant.description}</em></h3> */}
       <Editable
       textAlign='center'
+      value={newDescription}
       defaultValue={plant.description}
       fontSize='2xl'
-      isPreviewFocusable={false}
-      onChange={(editDesc) => {
-        setNewDescription(editDesc)
-      }}
-      onSubmit={(newDesc) => {
-        axios.patch(`/plants/update/${plant.id}`, {nickname: newName, description: newDesc})
-          .then(({data}) => {
-            getPlants()
-          })
-      }}
-      submitOnBlur={false} // so user doesn't accidentally change plant name 
+      isPreviewFocusable={true}
+      onChange={setNewDescription}
+      isDisabled={!editing}
+      // onSubmit={handleChanges}
+      // onSubmit={(newDesc) => {
+      //   axios.patch(`/plants/update/${plant.id}`, {nickname: newName, description: newDesc})
+      //     .then(({data}) => {
+      //       getPlants()
+      //     })
+      // }}
+      submitOnBlur={true} // so user doesn't accidentally change plant name 
       >
-      <EditablePreview />
+      <Text color='#d5e8ce' fontSize='lg'>
+        <EditablePreview />
+      </Text>
       {/* Here is the custom input */}
-      <Input as={EditableInput} />
-      <EditableControls />
+      {/* <Input as={EditableInput} /> */}
+      <EditableTextarea />
+      {/* <EditableControls /> */}
     </Editable><br></br>
     <Box>
       {allTasks.length > 0 &&
@@ -179,7 +222,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
          <div>
 
           {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
-    <CircularProgress trackColor='green.100' color='green.600' size={67} value={progress[task.id]}>
+    <CircularProgress trackColor='#d5e8ce' color='green.600' size={67} value={progress[task.id]}>
       <CircularProgressLabel>{task.taskName}</CircularProgressLabel>
     </CircularProgress>
           </div>
@@ -189,8 +232,18 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       </Box>
     </CardBody>
     <CardFooter justify={"space-between"} alignContent={"center"}>
+      <Flex>
+      <IconButton bgColor="tomato" aria-label='Delete plant' icon={<DeleteIcon color="white" />} onClick={deletePlant}/>
+      {editing ? (
+      <ButtonGroup justifyContent='center' size='md'>
+        <IconButton onClick={handleCancel} icon={<CloseIcon color="tomato"/>} />
+        <IconButton onClick={handleChanges} icon={<CheckIcon color="green.600"/>} />
+      </ButtonGroup>
+    ) : (
+        <IconButton onClick={handleEdit} size='md' bgColor="#488B49" icon={<EditIcon color="white"/>} />
+    )}
+      </Flex>
       <PlantCare plant={plant} tasks={tasks} fetchTasks={fetchTasks} fetchDoneTasks={fetchDoneTasks} getScore={getScore} updateProgressBar={updateProgressBar} fetchTaskProgress={fetchTaskProgress} allTasks={allTasks} doneTasks={doneTasks}/>
-      <IconButton aria-label='Delete plant' icon={<DeleteIcon color="tomato" />} onClick={deletePlant}/>
       {/* <DeleteIcon color="tomato" onClick={deletePlant}/> */}
     </CardFooter>
     </Card>

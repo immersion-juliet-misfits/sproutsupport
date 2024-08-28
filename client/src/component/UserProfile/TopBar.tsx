@@ -24,7 +24,7 @@ const TopBar = () => {
     >
       <GridItem
         colSpan={1}
-        bg='#5AB78D'
+        bg='#488B49'
         borderRadius='lg'
         display='flex'
         alignItems='center'
@@ -43,7 +43,7 @@ const TopBar = () => {
       </GridItem>
       <GridItem
         colSpan={3}
-        bg='#D3FFEB'
+        bg='#C5E063'
         boxShadow='md'
         display='flex'
         alignItems='center'
@@ -55,7 +55,7 @@ const TopBar = () => {
       </GridItem>
       <GridItem
         colSpan={1}
-        bg='#5AB78D'
+        bg='#488B49'
         borderRadius='lg'
         display='flex'
         alignItems='center'

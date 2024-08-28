@@ -69,6 +69,10 @@ const OwnedPlants = ({ user }) => {
     })
   }
 
+  const editPlant = (plantId) => {
+    setPlants((prev) => prev.map((plant) => plant.id === plantId.id ? plantId : plant))
+  }
+
   // useEffect(() => {
   //   getWarnings()
   // }, [])
@@ -79,17 +83,18 @@ const OwnedPlants = ({ user }) => {
   }, []) // stale reference || made everytime reran
 
   return (
-    <Box color='green.500' mx="auto" bg="green.200" p={5}>
+    // <Box color='green.500' mx="auto" p={5}>
+    <Box w='1100px' color='#507255' mx="auto" p={7}>
       <TopBar />
       <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading>
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
-          <Box color='yellow.100' bg='yellow.500' p={2} height="100%">
+          <Box color='#488B49' bg='#C5E063' p={2} height="100%" borderRadius="xl">
            <PlantWarnings user={user}/>
           </Box>
       </GridItem>
       <GridItem>
-      <Box color='green.100' bg='green.400' p={2} height="100%">
+      <Box color='#d5e8ce' bg='#488B49' p={2} height="100%" borderRadius="xl">
       <LevelBar user={user} score={score} progress={progress}/>
       </Box>
       </GridItem>
@@ -97,14 +102,14 @@ const OwnedPlants = ({ user }) => {
       <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Link to={'/plantfinder'}>
-        <Button colorScheme={'green'}>New Plant { <AddIcon /> } </Button>
+        <Button bgColor='d5e8ce' color="#4AAD52">New Plant</Button>
       </Link>
       {/* make into seperate component */}
-      <Box bg={'green.700'} p={5}>
+      <Box bg='#488B49' p={5} borderRadius="xl">
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {plants.length > 0 &&
         plants.map((plant) => (
-          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick} editPlant={editPlant}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>
@@ -117,6 +122,7 @@ const OwnedPlants = ({ user }) => {
           // </Card>
         ))
       }
+      {!plants.length && <Heading size={"lg"}>No sprouts...yet.</Heading>}
       </Grid>
       </Box>
     </Box>

@@ -17,7 +17,7 @@ const ssTheme = extendTheme({
   styles: {
     global: {
       'html, body': {
-        backgroundColor: '#A3EECC',
+        backgroundColor: '#93c482',
       },
     },
   },

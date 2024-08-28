@@ -8,9 +8,11 @@ const LevelBar = ({user, score, progress}) => {
     <div>
         <Heading size="lg">Sprout Growth</Heading>
         {/* <Heading size="lg">{`Level ${score.level}`}</Heading> */}
-        {progress < 90 ? (<Heading size="lg">{`Level ${score.level}`}</Heading>) : (<Heading  bgGradient='linear(to-br, green.100, yellow.300)' bgClip='text' size="lg">{`Level ${score.level}`}</Heading>)}
+        {progress < 90 ? (<Heading size="lg">{`Level ${score.level}`}</Heading>) : (<Heading  bgGradient='linear(to-br, #93c482, #C5E063)' bgClip='text' size="lg">{`Level ${score.level}`}</Heading>)}
         {/* look into min/max props */}
-        <Progress bgGradient='linear(to-r, green.300, green.200, green.100)' colorScheme='green' height='22px' value={progress} hasStripe={true} isAnimated={true}/>
+        <Progress sx={{'& > div': {
+          backgroundColor: '#C5E063'
+        }}} borderRadius="lg" bgGradient='linear(to-r, #4AAD52, #6EB257, #93c482)' height='22px' value={progress} hasStripe={true} isAnimated={true}/>
     </div>
   )
 }

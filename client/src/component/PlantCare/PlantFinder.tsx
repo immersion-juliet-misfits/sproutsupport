@@ -111,7 +111,8 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
   }, [selected, tasks, taskName])
 
   return (
-    <Box mx="auto" bg="green.200" p={5}>
+    // <Box mx="auto" color='green.500' p={5}>
+    <Box mx="auto" w='1100px'color='green.500'>
       <TopBar />
       <Heading textAlign={'center'}>Plant Finder</Heading>
       <Link to={'/myplants'}>
