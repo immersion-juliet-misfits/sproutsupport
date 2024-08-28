@@ -11,6 +11,7 @@ import {
   useColorMode,
   VStack,
 } from '@chakra-ui/react';
+import UserControls from './UserControls';
 
 const UserPrivacy = ({ user, fetchUserData }) => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -24,24 +25,6 @@ const UserPrivacy = ({ user, fetchUserData }) => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  // **************
-
-  const handleToggle = (field, value) => {
-    setSettings((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-
-    axios
-      .patch('/user/updateUserField', { field, value })
-      .then((status) => {
-        // console.log('Update Field: Success ', status);
-      })
-      .catch((err) => {
-        console.error('Error updating: ', err);
-      });
-  };
-
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -49,23 +32,22 @@ const UserPrivacy = ({ user, fetchUserData }) => {
   return (
     <>
       <Grid
-        className='BottomGrids'
         // border='2px solid yellow'
+        className='BottomGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
         <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
-          {/* This appears to change the entire site whether logged in or out?  Will tying it to the option in the User table fix this? */}
           <Heading textAlign='center' w='100%'>
             Public Profile Presentation
           </Heading>
           <Box
+            //border='2px solid red'
             w='80%'
             mx='auto'
             p={10}
             fontSize='25px'
-            //border='2px solid red'
           >
             <VStack align='start' pl={4} spacing={6}>
               <HStack>
@@ -83,7 +65,13 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                 <Switch
                   id='showPlants'
                   isChecked={settings.showPlants}
-                  onChange={(e) => handleToggle('showPlants', e.target.checked)}
+                  onChange={(e) =>
+                    UserControls.handleToggle(
+                      'showPlants',
+                      e.target.checked,
+                      setSettings
+                    )
+                  }
                 />
                 <label htmlFor='showPlants'>Display Your Plants?</label>
               </HStack>
@@ -93,7 +81,11 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                   id='showMyMeetups'
                   isChecked={settings.showMyMeetups}
                   onChange={(e) =>
-                    handleToggle('showMyMeetups', e.target.checked)
+                    UserControls.handleToggle(
+                      'showMyMeetups',
+                      e.target.checked,
+                      setSettings
+                    )
                   }
                 />
                 <label htmlFor='showMyMeetups'>
@@ -102,12 +94,12 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               </HStack>
 
               {/* Hide Below until I have access to other Users profiles & Meetups  */}
-               {/* <HStack>
+              {/* <HStack>
                 <Switch
                   id='showOtherMeetups'
                   isChecked={settings.showOtherMeetups}
                   onChange={(e) =>
-                    handleToggle('showOtherMeetups', e.target.checked)
+                    UserControls.handleToggle('showOtherMeetups', e.target.checked, setSettings)
                   }
                 />
                 <label htmlFor='showOtherMeetups'>
@@ -120,15 +112,17 @@ const UserPrivacy = ({ user, fetchUserData }) => {
                   id='showForumPosts'
                   isChecked={settings.showForumPosts}
                   onChange={(e) =>
-                    handleToggle('showForumPosts', e.target.checked)
+                    UserControls.handleToggle(
+                      'showForumPosts',
+                      e.target.checked,
+                      setSettings
+                    )
                   }
                 />
                 <label htmlFor='showForumPosts'>
                   Display Your Forum Posts?
                 </label>
               </HStack>
-
-
             </VStack>
           </Box>
         </GridItem>
@@ -142,7 +136,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
         <GridItem bg='green.500' h='150px'>
           Email/Password/Login Method Editing will be here
         </GridItem> */}
-         <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
+        <GridItem p='10px' borderRadius='lg' bg='#BDE3FF'>
           <Button colorScheme='red'>Delete Account</Button>
         </GridItem>
       </Grid>

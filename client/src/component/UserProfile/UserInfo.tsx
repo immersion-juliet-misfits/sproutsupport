@@ -11,7 +11,7 @@ import {
   Input,
   Text,
 } from '@chakra-ui/react';
-import UserControls from './UserControls';
+import UserControls, { useGlobalState } from './UserControls';
 
 const UserInfo = ({
   user,
@@ -23,6 +23,10 @@ const UserInfo = ({
   handleBioChange,
   handleUserNameChange,
 }) => {
+  // Global State conversion WIP
+  // const { state } = useGlobalState();
+  // ******
+  const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
   const [apiError, setApiError] = useState(false);
@@ -55,6 +59,15 @@ const UserInfo = ({
 
   return (
     <>
+      <Button
+        colorScheme='blue'
+        size='md'
+        onClick={() => setIsEditMode(!isEditMode)}
+        mb={4}
+      >
+        {isEditMode ? 'Cancel' : 'Edit Profile'}
+      </Button>
+
       <Grid
         className='AvatarGrid'
         // border='2px solid red'
@@ -67,8 +80,8 @@ const UserInfo = ({
           justifyContent='center'
           justifySelf='center'
           alignSelf='center'
-          borderRadius='50%'
-          border='15px solid #BDE3FF'
+          borderRadius='10%'
+          border='15px solid #D3FFEB'
           w='300px'
           h='300px'
           position='relative'
@@ -81,7 +94,6 @@ const UserInfo = ({
             alt='Click to Edit Avatar'
             w='100%'
             h='100%'
-            borderRadius='50%'
             display='flex'
             alignItems='center'
             justifyContent='center'
@@ -107,7 +119,7 @@ const UserInfo = ({
         <GridItem
           className='UserNameChange'
           borderRadius='lg'
-          bg='#BDE3FF'
+          bg='#D3FFEB'
           h='200px'
         >
           <Flex alignItems='center' gap='10'>
@@ -155,7 +167,7 @@ const UserInfo = ({
         <GridItem
           className='UserBioChange'
           borderRadius='lg'
-          bg='#BDE3FF'
+          bg='#D3FFEB'
           h='200px'
         >
           <Flex alignItems='center' gap='10'>
@@ -203,7 +215,7 @@ const UserInfo = ({
         <GridItem
           className='UserLocationCityStateChange'
           borderRadius='lg'
-          bg='#BDE3FF'
+          bg='#D3FFEB'
           h='200px'
         >
           <Flex alignItems='center' gap='10'>
@@ -213,7 +225,9 @@ const UserInfo = ({
           </Flex>
           <p />
           <Heading as='h2' size='lg' textAlign='center'>
-             {user.city && user.state ? `${user.city}, ${user.state}` : 'No Location Watched'}
+            {user.city && user.state
+              ? `${user.city}, ${user.state}`
+              : 'No Location Watched'}
           </Heading>
           <form
             onSubmit={(e) => {
@@ -237,10 +251,12 @@ const UserInfo = ({
               <Input
                 name='city'
                 placeholder='Enter City'
-                onChange={(e) => setLocation((prevLocation) => ({
-                  ...prevLocation,
-                  city: e.target.value,
-                }))}
+                onChange={(e) =>
+                  setLocation((prevLocation) => ({
+                    ...prevLocation,
+                    city: e.target.value,
+                  }))
+                }
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'
@@ -250,10 +266,12 @@ const UserInfo = ({
               <Input
                 name='state'
                 placeholder='Enter State'
-                onChange={(e) => setLocation((prevLocation) => ({
-                  ...prevLocation,
-                  state: e.target.value,
-                }))}
+                onChange={(e) =>
+                  setLocation((prevLocation) => ({
+                    ...prevLocation,
+                    state: e.target.value,
+                  }))
+                }
                 bg='white'
                 border='1px solid black'
                 borderRadius='md'

@@ -1,13 +1,4 @@
-import {
-  Box,
-  // ButtonGroup,
-  // Flex,
-  Grid,
-  GridItem,
-  Heading,
-  // IconButton,
-  // useEditableControls,
-} from '@chakra-ui/react';
+import { Box, Grid, GridItem, Heading } from '@chakra-ui/react';
 import NavBar from '../NavBar';
 
 const TopBar = () => {

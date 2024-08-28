@@ -13,6 +13,7 @@ import {
   Grid,
 } from '@chakra-ui/react';
 import TopBar from './TopBar';
+import UserControls from './UserControls';
 
 interface User {
   id: number;
@@ -27,57 +28,22 @@ interface User {
 
 const UserPublicProfile = ({ fetchUserData, user }) => {
   const [plants, setPlants] = useState([]);
-  const [myMeetups, setMyMeetups] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [myMeetups, setMyMeetups] = useState([]);
 
-  const getPlants = () => {
-    axios
-      .get(`/plants/all/${user.id}`)
-      .then(({ data }) => {
-        // console.log('Plant Data: ', data);
-        setPlants(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const getMeetups = (): void => {
-    axios
-      .get(`/meetup/all/${user.id}`)
-      .then(({ data }) => {
-        // console.log('Meetups data:', data);
-        setMyMeetups(data.yours);
-      })
-      .catch((err) => {
-        console.error('Error fetching meetups:', err);
-      });
-  };
-
-  const getPosts = () => {
-    axios
-      .get('/post/post')
-      .then(({ data }) => {
-        // console.log('Forum data', data);
-        setPosts(data);
-      })
-      .catch((err) => {
-        console.error('Failed to GET post: ', err);
-      });
-  };
 
   useEffect(() => {
     fetchUserData();
     if (user?.showPlants) {
-      getPlants();
-    }
-    if (user?.showMyMeetups) {
-      getMeetups();
+      UserControls.getPlants(user, setPlants);
     }
     if (user?.showForumPosts) {
-      getPosts();
+      UserControls.getPosts(setPosts);
     }
-  }, []);
+    if (user?.showMyMeetups) {
+      UserControls.getMeetups(user, setMyMeetups);
+    }
+  }, [user]);
 
   return (
     <Grid className='publicBodyGrid' w='1100px' mx='auto'>
@@ -97,7 +63,6 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
         display='flex'
         flexDirection='column'
         alignItems='center'
-        // justifyContent='flex-end'
       >
         <Grid
           w='1100px'
@@ -119,16 +84,13 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
           py={4}
         >
           <VStack spacing={4} align='center'>
-            {/* <Button colorScheme='teal' variant='solid'>
-            Follow(?)
-          </Button> */}
             <Image
               src={user.avatar}
               alt={`${user.userName}'s avatar`}
               w='300px'
               h='300px'
               objectFit='cover'
-              borderRadius='50%'
+              borderRadius='10%'
               border='15px solid #D3FFEB'
             />
             <Heading as='h2' size='xl'>
