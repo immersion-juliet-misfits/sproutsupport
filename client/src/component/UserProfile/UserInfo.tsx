@@ -3,25 +3,27 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
-  Flex,
+  Card,
   Grid,
   GridItem,
   Heading,
+  HStack,
   Image,
   Input,
   Text,
+  VStack,
 } from '@chakra-ui/react';
 import UserControls, { useGlobalState } from './UserControls';
 
 const UserInfo = ({
   user,
-  avatar,
-  bio,
-  userName,
   fetchUserData,
+  avatar,
   handleAvatarChange,
-  handleBioChange,
+  userName,
   handleUserNameChange,
+  bio,
+  handleBioChange,
 }) => {
   // Global State conversion WIP
   // const { state } = useGlobalState();
@@ -37,7 +39,18 @@ const UserInfo = ({
     city: user.city || '',
     state: user.state || '',
   });
+  // ******
+  // Display Toggle states
+  // const { colorMode, toggleColorMode } = useColorMode();
+  // const [settings, setSettings] = useState({
+  //   showWeather: user?.showWeather || false,
+  //   showPlants: user?.showPlants || false,
+  //   showMyMeetups: user?.showMyMeetups || false,
+  //   showOtherMeetups: user?.showOtherMeetups || false,
+  //   showForumPosts: user?.showForumPosts || false,
+  // });
 
+  // ******
   useEffect(() => {
     fetchUserData();
 
@@ -59,46 +72,12 @@ const UserInfo = ({
 
   return (
     <>
-      <Button
-        colorScheme='blue'
-        size='md'
-        onClick={() => setIsEditMode(!isEditMode)}
-        mb={4}
-      >
-        {isEditMode ? 'Cancel' : 'Edit Profile'}
-      </Button>
-
-      <Grid
-        className='AvatarGrid'
-        // border='2px solid red'
-      >
+      <Grid id='grid-avatar'>
         <GridItem
-          className='UserAvatar'
-          bg='black'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-          justifySelf='center'
-          alignSelf='center'
-          borderRadius='10%'
-          border='15px solid #D3FFEB'
-          w='300px'
-          h='300px'
-          position='relative'
-          overflow='hidden'
-          cursor='pointer'
+          id='gridItem-avatar'
           onClick={() => document.getElementById('avatarInput').click()}
         >
-          <Image
-            src={avatar}
-            alt='Click to Edit Avatar'
-            w='100%'
-            h='100%'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-            objectFit='cover'
-          />
+          <Image id='img-avatar' src={avatar} alt='Click to Edit Avatar' />
           <input
             type='file'
             id='avatarInput'
@@ -108,28 +87,21 @@ const UserInfo = ({
           />
         </GridItem>
       </Grid>
-      <Grid
-        // border='2px solid orange'
-        className='InnerGrids'
-        templateColumns='repeat(1, 1fr)'
-        w='85%'
-        gap={4}
+
+      <HStack>
+        <Button id='g-button' onClick={() => setIsEditMode(!isEditMode)}>
+          {isEditMode ? 'Cancel Edits' : 'Edit Profile'}
+        </Button>
+
+        {isEditMode && <Button id='g-button'>Save Edits</Button>}
+      </HStack>
+
+      {/* Edit Username ************************** */}
+      <GridItem
+        // className='UserNameChange'
+        id='gridItem-changes'
       >
-        {/* Edit Username ************************** */}
-        <GridItem
-          className='UserNameChange'
-          borderRadius='lg'
-          bg='#D3FFEB'
-          h='200px'
-        >
-          <Flex alignItems='center' gap='10'>
-            <Text fontSize='xl' fontWeight='bold' ml='90px'>
-              Edit Display Name
-            </Text>
-          </Flex>
-          <Heading as='h2' size='lg' textAlign='center'>
-            {userName}
-          </Heading>
+        <VStack align='center' visibility={isEditMode ? 'visible' : 'hidden'}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -137,47 +109,39 @@ const UserInfo = ({
               setEditableUserName('');
             }}
           >
-            <Flex
-              direction='row'
-              alignItems='center'
-              justifyContent='center'
-              mt={4}
-              gap={6}
-            >
-              <Input
-                name='username'
-                value={editableUserName}
-                placeholder='Enter new User Name here'
-                onChange={(e) => setEditableUserName(e.target.value)}
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='50%'
-              />
-            </Flex>
-            <Flex justifyContent='center' mt={4}>
-              <Button type='submit' colorScheme='teal' size='md'>
-                Save Display Name
-              </Button>
-            </Flex>
+            <Input
+              id='g-input'
+              name='username'
+              value={editableUserName}
+              placeholder='Enter new User Name here'
+              onChange={(e) => setEditableUserName(e.target.value)}
+            />
           </form>
-        </GridItem>
-        {/* Edit Bio ************************** */}
-        <GridItem
-          className='UserBioChange'
-          borderRadius='lg'
-          bg='#D3FFEB'
-          h='200px'
-        >
-          <Flex alignItems='center' gap='10'>
-            <Text fontSize='xl' fontWeight='bold' ml='90px'>
-              Edit User Bio
-            </Text>
-          </Flex>
+        </VStack>
+
+        <VStack align='center'>
+          <Text fontSize='xl' fontWeight='bold'>
+            Current Display Name:
+          </Text>
           <Heading as='h2' size='lg' textAlign='center'>
-            {bio}
+            {userName}
           </Heading>
+          {/* <Button type='submit' colorScheme='teal' size='md'>
+                Save Display Name
+              </Button> */}
+        </VStack>
+      </GridItem>
+
+      {/* Edit Bio ************************** */}
+      <GridItem
+        // className='UserBioChange'
+        id='gridItem-changes'
+      >
+        <VStack
+          // border='1px solid blue'
+          align='center'
+          visibility={isEditMode ? 'visible' : 'hidden'}
+        >
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -185,50 +149,40 @@ const UserInfo = ({
               setEditableBio('');
             }}
           >
-            <Flex
-              direction='row'
-              alignItems='center'
-              justifyContent='center'
-              mt={4}
-              gap={6}
-            >
-              <Input
-                name='bio'
-                value={editableBio}
-                placeholder='Enter new Bio'
-                onChange={(e) => setEditableBio(e.target.value)}
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='50%'
-              />
-            </Flex>
-            <Flex justifyContent='center' mt={4}>
-              <Button type='submit' colorScheme='teal' size='md'>
-                Save Bio
-              </Button>
-            </Flex>
+            <Input
+              id='g-input'
+              name='bio'
+              value={editableBio}
+              placeholder='Enter new Bio'
+              onChange={(e) => setEditableBio(e.target.value)}
+            />
           </form>
-        </GridItem>
-        {/* Edit Location ************************** */}
-        <GridItem
-          className='UserLocationCityStateChange'
-          borderRadius='lg'
-          bg='#D3FFEB'
-          h='200px'
+        </VStack>
+
+        <VStack
+          // border='1px solid red'
+          align='center'
         >
-          <Flex alignItems='center' gap='10'>
-            <Text fontSize='xl' fontWeight='bold' ml='90px'>
-              Edit City and State for Weather Watch
-            </Text>
-          </Flex>
-          <p />
+          <Text fontSize='xl' fontWeight='bold'>
+            Current User Bio
+          </Text>
+
           <Heading as='h2' size='lg' textAlign='center'>
-            {user.city && user.state
-              ? `${user.city}, ${user.state}`
-              : 'No Location Watched'}
+            {bio}
           </Heading>
+
+          {/* <Button type='submit' colorScheme='teal' size='md'>
+                Save Bio
+              </Button> */}
+        </VStack>
+      </GridItem>
+
+      {/* Edit Location ************************** */}
+      <GridItem
+        // className='UserLocationCityStateChange'
+        id='gridItem-changes'
+      >
+        <VStack align='center' visibility={isEditMode ? 'visible' : 'hidden'}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -241,14 +195,10 @@ const UserInfo = ({
               );
             }}
           >
-            <Flex
-              direction='row'
-              alignItems='center'
-              justifyContent='center'
-              mt={4}
-              gap={6}
-            >
+            <HStack spacing={1}>
               <Input
+                id='g-input'
+                className='u-input'
                 name='city'
                 placeholder='Enter City'
                 onChange={(e) =>
@@ -257,13 +207,9 @@ const UserInfo = ({
                     city: e.target.value,
                   }))
                 }
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='30%'
               />
               <Input
+                id='g-input'
                 name='state'
                 placeholder='Enter State'
                 onChange={(e) =>
@@ -272,142 +218,151 @@ const UserInfo = ({
                     state: e.target.value,
                   }))
                 }
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='30%'
               />
-            </Flex>
-            <Flex justifyContent='center' mt={4}>
-              <Button type='submit' colorScheme='teal' size='md'>
-                Get Weather
-              </Button>
-            </Flex>
+            </HStack>
           </form>
-        </GridItem>
-        {/* ************************** */}
+        </VStack>
 
-        <Box className='weatherBox'>
-          <Heading textAlign='center' mb={4}>
-            My Weather
+        <VStack
+          // border='1px solid red'
+          align='center'
+        >
+          <Text fontSize='xl' fontWeight='bold'>
+            Current City and State for Weather Watch
+          </Text>
+
+          <p />
+          <Heading as='h2' size='lg' textAlign='center'>
+            {user.city && user.state
+              ? `${user.city}, ${user.state}`
+              : 'No Location Watched'}
           </Heading>
-          {apiError ? (
-            <Text>No Weather Update Currently Available</Text>
-          ) : (
-            <>
-              {weatherData && (
-                <Box
-                  p={5}
-                  shadow='md'
-                  borderWidth='1px'
-                  borderRadius='lg'
-                  mb={4}
-                  textAlign='center'
-                  maxWidth='85%'
-                  mx='auto'
-                >
-                  <Heading as='h2' size='lg' mb={4}>
-                    Current Weather for {user.city}, {user.state}
-                  </Heading>
-                  <Text fontSize='lg' fontWeight='bold'>
-                    {new Date().toLocaleDateString('en-US', {
+
+          {/* <Button type='submit' colorScheme='teal' size='md'>
+                Get Weather
+              </Button> */}
+        </VStack>
+      </GridItem>
+      {/* ************************** */}
+
+      <Box className='weatherBox'>
+        <Heading textAlign='center' mb={4}>
+          My Weather
+        </Heading>
+        {apiError ? (
+          <Text>No Weather Update Currently Available</Text>
+        ) : (
+          <>
+            {weatherData && (
+              <Box
+                p={5}
+                shadow='md'
+                borderWidth='1px'
+                borderRadius='lg'
+                mb={4}
+                textAlign='center'
+                maxWidth='85%'
+                mx='auto'
+              >
+                <Heading as='h2' size='lg' mb={4}>
+                  Current Weather for {user.city}, {user.state}
+                </Heading>
+                <Text fontSize='lg' fontWeight='bold'>
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </Text>
+                <Text>
+                  Temperature: {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
+                </Text>
+                <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
+                <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
+                <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
+                <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
+                <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
+                <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
+              </Box>
+            )}
+
+            {dailyForecastData && dailyForecastData.length > 0 && (
+              <Box p={5} mb={4}>
+                <Heading as='h2' size='lg' mb={4} textAlign='center'>
+                  Daily Forecast
+                </Heading>
+                <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+                  {dailyForecastData.slice(1, 7).map((day, index) => {
+                    const date = new Date(day.datetime);
+                    date.setDate(date.getDate() + 1);
+                    const dayOfWeek = date.toLocaleDateString('en-US', {
                       weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </Text>
-                  <Text>
-                    Temperature: {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
-                  </Text>
-                  <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
-                  <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
-                  <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
-                  <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
-                  <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
-                  <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
-                </Box>
-              )}
+                    });
 
-              {dailyForecastData && dailyForecastData.length > 0 && (
-                <Box p={5} mb={4}>
-                  <Heading as='h2' size='lg' mb={4} textAlign='center'>
-                    Daily Forecast
-                  </Heading>
-                  <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-                    {dailyForecastData.slice(1, 7).map((day, index) => {
-                      const date = new Date(day.datetime);
-                      date.setDate(date.getDate() + 1);
-                      const dayOfWeek = date.toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      });
+                    return (
+                      <Box
+                        key={index}
+                        p={3}
+                        shadow='md'
+                        borderWidth='1px'
+                        borderRadius='lg'
+                        textAlign='center'
+                      >
+                        <Text fontSize='lg' fontWeight='bold'>
+                          {dayOfWeek} - {day.datetime}
+                        </Text>
+                        <Text>
+                          High:{' '}
+                          {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}
+                          °F
+                        </Text>
+                        <Text>
+                          Low: {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
+                          °F
+                        </Text>
+                        <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
+                      </Box>
+                    );
+                  })}
+                </Grid>
+              </Box>
+            )}
 
-                      return (
-                        <Box
-                          key={index}
-                          p={3}
-                          shadow='md'
-                          borderWidth='1px'
-                          borderRadius='lg'
-                          textAlign='center'
-                        >
-                          <Text fontSize='lg' fontWeight='bold'>
-                            {dayOfWeek} - {day.datetime}
-                          </Text>
-                          <Text>
-                            High:{' '}
-                            {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}
-                            °F
-                          </Text>
-                          <Text>
-                            Low:{' '}
-                            {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
-                            °F
-                          </Text>
-                          <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
-                        </Box>
-                      );
-                    })}
-                  </Grid>
-                </Box>
-              )}
+            {alertsData && alertsData.length > 0 && (
+              <Box
+                p={5}
+                shadow='md'
+                borderWidth='1px'
+                borderRadius='lg'
+                mb={4}
+                textAlign='center'
+                maxWidth='85%' // Limit the width for alerts as well
+                mx='auto' // Center the box
+              >
+                <Heading as='h2' size='lg' mb={4} textAlign='center'>
+                  Weather Alerts
+                </Heading>
+                {alertsData.map((alert, index) => (
+                  <Box key={index} mb={4}>
+                    <Text fontWeight='bold'>Alert: {alert.event}</Text>
+                    <Text>{alert.headline}</Text>
+                    <Text whiteSpace='pre-wrap'>
+                      {alert.description.replace(
+                        /(WHERE|WHEN|IMPACTS)/g,
+                        '\n$1'
+                      )}
+                    </Text>
+                    <Text>Ends: {new Date(alert.ends).toLocaleString()}</Text>
+                  </Box>
+                ))}
+              </Box>
+            )}
+          </>
+        )}
+      </Box>
 
-              {alertsData && alertsData.length > 0 && (
-                <Box
-                  p={5}
-                  shadow='md'
-                  borderWidth='1px'
-                  borderRadius='lg'
-                  mb={4}
-                  textAlign='center'
-                  maxWidth='85%' // Limit the width for alerts as well
-                  mx='auto' // Center the box
-                >
-                  <Heading as='h2' size='lg' mb={4} textAlign='center'>
-                    Weather Alerts
-                  </Heading>
-                  {alertsData.map((alert, index) => (
-                    <Box key={index} mb={4}>
-                      <Text fontWeight='bold'>Alert: {alert.event}</Text>
-                      <Text>{alert.headline}</Text>
-                      <Text whiteSpace='pre-wrap'>
-                        {alert.description.replace(
-                          /(WHERE|WHEN|IMPACTS)/g,
-                          '\n$1'
-                        )}
-                      </Text>
-                      <Text>Ends: {new Date(alert.ends).toLocaleString()}</Text>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </>
-          )}
-        </Box>
-
-        {/* ************************** */}
-      </Grid>
+      {/* ************************** */}
     </>
   );
 };

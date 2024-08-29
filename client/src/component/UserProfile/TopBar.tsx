@@ -3,19 +3,11 @@ import NavBar from '../NavBar';
 
 const TopBar = () => {
   return (
-    <Grid
-      // border='5px solid blue'
-      className='header-grid'
-      mt={10}
-      templateRows='repeat(1, 1fr)'
-      templateColumns='repeat(5, 1fr)'
-      h='100px'
-      gap={4}
-      mb={4}
-    >
+    <Grid id='topBar'>
       <GridItem
+      id=''
         colSpan={1}
-        bg='#5AB78D'
+        bg='#488B49'
         borderRadius='lg'
         display='flex'
         alignItems='center'
@@ -34,7 +26,8 @@ const TopBar = () => {
       </GridItem>
       <GridItem
         colSpan={3}
-        bg='#D3FFEB'
+        borderRadius='lg'
+        bg='#C5E063'
         boxShadow='md'
         display='flex'
         alignItems='center'
@@ -46,7 +39,7 @@ const TopBar = () => {
       </GridItem>
       <GridItem
         colSpan={1}
-        bg='#5AB78D'
+        bg='#488B49'
         borderRadius='lg'
         display='flex'
         alignItems='center'

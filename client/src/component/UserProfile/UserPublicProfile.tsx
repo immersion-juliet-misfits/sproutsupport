@@ -6,6 +6,8 @@ import {
   CardBody,
   CardHeader,
   Center,
+  Grid,
+  GridItem,
   Image,
   Text,
   VStack,
@@ -31,7 +33,6 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   const [posts, setPosts] = useState([]);
   const [myMeetups, setMyMeetups] = useState([]);
 
-
   useEffect(() => {
     fetchUserData();
     if (user?.showPlants) {
@@ -46,16 +47,13 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   }, [user]);
 
   return (
-    <Grid className='publicBodyGrid' w='1100px' mx='auto'>
+    <>
       <TopBar />
       <Grid
-        className='bodyGrid'
-        // border='2px solid red'
-        bg='#D3FFEB'
+        // border='1px solid red'
+        id='lvl-one'
+        className='u-public-grid'
         borderBottom='0'
-        w='1100px'
-        mx='auto'
-        borderRadius='lg'
         overflow='hidden'
         boxShadow='md'
         templateRows='1fr'
@@ -65,13 +63,11 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
         alignItems='center'
       >
         <Grid
+          // border='1px solid red'
+          id='lvl-two'
           w='1100px'
           mx='auto'
           mt='0'
-          borderRadius='lg'
-          // border='15px solid red'
-          border='15px solid #D3FFEB'
-          bg='#5AB78D'
           gap={10}
           overflow='hidden'
           boxShadow='md'
@@ -84,15 +80,18 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
           py={4}
         >
           <VStack spacing={4} align='center'>
+
+           <GridItem
+          id='gridItem-avatar'>
+
             <Image
+              id='img-avatar'
               src={user.avatar}
               alt={`${user.userName}'s avatar`}
-              w='300px'
-              h='300px'
-              objectFit='cover'
-              borderRadius='10%'
-              border='15px solid #D3FFEB'
-            />
+              />
+              
+              </GridItem>
+
             <Heading as='h2' size='xl'>
               {user.userName}
             </Heading>
@@ -255,7 +254,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
           </VStack>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 
