@@ -32,6 +32,11 @@ const ssTheme = extendTheme({
         width: '100%',
         mx: 'auto',
       },
+      '#lvl-three': {
+        backgroundColor: '#93C482',
+        borderRadius: '10px',
+        mx: 'auto',
+      },
       '#lvl-alert': {
         backgroundColor: '#B9DA44',
         borderRadius: '10px',
@@ -55,10 +60,20 @@ const ssTheme = extendTheme({
         size: 'md',
         mb: '4',
       },
+
+      '#g-card': {
+        // backgroundColor: '#93C482',
+        // backgroundColor: '#4AAD52',
+        // backgroundColor: '#488B49',
+        backgroundColor: '#6EB257',
+        borderRadius: '10px',
+        mx: 'auto',
+      },
+
       '#g-input': {
         backgroundColor: '#D5E8CE',
         border: '5px solid #488B49',
-        borderRadius: 'md',
+        borderRadius: '10px',
       },
 
       '#g-tabs': {
@@ -66,14 +81,45 @@ const ssTheme = extendTheme({
         backgroundColor: '#488B49',
         borderColor: '#488B49',
         width: '100%',
-        borderRadius: 'md',
+        borderRadius: '10px',
       },
       '#g-tabList': {
         height: '75px',
         gap: '20px',
       },
 
-      // *** User Styles ***
+      // *** User Styles *********
+
+      '.pub-box': {
+        // backgroundColor: '#93C482',
+        // backgroundColor: '#4AAD52',
+        // backgroundColor: '#6EB257',
+        // border: '1px solid red',
+        border: '10px solid #93C482',
+        borderRadius: '10px',
+        minHeight: '450px',
+        width: '100%',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center', // Needed to align Heading
+      },
+
+      '.pub-heading': {
+        // color: '#507255',
+        color: '#D5E8CE',
+        fontSize: '3rem',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        margin: '20px',
+      },
+
+      '.u-input': {
+        height: '50px',
+        width: '250px',
+        margin: '10px 0 10px 0',
+      },
+
       '.u-pages': {
         // border: '1px solid red',
         mt: '0',
@@ -87,18 +133,13 @@ const ssTheme = extendTheme({
         py: '4',
       },
 
-      '#u-input': {
-        height: '50px',
-        width: '250px',
-        margin: '5px 0 10px 0',
-      },
-
       '.uTabs': {
         // mb: 0,
         // pb: 0,
       },
 
       '#gridItem-avatar': {
+        // border: '15px solid #507255',
         border: '15px solid #488B49',
         backgroundColor: 'black',
         display: 'flex',
@@ -121,7 +162,7 @@ const ssTheme = extendTheme({
         justifyContent: 'center',
         objectFit: 'cover',
       },
-      
+
       '#gridItem-changes': {
         backgroundColor: '#93C482',
         borderRadius: '10px',

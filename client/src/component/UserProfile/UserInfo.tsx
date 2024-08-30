@@ -93,7 +93,8 @@ const UserInfo = ({
           {isEditMode ? 'Cancel Edits' : 'Edit Profile'}
         </Button>
 
-        {isEditMode && <Button id='g-button'>Save Edits</Button>}
+{/* On-Click skeleton - not yet connected and working - combine into single form */}
+        {isEditMode && <Button id='g-button' onClick={UserControls.handleSaveEdits} >Save Edits</Button>}
       </HStack>
 
       {/* Edit Username ************************** */}
@@ -111,6 +112,7 @@ const UserInfo = ({
           >
             <Input
               id='g-input'
+              className='u-input'
               name='username'
               value={editableUserName}
               placeholder='Enter new User Name here'
@@ -151,6 +153,7 @@ const UserInfo = ({
           >
             <Input
               id='g-input'
+              className='u-input'
               name='bio'
               value={editableBio}
               placeholder='Enter new Bio'
@@ -207,9 +210,10 @@ const UserInfo = ({
                     city: e.target.value,
                   }))
                 }
-              />
+                />
               <Input
                 id='g-input'
+                className='u-input'
                 name='state'
                 placeholder='Enter State'
                 onChange={(e) =>

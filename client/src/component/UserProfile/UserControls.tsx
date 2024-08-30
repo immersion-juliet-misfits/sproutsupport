@@ -240,6 +240,44 @@ const handleBioChange = (newBio, setUser) => {
 };
 
 // ************
+// Cobining all Edit functions
+
+const handleSaveEdits = (e) => {
+  e.preventDefault();
+
+  // Handle username change
+  if (editableUserName) {
+    handleUserNameChange(editableUserName);
+    setEditableUserName('');
+  }
+
+  // Handle bio change
+  if (editableBio) {
+    handleBioChange(editableBio);
+    setEditableBio('');
+  }
+
+  // Handle location change and fetch weather data
+  if (location.city && location.state) {
+    UserControls.fetchWeather(
+      location.city,
+      location.state,
+      setWeatherData,
+      setDailyForecastData,
+      setAlertsData
+    );
+  }
+
+  // Reset isEditMode to false after saving edits
+  setIsEditMode(false);
+};
+
+
+
+
+
+// ************
+
 // Global WIP
 // const handleLogOut = (onLogout, navigate) => {
 //   fetch('/api/logout', {
@@ -346,6 +384,7 @@ export default {
   handleAvatarChange,
   handleUserNameChange,
   handleBioChange,
+  handleSaveEdits,
   handleLogOut,
   handleToggle,
   getPlants,
