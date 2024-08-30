@@ -1,4 +1,6 @@
 import { extendTheme } from '@chakra-ui/react';
+import '@fontsource/nerko-one';
+import '@fontsource/pangolin';
 
 const config = {
   initialColorMode: 'light', // or "dark" or "system"
@@ -16,6 +18,8 @@ const ssTheme = extendTheme({
   config,
   styles: {
     global: {
+      // *** Global Settings *********
+
       'html, body': {
         backgroundColor: '#93C482',
       },
@@ -23,7 +27,7 @@ const ssTheme = extendTheme({
         border: '25px solid #488B49',
         backgroundColor: '#488B49',
         borderRadius: '10px',
-        width: '1200px',
+        width: '1500px',
         mx: 'auto',
       },
       '#lvl-two': {
@@ -42,29 +46,13 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
       },
 
-      '#topBar': {
-        // border: '1px solid red',
-        width: '1200px',
-        mx: 'auto',
-        marginTop: '20px',
-        marginBottom: '20px',
-        display: 'grid',
-        gridTemplateRows: 'repeat(1, 1fr)',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        height: '100px',
-        gap: '15px',
-      },
-
       '#g-button': {
         backgroundColor: '#D5E8CE',
         size: 'md',
-        mb: '4',
+        mb: '5',
       },
 
       '#g-card': {
-        // backgroundColor: '#93C482',
-        // backgroundColor: '#4AAD52',
-        // backgroundColor: '#488B49',
         backgroundColor: '#6EB257',
         borderRadius: '10px',
         mx: 'auto',
@@ -88,21 +76,75 @@ const ssTheme = extendTheme({
         gap: '20px',
       },
 
-      // *** User Styles *********
+      // *** Top Bar Settings *********
+
+      '#topBar-grid': {
+        height: '100px',
+        width: '1500px',
+        mx: 'auto',
+        marginTop: '20px',
+        marginBottom: '20px',
+        display: 'grid',
+        gridTemplateRows: 'repeat(1, 1fr)',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: '15px',
+      },
+
+      '#topBar-gridItem': {
+        bg: '#488B49',
+        color: '#D5E8CE',
+        borderRadius: 'lg',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        px: '50px',
+      },
+
+      '.tb-gi-one': {
+        fontFamily: 'nerko one',
+        fontSize: '4xl',
+        gridColumn: 'span 1',
+      },
+
+      '.tb-gi-two': {
+        fontFamily: 'pangolin',
+        fontSize: '5xl',
+        gridColumn: 'span 4',
+      },
+
+      '#topBar-hstack': {
+        // border: '5px solid red',
+        gap: '50px',
+      },
+
+      // *** User Style Settings *********
 
       '.pub-box': {
-        // backgroundColor: '#93C482',
-        // backgroundColor: '#4AAD52',
-        // backgroundColor: '#6EB257',
         // border: '1px solid red',
-        border: '10px solid #93C482',
+        border: '1px solid #93C482',
         borderRadius: '10px',
-        minHeight: '450px',
+        minHeight: '300px',
         width: '100%',
         padding: '20px',
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
         alignItems: 'center', // Needed to align Heading
+        gap: '20px',
+        my: '5px',
+      },
+
+      '.pub-grid': {
+        display: 'grid',
+        // gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        // gridTemplateRows: 'repeat(4, 1fr)',
+        // gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        // gridTemplateRows: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: '20px',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gridAutoFlow: 'row',
       },
 
       '.pub-heading': {
@@ -112,6 +154,21 @@ const ssTheme = extendTheme({
         fontWeight: 'bold',
         textAlign: 'center',
         margin: '20px',
+      },
+
+      '#pub-imgBox': {
+        width: '300px',
+        height: '300px',
+        overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+
+      '#pub-img': {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
       },
 
       '.u-input': {
@@ -139,8 +196,7 @@ const ssTheme = extendTheme({
       },
 
       '#gridItem-avatar': {
-        // border: '15px solid #507255',
-        border: '15px solid #488B49',
+        border: '15px solid #93C482',
         backgroundColor: 'black',
         display: 'flex',
         alignItems: 'center',

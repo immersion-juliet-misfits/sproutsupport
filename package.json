@@ -30,6 +30,8 @@
     "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
+    "@fontsource/nerko-one": "^5.0.21",
+    "@fontsource/pangolin": "^5.0.14",
     "@prisma/client": "^5.17.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/express-session": "^1.18.0",

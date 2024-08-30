@@ -9,6 +9,7 @@ import {
   Divider,
   Grid,
   GridItem,
+  HStack,
   Image,
   Text,
   VStack,
@@ -49,88 +50,63 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   return (
     <>
       <TopBar />
-
       <Grid
         // border='1px solid red'
         id='lvl-one'
-    className='placeholder'
+        className='placeholder'
       >
-        <VStack spacing={4} align='center'>
-          <Box className='pub-box'>
-
+        <Box className='pub-box'>
+          <HStack>
             <GridItem id='gridItem-avatar'>
-
               <Image
                 id='img-avatar'
                 src={user.avatar}
                 alt={`${user.userName}'s avatar`}
               />
-
             </GridItem>
 
-            <Heading
-            id='g-heading'
-            className='pub-heading'
-            >
-              {user.userName}
-            </Heading>
-            <Text
-            // fontSize='md'
-            // color='white'
-            textAlign='center'
-            >
-              {user.bio}
-            </Text>
+            <VStack>
+              <Heading id='g-heading' className='pub-heading'>
+                {user.userName}
+              </Heading>
+              <Text textAlign='center'>{user.bio}</Text>
+            </VStack>
+          </HStack>
+        </Box>
 
-          </Box>
+        {/* ***************************************  */}
+        <VStack spacing={4} align='center'>
 
-          {/* ***************************************  */}
-
-          <Divider />
+        <Divider />
+        <Divider />
 
           {user?.showPlants && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading
-              id='g-heading'
-            className='pub-heading'
-
-              >
+              <Heading id='g-heading' className='pub-heading'>
                 My Newest Plants
               </Heading>
               {plants.length > 0 ? (
                 <Grid
-                  // id=''
                   className='pub-grid'
-                  templateColumns='repeat(3, 1fr)'
-                  gap={6}
                 >
                   {plants.slice(-6).map((plant) => (
-                    <Card
-                      key={plant.id}
-                      id='g-card'
-                      className='pub-card'
-                      // bg='green.200'
-                    >
+                    <Card key={plant.id} id='g-card' className='pub-card'>
                       <CardHeader textAlign={'center'}>
                         <Heading size='md'>{plant.nickname}</Heading>
-                        {plant.nickname !== plant.commonName && (
-                          <Text>
-                            <strong>{plant.commonName}</strong>
-                          </Text>
-                        )}
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {plant.imageUrl && (
                           <Center>
-                            <img
-                              width={250}
-                              height={250}
-                              src={plant.imageUrl}
-                              alt={`${plant.nickname}`}
-                            />
+                            <Box id='pub-imgBox'>
+                              <img
+                                id='pub-img'
+                                src={plant.imageUrl}
+                                alt={`${plant.nickname}`}
+                              />
+                            </Box>
                           </Center>
                         )}
                         <Text>
@@ -155,41 +131,28 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading
-              id='g-heading'
-            className='pub-heading'
-              >
+              <Heading id='g-heading' className='pub-heading'>
                 My Hosted Meetups
               </Heading>
               {myMeetups.length > 0 ? (
                 <Grid
-                  templateColumns={`repeat(${Math.min(
-                    myMeetups.length,
-                    3
-                  )}, 1fr)`}
-                  gap={6}
-                  justifyContent='center'
-                  alignItems='center'
+                  className='pub-grid'
                 >
                   {myMeetups.slice(-6).map((meetup) => (
-                    <Card
-                      key={meetup.id}
-                      id='g-card'
-                      className='pub-card'
-                    >
+                    <Card key={meetup.id} id='g-card' className='pub-card'>
                       <CardHeader textAlign={'center'}>
                         <Heading size='md'>{meetup.eventName}</Heading>
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {meetup.imageUrl && (
                           <Center>
-                            <Image
-                              width={250}
-                              height={250}
-                              src={meetup.imageUrl}
-                              alt={meetup.eventName}
-                              objectFit='cover'
-                            />
+                            <Box id='pub-imgBox'>
+                              <Image
+                                id='pub-img'
+                                src={meetup.imageUrl}
+                                alt={meetup.eventName}
+                              />
+                            </Box>
                           </Center>
                         )}
                         <Text>{meetup.description}</Text>
@@ -233,41 +196,26 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading
-              id='g-heading'
-            className='pub-heading'
-              >
+              <Heading id='g-heading' className='pub-heading'>
                 My Recent Posts
               </Heading>
               {posts.length > 0 ? (
                 <Grid
-                  templateColumns={`repeat(${Math.min(posts.length, 3)}, 1fr)`}
-                  gap={6}
-                  justifyContent='center'
-                  alignItems='center'
+                  className='pub-grid'
                 >
                   {posts.slice(-6).map((post) => (
-                    <Card
-                      key={post.id}
-                      id='g-card'
-                      className='pub-card'
-
-                    >
-                        {/*
-                      <CardHeader textAlign={'center'}>
-                        <Heading size='md'>{`Post #${post.id}`}</Heading>
-                      </CardHeader>
-                        */}
+                    <Card key={post.id} id='g-card' className='pub-card'>
                       <CardBody textAlign={'center'}>
                         {post.imageUrl && (
                           <Center>
-                            <Image
-                              width={250}
-                              height={250}
-                              src={post.imageUrl}
-                              alt={`Post ${post.id}`}
-                              objectFit='contain'
-                            />
+                            <Box id='pub-imgBox'>
+                              <Image
+                                id='pub-img'
+                                src={post.imageUrl}
+                                alt={`Post ${post.id}`}
+                                objectFit='contain'
+                              />
+                            </Box>
                           </Center>
                         )}
                         <Text>{post.message}</Text>
