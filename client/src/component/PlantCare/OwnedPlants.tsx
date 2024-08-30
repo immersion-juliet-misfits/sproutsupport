@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid, GridItem } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid, GridItem, IconButton } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ import LevelBar from './LevelBar';
 import PlantWarnings from './PlantWarnings';
 import NavBar from '../NavBar'
 import TopBar from '../UserProfile/TopBar';
+import { RiPlantFill } from "react-icons/ri";
 // import UploadImage from '../UploadImage';
 // import io from 'socket.io-client';
 
@@ -89,7 +90,7 @@ const OwnedPlants = ({ user }) => {
       <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading>
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
-          <Box color='#488B49' bg='#C5E063' p={2} height="100%" borderRadius="xl">
+          <Box color='#488B49' bg='#b9da44' p={2} height="100%" borderRadius="xl">
            <PlantWarnings user={user}/>
           </Box>
       </GridItem>
@@ -101,11 +102,11 @@ const OwnedPlants = ({ user }) => {
       </Grid><br></br>
       <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
+      <Box position={"relative"} bg='#488B49' p={5} borderRadius="xl">
       <Link to={'/plantfinder'}>
-        <Button bgColor='d5e8ce' color="#4AAD52">New Plant</Button>
+        <IconButton fontSize="3xl" width="70px" height="70px" position="absolute" size="lg" top="-5" right="-5" zIndex="10" bgColor='#4AAD52' color="#d5e8ce" icon={<><RiPlantFill />+</>} isRound={true} aria-label='New Plant'></IconButton>
       </Link>
       {/* make into seperate component */}
-      <Box bg='#488B49' p={5} borderRadius="xl">
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {plants.length > 0 &&
         plants.map((plant) => (

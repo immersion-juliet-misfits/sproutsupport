@@ -93,7 +93,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
                 {progress[task.id] >= 100 &&
                   <Progress sx={{'& > div': {backgroundColor: '#6EB257'}}}  borderRadius="lg" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
                   <ProgressLabel>
-                    <Heading as="h2" size="md" bgGradient='linear(to-t, #4AAD52, #C5E063, white)' bgClip={"text"}>{task.taskName}</Heading>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, #4AAD52, #b9da44, white)' bgClip={"text"}>{task.taskName}</Heading>
                   </ProgressLabel>
                 </Progress>
                 }

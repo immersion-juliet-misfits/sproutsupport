@@ -43,7 +43,7 @@ const TopBar = () => {
       </GridItem>
       <GridItem
         colSpan={3}
-        bg='#C5E063'
+        bg='#b9da44' 
         boxShadow='md'
         display='flex'
         alignItems='center'
