@@ -27,7 +27,7 @@ const ssTheme = extendTheme({
         border: '25px solid #488B49',
         backgroundColor: '#488B49',
         borderRadius: '10px',
-        width: '1500px',
+        width: '1100px',
         mx: 'auto',
       },
       '#lvl-two': {
@@ -80,7 +80,7 @@ const ssTheme = extendTheme({
 
       '#topBar-grid': {
         height: '100px',
-        width: '1500px',
+        width: '1100px',
         mx: 'auto',
         marginTop: '20px',
         marginBottom: '20px',
@@ -136,15 +136,15 @@ const ssTheme = extendTheme({
 
       '.pub-grid': {
         display: 'grid',
-        // gridTemplateColumns: 'repeat(3, 1fr)',
-        gridTemplateColumns: 'repeat(4, 1fr)',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        // gridTemplateColumns: 'repeat(4, 1fr)',
         // gridTemplateRows: 'repeat(4, 1fr)',
         // gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
         // gridTemplateRows: 'repeat(auto-fit, minmax(250px, 1fr))',
         gap: '20px',
         justifyContent: 'center',
         alignItems: 'center',
-        gridAutoFlow: 'row',
+        // gridAutoFlow: 'row',
       },
 
       '.pub-heading': {
@@ -219,7 +219,7 @@ const ssTheme = extendTheme({
         objectFit: 'cover',
       },
 
-      '#gridItem-changes': {
+      '#u-gridItem-changes': {
         backgroundColor: '#93C482',
         borderRadius: '10px',
         width: '75%',

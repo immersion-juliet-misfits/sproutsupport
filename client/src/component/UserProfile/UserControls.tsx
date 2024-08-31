@@ -54,7 +54,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// User Methods *******************************************
+// User Methods: Data Retrieval *******************************************
 
 // Global WIP ******
 
@@ -115,6 +115,46 @@ const fetchWeather = (
       console.error('Error fetching weather data for city and state:', err);
     });
 };
+
+// ************
+
+const getPlants = (user, setPlants) => {
+  axios
+    .get(`/plants/all/${user.id}`)
+    .then(({ data }) => {
+      // console.log('Plant Data: ', data);
+      setPlants(data);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
+const getPosts = (setPosts) => {
+  axios
+    .get('/post/post')
+    .then(({ data }) => {
+      // console.log('Forum data', data);
+      setPosts(data);
+    })
+    .catch((err) => {
+      console.error('Failed to GET post: ', err);
+    });
+};
+
+const getMeetups = (user, setMyMeetups): void => {
+  axios
+    .get(`/meetup/all/${user.id}`)
+    .then(({ data }) => {
+      // console.log('Meetups data:', data);
+      setMyMeetups(data.yours);
+    })
+    .catch((err) => {
+      console.error('Error fetching meetups:', err);
+    });
+};
+
+// User Methods: Data Altering  *******************************************
 
 // ************
 // Global WIP
@@ -240,41 +280,123 @@ const handleBioChange = (newBio, setUser) => {
 };
 
 // ************
-// Cobining all Edit functions
 
-const handleSaveEdits = (e) => {
-  e.preventDefault();
+const handleLocationChange = (newCity, newState, setUser) => {
 
-  // Handle username change
-  if (editableUserName) {
-    handleUserNameChange(editableUserName);
-    setEditableUserName('');
-  }
+  console.log('Request: Hello World');
+  console.log('Location UpdateCheck: ', newCity, newState);
 
-  // Handle bio change
-  if (editableBio) {
-    handleBioChange(editableBio);
-    setEditableBio('');
-  }
+  axios
+  .patch('/user/updateLocation', { city: newCity, state: newState })
+  .then((response) => {
 
-  // Handle location change and fetch weather data
-  if (location.city && location.state) {
-    UserControls.fetchWeather(
-      location.city,
-      location.state,
-      setWeatherData,
-      setDailyForecastData,
-      setAlertsData
-    );
-  }
+      console.log('Response Check: ', response);
 
-  // Reset isEditMode to false after saving edits
-  setIsEditMode(false);
+      return setUser(response.data);
+    })
+    .catch((error) => {
+        console.error('Update Location: Failed ', error);
+      });
+
+  };
+
+
+// ************
+
+const handleToggle = (field, value, setSettings) => {
+  setSettings((prevState) => ({
+    ...prevState,
+    [field]: value,
+  }));
+
+  axios
+    .patch('/user/updateUserField', { field, value })
+    .then((status) => {
+      // console.log('Update Field: Success ', status);
+    })
+    .catch((err) => {
+      console.error('Error updating: ', err);
+    });
+};
+
+// ************
+
+// Combining all Edit functions
+// * V1 ******
+
+const handleSaveEdits = (
+  editableUserName: string,
+  editableBio: string,
+  location: { city: string; state: string },
+  setWeatherData: Function,
+  setDailyForecastData: Function,
+  setAlertsData: Function,
+  setIsEditMode: Function,
+  setUser: Function
+) => {
+  // Start with a resolved Promise to begin the chain
+  Promise.resolve()
+    // Handle username change
+    .then(() => {
+      if (editableUserName.trim() !== "") {
+        return handleUserNameChange(editableUserName, setUser);
+      }
+    })
+    // Handle bio change
+    .then(() => {
+      if (editableBio.trim() !== "") {
+        return handleBioChange(editableBio, setUser);
+      }
+    })
+    // Handle location change and fetch weather data
+    .then(() => {
+      if (location.city && location.state) {
+        return fetchWeather(
+          location.city,
+          location.state,
+          setWeatherData,
+          setDailyForecastData,
+          setAlertsData
+        );
+      }
+    })
+    // Reset isEditMode to false
+    .then(() => {
+      setIsEditMode(false);
+    })
+    .catch((error) => {
+      console.error("Error saving edits:", error);
+    });
 };
 
 
+// * V2 ******
 
-
+// const handleSaveEdits = (e) => {
+//   e.preventDefault();
+//   // Handle username change
+//   if (editableUserName) {
+//     handleUserNameChange(editableUserName);
+//     setEditableUserName('');
+//   }
+//   // Handle bio change
+//   if (editableBio) {
+//     handleBioChange(editableBio);
+//     setEditableBio('');
+//   }
+//   // Handle location change and fetch weather data
+//   if (location.city && location.state) {
+//     UserControls.fetchWeather(
+//       location.city,
+//       location.state,
+//       setWeatherData,
+//       setDailyForecastData,
+//       setAlertsData
+//     );
+//   }
+//   // Reset isEditMode to false after saving edits
+//   setIsEditMode(false);
+// };
 
 // ************
 
@@ -319,71 +441,13 @@ const handleLogOut = (onLogout, navigate) => {
 
 // ************
 
-const handleToggle = (field, value, setSettings) => {
-  setSettings((prevState) => ({
-    ...prevState,
-    [field]: value,
-  }));
-
-  axios
-      .patch('/user/updateUserField', { field, value })
-      .then((status) => {
-        // console.log('Update Field: Success ', status);
-      })
-      .catch((err) => {
-        console.error('Error updating: ', err);
-      });
-}
-
-// ************
-
-const getPlants = (user, setPlants) => {
-  axios
-    .get(`/plants/all/${user.id}`)
-    .then(({ data }) => {
-      // console.log('Plant Data: ', data);
-      setPlants(data);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-};
-
-const getPosts = (setPosts) => {
-  axios
-    .get('/post/post')
-    .then(({ data }) => {
-      // console.log('Forum data', data);
-      setPosts(data);
-    })
-    .catch((err) => {
-      console.error('Failed to GET post: ', err);
-    });
-};
-
-const getMeetups = (user, setMyMeetups): void => {
-  axios
-    .get(`/meetup/all/${user.id}`)
-    .then(({ data }) => {
-      // console.log('Meetups data:', data);
-      setMyMeetups(data.yours);
-    })
-    .catch((err) => {
-      console.error('Error fetching meetups:', err);
-    });
-};
-
-
-
-
-// ************
-
 // Export all functions in a single object
 export default {
   fetchWeather,
   handleAvatarChange,
   handleUserNameChange,
   handleBioChange,
+  handleLocationChange,
   handleSaveEdits,
   handleLogOut,
   handleToggle,

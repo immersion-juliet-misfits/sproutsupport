@@ -50,21 +50,25 @@ const UserPrivateProfile = ({
           {currentView === 'info' && (
             <UserInfo
               user={user}
+              setUser={setUser}
               avatar={user.avatar}
+              userName={user.userName}
               bio={user.bio}
               city={user.city}
               state={user.state}
-              userName={user.userName}
               fetchUserData={fetchUserData}
               fetchWeather={UserControls.fetchWeather}
               handleAvatarChange={(event) =>
                 UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
               }
+              handleUserNameChange={(newUserName) =>
+                UserControls.handleUserNameChange(newUserName, setUser)
+              }
               handleBioChange={(newBio) =>
                 UserControls.handleBioChange(newBio, setUser)
               }
-              handleUserNameChange={(newUserName) =>
-                UserControls.handleUserNameChange(newUserName, setUser)
+              handleLocationChange={(newCity, newState) =>
+                UserControls.handleLocationChange(newCity, newState, setUser)
               }
             />
           )}
