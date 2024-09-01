@@ -29,14 +29,12 @@ const UserInfo = ({
   state,
   handleLocationChange,
 }) => {
-  // Global State conversion WIP
-  // const { state } = useGlobalState();
-  // ******
+
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
-  const [editableCity, setEditableCity] = useState(user.city || '');
-  const [editableState, setEditableState] = useState(user.state || '');
+  const [editableCity, setEditableCity] = useState('');
+  const [editableState, setEditableState] = useState('');
 
   const [apiError, setApiError] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
@@ -44,20 +42,9 @@ const UserInfo = ({
   const [alertsData, setAlertsData] = useState(null);
 
   // ******
-  // Display Toggle states
-  // const { colorMode, toggleColorMode } = useColorMode();
-  // const [settings, setSettings] = useState({
-  //   showWeather: user?.showWeather || false,
-  //   showPlants: user?.showPlants || false,
-  //   showMyMeetups: user?.showMyMeetups || false,
-  //   showOtherMeetups: user?.showOtherMeetups || false,
-  //   showForumPosts: user?.showForumPosts || false,
-  // });
 
-  // ******
   useEffect(() => {
     fetchUserData();
-
     if (
       user.city !== 'undefined' &&
       user.state !== 'undefined' &&
@@ -72,25 +59,17 @@ const UserInfo = ({
         setAlertsData
       );
     }
-  }, [user.city, user.state, editableCity, editableState]);
+    setEditableUserName('');
+    setEditableBio('');
+    setEditableCity('');
+    setEditableState('');
 
-  // * V1 ******
+    fetchUserData();
+  }, [user.city, user.state]);
+
 
   return (
     <>
-       {/* Location debugging: */}
-
-      <Button
-        onClick={() =>
-          handleLocationChange('Minden', 'Louisiana', setUser)
-        }
-        >
-        Test Location Change
-      </Button>
-
-        {/* Location debugging: */}
-
-
       <Grid id='grid-avatar'>
         <GridItem
           id='gridItem-avatar'
@@ -107,65 +86,103 @@ const UserInfo = ({
         </GridItem>
       </Grid>
       <HStack>
-        <Button
-          id='g-button'
-          onClick={() => {
-            setIsEditMode(!isEditMode);
-            if (!isEditMode) {
-              setEditableCity(user.city || '');
-              setEditableState(user.state || '');
-            }
-          }}
-        >
+
+        {/* ************* */}
+
+        <Button id='g-button' onClick={() => setIsEditMode(!isEditMode)}>
           {isEditMode ? 'Cancel Edits' : 'Edit Profile'}
         </Button>
 
-        {/* <Button id='g-button' onClick={() => setIsEditMode(!isEditMode)}>
-          {isEditMode ? 'Cancel Edits' : 'Edit Profile'}
-        </Button> */}
-
         {isEditMode && (
-          <Button
-            id='g-button'
-            onClick={() =>
-              UserControls.handleSaveEdits(
-                editableUserName,
-                editableBio,
-                { city: editableCity, state: editableState },
-                setWeatherData,
-                setDailyForecastData,
-                setAlertsData,
-                setIsEditMode,
-                setUser
-              )
-            }
-          >
-            Save Edits
-          </Button>
+          <>
+
+{/* V3 *********  */}
+
+
+<Button
+  id='g-button'
+  onClick={() => {
+    Promise.resolve()
+      .then(() => {
+        if (editableUserName.trim() !== '') {
+          return handleUserNameChange(editableUserName, setUser);
+        }
+      })
+      .then(() => {
+        if (editableBio.trim() !== '') {
+          return handleBioChange(editableBio, setUser);
+        }
+      })
+      .then(() => {
+        if (editableCity.trim() !== '' && editableState.trim() !== '') {
+          return handleLocationChange(editableCity, editableState, setUser);
+        }
+      })
+      .then(() => {
+        fetchUserData();
+      })
+      .catch((err) => {
+        console.error('Handle functions or fetchUserData: Failed ', err);
+      });
+  }}
+>
+  Test
+</Button>
+
+
+
+
+{/* V2 ********  */}
+
+{/* <Button
+  id='g-button'
+  onClick={() => {
+    if (editableUserName.trim() !== '') {
+      handleUserNameChange(editableUserName, setUser);
+    }
+    if (editableBio.trim() !== '') {
+      handleBioChange(editableBio, setUser);
+    }
+    if (editableCity.trim() !== '' && editableState.trim() !== '') {
+      handleLocationChange(editableCity, editableState, setUser);
+    }
+  }}
+>
+  Test
+</Button> */}
+
+{/* V1 *******  */}
+            {/* <Button
+              id='g-button'
+              onClick={() => {
+                handleUserNameChange(editableUserName, setUser);
+                handleBioChange(editableBio);
+                handleLocationChange(editableCity, editableState, setUser);
+              }}
+            >
+              Test
+            </Button> */}
+
+          </>
         )}
       </HStack>
+
+
       {/* Edit Username ************************** */}
+
       <GridItem
-        // className='UserNameChange'
+        // className='u-gi-usernameChange'
         id='u-gridItem-changes'
       >
         <VStack align='center' visibility={isEditMode ? 'visible' : 'hidden'}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleUserNameChange(editableUserName);
-              setEditableUserName('');
-            }}
-          >
-            <Input
-              id='g-input'
-              className='u-input'
-              name='username'
-              value={editableUserName}
-              placeholder='Enter new User Name here'
-              onChange={(e) => setEditableUserName(e.target.value)}
-            />
-          </form>
+          <Input
+            id='g-input'
+            className='u-input'
+            name='username'
+            value={editableUserName}
+            placeholder='Enter new User Name here'
+            onChange={(e) => setEditableUserName(e.target.value)}
+          />
         </VStack>
 
         <VStack align='center'>
@@ -190,22 +207,14 @@ const UserInfo = ({
           align='center'
           visibility={isEditMode ? 'visible' : 'hidden'}
         >
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleBioChange(editableBio);
-              setEditableBio('');
-            }}
-          >
-            <Input
-              id='g-input'
-              className='u-input'
-              name='bio'
-              value={editableBio}
-              placeholder='Enter new Bio'
-              onChange={(e) => setEditableBio(e.target.value)}
-            />
-          </form>
+          <Input
+            id='g-input'
+            className='u-input'
+            name='bio'
+            value={editableBio}
+            placeholder='Enter new Bio'
+            onChange={(e) => setEditableBio(e.target.value)}
+          />
         </VStack>
 
         <VStack
@@ -227,71 +236,29 @@ const UserInfo = ({
       </GridItem>
       {/* Edit Location ************************** */}
       <GridItem
-        // className='UserLocationChange'
+        // className='u-gi-locationChange'
         id='u-gridItem-changes'
       >
         <VStack align='center' visibility={isEditMode ? 'visible' : 'hidden'}>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleLocationChange(editableCity, editableState, setUser);
-            }}
+          <HStack spacing={1}>
+            <Input
+              id='g-input'
+              className='u-input'
+              name='city'
+              value={editableCity}
+              placeholder='Enter City'
+              onChange={(e) => setEditableCity(e.target.value)}
+            />
 
-            // onSubmit={(e) => {
-            //   e.preventDefault();
-            //   UserControls.handleLocationChange(
-            //     editableCity,
-            //     editableState,
-            //     setUser
-            //   );
-            //   // setEditableCity('');
-            //   // setEditableState('');
-            // }}
-
-            //  onSubmit={(e) => {
-            //     e.preventDefault();
-            //     UserControls.fetchWeather(
-            //       location.city,
-            //       location.state,
-            //       setWeatherData,
-            //       setDailyForecastData,
-            //       setAlertsData
-            //     );
-            //   }}
-          >
-            <HStack spacing={1}>
-              <Input
-                id='g-input'
-                className='u-input'
-                name='city'
-                value={editableCity}
-                placeholder='Enter City'
-                onChange={(e) => setEditableCity(e.target.value)}
-
-                // onChange={(e) =>
-                //   setLocation((prevLocation) => ({
-                //     ...prevLocation,
-                //     city: e.target.value,
-                //   }))
-                // }
-              />
-              <Input
-                id='g-input'
-                className='u-input'
-                name='state'
-                value={editableState}
-                placeholder='Enter State'
-                onChange={(e) => setEditableState(e.target.value)}
-
-                // onChange={(e) =>
-                //   setLocation((prevLocation) => ({
-                //     ...prevLocation,
-                //     state: e.target.value,
-                //   }))
-                // }
-              />
-            </HStack>
-          </form>
+            <Input
+              id='g-input'
+              className='u-input'
+              name='state'
+              value={editableState}
+              placeholder='Enter State'
+              onChange={(e) => setEditableState(e.target.value)}
+            />
+          </HStack>
         </VStack>
 
         <VStack
@@ -301,18 +268,17 @@ const UserInfo = ({
           <Text fontSize='xl' fontWeight='bold'>
             Current City and State for Weather Watch
           </Text>
-
           <p />
           <Heading as='h2' size='lg' textAlign='center'>
             {user.city && user.state
               ? `${user.city}, ${user.state}`
               : 'No Location Watched'}
           </Heading>
-
           {/* Below will be replaced  */}
-          <Button type='submit' colorScheme='teal' size='md'>
+          {/* <Button type='submit' colorScheme='teal' size='md'>
             Get Weather
-          </Button>
+          </Button> */}
+          // **************
         </VStack>
       </GridItem>
       {/* ************************** */}

@@ -322,7 +322,7 @@ const handleToggle = (field, value, setSettings) => {
 // ************
 
 // Combining all Edit functions
-// * V1 ******
+// * V1 ****** Might not need this
 
 const handleSaveEdits = (
   editableUserName: string,
