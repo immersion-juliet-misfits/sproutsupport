@@ -282,24 +282,18 @@ const handleBioChange = (newBio, setUser) => {
 // ************
 
 const handleLocationChange = (newCity, newState, setUser) => {
-
-  console.log('Request: Hello World');
-  console.log('Location UpdateCheck: ', newCity, newState);
-
+  // console.log('Request: Hello World');
+  // console.log('Location UpdateCheck: ', newCity, newState);
   axios
-  .patch('/user/updateLocation', { city: newCity, state: newState })
-  .then((response) => {
-
-      console.log('Response Check: ', response);
-
+    .patch('/user/updateLocation', { city: newCity, state: newState })
+    .then((response) => {
+      // console.log('Response Check: ', response);
       return setUser(response.data);
     })
     .catch((error) => {
-        console.error('Update Location: Failed ', error);
-      });
-
-  };
-
+      console.error('Update Location: Failed ', error);
+    });
+};
 
 // ************
 
@@ -338,13 +332,13 @@ const handleSaveEdits = (
   Promise.resolve()
     // Handle username change
     .then(() => {
-      if (editableUserName.trim() !== "") {
+      if (editableUserName.trim() !== '') {
         return handleUserNameChange(editableUserName, setUser);
       }
     })
     // Handle bio change
     .then(() => {
-      if (editableBio.trim() !== "") {
+      if (editableBio.trim() !== '') {
         return handleBioChange(editableBio, setUser);
       }
     })
@@ -365,10 +359,9 @@ const handleSaveEdits = (
       setIsEditMode(false);
     })
     .catch((error) => {
-      console.error("Error saving edits:", error);
+      console.error('Error saving edits:', error);
     });
 };
-
 
 // * V2 ******
 

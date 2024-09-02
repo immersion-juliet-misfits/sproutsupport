@@ -38,12 +38,15 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
     fetchUserData();
     if (user?.showPlants) {
       UserControls.getPlants(user, setPlants);
+      // fetchUserData();
     }
     if (user?.showForumPosts) {
       UserControls.getPosts(setPosts);
+      // fetchUserData();
     }
     if (user?.showMyMeetups) {
       UserControls.getMeetups(user, setMyMeetups);
+      // fetchUserData();
     }
   }, [user]);
 
@@ -57,41 +60,37 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
       >
         <Box className='pub-box'>
           <HStack>
-            <GridItem id='gridItem-avatar'>
+            <GridItem id='u-avatar-gi'>
               <Image
-                id='img-avatar'
+                id='u-avatar-img'
                 src={user.avatar}
                 alt={`${user.userName}'s avatar`}
               />
             </GridItem>
 
             <VStack>
-              <Heading id='g-heading' className='pub-heading'>
+              <Heading id='g-heading' className='u-heading'>
                 {user.userName}
               </Heading>
-              <Text textAlign='center'>{user.bio}</Text>
+              <Text className='u-text' >{user.bio}</Text>
             </VStack>
           </HStack>
         </Box>
 
         {/* ***************************************  */}
         <VStack spacing={4} align='center'>
-
-        <Divider />
-        <Divider />
+          <Divider className='u-divider' />
 
           {user?.showPlants && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading id='g-heading' className='pub-heading'>
+              <Heading id='g-heading' className='u-heading'>
                 My Newest Plants
               </Heading>
               {plants.length > 0 ? (
-                <Grid
-                  className='pub-grid'
-                >
+                <Grid className='pub-grid'>
                   {plants.slice(-6).map((plant) => (
                     <Card key={plant.id} id='g-card' className='pub-card'>
                       <CardHeader textAlign={'center'}>
@@ -109,7 +108,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                             </Box>
                           </Center>
                         )}
-                        <Text>
+                        <Text className='u-text'>
                           <em>{plant.description}</em>
                         </Text>
                       </CardBody>
@@ -117,27 +116,25 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                   ))}
                 </Grid>
               ) : (
-                <Text>No Plants Available</Text>
+                <Text className='u-text'>No Plants Available</Text>
               )}
             </Box>
           )}
 
           {/* ***************************************  */}
 
-          <Divider />
+          <Divider className='u-divider' />
 
           {user?.showMyMeetups && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading id='g-heading' className='pub-heading'>
+              <Heading id='g-heading' className='u-heading'>
                 My Hosted Meetups
               </Heading>
               {myMeetups.length > 0 ? (
-                <Grid
-                  className='pub-grid'
-                >
+                <Grid className='pub-grid'>
                   {myMeetups.slice(-6).map((meetup) => (
                     <Card key={meetup.id} id='g-card' className='pub-card'>
                       <CardHeader textAlign={'center'}>
@@ -155,26 +152,26 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                             </Box>
                           </Center>
                         )}
-                        <Text>{meetup.description}</Text>
+                        <Text className='u-text'>{meetup.description}</Text>
                         <Text>
                           {meetup.location
                             .replace('State:', '-')
                             .replace('City:', '-')
                             .trim()}
                         </Text>
-                        <Text>Date & Time: {meetup.time_date}</Text>
+                        <Text className='u-text'>Date & Time: {meetup.time_date}</Text>
                       </CardBody>
                     </Card>
                   ))}
                 </Grid>
               ) : (
-                <Text>No Meetups Available</Text>
+                <Text className='u-text'>No Meetups Available</Text>
               )}
             </Box>
           )}
           {/* ***************************************  */}
 
-          {/* <Divider /> */}
+          {/* <Divider className='u-divider' /> */}
 
           {/* Can't Implement without access to other Users data  */}
           {/*
@@ -189,20 +186,18 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
 
           {/* ***************************************  */}
 
-          <Divider />
+          <Divider className='u-divider' />
 
           {user?.showForumPosts && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
-              <Heading id='g-heading' className='pub-heading'>
+              <Heading id='g-heading' className='u-heading'>
                 My Recent Posts
               </Heading>
               {posts.length > 0 ? (
-                <Grid
-                  className='pub-grid'
-                >
+                <Grid className='pub-grid'>
                   {posts.slice(-6).map((post) => (
                     <Card key={post.id} id='g-card' className='pub-card'>
                       <CardBody textAlign={'center'}>
@@ -218,13 +213,13 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                             </Box>
                           </Center>
                         )}
-                        <Text>{post.message}</Text>
+                        <Text className='u-text'>{post.message}</Text>
                       </CardBody>
                     </Card>
                   ))}
                 </Grid>
               ) : (
-                <Text>No Forum Posts Available</Text>
+                <Text className='u-text'>No Forum Posts Available</Text>
               )}
             </Box>
           )}

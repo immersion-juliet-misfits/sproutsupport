@@ -22,11 +22,11 @@ interface User {
 
 // Main component
 const UserPrivateProfile = ({
+  fetchUserData,
   user,
   setUser,
   onLogout,
   BUCKET_NAME,
-  fetchUserData,
 }) => {
   const navigate = useNavigate();
   const [currentView, setCurrentView] = useState('info');
@@ -37,8 +37,7 @@ const UserPrivateProfile = ({
 
   return (
     <GlobalStateProvider>
-
-        <TopBar />
+      <TopBar />
 
       <Grid id='lvl-one'>
         <UserTabs
@@ -46,9 +45,13 @@ const UserPrivateProfile = ({
           setCurrentView={setCurrentView}
         />
 
-        <Grid id='lvl-two' className='u-pages'>
+        <Grid
+          // id='lvl-two'
+          className='u-pages'
+        >
           {currentView === 'info' && (
             <UserInfo
+              fetchUserData={fetchUserData}
               user={user}
               setUser={setUser}
               avatar={user.avatar}
@@ -56,7 +59,6 @@ const UserPrivateProfile = ({
               bio={user.bio}
               city={user.city}
               state={user.state}
-              fetchUserData={fetchUserData}
               fetchWeather={UserControls.fetchWeather}
               handleAvatarChange={(event) =>
                 UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)

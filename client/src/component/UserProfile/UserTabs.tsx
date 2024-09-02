@@ -4,7 +4,7 @@ const UserTabs = ({ handleLogOut, setCurrentView }) => {
   return (
     <Tabs
       id='g-tabs'
-      className='uTabs'
+      className='u-tabs'
       variant='enclosed'
       isFitted
       w='100%'

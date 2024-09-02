@@ -147,15 +147,6 @@ const ssTheme = extendTheme({
         // gridAutoFlow: 'row',
       },
 
-      '.pub-heading': {
-        // color: '#507255',
-        color: '#D5E8CE',
-        fontSize: '3rem',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        margin: '20px',
-      },
-
       '#pub-imgBox': {
         width: '300px',
         height: '300px',
@@ -171,31 +162,7 @@ const ssTheme = extendTheme({
         height: '100%',
       },
 
-      '.u-input': {
-        height: '50px',
-        width: '250px',
-        margin: '10px 0 10px 0',
-      },
-
-      '.u-pages': {
-        // border: '1px solid red',
-        mt: '0',
-        gap: '10px',
-        overflow: 'hidden',
-        boxShadow: 'md',
-        templateRows: '1fr',
-        templateColumns: '1fr',
-        alignItems: 'center',
-        justifyItems: 'center',
-        py: '4',
-      },
-
-      '.uTabs': {
-        // mb: 0,
-        // pb: 0,
-      },
-
-      '#gridItem-avatar': {
+      '#u-avatar-gi': {
         border: '15px solid #93C482',
         backgroundColor: 'black',
         display: 'flex',
@@ -211,7 +178,7 @@ const ssTheme = extendTheme({
         cursor: 'pointer',
       },
 
-      '#img-avatar': {
+      '#u-avatar-img': {
         width: '100%',
         height: '100%',
         alignItems: 'center',
@@ -219,17 +186,120 @@ const ssTheme = extendTheme({
         objectFit: 'cover',
       },
 
-      '#u-gridItem-changes': {
-        backgroundColor: '#93C482',
-        borderRadius: '10px',
+      '.u-box-todaysWeather': {
+        border: '1px solid #93C482',
+        boxShadow: 'md',
+        borderRadius: 'lg',
+        padding: '20px',
+        marginBottom: '16px',
+        textAlign: 'center',
+        maxWidth: '90%',
+        mx: 'auto',
+      },
+
+      '.u-box-weeksWeather': {
+        border: '1px solid #93C482',
+        boxShadow: 'md',
+        borderRadius: 'lg',
+        padding: '20px',
+        marginBottom: '10px',
+        textAlign: 'center',
+      },
+
+      '.u-check-button': {
+        border: '1px solid purple',
+        width: '25px',
+        mx: '10px',
+        mt: '20px',
+        mb: '0px',
+        pb: '0px',
+      },
+
+      '.u-checkIcon': {
+        // border: '1px solid purple',
+        alignSelf: 'center',
+      },
+
+      '.u-divider': {
+        borderColor: '#93C482',
+        // borderWidth: '25px',
+        margin: '10px',
+      },
+
+      '.u-heading': {
+        // color: '#507255',
+        color: '#D5E8CE',
+        fontSize: '3rem',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        alignItems: 'center',
+        margin: '10px',
+      },
+
+      '.u-hs-input': {
+        border: '1px solid blue',
+        width: '100%',
+        mb: '0px',
+        pb: '0px',
+        // display: 'flex',
+        // justifyContent: 'center',
+        // alignItems: 'center',
+      },
+
+      '.u-gi-changes': {
+        // border: '1px solid red',
+        border: '1px solid #93C482',
+        borderRadius: 'lg',
+        boxShadow: 'md',
         width: '75%',
         minHeight: '220px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        pt: '10px',
+        // justifyContent: 'center', // Moves everything too low
       },
-      '.visible': {
-        visibility: 'visible',
+
+      //  Nothing added to the below settings appears to affect the input
+      '.u-input': {
+        // border: '10px solid blue', // This doesn't even appear
       },
+
+      '.u-pages': {
+        // border: '1px solid red',
+        border: '1px solid #93C482',
+        borderRadius: 'lg',
+        boxShadow: 'md',
+        mt: '0',
+        gap: '10px',
+        overflow: 'hidden',
+        templateRows: '1fr',
+        templateColumns: '1fr',
+        alignItems: 'center',
+        justifyItems: 'center',
+        py: '4',
+      },
+
+      '.u-tabs': {},
+
+      '.u-text': {
+        // color: '#507255',
+        fontSize: 'xl',
+        fontWeight: 'bold',
+        alignItems: 'center',
+      },
+
+      '.u-vs-input': {
+        border: '1px solid yellow',
+        width: '75%',
+      },
+
       '.hidden': {
         visibility: 'hidden',
+      },
+
+      '.visible': {
+        visibility: 'visible',
       },
     },
   },

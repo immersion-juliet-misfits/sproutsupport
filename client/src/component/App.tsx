@@ -109,8 +109,8 @@ const App = () => {
               path='/userprofile'
               element={
                 <UserPrivateProfile
-                  user={user}
                   fetchUserData={fetchUserData}
+                  user={user}
                   setUser={setUser}
                   onLogout={handleLogout}
                   BUCKET_NAME={BUCKET_NAME}
