@@ -1,9 +1,11 @@
-import { Input, Button, Box, Center, Select, useToast, Alert, AlertIcon, AlertDescription} from '@chakra-ui/react';
+import { Input, Button, Box, Center, useToast, Alert, AlertIcon, AlertDescription, Image} from '@chakra-ui/react';
 import axios from 'axios';
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import {AddIcon} from '@chakra-ui/icons'
+import dayjs from 'dayjs';
+import imagesExists from 'image-exists'
 
-const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, showSwitch: any}) => {
+const MeetupCreate = ({refresh, user, showSwitch}: {refresh: void, user: object, showSwitch: void}) => {
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
   const [city, setCity] = useState('')
@@ -12,11 +14,13 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
   const [description, setDescription] = useState('')
   const [image, setImage] = useState({})
   const [fillIn, setFillIn] = useState(false)
-  const [weather, setWeather] = useState([])
-  const [selecDate, setSelecDate] = useState('')
+  const [selecDate, setSelecDate] = useState('not in range')
   const toast = useToast()
   const [warn, setWarn] = useState('warning')
-  const [warnMessage, setWarnMessage] = useState('please fill in both city and state')
+  const [warnMessage, setWarnMessage] = useState('please fill in both city and state with the selected date')
+  const [check, setCheck] = useState(false)
+  const savedCallback = useRef()
+  const [src, setSrc] = useState('')
 
   const edit = (name: string, value: React.ChangeEvent<HTMLInputElement>): void =>{
     switch(name){
@@ -34,6 +38,7 @@ const MeetupCreate = ({refresh, user, showSwitch}: {refresh: any, user: object, 
       break;
       case 'img':
       setImage(value)
+      setSrc(URL.createObjectURL(value))
       break;
       case 'c':
       setCity(value)
@@ -54,7 +59,7 @@ if(image.name !== undefined){
     })
   })
   .then(() => {
-    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sprout-support.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
+    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
     .then(()=>{
      refresh()
      showSwitch()
@@ -83,55 +88,92 @@ if(image.name !== undefined){
     console.error('Failed to get image url', err)
   })
 
-  }else{  
-    toast({
-    title: 'missing data',
-    description: "please add image",
-    duration: 5000,
-    isClosable: true,
-    status: "error",
-    position: 'top'
-  })
-    console.error('No image added Can\'t create')
+  }else if(image.name === undefined){  
+      const combine = `Location:${location}\n, State:${st}\n, City:${city}`
+    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: 'https://sproutsupportbucket.s3.amazonaws.com/sproutsSupportLogo1.png', userId: user.id, status: 'none'})
+    .then(()=>{
+     refresh()
+     showSwitch()
+    })
+    .catch((err)=>{
+     toast({
+        title: 'Can\'t schedule meetup',
+        description: "Error some thing went wrong",
+        duration: 5000,
+        isClosable: true,
+        status: "error",
+        position: 'top'
+      })
+      console.error("Error can/'t schedule meetup: ", err)
+    })
   }
   }
 
   const getweather = (): void => {
-    if(city.length >= 4 && st.length >= 4){
+    const time: string = dayjs().format('MM/DD/YYYY')
+    if(city.length >= 4 && st.length >= 4 && dateTime.length >= 19){
+    const monthCheck = (parseInt(dateTime?.[0] + dateTime?.[1]) === parseInt(time[0] + time[1]))
+    const yearCheck = (parseInt(dateTime?.[6] + dateTime?.[7] + dateTime?.[8] + dateTime?.[9]) === parseInt(time[6] + time[7] + time[8] + time[9]))
+
     axios.get(`/meetup/weather?city=${city}&state=${st}`)
     .then(({data})=>{
-      setWeather(data.days)
+      if(monthCheck === true && yearCheck === true){
+        const passCheck = (parseInt(dateTime?.[3] + dateTime?.[4]) - parseInt(time[3] + time[4]))
+        if(passCheck < 0){
+          setSelecDate('selected date has already pass')
+        }else{
+        setSelecDate(selectedDate(data.days, time))
+        }
+      }
       setWarnMessage('city and state exist')
       setWarn('success')
     })
     .catch((err)=>{
-      setWarnMessage('pleas fill in both city and state')
-     setWarn('')
+      console.error('can\'t get weather: ' + err)
+      setWarnMessage('city or state don\'t exist')
+     setWarn('error')
     })
   }else{
+    if(dateTime.length < 19 && city.length >= 4 && st.length >= 4){
+      setWarnMessage('please fill in a date (example: 01/01/2024 1:01 am/pm)')
+    }else if(dateTime.length >= 17 && city.length < 4 && st.length < 4){
+      setWarnMessage('please fill in both city and state')
+    }else{
+    setWarnMessage('please fill in both city and state with the selected date')
+    }
     setWarn('warning')
   }
   }
 
-  const selectedDate = (target: string): void =>{
-    target = target.slice(6)
-for(let i = 0; i < weather.length; i++){
-  let arr = weather?.[i].datetime.split('-')
-       const month = arr[2]
-       arr[2] = arr[1]
-       arr[1] = month
-       arr.reverse()
-       arr = arr.join('/')
-   if(arr === target){
-    setSelecDate(weather?.[i].description)
+  const selectedDate = (arr: Array<T>, due: string): void =>{
+for(let i = 0; i < arr.length; i++){
+  let array = arr?.[i].datetime.split('-')
+       const month = array[2]
+       array[2] = array[1]
+       array[1] = month
+       array.reverse()
+       array = array.join('/')
+   if(array === due){
+ return arr?.[i].description
    }
 }
+return 'not in range'
   }
 
   useEffect(()=>{
+    savedCallback.current = getweather;
+    imagesExists(src, (img: boolean)=>{
+      if(img === true){
+        setCheck(true)
+      }
+      })
+  })
+
+  useEffect(()=>{
+    savedCallback.current()
     if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
       if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
-        if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.name !== undefined ){
+        if(location.length > 0 && eventName.length > 0 && description.length > 0){
           setFillIn(false)
         }else{
             setFillIn(true)
@@ -146,17 +188,12 @@ for(let i = 0; i < weather.length; i++){
 
   return (<div>
   <Center>
-    <Box w={"800px"} bg={'green.100'}>
-    <Select  bg={'green.300'} placeholder='Select date' w={'200px'} onChange={(e)=>{selectedDate(e.target.value)}}>{weather.map((day, i)=>{
-       let arr = day.datetime.split('-')
-       const month = arr[2]
-       arr[2] = arr[1]
-       arr[1] = month
-       arr.reverse()
-       arr = arr.join('/')
-return(<option key={i}>date: {arr}</option>)
-      })}</Select>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder='mm/dd/year h:mm am/pm'></Input>
+    <Box w={"800px"} bg={"#C5E063"}>
+    {check === true && <Image objectFit={'fill'} src={src} h={"150px"} w={"470px"} mx={"170px"}></Image>}
+      <Box h={'40px'}>{'weather: ' + selecDate}</Box>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
+      getweather()
+    }} name='dt' placeholder='mm/dd/year h:mm am/pm'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='location'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
@@ -176,7 +213,7 @@ return(<option key={i}>date: {arr}</option>)
     </Box>
     </Center>
     <Button colorScheme="green" onClick={()=>{makeMeetup()}} isDisabled={fillIn} position='relative' left="902px" top="-368px"><AddIcon/></Button>
-    <Box position="relative" left='360px' top="-410px" w={'450px'}>{selecDate}</Box>
+    {/* <Box position="relative" left='360px' top="-410px" w={'450px'}>{selecDate}</Box> */}
   </div>)
 };
 

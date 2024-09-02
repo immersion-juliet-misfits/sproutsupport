@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import NavBar from '../NavBar';
 
-const TopBar = () => {
+const TopBar = ({route}: {route: string}) => {
   return (
     <Grid
       // border='5px solid blue'
@@ -49,9 +49,9 @@ const TopBar = () => {
         alignItems='center'
         justifyContent='center'
       >
-        <Heading as='h1' size='2xl'>
-          Sprout Support
-        </Heading>
+        <Heading as='h1' size='2xl'>{
+         route === undefined || route === '' ? "Sprout Support" : route
+        }</Heading>
       </GridItem>
       <GridItem
         colSpan={1}
