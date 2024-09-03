@@ -2,19 +2,56 @@ import axios from 'axios';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 // Global User states WIP ****************************************
+
+interface User {
+  id: number;
+  google_id: string;
+  userName: string;
+  email: string;
+  avatar: string;
+  bio: string;
+  city: string;
+  state: string;
+}
+
 interface Location {
   city: string;
   state: string;
 }
+
+interface WeatherData {
+  temp: number;
+  conditions: string;
+  windspeed: number;
+  humidity: number;
+  feelslike: number;
+  uvindex: number;
+  visibility: number;
+}
+
+interface DailyForecast {
+  datetime: string;
+  tempmax: number;
+  tempmin: number;
+  conditions: string;
+}
+
+interface AlertData {
+  event: string;
+  headline: string;
+  description: string;
+  ends: string;
+}
+
 
 interface GlobalState {
   isEditMode: boolean;
   editableUserName: string;
   editableBio: string;
   apiError: boolean;
-  weatherData: any;
-  dailyForecastData: any;
-  alertsData: any;
+  weatherData: object;
+  dailyForecastData: object;
+  alertsData: object;
   location: Location;
 }
 
@@ -59,7 +96,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 
 // WIP: Fetch User data by ID (for viewing another Users profile)
 
-const getPublicUserData = (userId, setUser) => {
+const getPublicUserData = (userId: number, setUser: (user: object) => void) => {
   axios
     .get(`/user/public/${userId}`)
     .then(({ data }) => {
@@ -103,14 +140,16 @@ const getPublicUserData = (userId, setUser) => {
 //     });
 // };
 
-// *********
+// **********
 
 const fetchWeather = (
-  city,
-  state,
-  setWeatherData,
-  setDailyForecastData,
-  setAlertsData
+  city: string,
+  state: string,
+  setWeatherData: (data: WeatherData) => void,
+  setDailyForecastData: (data: DailyForecast[]) => void,
+  setAlertsData: (data: AlertData[]) => void,
+  handleLocationChange: (city: string | null, state: string | null, setUser: (user: object) => void) => void,
+  setUser: (user: object) => void
 ) => {
   if (!city || !state) {
     console.error('City or State is undefined.');
@@ -121,19 +160,29 @@ const fetchWeather = (
     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
     .then((response) => {
       const data = response.data;
+      console.log('Response Check: ', data);
 
-      setWeatherData(data.currentConditions);
-      setDailyForecastData(data.days);
-      setAlertsData(data.alerts || []);
+      if (data && data.currentConditions) {
+        // Valid location, update the weather data
+        setWeatherData(data.currentConditions);
+        setDailyForecastData(data.days);
+        setAlertsData(data.alerts || []);
+      } else {
+        // Invalid location, reset city and state in the database
+        alert('Invalid Location');
+        handleLocationChange('undefined', 'undefined', setUser);
+      }
     })
     .catch((err) => {
       console.error('Error fetching weather data for city and state:', err);
+      // Reset city and state to 'undefined' in the database upon API failure
+      handleLocationChange('undefined', 'undefined', setUser);
     });
 };
 
 // ************
 
-const getPlants = (user, setPlants) => {
+const getPlants = (user: object, setPlants: (plants: object[]) => void) => {
   axios
     .get(`/plants/all/${user.id}`)
     .then(({ data }) => {
@@ -145,13 +194,11 @@ const getPlants = (user, setPlants) => {
     });
 };
 
-// New version: Retrieves specified Users forum posts
-
-const getPosts = (setPosts, userId) => {
+const getPosts = (setPosts: (posts: object[]) => void, userId: number) => {
   axios
     .get(`/post/post/${userId}`)
     .then(({ data }) => {
-      console.log('1 User Forum Data Check: ', data);
+      // console.log('1 User Forum Data Check: ', data);
       setPosts(data);
     })
     .catch((err) => {
@@ -159,22 +206,7 @@ const getPosts = (setPosts, userId) => {
     });
 };
 
-// Old version: Retrieves ALL forum posts
-// const getPosts = (setPosts) => {
-//   axios
-//     .get('/post/post')
-//     .then(({ data }) => {
-//       // console.log('Forum data', data);
-//       setPosts(data);
-//     })
-//     .catch((err) => {
-//       console.error('Failed to GET post: ', err);
-//     });
-// };
-
-// ******
-
-const getMeetups = (user, setMyMeetups): void => {
+const getMeetups = (user: object, setMyMeetups: (myMeetups: object[]) => void) => {
   axios
     .get(`/meetup/all/${user.id}`)
     .then(({ data }) => {
@@ -224,7 +256,7 @@ const getMeetups = (user, setMyMeetups): void => {
 
 // ******
 
-const handleAvatarChange = (event, setUser, BUCKET_NAME) => {
+const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>, setUser: (user: object[]) => void, BUCKET_NAME: string) => {
   const file = event.target.files[0];
   if (file) {
     axios
@@ -269,7 +301,7 @@ const handleAvatarChange = (event, setUser, BUCKET_NAME) => {
 
 // ******
 
-const handleUserNameChange = (newUserName, setUser) => {
+const handleUserNameChange = (newUserName: object, setUser: (user: object[]) => void) => {
   axios
     .patch('/user/updateUserName', { userName: newUserName })
     .then((response) => {
@@ -300,7 +332,7 @@ const handleUserNameChange = (newUserName, setUser) => {
 
 // ******
 
-const handleBioChange = (newBio, setUser) => {
+const handleBioChange = (newBio, setUser: (user: object[]) => void) => {
   axios
     .patch('/user/updateBio', { bio: newBio })
     .then((response) => {
@@ -313,7 +345,7 @@ const handleBioChange = (newBio, setUser) => {
 
 // ************
 
-const handleLocationChange = (newCity, newState, setUser) => {
+const handleLocationChange = (newCity, newState, setUser: (user: object[]) => void) => {
   // console.log('Request: Hello World');
   // console.log('Location UpdateCheck: ', newCity, newState);
   axios
@@ -350,55 +382,55 @@ const handleToggle = (field, value, setSettings) => {
 // Combining all Edit functions
 // * V1 ****** Might not need this
 
-const handleSaveEdits = (
-  editableUserName: string,
-  editableBio: string,
-  location: { city: string; state: string },
-  setWeatherData: Function,
-  setDailyForecastData: Function,
-  setAlertsData: Function,
-  setIsEditMode: Function,
-  setUser: Function
-) => {
-  // Start with a resolved Promise to begin the chain
-  Promise.resolve()
-    // Handle username change
-    .then(() => {
-      if (editableUserName.trim() !== '') {
-        return handleUserNameChange(editableUserName, setUser);
-      }
-    })
-    // Handle bio change
-    .then(() => {
-      if (editableBio.trim() !== '') {
-        return handleBioChange(editableBio, setUser);
-      }
-    })
-    // Handle location change and fetch weather data
-    .then(() => {
-      if (location.city && location.state) {
-        return fetchWeather(
-          location.city,
-          location.state,
-          setWeatherData,
-          setDailyForecastData,
-          setAlertsData
-        );
-      }
-    })
-    // Reset isEditMode to false
-    .then(() => {
-      setIsEditMode(false);
-    })
-    .catch((error) => {
-      console.error('Error saving edits:', error);
-    });
-};
+// const handleSaveEdits = (
+//   editableUserName: string,
+//   editableBio: string,
+//   location: { city: string; state: string },
+//   setWeatherData: Function,
+//   setDailyForecastData: Function,
+//   setAlertsData: Function,
+//   setIsEditMode: Function,
+//   setUser: Function
+// ) => {
+//   // Start with a resolved Promise to begin the chain
+//   Promise.resolve()
+//     // Handle username change
+//     .then(() => {
+//       if (editableUserName.trim() !== '') {
+//         return handleUserNameChange(editableUserName, setUser);
+//       }
+//     })
+//     // Handle bio change
+//     .then(() => {
+//       if (editableBio.trim() !== '') {
+//         return handleBioChange(editableBio, setUser);
+//       }
+//     })
+//     // Handle location change and fetch weather data
+//     .then(() => {
+//       if (location.city && location.state) {
+//         return fetchWeather(
+//           location.city,
+//           location.state,
+//           setWeatherData,
+//           setDailyForecastData,
+//           setAlertsData
+//         );
+//       }
+//     })
+//     // Reset isEditMode to false
+//     .then(() => {
+//       setIsEditMode(false);
+//     })
+//     .catch((error) => {
+//       console.error('Error saving edits:', error);
+//     });
+// };
 
 // * V2 ******
 
-// const handleSaveEdits = (e) => {
-//   e.preventDefault();
+// const handleSaveEdits = (event: React.ChangeEvent<HTMLInputElement>) => {
+//   event.preventDefault();
 //   // Handle username change
 //   if (editableUserName) {
 //     handleUserNameChange(editableUserName);
@@ -469,17 +501,17 @@ const handleLogOut = (onLogout, navigate) => {
 // Export all functions in a single object
 export default {
   getPublicUserData,
+  getPlants,
+  getPosts,
+  getMeetups,
   fetchWeather,
   handleAvatarChange,
   handleUserNameChange,
   handleBioChange,
   handleLocationChange,
-  handleSaveEdits,
   handleLogOut,
   handleToggle,
-  getPlants,
-  getPosts,
-  getMeetups,
+  // handleSaveEdits,
   // useGlobalState,
   // GlobalStateProvider,
 };

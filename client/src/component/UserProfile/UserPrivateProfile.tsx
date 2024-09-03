@@ -51,27 +51,10 @@ const UserPrivateProfile = ({
         >
           {currentView === 'info' && (
             <UserInfo
+              BUCKET_NAME={BUCKET_NAME}
               fetchUserData={fetchUserData}
-              user={user}
               setUser={setUser}
-              avatar={user.avatar}
-              userName={user.userName}
-              bio={user.bio}
-              city={user.city}
-              state={user.state}
-              fetchWeather={UserControls.fetchWeather}
-              handleAvatarChange={(event) =>
-                UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
-              }
-              handleUserNameChange={(newUserName) =>
-                UserControls.handleUserNameChange(newUserName, setUser)
-              }
-              handleBioChange={(newBio) =>
-                UserControls.handleBioChange(newBio, setUser)
-              }
-              handleLocationChange={(newCity, newState) =>
-                UserControls.handleLocationChange(newCity, newState, setUser)
-              }
+              user={user}
             />
           )}
           {currentView === 'help' && (

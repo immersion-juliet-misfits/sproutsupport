@@ -3,12 +3,10 @@ import { Box, Divider, Grid, Heading, Text } from '@chakra-ui/react';
 import UserControls, { useGlobalState } from './UserControls';
 
 const UserWeather = ({
-  user,
   fetchUserData,
-  apiError,
-  weatherData,
-  dailyForecastData,
-  alertsData,
+  setUser,
+  user,
+
 }) => {
   const [apiError, setApiError] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
@@ -17,20 +15,15 @@ const UserWeather = ({
 
   useEffect(() => {
     fetchUserData();
-    if (
-      // user.city !== 'undefined' &&
-      // user.state !== 'undefined' &&
-      // user.city !== '' &&
-      // user.state !== '' &&
-      user.city !== null &&
-      user.state !== null
-    ) {
+    if (user.city !== null && user.state !== null && user.city !== 'undefined' && user.state !== 'undefined') {
       UserControls.fetchWeather(
         user.city,
         user.state,
         setWeatherData,
         setDailyForecastData,
-        setAlertsData
+        setAlertsData,
+        UserControls.handleLocationChange,
+        setUser,
       );
     }
   }, [user.city, user.state]);
@@ -42,9 +35,6 @@ const UserWeather = ({
         // id=''
       />
 
-      <Heading id='g-heading' className='u-heading'>
-        My Weather
-      </Heading>
       {apiError ? (
         <Text>No Weather Update Currently Available</Text>
       ) : (

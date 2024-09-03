@@ -17,32 +17,12 @@ import { AddIcon, CheckIcon } from '@chakra-ui/icons';
 import UserControls, { useGlobalState } from './UserControls';
 import UserWeather from './UserWeather';
 
-const UserInfo = ({
-  fetchUserData,
-  user,
-  setUser,
-  avatar,
-  handleAvatarChange,
-  userName,
-  handleUserNameChange,
-  bio,
-  handleBioChange,
-  city,
-  state,
-  handleLocationChange,
-}) => {
+const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
   const [editableCity, setEditableCity] = useState('');
   const [editableState, setEditableState] = useState('');
-
-  // const [apiError, setApiError] = useState(false);
-  // const [weatherData, setWeatherData] = useState(null);
-  // const [dailyForecastData, setDailyForecastData] = useState(null);
-  // const [alertsData, setAlertsData] = useState(null);
-
-  // ******
 
   useEffect(() => {
     fetchUserData();
@@ -50,7 +30,7 @@ const UserInfo = ({
     setEditableBio('');
     setEditableCity('');
     setEditableState('');
-  }, [user.userName, userName, user.bio, bio, city, state]);
+  }, [user.userName, user.bio, user.city, user.state]);
 
   return (
     <>
@@ -59,13 +39,19 @@ const UserInfo = ({
           id='u-avatar-gi'
           onClick={() => document.getElementById('avatarInput').click()}
         >
-          <Image id='u-avatar-img' src={avatar} alt='Click to Edit Avatar' />
+          <Image
+            id='u-avatar-img'
+            src={user.avatar}
+            alt='Click to Edit Avatar'
+          />
           <input
             type='file'
             id='avatarInput'
             style={{ display: 'none' }}
             accept='.jpg, .jpeg, .png'
-            onChange={handleAvatarChange}
+            onChange={(event) =>
+              UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
+            }
           />
         </GridItem>
       </Grid>
@@ -92,13 +78,13 @@ const UserInfo = ({
                   .then(() => {
                     if (editableUserName.trim() !== '') {
                       fetchUserData();
-                      return handleUserNameChange(editableUserName, setUser);
+                      return UserControls.handleUserNameChange(editableUserName, setUser);
                     }
                   })
                   .then(() => {
                     if (editableBio.trim() !== '') {
                       fetchUserData();
-                      return handleBioChange(editableBio, setUser);
+                      return UserControls.handleBioChange(editableBio, setUser);
                     }
                   })
                   .then(() => {
@@ -107,7 +93,7 @@ const UserInfo = ({
                       editableState.trim() !== ''
                     ) {
                       fetchUserData();
-                      return handleLocationChange(
+                      return UserControls.handleLocationChange(
                         editableCity,
                         editableState,
                         setUser
@@ -136,9 +122,9 @@ const UserInfo = ({
             {/* <Button
               id='g-button'
               onClick={() => {
-                handleUserNameChange(editableUserName, setUser);
-                handleBioChange(editableBio);
-                handleLocationChange(editableCity, editableState, setUser);
+                UserControls.handleUserNameChange(editableUserName, setUser);
+                UserControls.handleBioChange(editableBio);
+                UserControls.handleLocationChange(editableCity, editableState, setUser);
               }}
             >
               Test
@@ -173,9 +159,7 @@ const UserInfo = ({
               className='u-check-button'
               onClick={() => {
                 if (editableUserName.trim() !== '') {
-                  handleUserNameChange(editableUserName, setUser);
-                  // fetchUserData();
-                  // setEditableUserName('');
+                  UserControls.handleUserNameChange(editableUserName, setUser);
                 }
               }}
               isDisabled={!editableUserName.trim()}
@@ -189,7 +173,7 @@ const UserInfo = ({
         <VStack id='g-vstack' className='u-vstack'>
           <Text className='u-text'>Current Display Name:</Text>
           <Heading id='g-heading' className='u-heading'>
-            {userName}
+            {user.userName}
           </Heading>
         </VStack>
       </GridItem>
@@ -218,14 +202,11 @@ const UserInfo = ({
               className='u-check-button'
               onClick={() => {
                 if (editableBio.trim() !== '') {
-                  handleBioChange(editableBio, setUser);
-                  // fetchUserData();
-                  // setEditableBio('');
+                  UserControls.handleBioChange(editableBio, setUser);
                 }
               }}
               isDisabled={!editableBio.trim()}
             >
-              {/* Update */}
               <CheckIcon className='u-checkIcon' />
             </Button>
           </HStack>
@@ -235,7 +216,7 @@ const UserInfo = ({
           <Text className='u-text'>Current User Bio</Text>
 
           <Heading id='g-heading' className='u-heading'>
-            {bio}
+            {user.bio}
           </Heading>
         </VStack>
       </GridItem>
@@ -273,15 +254,15 @@ const UserInfo = ({
               className='u-check-button'
               onClick={() => {
                 if (editableCity.trim() !== '' && editableState.trim() !== '') {
-                  handleLocationChange(editableCity, editableState, setUser);
-                  // fetchUserData();
-                  // setEditableCity('');
-                  // setEditableState('');
+                  UserControls.handleLocationChange(
+                    editableCity,
+                    editableState,
+                    setUser
+                  );
                 }
               }}
               isDisabled={!editableCity.trim() || !editableState.trim()}
             >
-              {/* Update */}
               <CheckIcon className='u-checkIcon' />
             </Button>
           </HStack>
@@ -293,12 +274,19 @@ const UserInfo = ({
           </Text>
           <p />
           <Heading id='g-heading' className='u-heading'>
-            {user.city && user.state
+            {user.city &&
+            user.state &&
+            user.city !== 'undefined' &&
+            user.state !== 'undefined'
               ? `${user.city}, ${user.state}`
               : 'No Location Watched'}
           </Heading>
 
-          <UserWeather user={user} fetchUserData={fetchUserData} />
+          <UserWeather
+            user={user}
+            setUser={setUser}
+            fetchUserData={fetchUserData}
+          />
         </VStack>
       </GridItem>
     </>

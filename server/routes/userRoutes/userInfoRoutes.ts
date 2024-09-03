@@ -60,8 +60,6 @@ Posts.get('/post/:userId', (req: Request, res: Response) => {
     });
 });
 
-
-
 // ******
 
 UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
@@ -90,7 +88,6 @@ UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
 
 // ****
 
-
 UserInfo.patch('/updateUserName', (req: Request, res: Response) => {
   const { userName } = req.body;
   const userId = req.user.id;
@@ -116,7 +113,6 @@ UserInfo.patch('/updateUserName', (req: Request, res: Response) => {
 });
 
 // ****
-
 
 UserInfo.patch('/updateBio', (req: Request, res: Response) => {
   const { bio } = req.body;
@@ -145,7 +141,6 @@ UserInfo.patch('/updateBio', (req: Request, res: Response) => {
 // ****
 
 UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
-
   console.log('Request Handler: Hello World');
 
   const { city, state } = req.body;
@@ -155,30 +150,33 @@ UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
   console.log('Received userId:', userId);
 
   if (!userId || !city || !state) {
-      return res.status(400).send('User ID, City, and State are required');
-    }
+    return res.status(400).send('User ID, City, and State are required');
+  }
 
-    req.user.city = city;
-    req.user.state = state;
+  req.user.city = city;
+  req.user.state = state;
 
-    prisma.user
-      .update({
-          where: { id: userId },
-          data: { city, state },
-        })
-        .then((updatedUser) => {
-            res.send(updatedUser);
+  prisma.user
+    .update({
+      where: { id: userId },
+      data: {
+        city: city || null,
+        state: state || null
+      },
+    })
+    .then((updatedUser) => {
+      res.send(updatedUser);
     })
     .catch((error) => {
       console.error('Error updating location:', error);
       res.status(500).send('Failed to update location');
     });
-
 });
 
+// **************
 
 // * Call to Weather API ****
-
+// Fetch Weather by entering City & State
 UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
   const { city, state } = req.query;
   const userId = req.user?.id;
@@ -202,19 +200,31 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
     });
 });
 
-// *******
+// **************
 
 // *** Update all Privacy Toggles ***
 UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
   const { field, value } = req.body;
   const userId = req.user.id;
 
-  const validFields = ['showWeather', 'showPlants', 'showMyMeetups', 'showOtherMeetups', 'showForumPosts'];
+  console.log('Req User Check: ', req.user, 'Id Type Check: ', req.user.id);
+
+  const validFields = [
+    'showWeather',
+    'showPlants',
+    'showMyMeetups',
+    'showOtherMeetups',
+    'showForumPosts',
+  ];
   if (!userId || !validFields.includes(field) || typeof value !== 'boolean') {
-    return res.status(400).send('User ID, a valid field, and a boolean value are required');
+    return res
+      .status(400)
+      .send('User ID, a valid field, and a boolean value are required');
   }
 
-  req.user[field] = value;
+  // req.user[field] = value;
+  // Attempt to resolve Typescript warning
+  (req.user[field as keyof typeof req.user] as boolean) = value;
 
   prisma.user
     .update({
@@ -228,36 +238,35 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
       console.error(`Error updating ${field}:`, error);
       res.status(500).send(`Failed to update ${field}`);
     });
-  });
+});
 
-  // *******
+// *******
 
-  // Retrieve another Users profile Data to view it
-  UserInfo.get('/public/:userId', async (req, res) => {
-    const { userId } = req.params;
-    try {
-      const user = await prisma.user.findUnique({
-        where: { id: Number(userId) },
-        select: {
-          userName: true,
-          avatar: true,
-          bio: true,
-          city: true,
-          state: true,
-          // Any other fields you want to expose publicly
-        },
-      });
+// Retrieve another Users profile Data to view it
+UserInfo.get('/public/:userId', (req, res) => {
+  const { userId } = req.params;
 
-      if (user) {
-        res.json(user);
-      } else {
-        res.status(404).send('User not found');
-      }
-    } catch (error) {
-      res.status(500).send('Internal Server Error');
+  prisma.user.findUnique({
+    where: { id: Number(userId) },
+    select: {
+      userName: true,
+      avatar: true,
+      bio: true,
+      city: true,
+      state: true,
+    },
+  })
+  .then(user => {
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).send('User not found');
     }
+  })
+  .catch(err => {
+    res.status(500).send('Internal Server Error');
   });
-
+});
 
 
 export default UserInfo;

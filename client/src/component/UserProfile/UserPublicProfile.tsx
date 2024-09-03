@@ -6,7 +6,6 @@ import {
   CardBody,
   CardHeader,
   Center,
-  Divider,
   Grid,
   GridItem,
   HStack,
@@ -37,6 +36,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   // const { userId } = useParams();
   // const [user, setUser] = useState(null);
 
+  // Prevents infinite Loop from 'user' being a dependency
   const isFirstRender = useRef(true);
 
   // Fetches user data only on initial mount
@@ -100,7 +100,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               // border='5px solid red'
               className='pub-box'
             >
-              <Divider className='u-divider' />
+
               <Heading id='g-heading' className='u-heading'>
                 My Newest Plants
               </Heading>
@@ -143,7 +143,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               // border='5px solid red'
               className='pub-box'
             >
-              <Divider className='u-divider' />
+
               <Heading id='g-heading' className='u-heading'>
                 My Hosted Meetups
               </Heading>
@@ -191,7 +191,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
           {/*
             {user?.showOtherMeetups && (
               <Box className='rsvpMeetupsBox'>
-                 <Divider className='u-divider' />
+
                 <Heading textAlign='center' mb={4}>
                   Meetups I'm Attending
                 </Heading>
@@ -206,7 +206,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               // border='5px solid red'
               className='pub-box'
             >
-              <Divider className='u-divider' />
+
               <Heading id='g-heading' className='u-heading'>
                 My Recent Posts
               </Heading>
