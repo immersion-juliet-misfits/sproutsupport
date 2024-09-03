@@ -118,7 +118,6 @@ const App = () => {
               }
             ></Route>
 
-
             {/* <Route
               path='/public-profile/:userId'
               element={
@@ -131,7 +130,6 @@ const App = () => {
                 <UserPublicProfile user={user} fetchUserData={fetchUserData} />
               }
             ></Route>
-
 
             <Route
               path='/'

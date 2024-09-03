@@ -181,13 +181,14 @@ routerMeetup.delete('/AttendeeLeave/:id',(req: Request, res: Response): void =>{
  })
 
  routerMeetup.get('/weather', (req: Request, res: Response): void =>{
+  const { city, state } = req.query;
 
-  const baseUrl = 'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/64.7552,147.3534';
-  const dailyForecastUrl = `${baseUrl}?key=${WEATHER_KEY}&unitGroup=us&include=days`;
-axios.get(dailyForecastUrl)
+  const location = `${city},${state}`;
+  const weatherUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${WEATHER_KEY}`;
+
+axios.get(weatherUrl)
     .then((result: any)=>{
-      console.log(result)
-      res.status(200).send(result)
+      res.status(200).json(result.data)
     })
     .catch((err: any)=>{
       console.error('Error meetup get line 92: ', err)

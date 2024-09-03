@@ -1,53 +1,50 @@
 import {
-  Input,
-  Button,
   Box,
+  Button,
   Center,
-  useToast,
+  Image,
+  Input,
+  Card,
+  CardBody,
   Alert,
   AlertIcon,
   AlertDescription,
-  Image,
+  useToast,
 } from '@chakra-ui/react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import React, { useState, useEffect, useRef } from 'react';
+import imagesExists from 'image-exists';
 import { AddIcon } from '@chakra-ui/icons';
 import dayjs from 'dayjs';
-import imagesExists from 'image-exists';
 
-const MeetupCreate = ({
+const MeetupUpdate = ({
+  event,
   refresh,
-  user,
   showSwitch,
-  BUCKET_NAME,
 }: {
-  refresh: void;
-  user: object;
-  showSwitch: void;
-  BUCKET_NAME: string;
-}) => {
+  event: object;
+  refresh: any;
+  showSwitch: any;
+}): void => {
+  const savedCallback = useRef();
+  const toast = useToast();
+  const [check, setCheck] = useState(false);
+  const [fillIn, setFillIn] = useState(false);
+  const [selecDate, setSelecDate] = useState('not in range');
+  const [warn, setWarn] = useState('warning');
+  const [warnMessage, setWarnMessage] = useState(
+    'please fill in both city and state with the selected date'
+  );
+  const [id, setId] = useState(event.id);
   const [dateTime, setDateTime] = useState('');
   const [location, setLocation] = useState('');
   const [city, setCity] = useState('');
   const [st, setSt] = useState('');
   const [eventName, setEventName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState({});
-  const [fillIn, setFillIn] = useState(false);
-  const [selecDate, setSelecDate] = useState('not in range');
-  const toast = useToast();
-  const [warn, setWarn] = useState('warning');
-  const [warnMessage, setWarnMessage] = useState(
-    'please fill in both city and state with the selected date'
-  );
-  const [check, setCheck] = useState(false);
-  const savedCallback = useRef();
-  const [src, setSrc] = useState('');
+  const [image, setImage] = useState({ name: event.imageUrl });
 
-  const edit = (
-    name: string,
-    value: React.ChangeEvent<HTMLInputElement>
-  ): void => {
+  const edit = (name: string, value: any): void => {
     switch (name) {
       case 'dt':
         setDateTime(value);
@@ -63,7 +60,6 @@ const MeetupCreate = ({
         break;
       case 'img':
         setImage(value);
-        setSrc(URL.createObjectURL(value));
         break;
       case 'c':
         setCity(value);
@@ -74,9 +70,9 @@ const MeetupCreate = ({
     }
   };
 
-  const makeMeetup = (): void => {
+  const meetupUpdate = (): void => {
     if (image.name !== undefined) {
-      const combine = `Location: ${location}\n, State: ${st}\n, City: ${city}`;
+      const combine = `Location:${location}\n, State:${st}\n, City:${city}`;
       axios
         .get('/upload/url', { params: { filename: image.name } })
         .then(({ data }) => {
@@ -85,70 +81,71 @@ const MeetupCreate = ({
           });
         })
         .then(() => {
+          const obj: object = {
+            time_date: dateTime,
+            location: combine,
+            eventName,
+            description,
+            imageUrl: `https://${BUCKET_NAME}.s3.amazonaws.com/${image.name}`,
+            id,
+          };
+          const url = 'meetup/update/' + id;
           axios
-            .post('/meetup/create', {
-              time_date: dateTime,
-              location: combine,
-              eventName,
-              description,
-              imageUrl: `https://{BUCKET_NAME}.s3.amazonaws.com/${image.name}`,
-              userId: user.id,
-              status: 'none',
-            })
+            .patch(url, obj)
             .then(() => {
               refresh();
-              showSwitch();
+              showSwitch(false, {});
             })
-            .catch((err) => {
+            .catch((err: any) => {
               toast({
-                title: "Can't schedule meetup",
+                title: "Can't update",
                 description: 'Error some thing went wrong',
                 duration: 5000,
                 isClosable: true,
                 status: 'error',
                 position: 'top',
               });
-              console.error("Error can/'t schedule meetup: ", err);
+              console.error("Error can't update line 69: ", err);
             });
         })
-        .catch((err) => {
+        .catch((err: any) => {
           toast({
-            title: "Can't schedule meetup",
+            title: "Can't update",
             description: 'Error some thing went wrong',
             duration: 5000,
             isClosable: true,
             status: 'error',
             position: 'top',
           });
-          console.error('Failed to get image url', err);
+          console.error("Error can't update  line 75: ", err);
         });
-    } else if (image.name === undefined) {
-      const combine = `Location:${location}\n, State:${st}\n, City:${city}`;
+    } else {
+      const combine = `Location: ${location}\n, State: ${st}\n, City: ${city}`;
+      const obj: object = {
+        time_date: dateTime,
+        location: combine,
+        eventName,
+        description,
+        imageUrl: `https://${BUCKET_NAME}.s3.amazonaws.com/sproutsSupportLogo1.png`,
+        id,
+      };
+      const url = 'meetup/update/' + id;
       axios
-        .post('/meetup/create', {
-          time_date: dateTime,
-          location: combine,
-          eventName,
-          description,
-          imageUrl:
-            'https://{BUCKET_NAME}.s3.amazonaws.com/sproutsSupportLogo1.png',
-          userId: user.id,
-          status: 'none',
-        })
+        .patch(url, obj)
         .then(() => {
           refresh();
-          showSwitch();
+          showSwitch(false, {});
         })
-        .catch((err) => {
+        .catch((err: any) => {
           toast({
-            title: "Can't schedule meetup",
+            title: "Can't update",
             description: 'Error some thing went wrong',
             duration: 5000,
             isClosable: true,
             status: 'error',
             position: 'top',
           });
-          console.error("Error can/'t schedule meetup: ", err);
+          console.error("Error can't update: ", err);
         });
     }
   };
@@ -217,7 +214,7 @@ const MeetupCreate = ({
 
   useEffect(() => {
     savedCallback.current = getweather;
-    imagesExists(src, (img: boolean) => {
+    imagesExists(event.imageUrl, (img: boolean) => {
       if (img === true) {
         setCheck(true);
       }
@@ -255,97 +252,97 @@ const MeetupCreate = ({
   }, [edit]);
 
   return (
-    <div>
-      <Center>
-        <Box w={'800px'} bg={'#C5E063'}>
-          {check === true && (
+    <Card>
+      <CardBody bg={'#C5E063'} w={'450px'}>
+        <Box bg={'#6EB257'} h={'60px'}>
+          {'weather: ' + selecDate}
+          <Button
+            h={'25px'}
+            bg={'#C5E063'}
+            color={'#6EB257'}
+            onClick={() => {
+              meetupUpdate();
+            }}
+            isDisabled={fillIn}
+            left={'210px'}
+            top={'5px'}
+          >
+            <AddIcon />
+          </Button>
+        </Box>
+        {check === true && (
+          <Center>
             <Image
               objectFit={'fill'}
-              src={src}
+              src={
+                image.name[0] === 'h' ? image.name : URL.createObjectURL(image)
+              }
               h={'150px'}
               w={'470px'}
-              mx={'170px'}
             ></Image>
-          )}
-          <Box h={'40px'}>{'weather: ' + selecDate}</Box>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-              getweather();
-            }}
-            name='dt'
-            placeholder='mm/dd/year h:mm am/pm'
-          ></Input>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-            }}
-            name='l'
-            placeholder='location'
-          ></Input>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-              getweather();
-            }}
-            name='c'
-            placeholder='city'
-          ></Input>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-              getweather();
-            }}
-            name='s'
-            placeholder='state'
-          ></Input>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-            }}
-            name='en'
-            placeholder='event Name'
-          ></Input>
-          <Input
-            onChange={(e) => {
-              edit(e.target.name, e.target.value);
-            }}
-            name='d'
-            placeholder='description'
-          ></Input>
-          <Input
-            type='file'
-            onChange={(e) => {
-              edit(e.target.name, e.target.files[0]);
-            }}
-            name='img'
-            id='choose image'
-          ></Input>
-          {warn !== '' && (
-            <Alert status={warn}>
-              <AlertIcon />
-              <AlertDescription>
-                {warn === 'error' ? "city or state don't exist" : warnMessage}
-              </AlertDescription>
-            </Alert>
-          )}
-        </Box>
-      </Center>
-      <Button
-        colorScheme='green'
-        onClick={() => {
-          makeMeetup();
-        }}
-        isDisabled={fillIn}
-        position='relative'
-        left='902px'
-        top='-368px'
-      >
-        <AddIcon />
-      </Button>
-      {/* <Box position="relative" left='360px' top="-410px" w={'450px'}>{selecDate}</Box> */}
-    </div>
+          </Center>
+        )}
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+          }}
+          name='dt'
+          placeholder='mm/dd/year h:mm am/pm'
+        ></Input>
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+          }}
+          name='l'
+          placeholder='location'
+        ></Input>
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+            getweather();
+          }}
+          name='c'
+          placeholder='city'
+        ></Input>
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+            getweather();
+          }}
+          name='s'
+          placeholder='state'
+        ></Input>
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+          }}
+          name='en'
+          placeholder='eventName'
+        ></Input>
+        <Input
+          onChange={(e) => {
+            edit(e.target.name, e.target.value);
+          }}
+          name='d'
+          placeholder='description'
+        ></Input>
+        <Input
+          type='file'
+          accept='image/*'
+          onChange={(e) => {
+            edit(e.target.name, e.target.files[0]);
+          }}
+          name='img'
+        ></Input>
+        <Alert status={warn}>
+          <AlertIcon />
+          <AlertDescription>
+            {warn === 'error' ? "city or state don't exist" : warnMessage}
+          </AlertDescription>
+        </Alert>
+      </CardBody>
+    </Card>
   );
 };
 
-export default MeetupCreate;
+export default MeetupUpdate;

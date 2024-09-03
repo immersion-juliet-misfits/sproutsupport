@@ -2,7 +2,7 @@ import { Box, Grid, GridItem, Heading } from '@chakra-ui/react';
 import NavBar from '../NavBar';
 import '@fontsource/nerko-one';
 
-const TopBar = () => {
+const TopBar = ({route}: {route: string}) => {
   // * V2 ***
   return (
     <Grid id='topBar-grid'>
@@ -10,7 +10,9 @@ const TopBar = () => {
         id='topBar-gridItem'
         className='tb-gi-one'
       >
-        Sprout Support
+        <Heading as='h1' size='2xl'>{
+         route === undefined || route === '' ? "Sprout Support" : route
+        }</Heading>
       </GridItem>
 
       <GridItem
