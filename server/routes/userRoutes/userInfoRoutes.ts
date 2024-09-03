@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import axios from 'axios';
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
+import Posts from '../postRoute';
 
 const prisma = new PrismaClient();
 const UserInfo = express.Router();
@@ -33,8 +34,35 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
     });
 });
 
-// ****
+// ******
+// Fetch a specific Users posts
 
+Posts.get('/post/:userId', (req: Request, res: Response) => {
+  // const { userId } = req.params;
+  // console.log('U-Id Check: ', req.params);
+  const userId = parseInt(req.params.userId, 10);
+  console.log('New U-Id Check: ', userId, typeof userId);
+
+  prisma.post
+    .findMany({
+      where: {
+        userId: userId,
+      },
+    })
+    .then((posts) => {
+      posts.length > 0
+        ? res.status(200).send(posts)
+        : res.status(404).send('No posts found for this user');
+    })
+    .catch((err) => {
+      console.error('Failed to get posts: ', err);
+      res.sendStatus(500);
+    });
+});
+
+
+
+// ******
 
 UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
   const { avatar } = req.body;
@@ -174,53 +202,6 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
     });
 });
 
-
-
-
-
-// * Previous working ReqHandler ****
-
-// // Weather API City-State Route
-// UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
-//   const { city, state } = req.query;
-//   // console.log('Query Verified: ', req.query);
-//   const userId = req.user?.id;
-
-//   if (!city || !state) {
-//     return res.status(400).send('City and State are required');
-//   }
-
-//   // req.user.city = city;
-//   // req.user.state = state;
-
-//   prisma.user
-//     .update({
-//       where: { id: userId },
-//       data: {
-//         city: city as string,
-//         state: state as string,
-//       },
-//     })
-//     .then(() => {
-//       const location = `${city},${state}`;
-//       const weatherUrl = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${location}?unitGroup=metric&key=${WEATHER_KEY}`;
-
-//       return axios.get(weatherUrl);
-//     })
-//     .then((response) => {
-//       // console.log('Weather data retrieved successfully:', response.data);
-//       res.json(response.data);
-//     })
-//     .catch((error) => {
-//       console.error(
-//         'Error updating user location or fetching weather data:',
-//         error
-//       );
-//       res.status(500).send('Failed to update location or fetch weather data');
-//     });
-// });
-
-
 // *******
 
 // *** Update all Privacy Toggles ***
@@ -247,8 +228,35 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
       console.error(`Error updating ${field}:`, error);
       res.status(500).send(`Failed to update ${field}`);
     });
-});
+  });
 
+  // *******
+
+  // Retrieve another Users profile Data to view it
+  UserInfo.get('/public/:userId', async (req, res) => {
+    const { userId } = req.params;
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: Number(userId) },
+        select: {
+          userName: true,
+          avatar: true,
+          bio: true,
+          city: true,
+          state: true,
+          // Any other fields you want to expose publicly
+        },
+      });
+
+      if (user) {
+        res.json(user);
+      } else {
+        res.status(404).send('User not found');
+      }
+    } catch (error) {
+      res.status(500).send('Internal Server Error');
+    }
+  });
 
 
 

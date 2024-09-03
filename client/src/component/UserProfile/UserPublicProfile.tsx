@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Box,
   Card,
@@ -33,20 +33,36 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
   const [plants, setPlants] = useState([]);
   const [posts, setPosts] = useState([]);
   const [myMeetups, setMyMeetups] = useState([]);
+  // States for when another User views your profile
+  // const { userId } = useParams();
+  // const [user, setUser] = useState(null);
 
+  const isFirstRender = useRef(true);
+
+  // Fetches user data only on initial mount
   useEffect(() => {
     fetchUserData();
-    if (user?.showPlants) {
-      UserControls.getPlants(user, setPlants);
-      // fetchUserData();
-    }
-    if (user?.showForumPosts) {
-      UserControls.getPosts(setPosts);
-      // fetchUserData();
-    }
-    if (user?.showMyMeetups) {
-      UserControls.getMeetups(user, setMyMeetups);
-      // fetchUserData();
+    isFirstRender.current = false;
+  }, []);
+
+  // Fetches data based on changes to the dependency
+  useEffect(() => {
+    // fetchUserData(); // Currently logged in User data
+    // UserControls.getPublicUserData(userId, setUser); // Other User data
+
+    if (!isFirstRender.current && user?.id) {
+      if (user?.showPlants) {
+        // fetchUserData();
+        UserControls.getPlants(user, setPlants);
+      }
+      if (user?.showForumPosts && user?.id) {
+        // fetchUserData();
+        UserControls.getPosts(setPosts, user.id);
+      }
+      if (user?.showMyMeetups) {
+        // fetchUserData();
+        UserControls.getMeetups(user, setMyMeetups);
+      }
     }
   }, [user]);
 
@@ -72,20 +88,19 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               <Heading id='g-heading' className='u-heading'>
                 {user.userName}
               </Heading>
-              <Text className='u-text' >{user.bio}</Text>
+              <Text className='u-text'>{user.bio}</Text>
             </VStack>
           </HStack>
         </Box>
 
         {/* ***************************************  */}
         <VStack spacing={4} align='center'>
-          <Divider className='u-divider' />
-
           {user?.showPlants && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
+              <Divider className='u-divider' />
               <Heading id='g-heading' className='u-heading'>
                 My Newest Plants
               </Heading>
@@ -123,13 +138,12 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
 
           {/* ***************************************  */}
 
-          <Divider className='u-divider' />
-
           {user?.showMyMeetups && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
+              <Divider className='u-divider' />
               <Heading id='g-heading' className='u-heading'>
                 My Hosted Meetups
               </Heading>
@@ -159,7 +173,9 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
                             .replace('City:', '-')
                             .trim()}
                         </Text>
-                        <Text className='u-text'>Date & Time: {meetup.time_date}</Text>
+                        <Text className='u-text'>
+                          Date & Time: {meetup.time_date}
+                        </Text>
                       </CardBody>
                     </Card>
                   ))}
@@ -171,12 +187,11 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
           )}
           {/* ***************************************  */}
 
-          {/* <Divider className='u-divider' /> */}
-
           {/* Can't Implement without access to other Users data  */}
           {/*
             {user?.showOtherMeetups && (
               <Box className='rsvpMeetupsBox'>
+                 <Divider className='u-divider' />
                 <Heading textAlign='center' mb={4}>
                   Meetups I'm Attending
                 </Heading>
@@ -186,13 +201,12 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
 
           {/* ***************************************  */}
 
-          <Divider className='u-divider' />
-
           {user?.showForumPosts && (
             <Box
               // border='5px solid red'
               className='pub-box'
             >
+              <Divider className='u-divider' />
               <Heading id='g-heading' className='u-heading'>
                 My Recent Posts
               </Heading>

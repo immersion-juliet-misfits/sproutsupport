@@ -55,7 +55,22 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // User Methods: Data Retrieval *******************************************
+// *********
 
+// WIP: Fetch User data by ID (for viewing another Users profile)
+
+const getPublicUserData = (userId, setUser) => {
+  axios
+    .get(`/user/public/${userId}`)
+    .then(({ data }) => {
+      setUser(data);
+    })
+    .catch((err) => {
+      console.error('Fetch Other User Profile Data: Failed ', err);
+    });
+};
+
+// *********
 // Global WIP ******
 
 // const fetchWeather = () => {
@@ -88,7 +103,7 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 //     });
 // };
 
-// *****
+// *********
 
 const fetchWeather = (
   city,
@@ -130,17 +145,34 @@ const getPlants = (user, setPlants) => {
     });
 };
 
-const getPosts = (setPosts) => {
+// New version: Retrieves specified Users forum posts
+
+const getPosts = (setPosts, userId) => {
   axios
-    .get('/post/post')
+    .get(`/post/post/${userId}`)
     .then(({ data }) => {
-      // console.log('Forum data', data);
+      console.log('1 User Forum Data Check: ', data);
       setPosts(data);
     })
     .catch((err) => {
-      console.error('Failed to GET post: ', err);
+      console.error('Failed to GET posts: ', err);
     });
 };
+
+// Old version: Retrieves ALL forum posts
+// const getPosts = (setPosts) => {
+//   axios
+//     .get('/post/post')
+//     .then(({ data }) => {
+//       // console.log('Forum data', data);
+//       setPosts(data);
+//     })
+//     .catch((err) => {
+//       console.error('Failed to GET post: ', err);
+//     });
+// };
+
+// ******
 
 const getMeetups = (user, setMyMeetups): void => {
   axios
@@ -436,6 +468,7 @@ const handleLogOut = (onLogout, navigate) => {
 
 // Export all functions in a single object
 export default {
+  getPublicUserData,
   fetchWeather,
   handleAvatarChange,
   handleUserNameChange,

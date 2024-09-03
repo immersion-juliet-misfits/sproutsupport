@@ -18,10 +18,12 @@ const UserWeather = ({
   useEffect(() => {
     fetchUserData();
     if (
-      user.city !== 'undefined' &&
-      user.state !== 'undefined' &&
-      user.city !== '' &&
-      user.state !== ''
+      // user.city !== 'undefined' &&
+      // user.state !== 'undefined' &&
+      // user.city !== '' &&
+      // user.state !== '' &&
+      user.city !== null &&
+      user.state !== null
     ) {
       UserControls.fetchWeather(
         user.city,

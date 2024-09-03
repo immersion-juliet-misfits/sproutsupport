@@ -117,12 +117,22 @@ const App = () => {
                 />
               }
             ></Route>
+
+
+            {/* <Route
+              path='/public-profile/:userId'
+              element={
+                <UserPublicProfile user={user} fetchUserData={fetchUserData} />
+              }
+            ></Route> */}
             <Route
               path='/public-profile'
               element={
                 <UserPublicProfile user={user} fetchUserData={fetchUserData} />
               }
             ></Route>
+
+
             <Route
               path='/'
               element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}
