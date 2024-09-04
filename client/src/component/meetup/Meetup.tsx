@@ -211,6 +211,7 @@ const Meetup = ({
                   showSwitch={showSwitch}
                   refresh={getMeetups}
                   user={user}
+                  BUCKET_NAME={BUCKET_NAME}
                 />
               )}
             </>

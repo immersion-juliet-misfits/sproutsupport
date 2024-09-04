@@ -1,4 +1,13 @@
-import { Box, HStack } from '@chakra-ui/react';
+import {
+  Box,
+  HStack,
+  IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 // ***
@@ -8,32 +17,63 @@ import { VscAccount } from 'react-icons/vsc';
 
 const NavBar = () => {
   // * V2 ****
-  return (
-    <>
-      <HStack id='topBar-hstack'>
-        <ChakraLink as={ReactRouterLink} to='/home'>
-          Home
-        </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to='/meetup'>
-          Meet Up
-        </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to='/myplants'>
-          My Plants
-        </ChakraLink>
-      </HStack>
+  // return (
+  //   <>
+  //     <HStack id='topBar-hstack'>
+  //       <ChakraLink as={ReactRouterLink} to='/home'>
+  //         Home
+  //       </ChakraLink>
+  //       <ChakraLink as={ReactRouterLink} to='/meetup'>
+  //         Meet Up
+  //       </ChakraLink>
+  //       <ChakraLink as={ReactRouterLink} to='/myplants'>
+  //         My Plants
+  //       </ChakraLink>
+  //     </HStack>
 
-      <HStack id='topBar-hstack'>
-        <ChakraLink as={ReactRouterLink} to='/userprofile'>
-          <SettingsIcon />
-        </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to='/public-profile'>
-          <VscAccount />
-        </ChakraLink>
-      </HStack>
-    </>
-  );
+  //     <HStack id='topBar-hstack'>
+  //       <ChakraLink as={ReactRouterLink} to='/userprofile'>
+  //         <SettingsIcon />
+  //       </ChakraLink>
+  //       <ChakraLink as={ReactRouterLink} to='/public-profile'>
+  //         <VscAccount />
+  //       </ChakraLink>
+  //     </HStack>
+  //   </>
+  // );
 
   // * V1 ****
+  return (
+    <Menu>
+      <MenuButton
+        id='topBar-hamburger'
+        as={IconButton}
+        aria-label='Menu Options'
+        icon={<HamburgerIcon id='icon-hamburger' />}
+      />
+      <MenuList>
+        <MenuItem as={ReactRouterLink} to='/home'>
+          Home
+        </MenuItem>
+        <MenuItem as={ReactRouterLink} to='/meetup'>
+          Meet Up
+        </MenuItem>
+        <MenuItem as={ReactRouterLink} to='/myplants'>
+          My Plants
+        </MenuItem>
+        <MenuItem as={ReactRouterLink} to='/userprofile'>
+          <SettingsIcon mr={2} />
+          Settings
+        </MenuItem>
+        <MenuItem as={ReactRouterLink} to='/public-profile'>
+          <VscAccount mr={2} />
+          Profile
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+
+  // * V0 ****
   // return (
   //   <Box>
   //     <ChakraLink as={ReactRouterLink} to='/home'>
@@ -53,7 +93,7 @@ const NavBar = () => {
   //     </ChakraLink>
   //   </Box>
   // );
-  
+
   // ******
 };
 

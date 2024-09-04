@@ -19,11 +19,13 @@ const MeetupCard = ({
   showSwitch,
   refresh,
   user,
+  BUCKET_NAME
 }: {
   card: object;
   showSwitch: void;
   refresh: any;
   user: object;
+  BUCKET_NAME: string;
 }): void => {
   const [check, setCheck] = useState(false);
   const [updateSwap, setUpdateSwap] = useState(false);
@@ -239,6 +241,7 @@ const MeetupCard = ({
               event={card}
               refresh={refresh}
               showSwitch={showSwitch}
+              BUCKET_NAME={BUCKET_NAME}
             />
           </Box>
         )}

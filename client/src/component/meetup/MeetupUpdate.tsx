@@ -21,10 +21,12 @@ const MeetupUpdate = ({
   event,
   refresh,
   showSwitch,
+  BUCKET_NAME,
 }: {
   event: object;
   refresh: any;
   showSwitch: any;
+  BUCKET_NAME: string;
 }): void => {
   const savedCallback = useRef();
   const toast = useToast();

@@ -68,7 +68,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
 
   return (
     <>
-      <TopBar />
+      <TopBar route={`${user.userName}'s Public Profile`} />
       <Grid
         // border='1px solid red'
         id='lvl-one'

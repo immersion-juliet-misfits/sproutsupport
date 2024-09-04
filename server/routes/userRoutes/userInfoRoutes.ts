@@ -41,7 +41,7 @@ Posts.get('/post/:userId', (req: Request, res: Response) => {
   // const { userId } = req.params;
   // console.log('U-Id Check: ', req.params);
   const userId = parseInt(req.params.userId, 10);
-  console.log('New U-Id Check: ', userId, typeof userId);
+  // console.log('New U-Id Check: ', userId, typeof userId);
 
   prisma.post
     .findMany({
@@ -141,13 +141,13 @@ UserInfo.patch('/updateBio', (req: Request, res: Response) => {
 // ****
 
 UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
-  console.log('Request Handler: Hello World');
+  // console.log('Request Handler: Hello World');
 
   const { city, state } = req.body;
   const userId = req.user?.id;
 
-  console.log('Received city:', city, 'state:', state);
-  console.log('Received userId:', userId);
+  // console.log('Received city:', city, 'state:', state);
+  // console.log('Received userId:', userId);
 
   if (!userId || !city || !state) {
     return res.status(400).send('User ID, City, and State are required');
@@ -207,7 +207,7 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
   const { field, value } = req.body;
   const userId = req.user.id;
 
-  console.log('Req User Check: ', req.user, 'Id Type Check: ', req.user.id);
+  // console.log('Req User Check: ', req.user, 'Id Type Check: ', req.user.id);
 
   const validFields = [
     'showWeather',

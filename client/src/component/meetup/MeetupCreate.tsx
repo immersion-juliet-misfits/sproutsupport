@@ -91,7 +91,7 @@ const MeetupCreate = ({
               location: combine,
               eventName,
               description,
-              imageUrl: `https://{BUCKET_NAME}.s3.amazonaws.com/${image.name}`,
+              imageUrl: `https://${BUCKET_NAME}.s3.amazonaws.com/${image.name}`,
               userId: user.id,
               status: 'none',
             })
@@ -131,7 +131,7 @@ const MeetupCreate = ({
           eventName,
           description,
           imageUrl:
-            'https://{BUCKET_NAME}.s3.amazonaws.com/sproutsSupportLogo1.png',
+            `https://${BUCKET_NAME}.s3.amazonaws.com/sproutsSupportLogo1.png`,
           userId: user.id,
           status: 'none',
         })

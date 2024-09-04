@@ -37,7 +37,7 @@ const UserPrivateProfile = ({
 
   return (
     <GlobalStateProvider>
-      <TopBar />
+      <TopBar route={'Settings'} />
 
       <Grid id='lvl-one'>
         <UserTabs

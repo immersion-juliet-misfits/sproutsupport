@@ -58,6 +58,13 @@ const ssTheme = extendTheme({
         mx: 'auto',
       },
 
+      '#g-heading': {
+        // border: '1px solid blue',
+        mx: 'auto',
+        fontFamily: 'pangolin',
+        fontSize: '5xl',
+      },
+
       '#g-input': {
         backgroundColor: '#D5E8CE',
         border: '5px solid #488B49',
@@ -94,22 +101,57 @@ const ssTheme = extendTheme({
         bg: '#488B49',
         color: '#D5E8CE',
         borderRadius: 'lg',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        // display: 'flex',
+        // alignItems: 'center',
+        // justifyContent: 'space-between',
         px: '50px',
       },
 
       '.tb-gi-one': {
+        // border: '1px solid blue',
         fontFamily: 'nerko one',
         fontSize: '4xl',
         gridColumn: 'span 1',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       },
 
       '.tb-gi-two': {
+        // border: '5px solid red',
         fontFamily: 'pangolin',
         fontSize: '5xl',
         gridColumn: 'span 4',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      },
+
+      '.tb-gi-three': {
+        bg: '#C5E063',
+        // bg: '#507255',
+        // color: '#D5E8CE',
+        color: '#507255',
+        borderRadius: 'lg',
+        boxShadow: 'md',
+        gridColumn: 'span 3',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+
+      '#topBar-hamburger': {
+        _hover: {
+          borderColor: '#D5E8CE',
+        },
+        fontSize: '5xl',
+      },
+
+      '#icon-hamburger': {
+        borderColor: '#488B49',
+        bg: '#488B49',
+        color: '#D5E8CE',
+        boxSize: '100px',
       },
 
       '#topBar-hstack': {
