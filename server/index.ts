@@ -179,7 +179,7 @@ app.get(
   })
 );
 
-// Authenticates User , handles Google callback, & redirects User to home on successful Google login
+// Authenticates User, handles Google callback, & redirects User to home on successful Google login
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
