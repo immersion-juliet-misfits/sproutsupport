@@ -18,11 +18,11 @@ const PlantWarnings = ({ user }) => {
   }
 
   const getWarnings = () => {
-        axios.post(`/plants/warnings/${user.id}`)
-        .then(({data}) => {
-            setAlerts(data.alerts)
-            // setWeather(data.currentConditions)
-        });
+        // axios.post(`/plants/warnings/${user.id}`)
+        // .then(({data}) => {
+        //     setAlerts(data.alerts)
+        //     // setWeather(data.currentConditions)
+        // });
   };
 
   useEffect(() => {
