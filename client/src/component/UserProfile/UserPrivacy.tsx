@@ -15,6 +15,7 @@ import UserControls from './UserControls';
 
 const UserPrivacy = ({ user, fetchUserData }) => {
   const { colorMode, toggleColorMode } = useColorMode();
+
   const [settings, setSettings] = useState({
     showWeather: user?.showWeather || false,
     showPlants: user?.showPlants || false,

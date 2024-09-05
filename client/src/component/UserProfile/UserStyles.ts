@@ -1,181 +1,173 @@
-const UserStyles = {
-// *** User Style Settings *********
+import { mode } from '@chakra-ui/theme-tools';
+import colors from '../colors';
 
-'.pub-box': {
-  // border: '1px solid red',
-  border: '1px solid #93C482',
-  borderRadius: '10px',
-  minHeight: '300px',
-  width: '100%',
-  padding: '20px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center', // Needed to align Heading
-  gap: '20px',
-  my: '5px',
-},
+const UserStyles = (props) => ({
 
-'.pub-grid': {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  // gridTemplateColumns: 'repeat(4, 1fr)',
-  // gridTemplateRows: 'repeat(4, 1fr)',
-  // gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-  // gridTemplateRows: 'repeat(auto-fit, minmax(250px, 1fr))',
-  gap: '20px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  // gridAutoFlow: 'row',
-},
+  '.pub-box': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: '10px',
+    minHeight: '300px',
+    width: '100%',
+    padding: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center', // Needed to align Heading
+    gap: '20px',
+    my: '5px',
+  },
 
-'#pub-imgBox': {
-  width: '300px',
-  height: '300px',
-  overflow: 'hidden',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+  '.pub-grid': {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '20px',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
-'#pub-img': {
-  objectFit: 'cover',
-  width: '100%',
-  height: '100%',
-},
+  '#pub-imgBox': {
+    width: '300px',
+    height: '300px',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 
-'#u-avatar-gi': {
-  border: '15px solid #93C482',
-  backgroundColor: 'black',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  justifySelf: 'center',
-  alignSelf: 'center',
-  borderRadius: '10px',
-  width: '300px',
-  height: '300px',
-  position: 'relative',
-  overflow: 'hidden',
-  cursor: 'pointer',
-},
+  '#pub-img': {
+    objectFit: 'cover',
+    width: '100%',
+    height: '100%',
+  },
 
-'#u-avatar-img': {
-  width: '100%',
-  height: '100%',
-  alignItems: 'center',
-  justifyContent: 'center',
-  objectFit: 'cover',
-},
+  '#u-avatar-gi': {
+    border: '15px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    backgroundColor: 'black',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    justifySelf: 'center',
+    alignSelf: 'center',
+    borderRadius: '10px',
+    width: '300px',
+    height: '300px',
+    position: 'relative',
+    overflow: 'hidden',
+    cursor: 'pointer',
+  },
 
-'.u-box-todaysWeather': {
-  border: '1px solid #93C482',
-  boxShadow: 'md',
-  borderRadius: 'lg',
-  padding: '20px',
-  marginBottom: '16px',
-  textAlign: 'center',
-  maxWidth: '90%',
-  mx: 'auto',
-},
+  '#u-avatar-img': {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    objectFit: 'cover',
+  },
 
-'.u-box-weeksWeather': {
-  border: '1px solid #93C482',
-  boxShadow: 'md',
-  borderRadius: 'lg',
-  padding: '20px',
-  marginBottom: '10px',
-  textAlign: 'center',
-},
+  '.u-box-todaysWeather': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    boxShadow: 'md',
+    borderRadius: 'lg',
+    padding: '20px',
+    marginBottom: '16px',
+    textAlign: 'center',
+    maxWidth: '90%',
+    mx: 'auto',
+  },
 
-'.u-check-button': {
-  border: '1px solid purple',
-  width: '25px',
-  mx: '10px',
-  mt: '20px',
-  mb: '0px',
-  pb: '0px',
-},
+  '.u-box-weeksWeather': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    boxShadow: 'md',
+    borderRadius: 'lg',
+    padding: '20px',
+    marginBottom: '10px',
+    textAlign: 'center',
+  },
 
-'.u-checkIcon': {
-  // border: '1px solid purple',
-  alignSelf: 'center',
-},
+  '.u-check-button': {
+    width: '25px',
+    mx: '10px',
+    mt: '20px',
+    mb: '0px',
+    pb: '0px',
+  },
 
-'.u-divider': {
-  borderColor: '#93C482',
-  // borderWidth: '25px',
-  margin: '10px',
-},
+  '.u-checkIcon': {
+    alignSelf: 'center',
+  },
 
-'.u-heading': {
-  // color: '#507255',
-  color: '#D5E8CE',
-  fontSize: '3rem',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  alignItems: 'center',
-  margin: '10px',
-},
+  '.u-divider': {
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+  },
 
-'.u-hs-input': {
-  border: '1px solid blue',
-  width: '100%',
-  mb: '0px',
-  pb: '0px',
-  // display: 'flex',
-  // justifyContent: 'center',
-  // alignItems: 'center',
-},
+  '.u-heading': {
+    color: mode(colors.text.light, colors.text.dark)(props),
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    alignItems: 'center',
+    margin: '10px',
+  },
 
-'.u-gi-changes': {
-  // border: '1px solid red',
-  border: '1px solid #93C482',
-  borderRadius: 'lg',
-  boxShadow: 'md',
-  width: '75%',
-  minHeight: '220px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  pt: '10px',
-  // justifyContent: 'center', // Moves everything too low
-},
+  '.u-hs-input': {
+    width: '100%',
+    mb: '0px',
+    pb: '0px',
+  },
 
-//  Nothing added to the below settings appears to affect the input
-'.u-input': {
-  // border: '10px solid blue', // This doesn't even appear
-},
+  '.u-gi-changes': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: 'lg',
+    boxShadow: 'md',
+    width: '75%',
+    minHeight: '220px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    pt: '10px',
+  },
 
-'.u-pages': {
-  // border: '1px solid red',
-  border: '1px solid #93C482',
-  borderRadius: 'lg',
-  boxShadow: 'md',
-  mt: '0',
-  gap: '10px',
-  overflow: 'hidden',
-  templateRows: '1fr',
-  templateColumns: '1fr',
-  alignItems: 'center',
-  justifyItems: 'center',
-  py: '4',
-},
+  //  Nothing added to the below settings appears to affect the input
+  '.u-input': {
+    // border: '10px solid blue', // This doesn't even appear
+  },
 
-'.u-tabs': {},
+  '.u-lvl-one': {
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+  },
 
-'.u-text': {
-  // color: '#507255',
-  fontSize: 'xl',
-  fontWeight: 'bold',
-  alignItems: 'center',
-},
+  '.u-pages': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: 'lg',
+    boxShadow: 'md',
+    mt: '0',
+    gap: '10px',
+    overflow: 'hidden',
+    templateRows: '1fr',
+    templateColumns: '1fr',
+    alignItems: 'center',
+    justifyItems: 'center',
+    py: '4',
+  },
 
-'.u-vs-input': {
-  border: '1px solid yellow',
-  width: '75%',
-},
+  // '.u-tabs': {},
 
-}
+  '.u-text': {
+    color: mode(colors.text.light, colors.text.dark)(props),
+    fontSize: 'xl',
+    fontWeight: 'bold',
+    alignItems: 'center',
+  },
+
+  '.u-vs-input': {
+    width: '75%',
+  },
+});
 
 export default UserStyles;

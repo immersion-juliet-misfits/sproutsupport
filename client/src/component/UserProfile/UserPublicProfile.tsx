@@ -72,7 +72,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
       <Grid
         // border='1px solid red'
         id='lvl-one'
-        className='placeholder'
+        className='u-lvl-one'
       >
         <Box className='pub-box'>
           <HStack>

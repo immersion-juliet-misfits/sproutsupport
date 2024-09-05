@@ -1,6 +1,8 @@
 import { extendTheme } from '@chakra-ui/react';
+import { mode } from '@chakra-ui/theme-tools';
 import '@fontsource/nerko-one';
 import '@fontsource/pangolin';
+import colors from './colors';
 import UserStyles from './UserProfile/UserStyles';
 
 const config = {
@@ -8,55 +10,63 @@ const config = {
   useSystemColorMode: true, // If you want to use the system color mode preference
 };
 
-const colors = {
-  brand: {
-    500: '#f00', // Light mode
-    900: '#c00', // Dark mode
-  },
-};
-
 const ssTheme = extendTheme({
   config,
   styles: {
-    global: {
-      // * Integrate Feature Styles
-      ...UserStyles,
+    global: (props) => ({
+      ...UserStyles(props),
 
-      // * Global Layout Settings
+      // * Global Style Settings
       'html, body': {
-        backgroundColor: '#93C482',
+        backgroundColor: mode(
+          colors.background.light,
+          colors.background.dark
+        )(props),
       },
       '#lvl-one': {
-        border: '25px solid #488B49',
-        backgroundColor: '#488B49',
+        border: '25px solid',
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        backgroundColor: mode(
+          colors.levelOne.light,
+          colors.levelOne.dark
+        )(props),
         borderRadius: '10px',
         width: '1100px',
         mx: 'auto',
       },
       '#lvl-two': {
-        backgroundColor: '#6EB257',
+        backgroundColor: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
         borderRadius: '10px',
         width: '100%',
         mx: 'auto',
       },
       '#lvl-three': {
-        backgroundColor: '#93C482',
+        backgroundColor: mode(
+          colors.levelThree.light,
+          colors.levelThree.dark
+        )(props),
         borderRadius: '10px',
         mx: 'auto',
       },
       '#lvl-alert': {
-        backgroundColor: '#B9DA44',
+        backgroundColor: mode(colors.alert.light, colors.alert.dark)(props),
         borderRadius: '10px',
       },
 
       '#g-button': {
-        backgroundColor: '#D5E8CE',
+        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
         size: 'md',
         mb: '5',
       },
 
       '#g-card': {
-        backgroundColor: '#6EB257',
+        backgroundColor: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
         borderRadius: '10px',
         mx: 'auto',
       },
@@ -68,14 +78,13 @@ const ssTheme = extendTheme({
       },
 
       '#g-input': {
-        backgroundColor: '#D5E8CE',
-        border: '5px solid #488B49',
+        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
+        border: '5px solid',
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
       },
 
       '#g-tabs': {
-        backgroundColor: '#488B49',
-        borderColor: '#488B49',
         width: '100%',
         borderRadius: '10px',
       },
@@ -85,7 +94,6 @@ const ssTheme = extendTheme({
       },
 
       // * Global Nav/Top Bar Settings
-
       '#topBar-grid': {
         height: '100px',
         width: '1100px',
@@ -99,8 +107,9 @@ const ssTheme = extendTheme({
       },
 
       '#topBar-gridItem': {
-        bg: '#488B49',
-        color: '#D5E8CE', // Also affects color of text in Hamburger menu
+        bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        // Below also affects color of text in Hamburger menu
+        color: mode(colors.text.light, colors.text.dark)(props),
         borderRadius: 'lg',
         px: '50px',
       },
@@ -124,8 +133,11 @@ const ssTheme = extendTheme({
       },
 
       '.tb-gi-three': {
-        bg: '#C5E063',
-        color: '#507255',
+        bg: mode(colors.tbGiThree.bg.light, colors.tbGiThree.bg.dark)(props),
+        color: mode(
+          colors.tbGiThree.text.light,
+          colors.tbGiThree.text.dark
+        )(props),
         borderRadius: 'lg',
         boxShadow: 'md',
         gridColumn: 'span 3',
@@ -136,15 +148,15 @@ const ssTheme = extendTheme({
 
       '#topBar-hamburger': {
         _hover: {
-          borderColor: '#D5E8CE',
+          borderColor: mode(colors.text.light, colors.text.dark)(props),
         },
         fontSize: '5xl',
       },
 
       '#topBar-icon-hamburger': {
-        borderColor: '#488B49',
-        bg: '#488B49',
-        color: '#D5E8CE',
+        bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        color: mode(colors.text.light, colors.text.dark)(props),
         boxSize: '100px',
       },
 
@@ -159,7 +171,6 @@ const ssTheme = extendTheme({
         position: 'absolute',
         top: '30px',
         left: '50px',
-        // '--menu-bg': '#488B49 !important',
       },
 
       '.hidden': {
@@ -169,23 +180,23 @@ const ssTheme = extendTheme({
       '.visible': {
         visibility: 'visible',
       },
-    },
+    }),
   },
   components: {
     Tabs: {
       variants: {
-        enclosed: {
+        enclosed: (props) => ({
           tab: {
             fontSize: '35px',
             _selected: {
-              bg: '#6EB257',
-              color: '#D5E8CE',
+              bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+              color: mode(colors.text.light, colors.text.dark)(props),
               borderBottom: 'none',
             },
             mb: 0,
             pb: 0,
           },
-        },
+        }),
       },
     },
   },
