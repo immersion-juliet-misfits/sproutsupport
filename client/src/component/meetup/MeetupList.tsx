@@ -212,9 +212,9 @@ setFillIn(true)
         return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh} showSwitch={showSwitch}/>)})}</>
     </SimpleGrid>
     </Center>
-    <>{currentState === 'joined' && <>{join.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription>you don't have any meetups you planing to join</AlertDescription></Alert>}</>}</>
-    <>{currentState === 'yours' && <>{yours.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription>you don't have any meetup events</AlertDescription></Alert>}</>}</>
-    <>{currentState === 'public' && <>{pub.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription></AlertDescription>there are currently no public meetUps at the moment</Alert>}</>}</>
+    <>{currentState === 'joined' && <>{join.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'>you don't have any meetups you planing to join</AlertDescription></Alert>}</>}</>
+    <>{currentState === 'yours' && <>{yours.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'>you don't have any meetup events</AlertDescription></Alert>}</>}</>
+    <>{currentState === 'public' && <>{pub.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'> there are currently no public meetUps at the moment</AlertDescription></Alert>}</>}</>
      </>}
     {/* {swap === 'update' && <Center><Box w={'800px'} bg={"#C5E063"}>
     <Button bg={"#4AAD52"} onClick={()=>{
