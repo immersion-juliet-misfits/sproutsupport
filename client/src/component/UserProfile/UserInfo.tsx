@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
-  Card,
-  Grid,
   GridItem,
   Heading,
   HStack,
@@ -13,9 +11,10 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { AddIcon, CheckIcon } from '@chakra-ui/icons';
+import { CheckIcon, EditIcon } from '@chakra-ui/icons';
 import UserControls, { useGlobalState } from './UserControls';
 import UserWeather from './UserWeather';
+import UserPrivacy from './UserPrivacy';
 
 const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -34,261 +33,224 @@ const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
 
   return (
     <>
-      <Grid id='u-avatar-grid'>
-        <GridItem
-          id='u-avatar-gi'
-          onClick={() => document.getElementById('avatarInput').click()}
-        >
-          <Image
-            id='u-avatar-img'
-            src={user.avatar}
-            alt='Click to Edit Avatar'
-          />
-          <input
-            type='file'
-            id='avatarInput'
-            style={{ display: 'none' }}
-            accept='.jpg, .jpeg, .png'
-            onChange={(event) =>
-              UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
-            }
-          />
-        </GridItem>
-      </Grid>
+      <HStack
+      // className='u-hstack'
+      className='pub-box'
+      >
 
-      {/* ************* */}
+        <VStack className='u-edit-vstack'>
+          {/* Edit Profile Select ************* */}
+          <span
+            id='g-link'
+            className='u-link'
+            onClick={() => setIsEditMode(!isEditMode)}
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            {isEditMode ? 'Editing Complete' : 'Edit Profile'}
+          </span>
 
-      <HStack>
-        <Button id='g-button' onClick={() => setIsEditMode(!isEditMode)}>
-          {/* {isEditMode ? 'Cancel Edits' : 'Edit Profile'} */}
-          {isEditMode ? 'Editing Complete' : 'Edit Profile'}
-        </Button>
+          {/* Avatar  */}
 
-        {isEditMode && (
-          <>
-            {/*
-             V2: WIP button to save all edits at once *********
-              This version updates everything in the database, but only updates 1 of the 3 items on the front end.
-            */}
+          <GridItem
+            id='u-avatar-gi'
+            onClick={() => {
+              if (isEditMode) {
+                document.getElementById('avatarInput').click();
+              }
+            }}
+            style={{ cursor: isEditMode ? 'pointer' : 'default' }}
+          >
+            <Image
+              id='u-avatar-img'
+              src={user.avatar}
+              alt={isEditMode ? 'Click to Edit Avatar' : 'Avatar'}
+            />
+            <input
+              type='file'
+              id='avatarInput'
+              style={{ display: 'none' }}
+              accept='.jpg, .jpeg, .png'
+              onChange={(event) =>
+                UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
+              }
+            />
 
-            {/* <Button
-              id='g-button'
-              onClick={() => {
-                Promise.resolve()
-                  .then(() => {
-                    if (editableUserName.trim() !== '') {
-                      fetchUserData();
-                      return UserControls.handleUserNameChange(editableUserName, setUser);
-                    }
-                  })
-                  .then(() => {
-                    if (editableBio.trim() !== '') {
-                      fetchUserData();
-                      return UserControls.handleBioChange(editableBio, setUser);
-                    }
-                  })
-                  .then(() => {
-                    if (
-                      editableCity.trim() !== '' &&
-                      editableState.trim() !== ''
-                    ) {
-                      fetchUserData();
-                      return UserControls.handleLocationChange(
-                        editableCity,
-                        editableState,
-                        setUser
-                      );
-                    }
-                  })
-                  .then(() => {
+            {isEditMode && (
+              <EditIcon
+                position='absolute'
+                top='10px'
+                right='10px'
+                boxSize='24px'
+                color='gray.500'
+              />
+            )}
+          </GridItem>
+        </VStack>
 
-                    setEditableUserName('');
-                    setEditableBio('');
-                    setEditableCity('');
-                    setEditableState('');
-                  })
-                  .catch((err) => {
-                    console.error(
-                      'Handle functions or fetchUserData: Failed ',
-                      err
+        <VStack className='u-edit-vstack'>
+          {/* Edit Username ************************** */}
+
+          <VStack
+            // id='g-vstack'
+            className='u-vs-input'
+            visibility={isEditMode ? 'visible' : 'hidden'}
+          >
+            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+              <Input
+                id='g-input'
+                className='u-input'
+                name='username'
+                value={editableUserName}
+                placeholder='Enter new User Name here'
+                onChange={(e) => setEditableUserName(e.target.value)}
+              />
+
+              <Button
+                id='g-button'
+                className='u-check-button'
+                onClick={() => {
+                  if (editableUserName.trim() !== '') {
+                    UserControls.handleUserNameChange(
+                      editableUserName,
+                      setUser
                     );
-                  });
-              }}
-            >
-              Save Edits
-            </Button> */}
+                  }
+                }}
+                isDisabled={!editableUserName.trim()}
+              >
+                {/* Update */}
+                <CheckIcon className='u-checkIcon' />
+              </Button>
+            </HStack>
+          </VStack>
 
-            {/* V1: WIP button to save all edits at once *******  */}
-            {/* <Button
-              id='g-button'
-              onClick={() => {
-                UserControls.handleUserNameChange(editableUserName, setUser);
-                UserControls.handleBioChange(editableBio);
-                UserControls.handleLocationChange(editableCity, editableState, setUser);
-              }}
-            >
-              Test
-            </Button> */}
-          </>
-        )}
+          <VStack
+            // id='g-vstack'
+            className='u-vstack'
+          >
+            <Text className='u-text'>Current Display Name:</Text>
+            <Heading id='g-heading' className='u-heading'>
+              {user.userName}
+            </Heading>
+          </VStack>
+
+          {/* Edit Bio ************************** */}
+
+          <VStack
+            // id='g-vstack'
+            className='u-vs-input'
+            visibility={isEditMode ? 'visible' : 'hidden'}
+          >
+            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+              <Input
+                id='g-input'
+                className='u-input'
+                name='bio'
+                value={editableBio}
+                placeholder='Enter new Bio here'
+                onChange={(e) => setEditableBio(e.target.value)}
+              />
+
+              <Button
+                id='g-button'
+                className='u-check-button'
+                onClick={() => {
+                  if (editableBio.trim() !== '') {
+                    UserControls.handleBioChange(editableBio, setUser);
+                  }
+                }}
+                isDisabled={!editableBio.trim()}
+              >
+                <CheckIcon className='u-checkIcon' />
+              </Button>
+            </HStack>
+          </VStack>
+
+          <VStack
+            // id='g-vstack'
+            className='u-vstack'
+          >
+            <Text className='u-text'>Current User Bio</Text>
+
+            <Heading id='g-heading' className='u-heading'>
+              {user.bio}
+            </Heading>
+          </VStack>
+        </VStack>
       </HStack>
 
-      {/* Edit Username ************************** */}
+{/* Import Privacy Toggles  */}
+<Box className='pub-box'>
+  <UserPrivacy user={user} fetchUserData={fetchUserData} isEditMode={isEditMode}  />
+</Box>
 
-      <GridItem
-        // id='g-gi'
-        className='u-gi-changes'
-      >
-        <VStack
-          id='g-vstack'
-          className='u-vs-input'
-          visibility={isEditMode ? 'visible' : 'hidden'}
-        >
-          <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-            <Input
-              id='g-input'
-              className='u-input'
-              name='username'
-              value={editableUserName}
-              placeholder='Enter new User Name here'
-              onChange={(e) => setEditableUserName(e.target.value)}
-            />
 
-            <Button
-              id='g-button'
-              className='u-check-button'
-              onClick={() => {
-                if (editableUserName.trim() !== '') {
-                  UserControls.handleUserNameChange(editableUserName, setUser);
-                }
-              }}
-              isDisabled={!editableUserName.trim()}
-            >
-              {/* Update */}
-              <CheckIcon className='u-checkIcon' />
-            </Button>
-          </HStack>
-        </VStack>
-
-        <VStack id='g-vstack' className='u-vstack'>
-          <Text className='u-text'>Current Display Name:</Text>
-          <Heading id='g-heading' className='u-heading'>
-            {user.userName}
-          </Heading>
-        </VStack>
-      </GridItem>
-      {/* Edit Bio ************************** */}
-      <GridItem
-        // id='g-gi'
-        className='u-gi-changes'
-      >
-        <VStack
-          id='g-vstack'
-          className='u-vs-input'
-          visibility={isEditMode ? 'visible' : 'hidden'}
-        >
-          <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-            <Input
-              id='g-input'
-              className='u-input'
-              name='bio'
-              value={editableBio}
-              placeholder='Enter new Bio here'
-              onChange={(e) => setEditableBio(e.target.value)}
-            />
-
-            <Button
-              id='g-button'
-              className='u-check-button'
-              onClick={() => {
-                if (editableBio.trim() !== '') {
-                  UserControls.handleBioChange(editableBio, setUser);
-                }
-              }}
-              isDisabled={!editableBio.trim()}
-            >
-              <CheckIcon className='u-checkIcon' />
-            </Button>
-          </HStack>
-        </VStack>
-
-        <VStack id='g-vstack' className='u-vstack'>
-          <Text className='u-text'>Current User Bio</Text>
-
-          <Heading id='g-heading' className='u-heading'>
-            {user.bio}
-          </Heading>
-        </VStack>
-      </GridItem>
       {/* Edit Location ************************** */}
-      <GridItem
-        // id='g-gi'
-        className='u-gi-changes'
+
+      <VStack
+        // id='g-vstack'
+        className='u-vs-input'
+        visibility={isEditMode ? 'visible' : 'hidden'}
       >
-        <VStack
-          id='g-vstack'
-          className='u-vs-input'
-          visibility={isEditMode ? 'visible' : 'hidden'}
-        >
-          <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-            <Input
-              id='g-input'
-              className='u-input'
-              name='city'
-              value={editableCity}
-              placeholder='Enter new City here'
-              onChange={(e) => setEditableCity(e.target.value)}
-            />
-
-            <Input
-              id='g-input'
-              className='u-input'
-              name='state'
-              value={editableState}
-              placeholder='Enter new State here'
-              onChange={(e) => setEditableState(e.target.value)}
-            />
-
-            <Button
-              id='g-button'
-              className='u-check-button'
-              onClick={() => {
-                if (editableCity.trim() !== '' && editableState.trim() !== '') {
-                  UserControls.handleLocationChange(
-                    editableCity,
-                    editableState,
-                    setUser
-                  );
-                }
-              }}
-              isDisabled={!editableCity.trim() || !editableState.trim()}
-            >
-              <CheckIcon className='u-checkIcon' />
-            </Button>
-          </HStack>
-        </VStack>
-
-        <VStack id='g-vstack' className='u-vstack'>
-          <Text className='u-text'>
-            Current City and State for Weather Watch
-          </Text>
-          <p />
-          <Heading id='g-heading' className='u-heading'>
-            {user.city &&
-            user.state &&
-            user.city !== 'undefined' &&
-            user.state !== 'undefined'
-              ? `${user.city}, ${user.state}`
-              : 'No Location Watched'}
-          </Heading>
-
-          <UserWeather
-            user={user}
-            setUser={setUser}
-            fetchUserData={fetchUserData}
+        <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+          <Input
+            id='g-input'
+            className='u-input'
+            name='city'
+            value={editableCity}
+            placeholder='Enter new City here'
+            onChange={(e) => setEditableCity(e.target.value)}
           />
-        </VStack>
-      </GridItem>
+
+          <Input
+            id='g-input'
+            className='u-input'
+            name='state'
+            value={editableState}
+            placeholder='Enter new State here'
+            onChange={(e) => setEditableState(e.target.value)}
+          />
+
+          <Button
+            id='g-button'
+            className='u-check-button'
+            onClick={() => {
+              if (editableCity.trim() !== '' && editableState.trim() !== '') {
+                UserControls.handleLocationChange(
+                  editableCity,
+                  editableState,
+                  setUser
+                );
+              }
+            }}
+            isDisabled={!editableCity.trim() || !editableState.trim()}
+          >
+            <CheckIcon className='u-checkIcon' />
+          </Button>
+        </HStack>
+      </VStack>
+
+      <VStack
+        // id='g-vstack'
+        className='u-vstack'
+      >
+        <Text className='u-text'>Current City and State for Weather Watch</Text>
+        <p />
+        <Heading id='g-heading' className='u-heading'>
+          {user.city &&
+          user.state &&
+          user.city !== 'undefined' &&
+          user.state !== 'undefined'
+            ? `${user.city}, ${user.state}`
+            : 'No Location Watched'}
+        </Heading>
+
+        <UserWeather
+          user={user}
+          setUser={setUser}
+          fetchUserData={fetchUserData}
+        />
+      </VStack>
     </>
   );
 };

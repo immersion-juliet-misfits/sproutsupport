@@ -73,8 +73,7 @@ const ssTheme = extendTheme({
 
       '#g-heading': {
         mx: 'auto',
-        fontFamily: 'pangolin',
-        fontSize: '5xl',
+        fontFamily: 'nerko one',
       },
 
       '#g-input': {
@@ -82,6 +81,11 @@ const ssTheme = extendTheme({
         border: '5px solid',
         borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
+      },
+
+      '#g-link': {
+        color: mode(colors.text.light, colors.text.dark)(props),
+        fontFamily: 'pangolin',
       },
 
       '#g-tabs': {
@@ -93,7 +97,7 @@ const ssTheme = extendTheme({
         gap: '20px',
       },
 
-      // * Global Nav/Top Bar Settings
+      // *** Global Nav/Top Bar Settings ***
       '#topBar-grid': {
         height: '100px',
         width: '1100px',

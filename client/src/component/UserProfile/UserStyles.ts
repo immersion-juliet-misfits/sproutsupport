@@ -2,7 +2,6 @@ import { mode } from '@chakra-ui/theme-tools';
 import colors from '../colors';
 
 const UserStyles = (props) => ({
-
   '.pub-box': {
     border: '1px solid',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
@@ -104,13 +103,48 @@ const UserStyles = (props) => ({
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
   },
 
+  '.u-gi-changes': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: 'lg',
+    boxShadow: 'md',
+    width: '100%',
+    minHeight: '220px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    pt: '10px',
+  },
+
   '.u-heading': {
     color: mode(colors.text.light, colors.text.dark)(props),
-    fontSize: '3rem',
-    fontWeight: 'bold',
     textAlign: 'center',
     alignItems: 'center',
     margin: '10px',
+  },
+  '.u-heading3': {
+    color: mode(colors.text.light, colors.text.dark)(props),
+    fontSize: '3xl',
+    textAlign: 'center',
+    alignItems: 'center',
+    margin: '10px',
+  },
+  '.u-heading5': {
+    color: mode(colors.text.light, colors.text.dark)(props),
+    fontSize: '5xl',
+    textAlign: 'center',
+    alignItems: 'center',
+    margin: '10px',
+  },
+
+  '.u-hstack': {
+    // border:'1px solid red',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    mx: 'auto',
   },
 
   '.u-hs-input': {
@@ -119,22 +153,13 @@ const UserStyles = (props) => ({
     pb: '0px',
   },
 
-  '.u-gi-changes': {
-    border: '1px solid',
-    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
-    borderRadius: 'lg',
-    boxShadow: 'md',
-    width: '75%',
-    minHeight: '220px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    pt: '10px',
-  },
-
   //  Nothing added to the below settings appears to affect the input
   '.u-input': {
     // border: '10px solid blue', // This doesn't even appear
+  },
+
+  '.u-link': {
+    fontSize: '3xl',
   },
 
   '.u-lvl-one': {
@@ -163,6 +188,11 @@ const UserStyles = (props) => ({
     fontSize: 'xl',
     fontWeight: 'bold',
     alignItems: 'center',
+  },
+
+  '.u-edit-vstack': {
+    // border: '1px solid blue',
+    width: '50%',
   },
 
   '.u-vs-input': {

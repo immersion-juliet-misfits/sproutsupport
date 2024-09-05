@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, Divider, Grid, Heading, Text } from '@chakra-ui/react';
+import { Box, Grid, Heading, Text } from '@chakra-ui/react';
 import UserControls, { useGlobalState } from './UserControls';
 
 const UserWeather = ({
@@ -30,10 +30,7 @@ const UserWeather = ({
 
   return (
     <Box id='g-box' className='u-weatherBox'>
-      <Divider
-        className='u-divider'
-        // id=''
-      />
+
 
       {apiError ? (
         <Text>No Weather Update Currently Available</Text>
@@ -44,7 +41,7 @@ const UserWeather = ({
               // id=''
               className='u-box-todaysWeather'
             >
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading5'>
                 Current Weather for {user.city}, {user.state}
               </Heading>
               <Text fontSize='lg' fontWeight='bold'>
@@ -69,7 +66,7 @@ const UserWeather = ({
 
           {dailyForecastData && dailyForecastData.length > 0 && (
             <Box p={5} mb={4}>
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading5'>
                 Daily Forecast
               </Heading>
               <Grid templateColumns='repeat(3, 1fr)' gap={6}>
@@ -112,7 +109,7 @@ const UserWeather = ({
               maxWidth='85%' // Limit the width for alerts as well
               mx='auto' // Center the box
             >
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading5'>
                 Weather Alerts
               </Heading>
               {alertsData.map((alert, index) => (

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import {
   Box,
@@ -13,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import UserControls from './UserControls';
 
-const UserPrivacy = ({ user, fetchUserData }) => {
+const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [settings, setSettings] = useState({
@@ -40,11 +39,10 @@ const UserPrivacy = ({ user, fetchUserData }) => {
         gap={4}
       >
         <GridItem p='10px' borderRadius='lg'
-        // bg='#BDE3FF'
         >
-          <Heading textAlign='center' w='100%'>
+          {/* <Heading textAlign='center' w='100%'>
             Public Profile Presentation
-          </Heading>
+          </Heading> */}
           <Box
             //border='2px solid red'
             w='80%'
@@ -56,6 +54,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showDarkLight'
+                  isDisabled={!isEditMode}
                   isChecked={colorMode === 'dark'}
                   onChange={toggleColorMode}
                 />
@@ -67,6 +66,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showPlants'
+                  isDisabled={!isEditMode}
                   isChecked={settings.showPlants}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -82,6 +82,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showMyMeetups'
+                  isDisabled={!isEditMode}
                   isChecked={settings.showMyMeetups}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -100,6 +101,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               {/* <HStack>
                 <Switch
                   id='showOtherMeetups'
+                  isDisabled={!isEditMode}
                   isChecked={settings.showOtherMeetups}
                   onChange={(e) =>
                     UserControls.handleToggle('showOtherMeetups', e.target.checked, setSettings)
@@ -113,6 +115,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showForumPosts'
+                  isDisabled={!isEditMode}
                   isChecked={settings.showForumPosts}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -144,7 +147,7 @@ const UserPrivacy = ({ user, fetchUserData }) => {
         borderRadius='lg'
         // bg='#BDE3FF'
         >
-          <Button colorScheme='red'>Delete Account</Button>
+          <Button colorScheme='red' isDisabled={!isEditMode}>Delete Account</Button>
         </GridItem>
       </Grid>
     </>

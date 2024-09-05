@@ -85,7 +85,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             </GridItem>
 
             <VStack>
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading3'>
                 {user.userName}
               </Heading>
               <Text className='u-text'>{user.bio}</Text>
@@ -101,7 +101,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               className='pub-box'
             >
 
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading3'>
                 My Newest Plants
               </Heading>
               {plants.length > 0 ? (
@@ -144,7 +144,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               className='pub-box'
             >
 
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading3'>
                 My Hosted Meetups
               </Heading>
               {myMeetups.length > 0 ? (
@@ -207,7 +207,7 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               className='pub-box'
             >
 
-              <Heading id='g-heading' className='u-heading'>
+              <Heading id='g-heading' className='u-heading3'>
                 My Recent Posts
               </Heading>
               {posts.length > 0 ? (

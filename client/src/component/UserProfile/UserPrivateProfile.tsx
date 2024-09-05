@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import { useState } from 'react';
-import { Card, Grid } from '@chakra-ui/react';
+import { Grid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
@@ -47,7 +47,7 @@ const UserPrivateProfile = ({
 
         <Grid
           // id='lvl-two'
-          className='u-pages'
+          // className='u-pages'
         >
           {currentView === 'info' && (
             <UserInfo
