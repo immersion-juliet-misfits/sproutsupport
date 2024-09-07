@@ -58,8 +58,6 @@ const ssTheme = extendTheme({
 
       '#g-button': {
         backgroundColor: mode(colors.button.light, colors.button.dark)(props),
-        size: 'md',
-        mb: '5',
       },
 
       '#g-card': {
@@ -76,11 +74,15 @@ const ssTheme = extendTheme({
         fontFamily: 'nerko one',
       },
 
+      '#g-hstack': {
+        margin: 'auto',
+      },
+
       '#g-input': {
-        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
         border: '5px solid',
         borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
+        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
       },
 
       '#g-link': {
@@ -95,6 +97,10 @@ const ssTheme = extendTheme({
       '#g-tabList': {
         height: '75px',
         gap: '20px',
+      },
+
+      '#g-vstack': {
+        margin: 'auto',
       },
 
       // *** Global Nav/Top Bar Settings ***

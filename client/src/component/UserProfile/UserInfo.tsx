@@ -13,42 +13,47 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
 import UserControls, { useGlobalState } from './UserControls';
-import UserWeather from './UserWeather';
-import UserPrivacy from './UserPrivacy';
+import UserToggles from './UserToggles';
 
-const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
+const UserInfo = ({
+  BUCKET_NAME,
+  fetchUserData,
+  setUser,
+  user,
+  onLogout,
+  navigate,
+}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
-  const [editableCity, setEditableCity] = useState('');
-  const [editableState, setEditableState] = useState('');
 
   useEffect(() => {
     fetchUserData();
     setEditableUserName('');
     setEditableBio('');
-    setEditableCity('');
-    setEditableState('');
-  }, [user.userName, user.bio, user.city, user.state]);
+  }, [user.userName, user.bio]);
 
   return (
     <>
-      <HStack
-      // className='u-hstack'
-      className='pub-box'
+      <VStack
+      // border='2px solid blue'
       >
+        {/* Edit Profile Select ************* */}
+        <span
+          id='g-link'
+          className='u-link'
+          onClick={() => setIsEditMode(!isEditMode)}
+          style={{ cursor: 'pointer', textDecoration: 'underline' }}
+        >
+          {isEditMode ? 'Editing Complete' : 'Edit Profile'}
+        </span>
+      </VStack>
 
+      <HStack
+        // className='u-hstack'
+        className='pub-box'
+      >
         <VStack className='u-edit-vstack'>
-          {/* Edit Profile Select ************* */}
-          <span
-            id='g-link'
-            className='u-link'
-            onClick={() => setIsEditMode(!isEditMode)}
-            style={{ cursor: 'pointer', textDecoration: 'underline' }}
-          >
-            {isEditMode ? 'Editing Complete' : 'Edit Profile'}
-          </span>
-
           {/* Avatar  */}
 
           <GridItem
@@ -85,63 +90,78 @@ const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
               />
             )}
           </GridItem>
-        </VStack>
 
-        <VStack className='u-edit-vstack'>
-          {/* Edit Username ************************** */}
+          {/* Edit Username Start ************************** */}
 
+          {/* <VStack className='u-edit-vstack'> */}
           <VStack
-            // id='g-vstack'
-            className='u-vs-input'
-            visibility={isEditMode ? 'visible' : 'hidden'}
-          >
-            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-              <Input
-                id='g-input'
-                className='u-input'
-                name='username'
-                value={editableUserName}
-                placeholder='Enter new User Name here'
-                onChange={(e) => setEditableUserName(e.target.value)}
-              />
-
-              <Button
-                id='g-button'
-                className='u-check-button'
-                onClick={() => {
-                  if (editableUserName.trim() !== '') {
-                    UserControls.handleUserNameChange(
-                      editableUserName,
-                      setUser
-                    );
-                  }
-                }}
-                isDisabled={!editableUserName.trim()}
-              >
-                {/* Update */}
-                <CheckIcon className='u-checkIcon' />
-              </Button>
-            </HStack>
-          </VStack>
-
-          <VStack
-            // id='g-vstack'
+            id='g-vstack'
             className='u-vstack'
           >
+            <VStack
+              // id='g-vstack'
+              className='u-vs-input'
+              visibility={isEditMode ? 'visible' : 'hidden'}
+            >
+              <HStack
+                id='g-hstack'
+                className='u-hs-input'
+                spacing={1}
+              >
+                <Input
+                  id='g-input'
+                  className='u-input'
+                  name='username'
+                  value={editableUserName}
+                  placeholder='Enter new User Name here'
+                  onChange={(e) => setEditableUserName(e.target.value)}
+                />
+
+                <Button
+                  id='g-button'
+                  className='u-check-button'
+                  onClick={() => {
+                    if (editableUserName.trim() !== '') {
+                      UserControls.handleUserNameChange(
+                        editableUserName,
+                        setUser
+                      );
+                    }
+                  }}
+                  isDisabled={!editableUserName.trim()}
+                >
+                  {/* Update */}
+                  <CheckIcon className='u-checkIcon' />
+                </Button>
+              </HStack>
+            </VStack>
+
             <Text className='u-text'>Current Display Name:</Text>
-            <Heading id='g-heading' className='u-heading'>
+            <Heading
+              id='g-heading'
+              className='u-heading'
+            >
               {user.userName}
             </Heading>
           </VStack>
 
-          {/* Edit Bio ************************** */}
+          {/* Edit Username End ************************** */}
+        </VStack>
 
+        {/* Edit Bio Start ************************** */}
+        <VStack
+          id='g-vstack'
+          className='u-vstack'
+        >
           <VStack
-            // id='g-vstack'
             className='u-vs-input'
             visibility={isEditMode ? 'visible' : 'hidden'}
           >
-            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+            <HStack
+              id='g-hstack'
+              className='u-hs-input'
+              spacing={1}
+            >
               <Input
                 id='g-input'
                 className='u-input'
@@ -166,91 +186,55 @@ const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
             </HStack>
           </VStack>
 
-          <VStack
-            // id='g-vstack'
-            className='u-vstack'
-          >
-            <Text className='u-text'>Current User Bio</Text>
-
-            <Heading id='g-heading' className='u-heading'>
-              {user.bio}
-            </Heading>
-          </VStack>
+          <Text className='u-text'>Current User Bio</Text>
+          <Text className='u-text'>{user.bio}</Text>
         </VStack>
+
+        {/* *************** */}
+        {/* </VStack> */}
+
+        {/* Edit Bio End ************************** */}
       </HStack>
 
-{/* Import Privacy Toggles  */}
-<Box className='pub-box'>
-  <UserPrivacy user={user} fetchUserData={fetchUserData} isEditMode={isEditMode}  />
-</Box>
+      {/* Import Privacy Toggles  */}
+      <Box className='pub-box'>
+        <UserToggles
+          user={user}
+          fetchUserData={fetchUserData}
+          isEditMode={isEditMode}
+        />
+      </Box>
 
-
-      {/* Edit Location ************************** */}
-
-      <VStack
-        // id='g-vstack'
-        className='u-vs-input'
-        visibility={isEditMode ? 'visible' : 'hidden'}
-      >
-        <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-          <Input
-            id='g-input'
-            className='u-input'
-            name='city'
-            value={editableCity}
-            placeholder='Enter new City here'
-            onChange={(e) => setEditableCity(e.target.value)}
-          />
-
-          <Input
-            id='g-input'
-            className='u-input'
-            name='state'
-            value={editableState}
-            placeholder='Enter new State here'
-            onChange={(e) => setEditableState(e.target.value)}
-          />
-
+      {/* Log Out & Delete Account Box  */}
+      <Box className='pub-box'>
+        <HStack>
           <Button
-            id='g-button'
-            className='u-check-button'
-            onClick={() => {
-              if (editableCity.trim() !== '' && editableState.trim() !== '') {
-                UserControls.handleLocationChange(
-                  editableCity,
-                  editableState,
-                  setUser
-                );
-              }
-            }}
-            isDisabled={!editableCity.trim() || !editableState.trim()}
+            colorScheme='red'
+            isDisabled={!isEditMode}
           >
-            <CheckIcon className='u-checkIcon' />
+            Delete Account
+          </Button>
+          <Button
+            colorScheme='blue'
+            isDisabled={isEditMode}
+            onClick={() => UserControls.handleLogOut(onLogout, navigate)}
+          >
+            Log Out
           </Button>
         </HStack>
-      </VStack>
+      </Box>
 
-      <VStack
-        // id='g-vstack'
-        className='u-vstack'
-      >
-        <Text className='u-text'>Current City and State for Weather Watch</Text>
-        <p />
-        <Heading id='g-heading' className='u-heading'>
-          {user.city &&
-          user.state &&
-          user.city !== 'undefined' &&
-          user.state !== 'undefined'
-            ? `${user.city}, ${user.state}`
-            : 'No Location Watched'}
-        </Heading>
-
-        <UserWeather
-          user={user}
-          setUser={setUser}
-          fetchUserData={fetchUserData}
-        />
-      </VStack>
+      {/* Stretch Goal Skeletons  */}
+      {/* <GridItem bg='green.500' h='150px'>
+          Blocking - Enter the name of the User you want to block. <p>
+            You will no longer see each others: profiles, forum posts, or Meet Ups. </p>
+        </GridItem>
+        <GridItem bg='green.500' h='150px'>
+          Links to Users various Social Media accounts (Twitter, Tumblr, Etc) <p> STRETCH Goal</p>
+        </GridItem>
+        <GridItem bg='green.500' h='150px'>
+          Email/Password/Login Method Editing will be here
+        </GridItem> */}
     </>
   );
 };

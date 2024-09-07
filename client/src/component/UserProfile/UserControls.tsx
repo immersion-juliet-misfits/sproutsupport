@@ -43,9 +43,9 @@ interface AlertData {
   ends: string;
 }
 
-
 interface GlobalState {
   isEditMode: boolean;
+  isEditModeWeather: boolean;
   editableUserName: string;
   editableBio: string;
   apiError: boolean;
@@ -62,6 +62,7 @@ interface GlobalStateContextProps {
 
 const defaultState: GlobalState = {
   isEditMode: false,
+  isEditModeWeather: false,
   editableUserName: '',
   editableBio: '',
   apiError: false,
@@ -148,7 +149,11 @@ const fetchWeather = (
   setWeatherData: (data: WeatherData) => void,
   setDailyForecastData: (data: DailyForecast[]) => void,
   setAlertsData: (data: AlertData[]) => void,
-  handleLocationChange: (city: string | null, state: string | null, setUser: (user: object) => void) => void,
+  handleLocationChange: (
+    city: string | null,
+    state: string | null,
+    setUser: (user: object) => void
+  ) => void,
   setUser: (user: object) => void
 ) => {
   if (!city || !state) {
@@ -206,7 +211,10 @@ const getPosts = (setPosts: (posts: object[]) => void, userId: number) => {
     });
 };
 
-const getMeetups = (user: object, setMyMeetups: (myMeetups: object[]) => void) => {
+const getMeetups = (
+  user: object,
+  setMyMeetups: (myMeetups: object[]) => void
+) => {
   axios
     .get(`/meetup/all/${user.id}`)
     .then(({ data }) => {
@@ -256,7 +264,11 @@ const getMeetups = (user: object, setMyMeetups: (myMeetups: object[]) => void) =
 
 // ******
 
-const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>, setUser: (user: object[]) => void, BUCKET_NAME: string) => {
+const handleAvatarChange = (
+  event: React.ChangeEvent<HTMLInputElement>,
+  setUser: (user: object[]) => void,
+  BUCKET_NAME: string
+) => {
   const file = event.target.files[0];
   if (file) {
     axios
@@ -301,7 +313,10 @@ const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>, setUser:
 
 // ******
 
-const handleUserNameChange = (newUserName: object, setUser: (user: object[]) => void) => {
+const handleUserNameChange = (
+  newUserName: object,
+  setUser: (user: object[]) => void
+) => {
   axios
     .patch('/user/updateUserName', { userName: newUserName })
     .then((response) => {
@@ -345,7 +360,11 @@ const handleBioChange = (newBio, setUser: (user: object[]) => void) => {
 
 // ************
 
-const handleLocationChange = (newCity, newState, setUser: (user: object[]) => void) => {
+const handleLocationChange = (
+  newCity,
+  newState,
+  setUser: (user: object[]) => void
+) => {
   // console.log('Request: Hello World');
   // console.log('Location UpdateCheck: ', newCity, newState);
   axios
@@ -380,80 +399,6 @@ const handleToggle = (field, value, setSettings) => {
 // ************
 
 // Combining all Edit functions
-// * V1 ****** Might not need this
-
-// const handleSaveEdits = (
-//   editableUserName: string,
-//   editableBio: string,
-//   location: { city: string; state: string },
-//   setWeatherData: Function,
-//   setDailyForecastData: Function,
-//   setAlertsData: Function,
-//   setIsEditMode: Function,
-//   setUser: Function
-// ) => {
-//   // Start with a resolved Promise to begin the chain
-//   Promise.resolve()
-//     // Handle username change
-//     .then(() => {
-//       if (editableUserName.trim() !== '') {
-//         return handleUserNameChange(editableUserName, setUser);
-//       }
-//     })
-//     // Handle bio change
-//     .then(() => {
-//       if (editableBio.trim() !== '') {
-//         return handleBioChange(editableBio, setUser);
-//       }
-//     })
-//     // Handle location change and fetch weather data
-//     .then(() => {
-//       if (location.city && location.state) {
-//         return fetchWeather(
-//           location.city,
-//           location.state,
-//           setWeatherData,
-//           setDailyForecastData,
-//           setAlertsData
-//         );
-//       }
-//     })
-//     // Reset isEditMode to false
-//     .then(() => {
-//       setIsEditMode(false);
-//     })
-//     .catch((error) => {
-//       console.error('Error saving edits:', error);
-//     });
-// };
-
-// * V2 ******
-
-// const handleSaveEdits = (event: React.ChangeEvent<HTMLInputElement>) => {
-//   event.preventDefault();
-//   // Handle username change
-//   if (editableUserName) {
-//     handleUserNameChange(editableUserName);
-//     setEditableUserName('');
-//   }
-//   // Handle bio change
-//   if (editableBio) {
-//     handleBioChange(editableBio);
-//     setEditableBio('');
-//   }
-//   // Handle location change and fetch weather data
-//   if (location.city && location.state) {
-//     UserControls.fetchWeather(
-//       location.city,
-//       location.state,
-//       setWeatherData,
-//       setDailyForecastData,
-//       setAlertsData
-//     );
-//   }
-//   // Reset isEditMode to false after saving edits
-//   setIsEditMode(false);
-// };
 
 // ************
 
@@ -500,11 +445,11 @@ const handleLogOut = (onLogout, navigate) => {
 
 // Export all functions in a single object
 export default {
+  fetchWeather,
   getPublicUserData,
   getPlants,
   getPosts,
   getMeetups,
-  fetchWeather,
   handleAvatarChange,
   handleUserNameChange,
   handleBioChange,

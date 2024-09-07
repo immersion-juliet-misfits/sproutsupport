@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
-import { Box, Grid, Heading, Text } from '@chakra-ui/react';
-import UserControls, { useGlobalState } from './UserControls';
+import {
+  Box,
+  Button,
+  Grid,
+  Heading,
+  HStack,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { CheckIcon, EditIcon } from '@chakra-ui/icons';
+import UserControls from './UserControls';
 
-const UserWeather = ({
-  fetchUserData,
-  setUser,
-  user,
-
-}) => {
+const UserWeather = ({ fetchUserData, user, setUser }) => {
+  const [isEditModeWeather, setIsEditModeWeather] = useState(false);
+  const [editableCity, setEditableCity] = useState('');
+  const [editableState, setEditableState] = useState('');
   const [apiError, setApiError] = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [dailyForecastData, setDailyForecastData] = useState(null);
@@ -15,7 +23,12 @@ const UserWeather = ({
 
   useEffect(() => {
     fetchUserData();
-    if (user.city !== null && user.state !== null && user.city !== 'undefined' && user.state !== 'undefined') {
+    if (
+      user.city !== null &&
+      user.state !== null &&
+      user.city !== 'undefined' &&
+      user.state !== 'undefined'
+    ) {
       UserControls.fetchWeather(
         user.city,
         user.state,
@@ -23,14 +36,106 @@ const UserWeather = ({
         setDailyForecastData,
         setAlertsData,
         UserControls.handleLocationChange,
-        setUser,
+        setUser
       );
     }
+    setEditableCity('');
+    setEditableState('');
+    // setIsEditModeWeather(!isEditModeWeather)
   }, [user.city, user.state]);
 
   return (
-    <Box id='g-box' className='u-weatherBox'>
+    <Box
+      id='g-box'
+      className='u-weatherBox'
+    >
+      {/* ******************************* */}
 
+      <VStack
+        // id='g-vstack'
+        className='u-vstack'
+      >
+        <HStack
+          className='u-hstack'
+          // border='1px solid red'
+        >
+          <span
+            id='g-link'
+            className='u-link'
+            onClick={() => setIsEditModeWeather(!isEditModeWeather)}
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            {isEditModeWeather ? 'Editing Complete' : 'Edit Location'}
+          </span>
+        </HStack>
+
+        {/* ******************************* */}
+
+        {/* ************* */}
+        <Text className='u-text'>Current City and State for Weather Watch</Text>
+        <p />
+        <Heading
+          id='g-heading'
+          className='u-heading'
+        >
+          {user.city &&
+          user.state &&
+          user.city !== 'undefined' &&
+          user.state !== 'undefined'
+            ? `${user.city}, ${user.state}`
+            : 'No Location Watched'}
+        </Heading>
+
+
+          {/* ******************************* */}
+
+          <HStack
+            id='g-hstack'
+            className='u-hs-input'
+            spacing={1}
+            visibility={isEditModeWeather ? 'visible' : 'hidden'}
+          >
+            <Input
+              id='g-input'
+              className='u-input'
+              name='city'
+              value={editableCity}
+              placeholder='Enter new City here'
+              onChange={(e) => setEditableCity(e.target.value)}
+            />
+
+            <Input
+              id='g-input'
+              className='u-input'
+              name='state'
+              value={editableState}
+              placeholder='Enter new State here'
+              onChange={(e) => setEditableState(e.target.value)}
+            />
+
+            <Button
+              id='g-button'
+              className='u-check-button'
+              onClick={() => {
+                if (editableCity.trim() !== '' && editableState.trim() !== '') {
+                  UserControls.handleLocationChange(
+                    editableCity,
+                    editableState,
+                    setUser
+                  );
+                  setIsEditModeWeather(!isEditModeWeather)
+                }
+              }}
+              isDisabled={!editableCity.trim() || !editableState.trim()}
+            >
+              <CheckIcon className='u-checkIcon' />
+            </Button>
+          </HStack>
+
+
+      </VStack>
+
+      {/* ******************************* */}
 
       {apiError ? (
         <Text>No Weather Update Currently Available</Text>
@@ -41,10 +146,16 @@ const UserWeather = ({
               // id=''
               className='u-box-todaysWeather'
             >
-              <Heading id='g-heading' className='u-heading5'>
+              <Heading
+                id='g-heading'
+                className='u-heading5'
+              >
                 Current Weather for {user.city}, {user.state}
               </Heading>
-              <Text fontSize='lg' fontWeight='bold'>
+              <Text
+                fontSize='lg'
+                fontWeight='bold'
+              >
                 {new Date().toLocaleDateString('en-US', {
                   weekday: 'long',
                   year: 'numeric',
@@ -65,11 +176,20 @@ const UserWeather = ({
           )}
 
           {dailyForecastData && dailyForecastData.length > 0 && (
-            <Box p={5} mb={4}>
-              <Heading id='g-heading' className='u-heading5'>
+            <Box
+              p={5}
+              mb={4}
+            >
+              <Heading
+                id='g-heading'
+                className='u-heading5'
+              >
                 Daily Forecast
               </Heading>
-              <Grid templateColumns='repeat(3, 1fr)' gap={6}>
+              <Grid
+                templateColumns='repeat(3, 1fr)'
+                gap={6}
+              >
                 {dailyForecastData.slice(1, 7).map((day, index) => {
                   const date = new Date(day.datetime);
                   date.setDate(date.getDate() + 1);
@@ -78,8 +198,14 @@ const UserWeather = ({
                   });
 
                   return (
-                    <Box className='u-box-weeksWeather' key={index}>
-                      <Text fontSize='lg' fontWeight='bold'>
+                    <Box
+                      className='u-box-weeksWeather'
+                      key={index}
+                    >
+                      <Text
+                        fontSize='lg'
+                        fontWeight='bold'
+                      >
                         {dayOfWeek} - {day.datetime}
                       </Text>
                       <Text>
@@ -109,11 +235,17 @@ const UserWeather = ({
               maxWidth='85%' // Limit the width for alerts as well
               mx='auto' // Center the box
             >
-              <Heading id='g-heading' className='u-heading5'>
+              <Heading
+                id='g-heading'
+                className='u-heading5'
+              >
                 Weather Alerts
               </Heading>
               {alertsData.map((alert, index) => (
-                <Box key={index} mb={4}>
+                <Box
+                  key={index}
+                  mb={4}
+                >
                   <Text fontWeight='bold'>Alert: {alert.event}</Text>
                   <Text>{alert.headline}</Text>
                   <Text whiteSpace='pre-wrap'>
