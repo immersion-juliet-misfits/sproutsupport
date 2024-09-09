@@ -112,7 +112,7 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
 
   return (
     // <Box mx="auto" color='green.500' p={5}>
-    <Box mx="auto" w='1100px'color='green.500'>
+    <Box mx="auto" w='1100px'color='green.500' p={7}>
       <TopBar />
       <Heading textAlign={'center'}>Plant Finder</Heading>
       <Link to={'/myplants'}>

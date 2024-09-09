@@ -9,6 +9,7 @@ import PlantWarnings from './PlantWarnings';
 import NavBar from '../NavBar'
 import TopBar from '../UserProfile/TopBar';
 import { RiPlantFill } from "react-icons/ri";
+import { motion } from "framer-motion"
 // import UploadImage from '../UploadImage';
 // import io from 'socket.io-client';
 
@@ -103,9 +104,11 @@ const OwnedPlants = ({ user }) => {
       <Heading textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Box position={"relative"} bg='#488B49' p={5} borderRadius="xl">
+      {/* <motion.div drag dragConstraints={{top: -20, left: -20, right: 20, bottom: 20}}> */}
       <Link to={'/plantfinder'}>
-        <IconButton fontSize="3xl" width="70px" height="70px" position="absolute" size="lg" top="-5" right="-5" zIndex="10" bgColor='#4AAD52' color="#d5e8ce" icon={<><RiPlantFill />+</>} isRound={true} aria-label='New Plant'></IconButton>
+        <IconButton fontSize="3xl" width="70px" height="70px" position="absolute" size="lg" top="-5" right="-5" zIndex="10" bgColor='#4AAD52' color="#d5e8ce" icon={<><RiPlantFill />+</>} isRound={true} aria-label='New Plant'>New Plant</IconButton>
       </Link>
+      {/* </motion.div> */}
       {/* make into seperate component */}
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {plants.length > 0 &&

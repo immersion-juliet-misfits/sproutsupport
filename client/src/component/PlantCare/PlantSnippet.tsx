@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel, EditableTextarea } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel, EditableTextarea, Avatar } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import PlantCare from './PlantCare';
+import { motion } from "framer-motion"
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:8000');
@@ -167,7 +168,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       isDisabled={!editing}
       onChange={setNewName}
       // onSubmit={handleChanges}
-      submitOnBlur={false} // so user doesn't accidentally change plant name 
+      submitOnBlur={true} // so user doesn't accidentally change plant name 
       >
       <strong>
         <Heading color='#d5e8ce' size="md">
@@ -182,13 +183,16 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     </Editable>
         {/* <Heading size='md'>{plant.nickname}</Heading> */}
         {plant.nickname !== plant.commonName && <Heading color='#d5e8ce' size="sm">{<em>{plant.commonName}</em>}</Heading>}
+        {plant.nickname === plant.commonName && <Heading color='#d5e8ce' size="sm">{<em>&nbsp;</em>}</Heading>}
         {/* {!plant.nickname.length !} */}
         {/* {tasks.length === 1 && <h3>!! {tasks.length} Task Due</h3>} */}
-        {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="tomato">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>No Tasks</h3> )}
+        {/* {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="tomato">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>&nbsp;</h3> )} */}
+        {/* {tasks.length > 0 && <Avatar bgColor="#b9da44" name={`${tasks.length}`}></Avatar>} */}
         {/* <h4>{plant.CommonName}</h4> */}
     </CardHeader>
     <CardBody textAlign={'center'}>
-    {plant.imageUrl && <Center><Image width={200} height={200} src={plant.imageUrl} borderRadius="md"></Image></Center>}
+    {/* {plant.imageUrl && <Center><Image width={200} height={200} src={plant.imageUrl} borderRadius="md"></Image></Center>} */}
+    {plant.imageUrl && <Center><Image objectFit={"cover"} width={200} height={200} src={plant.imageUrl} borderRadius="md"></Image></Center>}
         {/* <h3><em>{plant.description}</em></h3> */}
       <Editable
       textAlign='center'
@@ -219,13 +223,13 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       {allTasks.length > 0 &&
       <Flex gap={4} justifyContent={"center"} wrap="wrap">
        {doneTasks.map((task) => (
-         <div>
+         <motion.div whileHover={{ scale: 1.3 }}>
 
           {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
     <CircularProgress trackColor='#d5e8ce' color='green.600' size={67} value={progress[task.id]}>
-      <CircularProgressLabel>{task.taskName}</CircularProgressLabel>
+      <CircularProgressLabel fontSize={"12"} maxWidth={"90%"} whiteSpace={"nowrap"}>{task.taskName}</CircularProgressLabel>
     </CircularProgress>
-          </div>
+          </motion.div>
         ))}
       </Flex>
       }

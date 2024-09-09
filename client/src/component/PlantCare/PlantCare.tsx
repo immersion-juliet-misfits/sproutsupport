@@ -16,7 +16,8 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Progress,
-  ProgressLabel
+  ProgressLabel,
+  Avatar
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { motion } from "framer-motion"
@@ -69,8 +70,8 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
 
   return (
     <>
-      <Button bgColor="#d5e8ce" color="#4AAD52" onClick={onOpen}>View Tasks</Button>
-
+      <Button position={"relative"} bgColor="#d5e8ce" color="#4AAD52" onClick={onOpen}>View Tasks</Button>
+      {tasks.length > 0 && <Avatar position={"absolute"} bottom="43" right="1.5" size="sm" bgColor="#b9da44" name={`${tasks.length}`}></Avatar>}
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent maxWidth="900px" width="50%">
