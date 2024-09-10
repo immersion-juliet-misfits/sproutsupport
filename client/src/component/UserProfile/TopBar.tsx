@@ -1,79 +1,41 @@
-import {
-  Box,
-  // ButtonGroup,
-  // Flex,
-  Grid,
-  GridItem,
-  Heading,
-  // IconButton,
-  // useEditableControls,
-} from '@chakra-ui/react';
+import { Grid, GridItem, Heading } from '@chakra-ui/react';
 import NavBar from '../NavBar';
+import '@fontsource/nerko-one';
 
-const TopBar = () => {
+const TopBar = ({ route }: { route: string }) => {
+  // * V2 ******
   return (
-    <Grid
-      // border='5px solid blue'
-      className='header-grid'
-      mt={10}
-      templateRows='repeat(1, 1fr)'
-      templateColumns='repeat(5, 1fr)'
-      h='100px'
-      gap={4}
-      mb={4}
-    >
-      <GridItem
-        colSpan={1}
-        bg='#5AB78D'
-        borderRadius='lg'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <Box
-          w='100px'
-          h='100px'
-          color='white'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          Logo
-        </Box>
+    <Grid id='topBar-grid'>
+      <GridItem id='topBar-gridItem' className='tb-gi-one'>
+        Sprout Support
       </GridItem>
-      <GridItem
-        colSpan={3}
-        bg='#D3FFEB'
-        boxShadow='md'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <Heading as='h1' size='2xl'>
-          Sprout Support
-        </Heading>
-      </GridItem>
-      <GridItem
-        colSpan={1}
-        bg='#5AB78D'
-        borderRadius='lg'
-        display='flex'
-        alignItems='center'
-        justifyContent='center'
-      >
-        <Box
-          w='100px'
-          h='100px'
-          color='white'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-        >
-          <NavBar />
-        </Box>
+
+      <GridItem id='topBar-gridItem' className='tb-gi-two'>
+        <NavBar />
       </GridItem>
     </Grid>
   );
+
+  // * V1 *****
+  // return (
+  //   <Grid id='topBar-grid'>
+  //     <GridItem id='topBar-gridItem' className='tb-gi-one'>
+  //       Logo
+  //     </GridItem>
+
+  //     <GridItem className='tb-gi-three'>
+  //       <Heading id='g-heading'>
+  //         {route === undefined || route === '' ? 'Sprout Support' : route}
+  //       </Heading>
+  //     </GridItem>
+
+  //     <GridItem id='topBar-gridItem' className='tb-gi-one'>
+  //       <NavBar />
+  //     </GridItem>
+  //   </Grid>
+  // );
+
+  // ******
 };
 
 export default TopBar;

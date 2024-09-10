@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `DarkLight` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `showForumPosts` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `showMyMeetups` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `showOtherMeetups` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `showPlants` BOOLEAN NOT NULL DEFAULT false;

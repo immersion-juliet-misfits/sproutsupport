@@ -1,37 +1,138 @@
+import { useState, useEffect } from 'react';
 import {
+  Box,
   Button,
-  Checkbox,
   Grid,
   GridItem,
   Heading,
-  VStack
+  HStack,
+  Switch,
+  useColorMode,
+  VStack,
 } from '@chakra-ui/react';
+import UserControls from './UserControls';
 
-const UserPrivacy = () => {
+const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  const [settings, setSettings] = useState({
+    showWeather: user?.showWeather || false,
+    showPlants: user?.showPlants || false,
+    showMyMeetups: user?.showMyMeetups || false,
+    showOtherMeetups: user?.showOtherMeetups || false,
+    showForumPosts: user?.showForumPosts || false,
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <>
       <Grid
+        // border='2px solid yellow'
         className='BottomGrids'
-        border='2px solid yellow'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
-        <GridItem bg='green.500' p='10px'>
-          Toggle to choose what's displayed on your public profile
-          <VStack align='start' pl={4}>
-            <Checkbox>My Plants</Checkbox>
-            <Checkbox>My Created Meetups</Checkbox>
-            <Checkbox>Meetups I will attend</Checkbox>
-            <Checkbox>My Forum Posts</Checkbox>
-            <Checkbox>Light VS Dark mode</Checkbox>
-            <Checkbox>Display your plants?</Checkbox>
-            <Checkbox>Display your Meetups??</Checkbox>
-            <Checkbox>Display link to your Forum posts?</Checkbox>
-            <Checkbox> Accept messages from strangers?</Checkbox>
-          </VStack>
+        <GridItem p='10px' borderRadius='lg'
+        >
+          {/* <Heading textAlign='center' w='100%'>
+            Public Profile Presentation
+          </Heading> */}
+          <Box
+            //border='2px solid red'
+            w='80%'
+            mx='auto'
+            p={10}
+            fontSize='25px'
+          >
+            <VStack align='start' pl={4} spacing={6}>
+              <HStack>
+                <Switch
+                  id='showDarkLight'
+                  isDisabled={!isEditMode}
+                  isChecked={colorMode === 'dark'}
+                  onChange={toggleColorMode}
+                />
+                <label htmlFor='showDarkLight'>
+                  Change Site Color Mode? Current: {colorMode}
+                </label>
+              </HStack>
+
+              <HStack>
+                <Switch
+                  id='showPlants'
+                  isDisabled={!isEditMode}
+                  isChecked={settings.showPlants}
+                  onChange={(e) =>
+                    UserControls.handleToggle(
+                      'showPlants',
+                      e.target.checked,
+                      setSettings
+                    )
+                  }
+                />
+                <label htmlFor='showPlants'>Display Your Plants?</label>
+              </HStack>
+
+              <HStack>
+                <Switch
+                  id='showMyMeetups'
+                  isDisabled={!isEditMode}
+                  isChecked={settings.showMyMeetups}
+                  onChange={(e) =>
+                    UserControls.handleToggle(
+                      'showMyMeetups',
+                      e.target.checked,
+                      setSettings
+                    )
+                  }
+                />
+                <label htmlFor='showMyMeetups'>
+                  Display Your Created Meetups?
+                </label>
+              </HStack>
+
+              {/* Hide Below until I have access to other Users profiles & Meetups  */}
+              {/* <HStack>
+                <Switch
+                  id='showOtherMeetups'
+                  isDisabled={!isEditMode}
+                  isChecked={settings.showOtherMeetups}
+                  onChange={(e) =>
+                    UserControls.handleToggle('showOtherMeetups', e.target.checked, setSettings)
+                  }
+                />
+                <label htmlFor='showOtherMeetups'>
+                  Display Your RSVP'd Meetups?
+                </label>
+              </HStack> */}
+
+              <HStack>
+                <Switch
+                  id='showForumPosts'
+                  isDisabled={!isEditMode}
+                  isChecked={settings.showForumPosts}
+                  onChange={(e) =>
+                    UserControls.handleToggle(
+                      'showForumPosts',
+                      e.target.checked,
+                      setSettings
+                    )
+                  }
+                />
+                <label htmlFor='showForumPosts'>
+                  Display Your Forum Posts?
+                </label>
+              </HStack>
+            </VStack>
+          </Box>
         </GridItem>
-        <GridItem bg='green.500' h='150px'>
+        {/* <GridItem bg='green.500' h='150px'>
           Blocking - Enter the name of the User you want to block. <p>
             You will no longer see each others: profiles, forum posts, or Meet Ups. </p>
         </GridItem>
@@ -40,11 +141,13 @@ const UserPrivacy = () => {
         </GridItem>
         <GridItem bg='green.500' h='150px'>
           Email/Password/Login Method Editing will be here
-        </GridItem>
-        <GridItem bg='green.500' h='100px'>
-          <Button colorScheme='red'>
-            Delete Account Placeholder
-          </Button>
+        </GridItem> */}
+        <GridItem p='10px'
+        className='gi-delete'
+        borderRadius='lg'
+        // bg='#BDE3FF'
+        >
+          <Button colorScheme='red' isDisabled={!isEditMode}>Delete Account</Button>
         </GridItem>
       </Grid>
     </>

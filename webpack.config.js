@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import path, { dirname } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -8,10 +8,9 @@ import autoprefixer from 'autoprefixer'; // Parses CSS
 import 'dotenv/config';
 import { fileURLToPath } from 'url';
 import sass from 'sass';
-import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
+import NodePolyfillPlugin from 'node-polyfill-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import  ProgressPlugin  from 'progress-webpack-plugin';
-
+import ProgressPlugin from 'progress-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,7 +28,7 @@ export default (env) => {
     entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
       filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, './client/dist'),
+      path: path.resolve(__dirname, './client/dist/'),
       clean: true,
     },
     optimization: {
@@ -42,6 +41,7 @@ export default (env) => {
       splitChunks: {
         chunks: 'all',
       },
+      runtimeChunk: 'single',
     },
     cache: {
       type: 'filesystem',
@@ -108,7 +108,11 @@ export default (env) => {
       }),
       new NodePolyfillPlugin(),
       new ProgressPlugin(true),
-      // new BundleAnalyzerPlugin(),
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+        generateStatsFile: true,
+        statsFilename: 'stats.json',
+      }),
     ],
   };
 };

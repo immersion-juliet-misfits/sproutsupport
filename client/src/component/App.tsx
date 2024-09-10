@@ -33,8 +33,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast();
-  // const BUCKET_NAME = 'my1test1bucket';
-  const BUCKET_NAME = 'sprout-support';
+  const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'sprout-support';
   // const BUCKET_NAME = 'sproutsupportbucket'
   // const BUCKET_NAME = 'ssupportbucket'
 
@@ -109,20 +109,28 @@ const App = () => {
               path='/userprofile'
               element={
                 <UserPrivateProfile
-                  user={user}
                   fetchUserData={fetchUserData}
+                  user={user}
                   setUser={setUser}
                   onLogout={handleLogout}
                   BUCKET_NAME={BUCKET_NAME}
                 />
               }
             ></Route>
+
+            {/* <Route
+              path='/public-profile/:userId'
+              element={
+                <UserPublicProfile user={user} fetchUserData={fetchUserData} />
+              }
+            ></Route> */}
             <Route
               path='/public-profile'
               element={
                 <UserPublicProfile user={user} fetchUserData={fetchUserData} />
               }
             ></Route>
+
             <Route
               path='/'
               element={<Navigate to={isAuthenticated ? '/home' : '/login'} />}

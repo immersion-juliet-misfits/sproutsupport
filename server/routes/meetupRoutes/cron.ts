@@ -138,7 +138,7 @@ data
 }
 
 
-const sendEmail = new CronJob('*/1 * * * *', () => { // wanna make this dynamic 
+const sendEmail = new CronJob('* 23 * * *', () => { // wanna make this dynamic 
 prisma.meet.findMany()
   .then(async (result)=>{
     const obj: object = {}     
