@@ -1,16 +1,21 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Grid,
+  GridItem,
+  HStack,
   Image,
   Text,
   VStack,
   Heading,
-  Grid,
-  GridItem,
 } from '@chakra-ui/react';
 import TopBar from './TopBar';
-import NavBar from '../NavBar';
+import UserControls from './UserControls';
 
 interface User {
   id: number;
@@ -24,183 +29,219 @@ interface User {
 }
 
 const UserPublicProfile = ({ fetchUserData, user }) => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [dailyForecastData, setDailyForecastData] = useState(null);
-  const [alertsData, setAlertsData] = useState(null);
+  const [plants, setPlants] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [myMeetups, setMyMeetups] = useState([]);
+  // States for when another User views your profile
+  // const { userId } = useParams();
+  // const [user, setUser] = useState(null);
 
-  const fetchWeather = (city, state) => {
-    axios
-      .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
-      .then((response) => {
-        console.log('Retrieved weather data:', response.data);
-        const data = response.data;
+  // Prevents infinite Loop from 'user' being a dependency
+  const isFirstRender = useRef(true);
 
-        setWeatherData(data.currentConditions);
-        setDailyForecastData(data.days);
-        setAlertsData(data.alerts || []);
-      })
-      .catch((error) => {
-        console.error('Error fetching weather data for city and state:', error);
-      });
-  };
-
+  // Fetches user data only on initial mount
   useEffect(() => {
     fetchUserData();
-    fetchWeather(user.city, user.state);
+    isFirstRender.current = false;
   }, []);
 
+  // Fetches data based on changes to the dependency
+  useEffect(() => {
+    // fetchUserData(); // Currently logged in User data
+    // UserControls.getPublicUserData(userId, setUser); // Other User data
+
+    if (!isFirstRender.current && user?.id) {
+      if (user?.showPlants) {
+        // fetchUserData();
+        UserControls.getPlants(user, setPlants);
+      }
+      if (user?.showForumPosts && user?.id) {
+        // fetchUserData();
+        UserControls.getPosts(setPosts, user.id);
+      }
+      if (user?.showMyMeetups) {
+        // fetchUserData();
+        UserControls.getMeetups(user, setMyMeetups);
+      }
+    }
+  }, [user]);
+
   return (
-    <Grid className='publicBodyGrid' w='1100px' mx='auto'>
-      <TopBar />
+    <>
+      <TopBar route={`${user.userName}'s Public Profile`} />
       <Grid
-      className='bodyGrid'
-      border='15px solid #D3FFEB'
-      bg='#D3FFEB'
-      borderBottom='0'
-      w='1100px'
-      mx='auto'
-      borderRadius='lg lg 0 0'
-      overflow='hidden'
-      boxShadow='md'
-      templateRows='1fr'
-      templateColumns='1fr'
-      display='flex'
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='flex-end'
+        // border='1px solid red'
+        id='lvl-one'
+        className='u-lvl-one'
       >
-        <Grid
-         w='1100px'
-         mx='auto'
-         mt='0'
-         borderRadius='0 0 lg lg'
-         // border='15px solid red'
-         border='15px solid #D3FFEB'
-         borderTop='0'
-         bg='#5AB78D'
-         gap={10}
-         overflow='hidden'
-         boxShadow='md'
-         templateRows='1fr'
-         templateColumns='1fr'
-         display='flex'
-         flexDirection='column'
-         alignItems='center'
-         justifyContent='center'
-         py={4}
-          // className='content-grid'
-          // templateRows='1fr'
-          // templateColumns='1fr'
-          // bg='teal'
-          // alignItems='center'
-          // justifyContent='center'
-          // py={4}
-        >
-          <VStack spacing={4} align='center'>
-            {/* <Button colorScheme='teal' variant='solid'>
-            Follow(?)
-          </Button> */}
-            <Image
-              src={user.avatar}
-              alt={`${user.userName}'s avatar`}
-              // borderRadius='full'
-              // boxSize='150px'
-              w='300px' // Fixed width
-              h='300px' // Fixed height
-              borderRadius='50%' // Makes it circular
-              objectFit='cover'
-            />
-            <Heading as='h2' size='xl'>
-              {user.userName}
-            </Heading>
-            <Text fontSize='md' color='white' textAlign='center'>
-              {user.bio}
-            </Text>
+        <Box className='pub-box'>
+          <HStack>
+            <GridItem id='u-avatar-gi'>
+              <Image
+                id='u-avatar-img'
+                src={user.avatar}
+                alt={`${user.userName}'s avatar`}
+              />
+            </GridItem>
 
-            {weatherData && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Current Weather for {user.city}, {user.state}:
-                </Heading>
-                <Text fontSize='lg' fontWeight='bold'>
-                  {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </Text>
-                <Text>Temperature: { ((weatherData.temp * 9/5) + 32) ?? 'N/A'}°F</Text>
-                <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
-                <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
-                <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
-                <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
-                <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
-                <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
-              </Box>
-            )}
-            {dailyForecastData && dailyForecastData.length > 0 && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Daily Forecast
-                </Heading>
-                <Grid
-                  templateRows='repeat(2, 1fr)'
-                  templateColumns='repeat(3, 1fr)'
-                  gap={6}
-                >
-                  {dailyForecastData.slice(1, 7).map((day, index) => {
-                    const date = new Date(day.datetime);
-                    date.setDate(date.getDate() + 1);
-                    const dayOfWeek = date.toLocaleDateString('en-US', {
-                      weekday: 'long',
-                    });
+            <VStack>
+              <Heading id='g-heading' className='u-heading3'>
+                {user.userName}
+              </Heading>
+              <Text className='u-text'>{user.bio}</Text>
+            </VStack>
+          </HStack>
+        </Box>
 
-                    return (
-                      <Box
-                        key={index}
-                        mb={4}
-                        p={3}
-                        borderWidth='1px'
-                        borderRadius='lg'
-                        shadow='md'
-                      >
-                        <Text fontSize='lg' fontWeight='bold'>
-                          {dayOfWeek} - {day.datetime}
+        {/* ***************************************  */}
+        <VStack spacing={4} align='center'>
+          {user?.showPlants && (
+            <Box
+              // border='5px solid red'
+              className='pub-box'
+            >
+
+              <Heading id='g-heading' className='u-heading3'>
+                My Newest Plants
+              </Heading>
+              {plants.length > 0 ? (
+                <Grid className='pub-grid'>
+                  {plants.slice(-6).map((plant) => (
+                    <Card key={plant.id} id='g-card' className='pub-card'>
+                      <CardHeader textAlign={'center'}>
+                        <Heading size='md'>{plant.nickname}</Heading>
+                      </CardHeader>
+                      <CardBody textAlign={'center'}>
+                        {plant.imageUrl && (
+                          <Center>
+                            <Box id='pub-imgBox'>
+                              <img
+                                id='pub-img'
+                                src={plant.imageUrl}
+                                alt={`${plant.nickname}`}
+                              />
+                            </Box>
+                          </Center>
+                        )}
+                        <Text className='u-text'>
+                          <em>{plant.description}</em>
                         </Text>
-                        <Text>High: {day.tempmax ?? 'N/A'}°F</Text>
-                        <Text>Low: {day.tempmin ?? 'N/A'}°F</Text>
-                        <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
-                      </Box>
-                    );
-                  })}
+                      </CardBody>
+                    </Card>
+                  ))}
                 </Grid>
-              </Box>
-            )}
+              ) : (
+                <Text className='u-text'>No Plants Available</Text>
+              )}
+            </Box>
+          )}
 
-            {alertsData && (
-              <Box p={5} shadow='md' borderWidth='1px' borderRadius='lg'>
-                <Heading as='h2' size='lg' mb={4}>
-                  Weather Alerts
+          {/* ***************************************  */}
+
+          {user?.showMyMeetups && (
+            <Box
+              // border='5px solid red'
+              className='pub-box'
+            >
+
+              <Heading id='g-heading' className='u-heading3'>
+                My Hosted Meetups
+              </Heading>
+              {myMeetups.length > 0 ? (
+                <Grid className='pub-grid'>
+                  {myMeetups.slice(-6).map((meetup) => (
+                    <Card key={meetup.id} id='g-card' className='pub-card'>
+                      <CardHeader textAlign={'center'}>
+                        <Heading size='md'>{meetup.eventName}</Heading>
+                      </CardHeader>
+                      <CardBody textAlign={'center'}>
+                        {meetup.imageUrl && (
+                          <Center>
+                            <Box id='pub-imgBox'>
+                              <Image
+                                id='pub-img'
+                                src={meetup.imageUrl}
+                                alt={meetup.eventName}
+                              />
+                            </Box>
+                          </Center>
+                        )}
+                        <Text className='u-text'>{meetup.description}</Text>
+                        <Text>
+                          {meetup.location
+                            .replace('State:', '-')
+                            .replace('City:', '-')
+                            .trim()}
+                        </Text>
+                        <Text className='u-text'>
+                          Date & Time: {meetup.time_date}
+                        </Text>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </Grid>
+              ) : (
+                <Text className='u-text'>No Meetups Available</Text>
+              )}
+            </Box>
+          )}
+          {/* ***************************************  */}
+
+          {/* Can't Implement without access to other Users data  */}
+          {/*
+            {user?.showOtherMeetups && (
+              <Box className='rsvpMeetupsBox'>
+
+                <Heading textAlign='center' mb={4}>
+                  Meetups I'm Attending
                 </Heading>
-                {alertsData.length > 0 ? (
-                  alertsData.map((alert, index) => (
-                    <Box key={index} mb={4}>
-                      <Text>Alert: {alert.event}</Text>
-                      <Text>Description: {alert.description}</Text>
-                      <Text>Effective: {alert.effective}</Text>
-                      <Text>Expires: {alert.expires}</Text>
-                    </Box>
-                  ))
-                ) : (
-                  <Text>There Are No Alerts At This Time</Text>
-                )}
               </Box>
             )}
-          </VStack>
-        </Grid>
+            */}
+
+          {/* ***************************************  */}
+
+          {user?.showForumPosts && (
+            <Box
+              // border='5px solid red'
+              className='pub-box'
+            >
+
+              <Heading id='g-heading' className='u-heading3'>
+                My Recent Posts
+              </Heading>
+              {posts.length > 0 ? (
+                <Grid className='pub-grid'>
+                  {posts.slice(-6).map((post) => (
+                    <Card key={post.id} id='g-card' className='pub-card'>
+                      <CardBody textAlign={'center'}>
+                        {post.imageUrl && (
+                          <Center>
+                            <Box id='pub-imgBox'>
+                              <Image
+                                id='pub-img'
+                                src={post.imageUrl}
+                                alt={`Post ${post.id}`}
+                                objectFit='contain'
+                              />
+                            </Box>
+                          </Center>
+                        )}
+                        <Text className='u-text'>{post.message}</Text>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </Grid>
+              ) : (
+                <Text className='u-text'>No Forum Posts Available</Text>
+              )}
+            </Box>
+          )}
+
+          {/* ***************************************  */}
+        </VStack>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

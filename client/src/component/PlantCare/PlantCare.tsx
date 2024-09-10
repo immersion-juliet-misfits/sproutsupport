@@ -22,10 +22,14 @@ import {
 import axios from 'axios';
 import { motion } from "framer-motion"
 import { Link } from 'react-router-dom';
+import colors from '../colors';
+import { useColorModeValue } from '@chakra-ui/react';
 
 const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetchTaskProgress, allTasks, fetchDoneTasks, doneTasks }) => {
   const [progress, setProgress] = useState({})
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const modalBg = useColorModeValue(colors.background.light, colors.background.dark)
 
   const handleCompletion = (task) => {
     axios.post('/plants/completeTask', { id: task.id })
@@ -74,7 +78,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
       {tasks.length > 0 && <Avatar position={"absolute"} bottom="43" right="1.5" size="sm" bgColor="#b9da44" name={`${tasks.length}`}></Avatar>}
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent maxWidth="900px" width="50%">
+        <ModalContent bgColor={modalBg} maxWidth="900px" width="50%">
           <ModalHeader>
             <Flex direction="column" alignItems="center" width="100%">
               <Heading as="h1" size="lg">{plant.nickname}</Heading>

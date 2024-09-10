@@ -1,220 +1,256 @@
+// import axios from 'axios';
+import { useEffect, useState } from 'react';
 import {
+  Box,
   Button,
-  Editable,
-  EditableInput,
-  Flex,
-  Grid,
   GridItem,
   Heading,
+  HStack,
   Image,
   Input,
   Text,
+  VStack,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { CheckIcon, EditIcon } from '@chakra-ui/icons';
+import UserControls, { useGlobalState } from './UserControls';
+import UserWeather from './UserWeather';
+import UserPrivacy from './UserPrivacy';
 
-const UserInfo = ({
-  fetchUserData,
-  user,
-  avatar,
-  bio,
-  city,
-  state,
-  userName,
-  EditableControls,
-  handleAvatarChange,
-  handleBioChange,
-  handleLocationChange,
-  handleInputChange,
-  handleUserNameChange,
-}) => {
-  const [editableUserName, setEditableUserName] = useState(userName);
+const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editableUserName, setEditableUserName] = useState('');
+  const [editableBio, setEditableBio] = useState('');
+  const [editableCity, setEditableCity] = useState('');
+  const [editableState, setEditableState] = useState('');
 
   useEffect(() => {
     fetchUserData();
-    // fetchWeather(user.city, user.state);
-  }, [user]);
-
+    setEditableUserName('');
+    setEditableBio('');
+    setEditableCity('');
+    setEditableState('');
+  }, [user.userName, user.bio, user.city, user.state]);
 
   return (
     <>
-      <Grid
-        className='AvatarGrid'
-        // border='2px solid red'
+      <HStack
+      // className='u-hstack'
+      className='pub-box'
       >
-        <GridItem
-          className='UserAvatar'
-          bg='black'
-          display='flex'
-          alignItems='center'
-          justifyContent='center'
-          justifySelf='center'
-          alignSelf='center'
-          borderRadius='50%'
-          border='15px solid #BDE3FF'
-          w='300px'
-          h='300px'
-          position='relative'
-          overflow='hidden'
-          cursor='pointer'
-          onClick={() => document.getElementById('avatarInput').click()}
-        >
-          <Image
-            src={avatar}
-            alt='Click to Edit Avatar'
-            w='100%'
-            h='100%'
-            borderRadius='50%'
-            // bg='#BDE3FF'
-            display='flex'
-            alignItems='center'
-            justifyContent='center'
-            objectFit='cover'
-          />
-          <input
-            type='file'
-            id='avatarInput'
-            style={{ display: 'none' }}
-            accept='.jpg, .jpeg, .png'
-            onChange={handleAvatarChange}
-          />
-        </GridItem>
-      </Grid>
-      <Grid
-        // border='2px solid orange'
-        className='InnerGrids'
-        templateColumns='repeat(1, 1fr)'
-        w='85%'
-        gap={4}
-      >
-        <GridItem
-          className='UserNameChange'
-          borderRadius='lg'
-          bg='#BDE3FF'
-          h='100px'
-        >
-          <Editable
-            defaultValue={userName}
-            onChange={(nextValue) => {
-              setEditableUserName(nextValue);
-            }}
-            onSubmit={() => {
-              handleUserNameChange(editableUserName);
-            }}
-            mt={2}
-            minH='40px'
-            isPreviewFocusable={false}
+
+        <VStack className='u-edit-vstack'>
+          {/* Edit Profile Select ************* */}
+          <span
+            id='g-link'
+            className='u-link'
+            onClick={() => setIsEditMode(!isEditMode)}
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
           >
-            <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Edit Display Name
-              </Text>
-            </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {userName}
-            </Heading>
-            <Input
-              as={EditableInput}
-              border='1px solid black'
-              bg='white'
-              placeholder='Update your User Name'
-              borderRadius='md'
-              minH='40px'
-              p={2}
+            {isEditMode ? 'Editing Complete' : 'Edit Profile'}
+          </span>
+
+          {/* Avatar  */}
+
+          <GridItem
+            id='u-avatar-gi'
+            onClick={() => {
+              if (isEditMode) {
+                document.getElementById('avatarInput').click();
+              }
+            }}
+            style={{ cursor: isEditMode ? 'pointer' : 'default' }}
+          >
+            <Image
+              id='u-avatar-img'
+              src={user.avatar}
+              alt={isEditMode ? 'Click to Edit Avatar' : 'Avatar'}
             />
-          </Editable>
-        </GridItem>
-        {/* Line break  */}
-        <GridItem
-          className='UserLocationCityStateChange'
-          borderRadius='lg'
-          bg='#BDE3FF'
-          h='200px'
-        >
-            <Flex alignItems='center' gap='10'>
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                City and State
-              </Text>
-            </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {city && state ? `${city}, ${state}` : 'No Location Watched'}
-            </Heading>
-            <Flex
-              direction='row'
-              alignItems='center'
-              justifyContent='center'
-              mt={4}
-              gap={6}
-            >
-              <Input
-                name='city'
-                placeholder='Enter City'
-                onChange={handleInputChange}
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='30%'
+            <input
+              type='file'
+              id='avatarInput'
+              style={{ display: 'none' }}
+              accept='.jpg, .jpeg, .png'
+              onChange={(event) =>
+                UserControls.handleAvatarChange(event, setUser, BUCKET_NAME)
+              }
+            />
+
+            {isEditMode && (
+              <EditIcon
+                position='absolute'
+                top='10px'
+                right='10px'
+                boxSize='24px'
+                color='gray.500'
               />
+            )}
+          </GridItem>
+        </VStack>
+
+        <VStack className='u-edit-vstack'>
+          {/* Edit Username ************************** */}
+
+          <VStack
+            // id='g-vstack'
+            className='u-vs-input'
+            visibility={isEditMode ? 'visible' : 'hidden'}
+          >
+            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
               <Input
-                name='state'
-                placeholder='Enter State'
-                onChange={handleInputChange}
-                bg='white'
-                border='1px solid black'
-                borderRadius='md'
-                mb={4}
-                w='30%'
+                id='g-input'
+                className='u-input'
+                name='username'
+                value={editableUserName}
+                placeholder='Enter new User Name here'
+                onChange={(e) => setEditableUserName(e.target.value)}
               />
-            </Flex>
-            <Flex justifyContent='center' mt={4}>
+
               <Button
-                onClick={handleLocationChange}
-                colorScheme='teal'
-                size='md'
+                id='g-button'
+                className='u-check-button'
+                onClick={() => {
+                  if (editableUserName.trim() !== '') {
+                    UserControls.handleUserNameChange(
+                      editableUserName,
+                      setUser
+                    );
+                  }
+                }}
+                isDisabled={!editableUserName.trim()}
               >
-                Get Weather
+                {/* Update */}
+                <CheckIcon className='u-checkIcon' />
               </Button>
-            </Flex>
-        </GridItem>
-         {/* Break Here  */}
-        <GridItem
-          className='UserBioChange'
-          borderRadius='lg'
-          bg='#BDE3FF'
-          h='200px'
-        >
-          <Editable
-            defaultValue={bio}
-            onSubmit={handleBioChange}
-            mt={2}
-            minH='40px'
-            isPreviewFocusable={false}
+            </HStack>
+          </VStack>
+
+          <VStack
+            // id='g-vstack'
+            className='u-vstack'
           >
-            <Flex alignItems='center' gap='10'>
-              <EditableControls bottom='5px' left='5px' w='100px' />
-              <Text fontSize='xl' fontWeight='bold' ml='90px'>
-                Edit User Bio
-              </Text>
-            </Flex>
-            <p />
-            <Heading as='h2' size='lg' textAlign='center'>
-              {bio}
+            <Text className='u-text'>Current Display Name:</Text>
+            <Heading id='g-heading' className='u-heading'>
+              {user.userName}
             </Heading>
-            <Input
-              as={EditableInput}
-              border='1px solid black'
-              bg='white'
-              p={2}
-              borderRadius='md'
-              minH='40px'
-              placeholder='Update your bio'
-            />
-          </Editable>
-        </GridItem>
-      </Grid>
+          </VStack>
+
+          {/* Edit Bio ************************** */}
+
+          <VStack
+            // id='g-vstack'
+            className='u-vs-input'
+            visibility={isEditMode ? 'visible' : 'hidden'}
+          >
+            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+              <Input
+                id='g-input'
+                className='u-input'
+                name='bio'
+                value={editableBio}
+                placeholder='Enter new Bio here'
+                onChange={(e) => setEditableBio(e.target.value)}
+              />
+
+              <Button
+                id='g-button'
+                className='u-check-button'
+                onClick={() => {
+                  if (editableBio.trim() !== '') {
+                    UserControls.handleBioChange(editableBio, setUser);
+                  }
+                }}
+                isDisabled={!editableBio.trim()}
+              >
+                <CheckIcon className='u-checkIcon' />
+              </Button>
+            </HStack>
+          </VStack>
+
+          <VStack
+            // id='g-vstack'
+            className='u-vstack'
+          >
+            <Text className='u-text'>Current User Bio</Text>
+
+            <Heading id='g-heading' className='u-heading'>
+              {user.bio}
+            </Heading>
+          </VStack>
+        </VStack>
+      </HStack>
+
+{/* Import Privacy Toggles  */}
+<Box className='pub-box'>
+  <UserPrivacy user={user} fetchUserData={fetchUserData} isEditMode={isEditMode}  />
+</Box>
+
+
+      {/* Edit Location ************************** */}
+
+      <VStack
+        // id='g-vstack'
+        className='u-vs-input'
+        visibility={isEditMode ? 'visible' : 'hidden'}
+      >
+        <HStack id='g-hstack' className='u-hs-input' spacing={1}>
+          <Input
+            id='g-input'
+            className='u-input'
+            name='city'
+            value={editableCity}
+            placeholder='Enter new City here'
+            onChange={(e) => setEditableCity(e.target.value)}
+          />
+
+          <Input
+            id='g-input'
+            className='u-input'
+            name='state'
+            value={editableState}
+            placeholder='Enter new State here'
+            onChange={(e) => setEditableState(e.target.value)}
+          />
+
+          <Button
+            id='g-button'
+            className='u-check-button'
+            onClick={() => {
+              if (editableCity.trim() !== '' && editableState.trim() !== '') {
+                UserControls.handleLocationChange(
+                  editableCity,
+                  editableState,
+                  setUser
+                );
+              }
+            }}
+            isDisabled={!editableCity.trim() || !editableState.trim()}
+          >
+            <CheckIcon className='u-checkIcon' />
+          </Button>
+        </HStack>
+      </VStack>
+
+      <VStack
+        // id='g-vstack'
+        className='u-vstack'
+      >
+        <Text className='u-text'>Current City and State for Weather Watch</Text>
+        <p />
+        <Heading id='g-heading' className='u-heading'>
+          {user.city &&
+          user.state &&
+          user.city !== 'undefined' &&
+          user.state !== 'undefined'
+            ? `${user.city}, ${user.state}`
+            : 'No Location Watched'}
+        </Heading>
+
+        <UserWeather
+          user={user}
+          setUser={setUser}
+          fetchUserData={fetchUserData}
+        />
+      </VStack>
     </>
   );
 };

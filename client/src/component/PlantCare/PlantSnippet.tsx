@@ -171,7 +171,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       submitOnBlur={true} // so user doesn't accidentally change plant name 
       >
       <strong>
-        <Heading color='#d5e8ce' size="md">
+        <Heading className='u-text' size="md">
 
         <EditablePreview />
         </Heading>
@@ -182,8 +182,8 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       {/* <EditableControls /> */}
     </Editable>
         {/* <Heading size='md'>{plant.nickname}</Heading> */}
-        {plant.nickname !== plant.commonName && <Heading color='#d5e8ce' size="sm">{<em>{plant.commonName}</em>}</Heading>}
-        {plant.nickname === plant.commonName && <Heading color='#d5e8ce' size="sm">{<em>&nbsp;</em>}</Heading>}
+        {plant.nickname !== plant.commonName && <Heading className='u-text' size="sm">{<em>{plant.commonName}</em>}</Heading>}
+        {plant.nickname === plant.commonName && <Heading size="sm">{<em>&nbsp;</em>}</Heading>}
         {/* {!plant.nickname.length !} */}
         {/* {tasks.length === 1 && <h3>!! {tasks.length} Task Due</h3>} */}
         {/* {tasks.length > 0 ? tasks.length === 1 ? ( <Text color="tomato">{tasks.length} Task Due</Text> ) : ( <Text color='tomato'>{tasks.length} Tasks Due</Text> ): ( <h3>&nbsp;</h3> )} */}
@@ -211,7 +211,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
       // }}
       submitOnBlur={true} // so user doesn't accidentally change plant name 
       >
-      <Text color='#d5e8ce' fontSize='lg'>
+      <Text className='u-text' fontSize='lg'>
         <EditablePreview />
       </Text>
       {/* Here is the custom input */}
@@ -226,7 +226,7 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
          <motion.div whileHover={{ scale: 1.3 }}>
 
           {/* <p key={task.id} style={{color:"red"}}>{task.taskName}</p> */}
-    <CircularProgress trackColor='#d5e8ce' color='green.600' size={67} value={progress[task.id]}>
+    <CircularProgress trackColor='#d5e8ce' color='#488B49' size={67} value={progress[task.id]}>
       <CircularProgressLabel fontSize={"12"} maxWidth={"90%"} whiteSpace={"nowrap"}>{task.taskName}</CircularProgressLabel>
     </CircularProgress>
           </motion.div>

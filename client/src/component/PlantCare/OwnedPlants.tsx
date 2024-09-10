@@ -86,12 +86,12 @@ const OwnedPlants = ({ user }) => {
 
   return (
     // <Box color='green.500' mx="auto" p={5}>
-    <Box w='1100px' color='#507255' mx="auto" p={7}>
+    <Box w='1100px' mx="auto">
       <TopBar />
-      <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading>
+      {/* <Heading textAlign={'center'}>{`Hey, ${user.userName.split(' ')[0]}`}</Heading> */}
       <Grid templateColumns="1fr 2fr" gap={2}>
         <GridItem>
-          <Box color='#488B49' bg='#b9da44' p={2} height="100%" borderRadius="xl">
+          <Box color='#488B49' p={2} height="100%" borderRadius="xl" id='lvl-alert'>
            <PlantWarnings user={user}/>
           </Box>
       </GridItem>
@@ -101,7 +101,7 @@ const OwnedPlants = ({ user }) => {
       </Box>
       </GridItem>
       </Grid><br></br>
-      <Heading textAlign={'center'}>Your Plants</Heading>
+      <Heading className='u-text' textAlign={'center'}>Your Plants</Heading>
       {/* will eventually be used with cards... */}
       <Box position={"relative"} bg='#488B49' p={5} borderRadius="xl">
       {/* <motion.div drag dragConstraints={{top: -20, left: -20, right: 20, bottom: 20}}> */}

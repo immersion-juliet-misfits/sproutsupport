@@ -3,25 +3,25 @@ import { Tabs, TabList, Tab } from '@chakra-ui/react';
 const UserTabs = ({ handleLogOut, setCurrentView }) => {
   return (
     <Tabs
-      className='UserTabs'
+      id='g-tabs'
+      className='u-tabs'
       variant='enclosed'
       isFitted
-      w='95%'
-      defaultIndex={3}
-      // border='5px solid purple'
+      w='100%'
+      defaultIndex={2}
     >
-      <TabList className='UserTabList'>
+      <TabList
+      id='g-tabList'
+      className='UserTabList'
+      >
         <Tab className='uTab' onClick={handleLogOut}>
           Log Out
         </Tab>
-        {/* <Tab className='uTab' onClick={goToPublicProfile}>
-          Profile
-        </Tab> */}
         <Tab className='uTab' onClick={() => setCurrentView('help')}>
           Privacy
         </Tab>
         <Tab className='uTab' onClick={() => setCurrentView('info')}>
-          Info
+          Profile Display
         </Tab>
       </TabList>
     </Tabs>

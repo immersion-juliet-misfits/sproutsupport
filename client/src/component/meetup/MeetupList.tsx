@@ -1,20 +1,25 @@
 import MeetupListItem from './MeetupListItem'
-import axios from 'axios';
+//import axios from 'axios';
 import React, {useState, useEffect} from 'react'
-import { Input, Button, SimpleGrid, Box } from '@chakra-ui/react';
+import { Input, Button, SimpleGrid, Box, useToast, Alert, AlertIcon, AlertDescription, Center, Select } from '@chakra-ui/react';
 
-const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>}) =>{
+const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join, showSwitch, buttonCheck}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>, showSwitch: void, buttonCheck: void}) =>{
   const [swap, setSwap] = useState('none')
-  const [id, setId] = useState(0)
+  // const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
-  const [city, setCity] = useState('')
-  const [st, setSt] = useState('')
-  const [eventName, setEventName] = useState('')
-  const [description, setDescription] = useState('')
-  const [image, setImage] = useState({})
+  // const [city, setCity] = useState('')
+  // const [st, setSt] = useState('')
+  // const [eventName, setEventName] = useState('')
+  // const [description, setDescription] = useState('')
+  // const [image, setImage] = useState({})
   const [currentState, setCurrentState] = useState('yours')
   const [fillIn, setFillIn] = useState(false)
+ // const toast = useToast()
+  // const [warn, setWarn] = useState('warning')
+  // const [warnMessage, setWarnMessage] = useState('please fill in both city and state')
+  // const [selecDate, setSelecDate] = useState('')
+  // const [weather, setWeather] = useState([])
 
   const edit = (name: string, value: any): void =>{
     switch(name){
@@ -43,7 +48,9 @@ const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join}: {r
   }
 
 const meetupUpdate = (): void =>{
-    const combine = `Location: ${location}\n State: ${st}\n City: ${city}`
+  if(image.name !== undefined){
+    const combine = `Location:${location}\n, State:${st}\n, City:${city}`
+    console.log(combine)
   axios.get('/upload/url', { params: {filename: image.name}})
   .then(({data}) => {
     return axios.put(data, image, {
@@ -58,12 +65,32 @@ axios.patch(url, obj)
   meetupSwap({})
 })
 .catch((err: any)=>{
+  toast({title: 'Can\'t update', description: "Error some thing went wrong", duration: 5000, isClosable: true, status: "error", position: 'top'
+  })
   console.error('Error can\'t update: ', err)
 })
  })
  .catch((err: any)=>{
+  toast({ title: 'Can\'t update', description: "Error some thing went wrong", duration: 5000, isClosable: true, status: "error", position: 'top'
+  })
   console.error('Error can\'t update: ', err)
 })
+  }else{
+    const combine = `Location: ${location}\n, State: ${st}\n, City: ${city}`
+    console.log(combine)
+    const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: 'https://sproutsupportbucket.s3.amazonaws.com/sproutsSupportLogo1.png', id}
+    const url = 'meetup/update/' + id
+    axios.patch(url, obj)
+    .then(()=>{
+      refresh()
+      meetupSwap({})
+    })
+    .catch((err: any)=>{
+      toast({title: 'Can\'t update', description: "Error some thing went wrong", duration: 5000, isClosable: true, status: "error", position: 'top'
+      })
+      console.error('Error can\'t update: ', err)
+    })
+  }
 }
 
 const meetupDelete = (id: number): void =>{
@@ -73,6 +100,14 @@ const meetupDelete = (id: number): void =>{
     refresh()
   })
   .catch((err: any)=>{
+    toast({
+      title: 'Can\'t delete',
+      description: "Error some thing went wrong",
+      duration: 5000,
+      isClosable: true,
+      status: "error",
+      position: 'top'
+    })
     console.error('Error can\'t delete: ', err)
   })
 }
@@ -98,46 +133,119 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
+// const getweather = (): void => {
+//   if(city.length >= 4 && st.length >= 4){
+//   axios.get(`/meetup/weather?city=${city}&state=${st}`)
+//   .then(({data})=>{
+//     setWeather(data.days)
+//     setWarnMessage('city and state exist')
+//     setWarn('success')
+//   })
+//   .catch((err)=>{
+//    setWarnMessage('city or state don\'t exist')
+//    setWarn('error')
+//   })
+// }else{
+//   setWarnMessage('pleas fill in both city and state')
+//   setWarn('warning')
+// }
+// }
+
+// const selectedDate = (target: string): void =>{
+//   target = target.slice(6)
+// for(let i = 0; i < weather.length; i++){
+// let arr = weather?.[i].datetime.split('-')
+//      const month = arr[2]
+//      arr[2] = arr[1]
+//      arr[1] = month
+//      arr.reverse()
+//      arr = arr.join('/')
+//  if(arr === target){
+//   setSelecDate(weather?.[i].description)
+//  }
+// }
+// }
+
 useEffect(()=>{
   if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
     if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
-      if(location.length > 0 && eventName.length > 0 && description.length > 0 && image.name !== undefined ){
-        setFillIn(true)
+      if(location.length > 0 && eventName.length > 0 && description.length > 0){
+        setFillIn(false)
       }else{
-          setFillIn(false)
+          setFillIn(true)
         }
     }else{
-      setFillIn(false)
+      setFillIn(true)
     }
   }else{
-setFillIn(false)
+setFillIn(true)
   }
 },[edit])
 
-
   return(
     <>
-     {swap === 'none' && <><Button onClick={()=>{currentState !== 'yours' ? setCurrentState('yours') : 'none'}} top="-80px" left="175px">yours</Button></>}
-     {swap === 'none' && <><Button onClick={()=>{currentState !== 'joined' ? setCurrentState('joined') : 'none'}} top="-80px" left="178px">joined</Button></>}
-     {swap === 'none' && <><Button onClick={()=>{currentState !== 'public' ? setCurrentState('public') : 'none'}} top="-80px" left="180px">public</Button></>}
-        <SimpleGrid columns={3} spacing={10}>
-        {swap === 'none' && <><>{currentState === 'yours' && yours.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
-        {swap === 'none' && <><>{currentState === 'joined' && join.map((group, i)=>{
-          return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={true} refresh={refresh}/>)
-          })}</></>}
-        {swap === 'none' && <><>{currentState === 'public' && pub.map((group, i)=>{return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh}/>)})}</></>}
-        </SimpleGrid>
-    {swap === 'update' && <><Box w={'500px'}>
-      {fillIn === true && <Button onClick={()=>{meetupUpdate()}}>confirm update</Button>}
-      {fillIn === false && <Button colorScheme="red" onClick={()=>{alert('fill in all inputs and for time reference the clock')}}>can't create</Button>}
+     {swap === 'none' && <><Box  position="relative" top="-40px" h={'60px'}>
+       <Button className="g-font"  isActive={currentState === 'yours' ? false : true} onClick={()=>{
+        currentState !== 'yours' ? setCurrentState('yours') : 'none'
+        buttonCheck(false)
+        }} top="25px" left="175px">yours</Button>
+     <Button className="g-font" isActive={currentState === 'joined' ? false : true} onClick={()=>{
+      currentState !== 'joined' ? setCurrentState('joined') : 'none'
+      buttonCheck(true)
+      }} top="25px" left="416px">joined</Button>
+     <Button className="g-font" isActive={currentState === 'public' ? false : true} onClick={()=>{
+      currentState !== 'public' ? setCurrentState('public') : 'none'
+      buttonCheck(true)
+      }} top="25px" left="660px">public</Button>
+    </Box>
+     <Center>
+     <SimpleGrid position="relative" top="-30px" columns={3} spacing={4} w={'940px'} >
+      <>{currentState === 'yours' && yours.map((group, i)=>{
+         group.isJoined = false
+        return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh} showSwitch={showSwitch}/>)})}</>
+      <>{currentState === 'joined' && join.map((group, i)=>{
+        group.isJoined = true
+        return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={true} refresh={refresh} showSwitch={showSwitch}/>)
+        })}</>
+      <>{currentState === 'public' && pub.map((group, i)=>{
+         group.isJoined = false
+        return(<MeetupListItem key={i} user={user} group={group} remove={meetupDelete} swap={meetupSwap} createSwapUpdate={createSwapUpdateCheck} isJoined={false} refresh={refresh} showSwitch={showSwitch}/>)})}</>
+    </SimpleGrid>
+    </Center>
+    <>{currentState === 'joined' && <>{join.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'>you don't have any meetups you planing to join</AlertDescription></Alert>}</>}</>
+    <>{currentState === 'yours' && <>{yours.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'>you don't have any meetup events</AlertDescription></Alert>}</>}</>
+    <>{currentState === 'public' && <>{pub.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'> there are currently no public meetUps at the moment</AlertDescription></Alert>}</>}</>
+     </>}
+    {/* {swap === 'update' && <Center><Box w={'800px'} bg={"#C5E063"}>
+    <Button bg={"#4AAD52"} onClick={()=>{
+      setSwap('none')
+      createSwapUpdateCheck()
+      }}>Cancel Update</Button>
+       <Button bg={"#4AAD52"} onClick={()=>{
+        meetupUpdate()
+        refresh()
+        refresh()
+        }} isDisabled={fillIn} >Confirm Update</Button>
+   
       <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='c' value={city}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='s' value={st}></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
+      getweather()
+    }} name='c' placeholder='city'></Input>
+    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
+      getweather()
+    }} name='s' placeholder='state'></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
     <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
-    <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
-    </Box></>}
+  <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
+    {warn !== '' && 
+    <Alert status={warn}>
+  <AlertIcon />
+  <AlertDescription>{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
+</Alert>
+}
+    </Box></Center>}
+    {swap === 'update' &&  <Box position="relative" left='360px' top="-362px">{selecDate}</Box>} */}
     </>
   )
 }
