@@ -6,40 +6,40 @@ const colors = {
   },
   background: {
     light: '#93C482',
-    dark: '#234E52',
+    dark: '#2d4130',
   },
   levelOne: {
     light: '#488B49',
-    dark: '#285E61',
+    dark: '#488B49',
   },
   levelTwo: {
     light: '#6EB257',
-    dark: '#2C7A7B',
+    dark: '#6EB257',
   },
   levelThree: {
     light: '#93C482',
-    dark: '#38B2AC',
+    dark: '#93C482',
   },
   alert: {
     light: '#B9DA44',
-    dark: '#81E6D9',
+    dark: '#B9DA44',
   },
   button: {
     light: '#D5E8CE',
-    dark: '#4FD1C5',
+    dark: '#D5E8CE',
   },
   text: {
-    light: '#D5E8CE',
-    dark: '#E6FFFA',
+    light: '#2d4130',
+    dark: '#D5E8CE',
   },
   tbGiThree: {
     bg: {
       light: '#C5E063',
-      dark: '#4FD1C5',
+      dark: '#C5E063',
     },
     text: {
       light: '#507255',
-      dark: '#B2F5EA',
+      dark: '#507255',
     },
   },
 };
