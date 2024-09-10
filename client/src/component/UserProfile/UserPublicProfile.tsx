@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+// Above added for dynamic routes
 import { useEffect, useRef, useState } from 'react';
 import {
   Box,
@@ -28,29 +30,55 @@ interface User {
   state: string;
 }
 
+// Hard coded single user
 const UserPublicProfile = ({ fetchUserData, user }) => {
+
+// Dynamic router - any User
+// const UserPublicProfile = ({ fetchUserData }) => {
+// const { userId } = useParams();
+const [publicUser, setPublicUser] = useState<User | null>(null);
+
+  // Always
   const [plants, setPlants] = useState([]);
   const [posts, setPosts] = useState([]);
   const [myMeetups, setMyMeetups] = useState([]);
   // States for when another User views your profile
-  // const { userId } = useParams();
-  // const [user, setUser] = useState(null);
+
 
   // Prevents infinite Loop from 'user' being a dependency
   const isFirstRender = useRef(true);
+
+
+  // WIP - displaying User by ID
+  // useEffect(() => {
+  //     fetchUserData();
+  //   if (userId) {
+  //     console.log('Requesting data for userId:', userId);
+  //     UserControls.getPublicUserData(userId, setPublicUser);
+  //   }
+  //   isFirstRender.current = false;
+  // }, [userId]);
+
+
 
   // Fetches user data only on initial mount
   useEffect(() => {
     fetchUserData();
     isFirstRender.current = false;
+    // Test retrieval of public Data
+    // UserControls.getPublicUserData(user.id, setPublicUser);
+    UserControls.getPublicUserData(3, setPublicUser); // Trying to log publicly acceptable data to browser console
+    // Swapping the number causes an error for some reason - must restart server
+    // Unable to retrieve data for User #3???
+
   }, []);
 
   // Fetches data based on changes to the dependency
   useEffect(() => {
-    // fetchUserData(); // Currently logged in User data
-    // UserControls.getPublicUserData(userId, setUser); // Other User data
 
     if (!isFirstRender.current && user?.id) {
+      console.log('Logged in User Id:', user.id);
+
       if (user?.showPlants) {
         // fetchUserData();
         UserControls.getPlants(user, setPlants);
@@ -68,7 +96,10 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
 
   return (
     <>
+    {/* Single User  */}
       <TopBar route={`${user.userName}'s Public Profile`} />
+      {/* Multi User WIP */}
+      {/* <TopBar route={`${user.userName || ''}'s Public Profile`} /> */}
       <Grid
         // border='1px solid red'
         id='lvl-one'
@@ -84,7 +115,9 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               />
             </GridItem>
 
-            <VStack>
+            <VStack
+            className='u-vstack'
+            >
               <Heading id='g-heading' className='u-heading3'>
                 {user.userName}
               </Heading>

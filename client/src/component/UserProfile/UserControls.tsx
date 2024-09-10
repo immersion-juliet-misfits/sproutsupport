@@ -53,6 +53,7 @@ interface GlobalState {
   dailyForecastData: object;
   alertsData: object;
   location: Location;
+  publicUser: User | null;
 }
 
 interface GlobalStateContextProps {
@@ -73,6 +74,7 @@ const defaultState: GlobalState = {
     city: '',
     state: '',
   },
+  publicUser: null,
 };
 
 const GlobalStateContext = createContext<GlobalStateContextProps>({
@@ -97,11 +99,20 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 
 // WIP: Fetch User data by ID (for viewing another Users profile)
 
-const getPublicUserData = (userId: number, setUser: (user: object) => void) => {
+// const getPublicUserData = (userId: number, setUser: (user: object) => void) => {
+const getPublicUserData = (userId: number, setPublicUser: (user: object) => void) => {
+// const getPublicUserData = (userId: number, setUser: (user: object) => void, setPublicUser: (user: object) => void) => {
+
+  console.log('Public User Req Id:', userId);
+
   axios
     .get(`/user/public/${userId}`)
     .then(({ data }) => {
-      setUser(data);
+
+      console.log('Requested User data:', data);
+      // setUser(data);
+      setPublicUser(data);
+
     })
     .catch((err) => {
       console.error('Fetch Other User Profile Data: Failed ', err);

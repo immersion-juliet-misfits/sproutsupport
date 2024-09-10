@@ -2,6 +2,16 @@ import { mode } from '@chakra-ui/theme-tools';
 import colors from '../colors';
 
 const UserStyles = (props) => ({
+
+  '.pub-bio': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: '10px',
+    width: '60%',
+    mx: 'auto',
+    p: '10px',
+  },
+
   '.pub-box': {
     border: '1px solid',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
@@ -70,8 +80,9 @@ const UserStyles = (props) => ({
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     boxShadow: 'md',
     borderRadius: 'lg',
-    padding: '20px',
-    marginBottom: '16px',
+    paddingBottom: '20px',
+    marginTop: '20px',
+    marginBottom: '10px',
     textAlign: 'center',
     maxWidth: '90%',
     mx: 'auto',
@@ -203,7 +214,7 @@ const UserStyles = (props) => ({
   // I need the contents of this aligned along the horizontal access
   // This contains both input boxes
   '.u-vs-input': {
-    border: '1px solid blue',
+    // border: '1px solid blue',
     width: '75%',
     display: 'flex',
     justifyContent: 'center',
@@ -211,10 +222,8 @@ const UserStyles = (props) => ({
   },
 
   '.u-vstack': {
-    border: '1px solid',
-    borderColor: 'red',
-    // borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
-    width: '90%',
+    borderRadius: '10px',
+    width: '60%',
     mx: 'auto',
     my: '10px',
   },

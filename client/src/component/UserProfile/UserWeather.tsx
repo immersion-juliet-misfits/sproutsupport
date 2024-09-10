@@ -53,7 +53,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
 
       <VStack
         // id='g-vstack'
-        className='u-vstack'
+        className='u-box-todaysWeather'
       >
         <HStack
           className='u-hstack'
@@ -93,7 +93,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             id='g-hstack'
             className='u-hs-input'
             spacing={1}
-            visibility={isEditModeWeather ? 'visible' : 'hidden'}
+            // visibility={isEditModeWeather ? 'visible' : 'hidden'}
           >
             <Input
               id='g-input'
@@ -101,6 +101,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
               name='city'
               value={editableCity}
               placeholder='Enter new City here'
+              isDisabled={!isEditModeWeather}
               onChange={(e) => setEditableCity(e.target.value)}
             />
 
@@ -110,6 +111,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
               name='state'
               value={editableState}
               placeholder='Enter new State here'
+              isDisabled={!isEditModeWeather}
               onChange={(e) => setEditableState(e.target.value)}
             />
 

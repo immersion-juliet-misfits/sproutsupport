@@ -91,17 +91,26 @@ const UserInfo = ({
             )}
           </GridItem>
 
+
+        </VStack>
+
+        {/* Edit Boxes Start ************************** */}
+        <VStack
+          // border='5px dashed purple'
+          id='g-vstack'
+          className='u-vstack'
+          >
+
           {/* Edit Username Start ************************** */}
 
-          {/* <VStack className='u-edit-vstack'> */}
           <VStack
             id='g-vstack'
             className='u-vstack'
+            // border='5px dashed green'
           >
             <VStack
               // id='g-vstack'
               className='u-vs-input'
-              visibility={isEditMode ? 'visible' : 'hidden'}
             >
               <HStack
                 id='g-hstack'
@@ -114,6 +123,7 @@ const UserInfo = ({
                   name='username'
                   value={editableUserName}
                   placeholder='Enter new User Name here'
+                  isDisabled={!isEditMode}
                   onChange={(e) => setEditableUserName(e.target.value)}
                 />
 
@@ -146,16 +156,11 @@ const UserInfo = ({
           </VStack>
 
           {/* Edit Username End ************************** */}
-        </VStack>
 
-        {/* Edit Bio Start ************************** */}
-        <VStack
-          id='g-vstack'
-          className='u-vstack'
-        >
+          {/* Edit Bio Start ************************** */}
+
           <VStack
             className='u-vs-input'
-            visibility={isEditMode ? 'visible' : 'hidden'}
           >
             <HStack
               id='g-hstack'
@@ -168,6 +173,7 @@ const UserInfo = ({
                 name='bio'
                 value={editableBio}
                 placeholder='Enter new Bio here'
+                isDisabled={!isEditMode}
                 onChange={(e) => setEditableBio(e.target.value)}
               />
 
@@ -186,14 +192,15 @@ const UserInfo = ({
             </HStack>
           </VStack>
 
+        {/* Edit Bio End ************************** */}
+
           <Text className='u-text'>Current User Bio</Text>
           <Text className='u-text'>{user.bio}</Text>
         </VStack>
 
-        {/* *************** */}
-        {/* </VStack> */}
+        {/* Edit Boxes Start ************************** */}
 
-        {/* Edit Bio End ************************** */}
+
       </HStack>
 
       {/* Import Privacy Toggles  */}

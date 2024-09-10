@@ -161,7 +161,7 @@ UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
       where: { id: userId },
       data: {
         city: city || null,
-        state: state || null
+        state: state || null,
       },
     })
     .then((updatedUser) => {
@@ -243,30 +243,69 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
 // *******
 
 // Retrieve another Users profile Data to view it
+// Find many is causing problems, use a different search command
 UserInfo.get('/public/:userId', (req, res) => {
   const { userId } = req.params;
+  console.log('Req-Handler UserId Check:', userId);
 
-  prisma.user.findUnique({
-    where: { id: Number(userId) },
-    select: {
-      userName: true,
-      avatar: true,
-      bio: true,
-      city: true,
-      state: true,
-    },
-  })
-  .then(user => {
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('User not found');
-    }
-  })
-  .catch(err => {
-    res.status(500).send('Internal Server Error');
-  });
+  // Fetch User data needed for the public profile - nothing private
+  prisma.user
+    .findUnique({
+      where: { id: Number(userId) },
+      select: {
+        id: true,
+        userName: true,
+        avatar: true,
+        bio: true,
+        city: true,
+        state: true,
+        showPlants: true,
+        showForumPosts: true,
+        showMyMeetups: true,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+      // Fetch other user's plants if allowed
+      const plantsPromise = user.showPlants
+        ? prisma.plant.findMany({
+            where: { userId: Number(userId) },
+            select: { id: true, nickname: true, description: true, imageUrl: true },
+          })
+        : Promise.resolve([]);
+
+      // Fetch other user's posts if allowed
+      const postsPromise = user.showForumPosts
+        ? prisma.post.findMany({
+            where: { userId: Number(userId) },
+            select: { id: true, message: true, imageUrl: true },
+          })
+        : Promise.resolve([]);
+
+      // Fetch other user's meetups if allowed
+      const meetupsPromise = user.showMyMeetups
+        ? prisma.meetup.findMany({
+            where: { userId: Number(userId) },
+            select: { id: true, eventName: true, description: true, location: true, time_date: true, imageUrl: true },
+          })
+        : Promise.resolve([]);
+
+      // Resolve all data promises
+      return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
+        ([plants, posts, meetups]) => {
+          res.json({ user, plants, posts, meetups });
+        }
+      );
+    })
+    .catch((err) => {
+      console.error('Public User data fetch: Failed:', err);
+      res.status(500).send('Internal Server Error');
+    });
 });
+
 
 
 export default UserInfo;

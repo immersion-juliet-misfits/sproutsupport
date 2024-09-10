@@ -118,10 +118,13 @@ const App = () => {
               }
             ></Route>
 
-            {/* <Route
+             {/* <Route
               path='/public-profile/:userId'
               element={
-                <UserPublicProfile user={user} fetchUserData={fetchUserData} />
+                <UserPublicProfile
+                fetchUserData={fetchUserData}
+                onLoad={() => console.log('Verify Public Profile For User:', user)}
+                />
               }
             ></Route> */}
             <Route
