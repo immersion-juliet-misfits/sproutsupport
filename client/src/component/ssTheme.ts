@@ -124,6 +124,17 @@ const ssTheme = extendTheme({
         px: '50px',
       },
 
+      '#g-box':{
+        bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        color: mode(colors.text.light, colors.text.dark)(props),
+        borderRadius: '10px',
+        fontFamily: 'pangolin'
+      },
+
+      '.g-font':{
+fontFamily: 'pangolin'
+      },
+
       '.tb-gi-one': {
         fontFamily: 'nerko one',
         fontSize: '4xl',
@@ -193,6 +204,16 @@ const ssTheme = extendTheme({
     }),
   },
   components: {
+    Button: {
+      variants: {
+        solid: (props)=>({
+          bg: mode(colors.button.light, colors.button.dark)(props),
+          _active: {
+            bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+          }
+        })
+      }
+    },  
     Tabs: {
       variants: {
         enclosed: (props) => ({

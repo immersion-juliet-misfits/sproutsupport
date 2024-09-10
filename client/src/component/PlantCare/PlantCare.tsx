@@ -16,15 +16,20 @@ import {
   CircularProgress,
   CircularProgressLabel,
   Progress,
-  ProgressLabel
+  ProgressLabel,
+  Avatar
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { motion } from "framer-motion"
 import { Link } from 'react-router-dom';
+import colors from '../colors';
+import { useColorModeValue } from '@chakra-ui/react';
 
 const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetchTaskProgress, allTasks, fetchDoneTasks, doneTasks }) => {
   const [progress, setProgress] = useState({})
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const modalBg = useColorModeValue(colors.background.light, colors.background.dark)
 
   const handleCompletion = (task) => {
     axios.post('/plants/completeTask', { id: task.id })
@@ -69,11 +74,11 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
 
   return (
     <>
-      <Button onClick={onOpen}>View Tasks</Button>
-
+      <Button position={"relative"} bgColor="#d5e8ce" color="#4AAD52" onClick={onOpen}>View Tasks</Button>
+      {tasks.length > 0 && <Avatar position={"absolute"} bottom="43" right="1.5" size="sm" bgColor="#b9da44" name={`${tasks.length}`}></Avatar>}
       <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
-        <ModalContent maxWidth="900px" width="50%">
+        <ModalContent bgColor={modalBg} maxWidth="900px" width="50%">
           <ModalHeader>
             <Flex direction="column" alignItems="center" width="100%">
               <Heading as="h1" size="lg">{plant.nickname}</Heading>
@@ -89,11 +94,11 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
           {!tasks.length && <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{'No tasks due :)'}</Heading>}
           {tasks.length > 0 && // no awkward spacing now
               tasks.map((task) => (
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.9 }}>
                 {progress[task.id] >= 100 &&
-                  <Progress colorScheme="green" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
+                  <Progress sx={{'& > div': {backgroundColor: '#6EB257'}}}  borderRadius="lg" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
                   <ProgressLabel>
-                    <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{task.taskName}</Heading>
+                    <Heading as="h2" size="md" bgGradient='linear(to-t, #4AAD52, #b9da44, white)' bgClip={"text"}>{task.taskName}</Heading>
                   </ProgressLabel>
                 </Progress>
                 }
@@ -109,7 +114,6 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
               ))}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
