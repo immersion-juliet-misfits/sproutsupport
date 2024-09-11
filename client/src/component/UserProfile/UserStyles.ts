@@ -2,6 +2,16 @@ import { mode } from '@chakra-ui/theme-tools';
 import colors from '../colors';
 
 const UserStyles = (props) => ({
+
+  '.pub-bio': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    borderRadius: '10px',
+    width: '60%',
+    mx: 'auto',
+    p: '10px',
+  },
+
   '.pub-box': {
     border: '1px solid',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
@@ -42,6 +52,7 @@ const UserStyles = (props) => ({
 
   '#u-avatar-gi': {
     border: '15px solid',
+    // borderColor: 'red',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     backgroundColor: 'black',
     display: 'flex',
@@ -70,8 +81,9 @@ const UserStyles = (props) => ({
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     boxShadow: 'md',
     borderRadius: 'lg',
-    padding: '20px',
-    marginBottom: '16px',
+    paddingBottom: '20px',
+    marginTop: '20px',
+    marginBottom: '10px',
     textAlign: 'center',
     maxWidth: '90%',
     mx: 'auto',
@@ -88,14 +100,13 @@ const UserStyles = (props) => ({
   },
 
   '.u-check-button': {
-    width: '25px',
-    mx: '10px',
-    mt: '20px',
-    mb: '0px',
-    pb: '0px',
+    // border: '2px solid purple',
+    size: 'md',
+    alignSelf: 'center',
   },
 
   '.u-checkIcon': {
+    // border: '2px solid orange',
     alignSelf: 'center',
   },
 
@@ -120,7 +131,6 @@ const UserStyles = (props) => ({
     color: mode(colors.text.light, colors.text.dark)(props),
     textAlign: 'center',
     alignItems: 'center',
-    margin: '10px',
   },
   '.u-heading3': {
     color: mode(colors.text.light, colors.text.dark)(props),
@@ -144,18 +154,25 @@ const UserStyles = (props) => ({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
+    mt: '15px',
+    pt: '10px',
     mx: 'auto',
   },
 
   '.u-hs-input': {
-    width: '100%',
-    mb: '0px',
-    pb: '0px',
+    // border: '1px solid purple',
+    width: '90%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    pb: '5px',
   },
 
   //  Nothing added to the below settings appears to affect the input
   '.u-input': {
-    // border: '10px solid blue', // This doesn't even appear
+    // border: '10px solid orange', // This doesn't even appear
+    // my: '0px'
   },
 
   '.u-link': {
@@ -178,14 +195,14 @@ const UserStyles = (props) => ({
     templateColumns: '1fr',
     alignItems: 'center',
     justifyItems: 'center',
-    py: '4',
+    py: '5',
   },
 
   // '.u-tabs': {},
 
   '.u-text': {
     color: mode(colors.text.light, colors.text.dark)(props),
-    fontSize: 'xl',
+    // fontSize: 'xl',
     fontWeight: 'bold',
     alignItems: 'center',
   },
@@ -195,8 +212,21 @@ const UserStyles = (props) => ({
     width: '50%',
   },
 
+  // I need the contents of this aligned along the horizontal access
+  // This contains both input boxes
   '.u-vs-input': {
+    // border: '1px solid blue',
     width: '75%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  '.u-vstack': {
+    borderRadius: '10px',
+    width: '60%',
+    mx: 'auto',
+    my: '10px',
   },
 });
 

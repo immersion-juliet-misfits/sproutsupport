@@ -120,6 +120,11 @@ passport.deserializeUser((obj: User, doneCB) => {
 
 // Directs users to specific pages based on their login status
 app.use((req, res, next) => {
+  // WIP - use for public profile data display
+  if (req.path.startsWith('/user/public')) {
+    return next();
+  }
+  // WIP - end
   if (
     req.isAuthenticated() ||
     req.path.startsWith('/auth/google') ||

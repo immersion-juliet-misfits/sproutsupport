@@ -161,7 +161,7 @@ UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
       where: { id: userId },
       data: {
         city: city || null,
-        state: state || null
+        state: state || null,
       },
     })
     .then((updatedUser) => {
@@ -245,28 +245,107 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
 // Retrieve another Users profile Data to view it
 UserInfo.get('/public/:userId', (req, res) => {
   const { userId } = req.params;
+  console.log('Req-Handler UserId Check:', userId);
 
-  prisma.user.findUnique({
-    where: { id: Number(userId) },
-    select: {
-      userName: true,
-      avatar: true,
-      bio: true,
-      city: true,
-      state: true,
-    },
-  })
-  .then(user => {
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('User not found');
-    }
-  })
-  .catch(err => {
-    res.status(500).send('Internal Server Error');
-  });
+  prisma.user
+    .findUnique({
+      where: { id: Number(userId) },
+      select: {
+        id: true,
+        userName: true,
+        avatar: true,
+        bio: true,
+        city: true,
+        state: true,
+        showPlants: true,
+        showForumPosts: true,
+        showMyMeetups: true,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+      console.log('User found:', user);
+
+      const plantsPromise = user.showPlants
+        ? prisma.plant
+            .findMany({
+              where: { userId: Number(userId) },
+              select: {
+                id: true,
+                nickname: true,
+                description: true,
+                imageUrl: true,
+              },
+            })
+            .then((plants) => {
+              console.log(
+                `Fetched ${plants.length} plants for userId: ${userId}`
+              );
+              return plants;
+            })
+            .catch((err) => {
+              console.error('Error fetching plants for userId:', userId, err);
+              return []; // Return empty array for plants in case of an error
+            })
+        : Promise.resolve([]);
+
+      const postsPromise = user.showForumPosts
+        ? prisma.post
+            .findMany({
+              where: { userId: Number(userId) },
+              select: { id: true, message: true, imageUrl: true },
+            })
+            .then((posts) => {
+              console.log(
+                `Fetched ${posts.length} posts for userId: ${userId}`
+              );
+              return posts;
+            })
+            .catch((err) => {
+              console.error('Error fetching posts for userId:', userId, err);
+              return []; // Return empty array for posts in case of an error
+            })
+        : Promise.resolve([]);
+
+      const meetupsPromise = user.showMyMeetups
+        ? prisma.meet
+            .findMany({
+              where: { userId: Number(userId) },
+              select: {
+                id: true,
+                eventName: true,
+                description: true,
+                location: true,
+                time_date: true,
+                imageUrl: true,
+              },
+            })
+            .then((meetups) => {
+              console.log(
+                `Fetched ${meetups.length} meetups for userId: ${userId}`
+              );
+              return meetups;
+            })
+            .catch((err) => {
+              console.error('Error fetching meetups for userId:', userId, err);
+              return []; // Return empty array for meetups in case of an error
+            })
+        : Promise.resolve([]);
+
+      return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
+        ([plants, posts, meetups]) => {
+          console.log('Response Data:', { user, plants, posts, meetups });
+          res.json({ user, plants, posts, meetups });
+        }
+      );
+    })
+    .catch((err) => {
+      console.error('Public User data fetch: Failed:', err);
+      res.status(500).send('Internal Server Error');
+    });
 });
-
 
 export default UserInfo;
