@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useEffect } from 'react';
+import { SetStateAction, useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
   FormControl,
@@ -15,12 +15,24 @@ import {
   Center,
   Text,
   Container,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from '@chakra-ui/react';
 
-const Comment = ({ postId }) => {
+const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
   const [input, setInput] = useState('');
   const [comments, setComments] = useState([]);
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const comCancelRef = useRef();
 
   const handleInputChange = (e: {
     target: { value: SetStateAction<string> };
@@ -32,9 +44,14 @@ const Comment = ({ postId }) => {
 
   const addComment = () => {
     return axios
-      .post('comment/comment', { message: input, postId })
+      .post('comment/comment', {
+        message: input,
+        postId,
+        userId: user.id,
+        username: user.userName,
+      })
       .then((data) => {
-        console.log('s', data)
+        console.log('s', data);
         getComments();
       })
       .then(() => {
@@ -49,7 +66,7 @@ const Comment = ({ postId }) => {
     axios
       .get(`/comment/comment/${postId}`)
       .then(({ data }) => {
-        // console.log('data', data);
+        // console.log('Cdata', data);
         setComments(data);
       })
       .catch((err) => {
@@ -73,44 +90,77 @@ const Comment = ({ postId }) => {
     getComments();
   }, []);
 
+
   return (
-    <Container>
-      { comments.map((comment: object) => (
+    <Flex direction='column'>
+      {comments.map((comment: object) => (
         <Flex boxSize='large' key={comment.id}>
-          <Box flex='1'>
+          <Box flex='1' alignSelf='left'>
+            <Text>{comment.username}</Text>
             <Text>{comment.message}</Text>
           </Box>
-          <Center w='100px'>
-            <Text>
-              <IconButton
-              size='small'
-                mt={2}
-                onClick={() => {
-                  deleteComment(comment.id);
-                }}
-                icon={<DeleteIcon />}
-              />
-            </Text>
-          </Center>
+          <IconButton
+            variant='contained'
+            mt={2}
+            onClick={onOpen}
+            icon={<DeleteIcon />}
+            isDisabled={user.id !== comment.userId}
+            aria-label={''}          />
+          <AlertDialog
+            isOpen={isOpen}
+            leastDestructiveRef={comCancelRef}
+            onClose={onClose}
+          >
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize='md' fontWeight='bold'>
+                  Delete Comment
+                </AlertDialogHeader>
+
+                <AlertDialogBody>
+                  Are you sure? You can't undo this action afterwards.
+                </AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button ref={comCancelRef} onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    colorScheme='red'
+                    onClick={() => {
+                      deleteComment(comment.id);
+                    }}
+                    onChange={onClose}
+                    ml={3}
+                  >
+                    Delete
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </Flex>
       ))}
-      <Box>
+      <Box flexDirection='column'>
         <FormControl isInvalid={isError}>
-          <FormLabel>Comment</FormLabel>
+          {/* <FormLabel>Comment</FormLabel> */}
           <Input type='post' value={input} onChange={handleInputChange} />
           {!isError ? (
             <FormHelperText>Press Submit to create comment.</FormHelperText>
           ) : (
-            <FormErrorMessage color='yellow'>
-              A comment is required.
-            </FormErrorMessage>
+            <FormErrorMessage>A comment is required.</FormErrorMessage>
           )}
-          <Button mt={4} onClick={addComment}>
+          <Button
+            mt={4}
+            onClick={addComment}
+            boxSize='small'
+            isDisabled={input === ''}
+          >
             Submit
           </Button>
         </FormControl>
       </Box>
-    </Container>
+    </Flex>
   );
 };
 

@@ -16,8 +16,8 @@ import Upload from './routes/uploadImgRoutes';
 import { Server } from "socket.io";
 import Comments from './routes/commentRoutes';
 import UserInfo from './routes/userRoutes/userInfoRoutes';
-import sendEmail from './routes/meetupRoutes/cron';
-import Images from './routes/imgRoute';
+// import sendEmail from './routes/meetupRoutes/cron';
+// import Images from './routes/imgRoute';
 
 
 const prisma = new PrismaClient();

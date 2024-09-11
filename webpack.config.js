@@ -45,6 +45,7 @@ export default (env) => {
     },
     cache: {
       type: 'filesystem',
+      // cacheDirectory: path.resolve(__dirname, '.temp_cache'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
