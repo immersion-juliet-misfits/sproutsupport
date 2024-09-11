@@ -107,12 +107,12 @@ export default (env) => {
         template: path.resolve(__dirname, './client/index.html'),
       }),
       new NodePolyfillPlugin(),
-      new ProgressPlugin(true),
-      new BundleAnalyzerPlugin({
-        analyzerMode: 'static',
-        generateStatsFile: true,
-        statsFilename: 'stats.json',
-      }),
+      // new ProgressPlugin(true),
+      // new BundleAnalyzerPlugin({
+      //   analyzerMode: 'static',
+      //   generateStatsFile: true,
+      //   statsFilename: 'stats.json',
+      // }),
     ],
   };
 };

@@ -20,8 +20,12 @@ const PlantWarnings = ({ user }) => {
   const getWarnings = () => {
         // axios.post(`/plants/warnings/${user.id}`)
         // .then(({data}) => {
+        //   console.log(data)
         //     setAlerts(data.alerts)
         //     // setWeather(data.currentConditions)
+        // })
+        // .catch(() => {
+        //   console.error('Issue getting weather warnings. Check if location is set in Settings.')
         // });
   };
 
@@ -34,10 +38,11 @@ const PlantWarnings = ({ user }) => {
       <Heading size="lg">{`Warnings`}</Heading>
       {!user.city || !user.state && <h1>No location found. Please visit settings to allow for location access.</h1>}
       {/* {currWeather && <h2>{currWeather.conditions}</h2>} */}
+      {!alerts.length && <Heading size={"md"}>No warnings today.</Heading>}
       {alerts.length > 0 && alerts.map((alert, i) => {
         return (
           <div key={`${alert}-${i}`}>
-          <Heading size="s">{alert.event}</Heading>
+          <Heading size="sm">{alert.event}</Heading>
           <h1>{decideWarning(alert.event)}</h1>
           </div>
         )
