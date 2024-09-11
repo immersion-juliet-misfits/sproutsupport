@@ -25,6 +25,11 @@ const UserPrivateProfile = lazy(
 const UserPublicProfile = lazy(() => import('./UserProfile/UserPublicProfile'));
 const Meetup = lazy(() => import('./meetup/Meetup'));
 
+// Temp profile stuff
+const PublicTest = lazy(() => import('./UserProfile/PublicTest'));
+const UserInput = lazy(() => import('./UserProfile/UserInput'));
+
+
 const socket = io('http://localhost:8000');
 
 const App = () => {
@@ -105,6 +110,8 @@ const App = () => {
               path='/plantfinder'
               element={<PlantFinder user={user} BUCKET_NAME={BUCKET_NAME} />}
             ></Route>
+
+
             <Route
               path='/userprofile'
               element={
@@ -118,21 +125,29 @@ const App = () => {
               }
             ></Route>
 
-             {/* <Route
+            {/* WIP Below  */}
+
+            <Route
+              path='/enter-user-id'
+              element={<UserInput />}
+              />
+
+            <Route
               path='/public-profile/:userId'
-              element={
-                <UserPublicProfile
-                fetchUserData={fetchUserData}
-                onLoad={() => console.log('Verify Public Profile For User:', user)}
-                />
-              }
-            ></Route> */}
+              element={<PublicTest />}
+              ></Route>
+
             <Route
               path='/public-profile'
               element={
-                <UserPublicProfile user={user} fetchUserData={fetchUserData} />
+                <UserPublicProfile
+                user={user}
+                fetchUserData={fetchUserData}
+                />
               }
-            ></Route>
+              ></Route>
+
+{/* WIP Above */}
 
             <Route
               path='/'

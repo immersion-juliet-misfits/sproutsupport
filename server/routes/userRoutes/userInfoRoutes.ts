@@ -267,7 +267,7 @@ UserInfo.get('/public/:userId', (req, res) => {
         return res.status(404).send('User not found');
       }
 
-      console.log('User found:', user);
+      // console.log('User found:', user);
 
       const plantsPromise = user.showPlants
         ? prisma.plant
@@ -281,9 +281,7 @@ UserInfo.get('/public/:userId', (req, res) => {
               },
             })
             .then((plants) => {
-              console.log(
-                `Fetched ${plants.length} plants for userId: ${userId}`
-              );
+              // console.log(`Fetched ${plants.length} plants for userId: ${userId}`);
               return plants;
             })
             .catch((err) => {
@@ -299,9 +297,7 @@ UserInfo.get('/public/:userId', (req, res) => {
               select: { id: true, message: true, imageUrl: true },
             })
             .then((posts) => {
-              console.log(
-                `Fetched ${posts.length} posts for userId: ${userId}`
-              );
+              // console.log(`Fetched ${posts.length} posts for userId: ${userId}`);
               return posts;
             })
             .catch((err) => {
@@ -324,9 +320,7 @@ UserInfo.get('/public/:userId', (req, res) => {
               },
             })
             .then((meetups) => {
-              console.log(
-                `Fetched ${meetups.length} meetups for userId: ${userId}`
-              );
+              // console.log(`Fetched ${meetups.length} meetups for userId: ${userId}`);
               return meetups;
             })
             .catch((err) => {
@@ -337,7 +331,7 @@ UserInfo.get('/public/:userId', (req, res) => {
 
       return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
         ([plants, posts, meetups]) => {
-          console.log('Response Data:', { user, plants, posts, meetups });
+          // console.log('Response Data:', { user, plants, posts, meetups });
           res.json({ user, plants, posts, meetups });
         }
       );

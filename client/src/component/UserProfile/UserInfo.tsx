@@ -14,6 +14,7 @@ import {
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
 import UserControls, { useGlobalState } from './UserControls';
 import UserToggles from './UserToggles';
+import UserInput from './UserInput';
 
 const UserInfo = ({
   BUCKET_NAME,
@@ -35,6 +36,10 @@ const UserInfo = ({
 
   return (
     <>
+    
+      {/* User Input for entering userId */}
+      <UserInput />
+
       <VStack
       // border='2px solid blue'
       >
@@ -90,8 +95,6 @@ const UserInfo = ({
               />
             )}
           </GridItem>
-
-
         </VStack>
 
         {/* Edit Boxes Start ************************** */}
@@ -99,8 +102,7 @@ const UserInfo = ({
           // border='5px dashed purple'
           id='g-vstack'
           className='u-vstack'
-          >
-
+        >
           {/* Edit Username Start ************************** */}
 
           <VStack
@@ -159,9 +161,7 @@ const UserInfo = ({
 
           {/* Edit Bio Start ************************** */}
 
-          <VStack
-            className='u-vs-input'
-          >
+          <VStack className='u-vs-input'>
             <HStack
               id='g-hstack'
               className='u-hs-input'
@@ -192,15 +192,13 @@ const UserInfo = ({
             </HStack>
           </VStack>
 
-        {/* Edit Bio End ************************** */}
+          {/* Edit Bio End ************************** */}
 
           <Text className='u-text'>Current User Bio</Text>
           <Text className='u-text'>{user.bio}</Text>
         </VStack>
 
         {/* Edit Boxes Start ************************** */}
-
-
       </HStack>
 
       {/* Import Privacy Toggles  */}
