@@ -67,9 +67,8 @@ const [publicUser, setPublicUser] = useState<User | null>(null);
     isFirstRender.current = false;
     // Test retrieval of public Data
     // UserControls.getPublicUserData(user.id, setPublicUser);
-    UserControls.getPublicUserData(3, setPublicUser); // Trying to log publicly acceptable data to browser console
-    // Swapping the number causes an error for some reason - must restart server
-    // Unable to retrieve data for User #3???
+    UserControls.getPublicUserData(1, setPublicUser); // Logs publicly acceptable data to browser console
+    // Now that I have access to this, I can start populating the pages with this.
 
   }, []);
 
@@ -106,7 +105,10 @@ const [publicUser, setPublicUser] = useState<User | null>(null);
         className='u-lvl-one'
       >
         <Box className='pub-box'>
-          <HStack>
+          <HStack
+          className='pub-box'
+          // border='1px dashed purple'
+          >
             <GridItem id='u-avatar-gi'>
               <Image
                 id='u-avatar-img'

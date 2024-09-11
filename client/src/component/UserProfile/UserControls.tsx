@@ -100,19 +100,20 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 // WIP: Fetch User data by ID (for viewing another Users profile)
 
 // const getPublicUserData = (userId: number, setUser: (user: object) => void) => {
-const getPublicUserData = (userId: number, setPublicUser: (user: object) => void) => {
-// const getPublicUserData = (userId: number, setUser: (user: object) => void, setPublicUser: (user: object) => void) => {
+const getPublicUserData = (
+  userId: number,
+  setPublicUser: (user: object) => void
+) => {
+  // const getPublicUserData = (userId: number, setUser: (user: object) => void, setPublicUser: (user: object) => void) => {
 
   console.log('Public User Req Id:', userId);
 
   axios
     .get(`/user/public/${userId}`)
     .then(({ data }) => {
-
-      console.log('Requested User data:', data);
+      console.log('Req Public User data:', data);
       // setUser(data);
       setPublicUser(data);
-
     })
     .catch((err) => {
       console.error('Fetch Other User Profile Data: Failed ', err);
@@ -214,11 +215,22 @@ const getPosts = (setPosts: (posts: object[]) => void, userId: number) => {
   axios
     .get(`/post/post/${userId}`)
     .then(({ data }) => {
-      // console.log('1 User Forum Data Check: ', data);
-      setPosts(data);
+      //       // console.log('1 User Forum Data Check: ', data);
+      if (data.length === 0) {
+        console.log('User has no Posts.');
+        setPosts([]); // Set as empty array to prevent browser error
+      } else {
+        setPosts(data);
+      }
     })
     .catch((err) => {
-      console.error('Failed to GET posts: ', err);
+      if (err.response && err.response.status === 404) {
+        console.log('No posts found for this user');
+        // Set an empty array if no posts are found
+        setPosts([]);
+      } else {
+        console.error('Failed to GET posts: ', err);
+      }
     });
 };
 

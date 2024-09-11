@@ -52,6 +52,7 @@ const UserStyles = (props) => ({
 
   '#u-avatar-gi': {
     border: '15px solid',
+    // borderColor: 'red',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     backgroundColor: 'black',
     display: 'flex',

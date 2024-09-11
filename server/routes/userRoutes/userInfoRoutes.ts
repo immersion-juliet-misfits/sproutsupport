@@ -243,12 +243,10 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
 // *******
 
 // Retrieve another Users profile Data to view it
-// Find many is causing problems, use a different search command
 UserInfo.get('/public/:userId', (req, res) => {
   const { userId } = req.params;
   console.log('Req-Handler UserId Check:', userId);
 
-  // Fetch User data needed for the public profile - nothing private
   prisma.user
     .findUnique({
       where: { id: Number(userId) },
@@ -269,33 +267,77 @@ UserInfo.get('/public/:userId', (req, res) => {
         return res.status(404).send('User not found');
       }
 
-      // Fetch other user's plants if allowed
+      console.log('User found:', user);
+
       const plantsPromise = user.showPlants
-        ? prisma.plant.findMany({
-            where: { userId: Number(userId) },
-            select: { id: true, nickname: true, description: true, imageUrl: true },
-          })
+        ? prisma.plant
+            .findMany({
+              where: { userId: Number(userId) },
+              select: {
+                id: true,
+                nickname: true,
+                description: true,
+                imageUrl: true,
+              },
+            })
+            .then((plants) => {
+              console.log(
+                `Fetched ${plants.length} plants for userId: ${userId}`
+              );
+              return plants;
+            })
+            .catch((err) => {
+              console.error('Error fetching plants for userId:', userId, err);
+              return []; // Return empty array for plants in case of an error
+            })
         : Promise.resolve([]);
 
-      // Fetch other user's posts if allowed
       const postsPromise = user.showForumPosts
-        ? prisma.post.findMany({
-            where: { userId: Number(userId) },
-            select: { id: true, message: true, imageUrl: true },
-          })
+        ? prisma.post
+            .findMany({
+              where: { userId: Number(userId) },
+              select: { id: true, message: true, imageUrl: true },
+            })
+            .then((posts) => {
+              console.log(
+                `Fetched ${posts.length} posts for userId: ${userId}`
+              );
+              return posts;
+            })
+            .catch((err) => {
+              console.error('Error fetching posts for userId:', userId, err);
+              return []; // Return empty array for posts in case of an error
+            })
         : Promise.resolve([]);
 
-      // Fetch other user's meetups if allowed
       const meetupsPromise = user.showMyMeetups
-        ? prisma.meetup.findMany({
-            where: { userId: Number(userId) },
-            select: { id: true, eventName: true, description: true, location: true, time_date: true, imageUrl: true },
-          })
+        ? prisma.meet
+            .findMany({
+              where: { userId: Number(userId) },
+              select: {
+                id: true,
+                eventName: true,
+                description: true,
+                location: true,
+                time_date: true,
+                imageUrl: true,
+              },
+            })
+            .then((meetups) => {
+              console.log(
+                `Fetched ${meetups.length} meetups for userId: ${userId}`
+              );
+              return meetups;
+            })
+            .catch((err) => {
+              console.error('Error fetching meetups for userId:', userId, err);
+              return []; // Return empty array for meetups in case of an error
+            })
         : Promise.resolve([]);
 
-      // Resolve all data promises
       return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
         ([plants, posts, meetups]) => {
+          console.log('Response Data:', { user, plants, posts, meetups });
           res.json({ user, plants, posts, meetups });
         }
       );
@@ -305,7 +347,5 @@ UserInfo.get('/public/:userId', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
-
-
 
 export default UserInfo;
