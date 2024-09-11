@@ -53,7 +53,7 @@ const CreatePost = ({user, BUCKET_NAME}) => {
 
   const addMessage = () => {
     return axios
-      .post('/post/post', { message: input, userId: user.id, imageUrl: signedUrl})
+      .post('/post/post', { message: input, userId: user.id, imageUrl: signedUrl, username: user.userName })
       .then(() => {
       })
       .catch((err) => {
