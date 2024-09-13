@@ -36,10 +36,6 @@ const UserInfo = ({
 
   return (
     <>
-    
-      {/* User Input for entering userId */}
-      <UserInput />
-
       <VStack
       // border='2px solid blue'
       >

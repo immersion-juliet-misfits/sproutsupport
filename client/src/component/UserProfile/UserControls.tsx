@@ -104,15 +104,12 @@ const getPublicUserData = (
   userId: number,
   setPublicUser: (user: object) => void
 ) => {
-  // const getPublicUserData = (userId: number, setUser: (user: object) => void, setPublicUser: (user: object) => void) => {
-
-  console.log('Public User Req Id:', userId);
+  // console.log('Public User Req Id:', userId);
 
   axios
     .get(`/user/public/${userId}`)
     .then(({ data }) => {
-      console.log('Req Public User data:', data);
-      // setUser(data);
+      // console.log('Req Public User data:', data);
       setPublicUser(data);
     })
     .catch((err) => {

@@ -14,12 +14,16 @@ import { Link as ReactRouterLink } from 'react-router-dom';
 import { SettingsIcon } from '@chakra-ui/icons';
 import { VscAccount } from 'react-icons/vsc';
 // import '@fontsource/pangolin';
+import { useUser } from './App';
 
 const NavBar = () => {
+  const { user, isAuthenticated } = useUser(); 
+
+
   // * V2 ****
   return (
     <>
-      <HStack id='topBar-hstack'>
+      <HStack id='topBar-hstack' >
         <ChakraLink as={ReactRouterLink} to='/home'>
           Home
         </ChakraLink>
@@ -35,7 +39,7 @@ const NavBar = () => {
         <ChakraLink as={ReactRouterLink} to='/userprofile'>
           <SettingsIcon />
         </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to='/public-profile'>
+        <ChakraLink as={ReactRouterLink} to={`/public-profile/${user?.id}`}>
           <VscAccount />
         </ChakraLink>
       </HStack>
@@ -68,7 +72,7 @@ const NavBar = () => {
   //         <SettingsIcon mr={2} />
   //         Settings
   //       </MenuItem>
-  //       <MenuItem as={ReactRouterLink} to='/public-profile'>
+  //       <MenuItem as={ReactRouterLink} to={`/public-profile/${user?.id}`}>
   //         <VscAccount mr={2} />
   //         Profile
   //       </MenuItem>
@@ -91,7 +95,7 @@ const NavBar = () => {
   //     <ChakraLink as={ReactRouterLink} to='/userprofile'>
   //       Settings
   //     </ChakraLink>
-  //     <ChakraLink as={ReactRouterLink} to='/public-profile'>
+  //     <ChakraLink as={ReactRouterLink} to={`/public-profile/${user?.id}`}>
   //       Profile
   //     </ChakraLink>
   //   </Box>

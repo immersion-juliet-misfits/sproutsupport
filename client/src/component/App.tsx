@@ -1,18 +1,14 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState, createContext, useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import io from 'socket.io-client';
 import { useToast } from '@chakra-ui/react';
 import ssTheme from './ssTheme';
-// import Home from './Home';
-// import CreatePost from './Post/CreatePost';
-// import OwnedPlants from './PlantCare/OwnedPlants';
-// import PlantFinder from './PlantCare/PlantFinder';
-// import Login from './Login';
-// import UserPrivateProfile from './UserProfile/UserPrivateProfile';
-// import UserPublicProfile from './UserProfile/UserPublicProfile';
-// import Meetup from './meetup/Meetup';
+
+// WIP React Context logic
+const UserContext = createContext({});
+export const useUser = () => useContext(UserContext);
 
 const Home = lazy(() => import('./Home'));
 const CreatePost = lazy(() => import('./Post/CreatePost'));
@@ -24,9 +20,7 @@ const UserPrivateProfile = lazy(
 );
 const UserPublicProfile = lazy(() => import('./UserProfile/UserPublicProfile'));
 const Meetup = lazy(() => import('./meetup/Meetup'));
-
-// Temp profile stuff
-const PublicTest = lazy(() => import('./UserProfile/PublicTest'));
+// const PublicTest = lazy(() => import('./UserProfile/PublicTest'));
 const UserInput = lazy(() => import('./UserProfile/UserInput'));
 
 
@@ -88,6 +82,7 @@ const App = () => {
   }
 
   return (
+    <UserContext.Provider value={{ user, setUser, isAuthenticated }}>
     <ChakraProvider theme={ssTheme}>
       <ColorModeScript initialColorMode={ssTheme.config.initialColorMode} />
       <div className='App'>
@@ -125,29 +120,18 @@ const App = () => {
               }
             ></Route>
 
-            {/* WIP Below  */}
-
             <Route
               path='/enter-user-id'
               element={<UserInput />}
               />
 
-            <Route
-              path='/public-profile/:userId'
-              element={<PublicTest />}
-              ></Route>
-
-            <Route
-              path='/public-profile'
+             <Route
+              path="/public-profile/:userId?"
               element={
                 <UserPublicProfile
-                user={user}
-                fetchUserData={fetchUserData}
                 />
               }
-              ></Route>
-
-{/* WIP Above */}
+            />
 
             <Route
               path='/'
@@ -161,6 +145,7 @@ const App = () => {
         </Suspense>
       </div>
     </ChakraProvider>
+    </UserContext.Provider>
   );
 };
 

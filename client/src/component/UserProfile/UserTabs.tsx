@@ -17,8 +17,8 @@ const UserTabs = ({ setCurrentView }) => {
         {/* <Tab className='uTab' onClick={handleLogOut}>
           Log Out
         </Tab> */}
-         <Tab className='placeholder' onClick={() => setCurrentView('placeholder')}>
-          Placeholder
+         <Tab className='uTab' onClick={() => setCurrentView('userSearch')}>
+          User Search
         </Tab>
          <Tab className='uTab' onClick={() => setCurrentView('weather')}>
           Weather

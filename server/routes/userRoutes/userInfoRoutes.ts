@@ -245,7 +245,7 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
 // Retrieve another Users profile Data to view it
 UserInfo.get('/public/:userId', (req, res) => {
   const { userId } = req.params;
-  console.log('Req-Handler UserId Check:', userId);
+  // console.log('Req-Handler UserId Check:', userId);
 
   prisma.user
     .findUnique({

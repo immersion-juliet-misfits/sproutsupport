@@ -6,6 +6,7 @@ import TopBar from './TopBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserWeather from './UserWeather';
+import UserInput from './UserInput';
 import UserControls, { GlobalStateProvider } from './UserControls';
 
 // User context
@@ -46,6 +47,10 @@ const UserPrivateProfile = ({
         // id='lvl-two'
         // className='u-pages'
         >
+          {currentView === 'userSearch' && (
+            <UserInput
+            />
+          )}
           {currentView === 'weather' && (
             <UserWeather
               fetchUserData={fetchUserData}
