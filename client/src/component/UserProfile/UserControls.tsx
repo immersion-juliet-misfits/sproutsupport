@@ -95,11 +95,8 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // User Methods: Data Retrieval *******************************************
-// *********
 
-// WIP: Fetch User data by ID (for viewing another Users profile)
-
-// const getPublicUserData = (userId: number, setUser: (user: object) => void) => {
+// Fetch User data by ID (for viewing another Users profile)
 const getPublicUserData = (
   userId: number,
   setPublicUser: (user: object) => void
@@ -117,8 +114,7 @@ const getPublicUserData = (
     });
 };
 
-// *********
-// Global WIP ******
+// ********* // Global WIP ******
 
 // const fetchWeather = () => {
 //   const { state, setState } = useGlobalState();
@@ -463,6 +459,20 @@ const handleLogOut = (onLogout, navigate) => {
 
 // ************
 
+const deleteAccount = (setUser: (user: object | null) => void) => {
+  return axios
+    .delete('/user/deleteAccount')
+    .then(() => {
+      alert('Account deleted successfully');
+      setUser(null);
+    })
+    .catch((err) => {
+      console.error('Failed to delete account:', err);
+    });
+};
+
+// ************
+
 // Export all functions in a single object
 export default {
   fetchWeather,
@@ -476,7 +486,7 @@ export default {
   handleLocationChange,
   handleLogOut,
   handleToggle,
-  // handleSaveEdits,
   // useGlobalState,
   // GlobalStateProvider,
+  deleteAccount,
 };

@@ -342,4 +342,27 @@ UserInfo.get('/public/:userId', (req, res) => {
     });
 });
 
+
+UserInfo.delete('/deleteAccount', (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(400).send('User ID is required');
+  }
+
+  prisma.user
+    .delete({
+      where: { id: userId },
+    })
+    .then(() => {
+      res.status(200).send('User Account Deletion: Success');
+    })
+    .catch((err) => {
+      console.error('Error deleting user account:', err);
+      res.status(500).send('Failed to delete user account');
+    });
+});
+
+
+
 export default UserInfo;

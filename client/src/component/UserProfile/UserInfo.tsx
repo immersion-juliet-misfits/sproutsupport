@@ -212,9 +212,24 @@ const UserInfo = ({
           <Button
             colorScheme='red'
             isDisabled={!isEditMode}
+            onClick={() => {
+              if (
+                window.confirm('Are you sure you want to delete your account?')
+              ) {
+                UserControls.deleteAccount(setUser)
+                  .then(() => {
+                    onLogout();
+                    navigate('/login');
+                  })
+                  .catch((err) => {
+                    console.error('Error during account deletion:', err);
+                  });
+              }
+            }}
           >
             Delete Account
           </Button>
+
           <Button
             colorScheme='blue'
             isDisabled={isEditMode}
