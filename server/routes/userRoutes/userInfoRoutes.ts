@@ -240,16 +240,18 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
     });
 });
 
-// *******
-
 // Retrieve another Users profile Data to view it
-UserInfo.get('/public/:userId', (req, res) => {
-  const { userId } = req.params;
-  // console.log('Req-Handler UserId Check:', userId);
+// UserInfo.get('/public/:userId', (req, res) => {
+// const { userId } = req.params;
+// console.log('Req-Handler UserId Check:', userId);
+UserInfo.get('/public/:username', (req, res) => {
+  const { username } = req.params;
+  console.log('Req-Handler UserName Check:', username);
 
   prisma.user
     .findUnique({
-      where: { id: Number(userId) },
+      // where: { id: Number(userId) },
+      where: { userName: username },
       select: {
         id: true,
         userName: true,
@@ -272,7 +274,8 @@ UserInfo.get('/public/:userId', (req, res) => {
       const plantsPromise = user.showPlants
         ? prisma.plant
             .findMany({
-              where: { userId: Number(userId) },
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
               select: {
                 id: true,
                 nickname: true,
@@ -285,7 +288,8 @@ UserInfo.get('/public/:userId', (req, res) => {
               return plants;
             })
             .catch((err) => {
-              console.error('Error fetching plants for userId:', userId, err);
+              // console.error('Error fetching plants for userId:', userId, err);
+              console.error('Error fetching plants for username:', username, user.id, err);
               return []; // Return empty array for plants in case of an error
             })
         : Promise.resolve([]);
@@ -293,7 +297,8 @@ UserInfo.get('/public/:userId', (req, res) => {
       const postsPromise = user.showForumPosts
         ? prisma.post
             .findMany({
-              where: { userId: Number(userId) },
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
               select: { id: true, message: true, imageUrl: true },
             })
             .then((posts) => {
@@ -301,7 +306,7 @@ UserInfo.get('/public/:userId', (req, res) => {
               return posts;
             })
             .catch((err) => {
-              console.error('Error fetching posts for userId:', userId, err);
+              console.error('Error fetching posts for username:', username, user.id, err);
               return []; // Return empty array for posts in case of an error
             })
         : Promise.resolve([]);
@@ -309,7 +314,8 @@ UserInfo.get('/public/:userId', (req, res) => {
       const meetupsPromise = user.showMyMeetups
         ? prisma.meet
             .findMany({
-              where: { userId: Number(userId) },
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
               select: {
                 id: true,
                 eventName: true,
@@ -324,7 +330,8 @@ UserInfo.get('/public/:userId', (req, res) => {
               return meetups;
             })
             .catch((err) => {
-              console.error('Error fetching meetups for userId:', userId, err);
+              // console.error('Error fetching meetups for userId:', userId, err);
+              console.error('Error fetching meetups for username:', username, user.id, err);
               return []; // Return empty array for meetups in case of an error
             })
         : Promise.resolve([]);
@@ -341,7 +348,6 @@ UserInfo.get('/public/:userId', (req, res) => {
       res.status(500).send('Internal Server Error');
     });
 });
-
 
 UserInfo.delete('/deleteAccount', (req: Request, res: Response) => {
   const userId = req.user?.id;
@@ -362,7 +368,5 @@ UserInfo.delete('/deleteAccount', (req: Request, res: Response) => {
       res.status(500).send('Failed to delete user account');
     });
 });
-
-
 
 export default UserInfo;

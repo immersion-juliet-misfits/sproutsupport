@@ -97,16 +97,30 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
 // User Methods: Data Retrieval *******************************************
 
 // Fetch User data by ID (for viewing another Users profile)
+// const getPublicUserData = (
+//   userId: number,
+//   setPublicUser: (user: object) => void
+// ) => {
+//   // console.log('Public User Req Id:', userId);
+
+//   axios
+//     .get(`/user/public/${userId}`)
+//     .then(({ data }) => {
+//       // console.log('Req Public User data:', data);
+//       setPublicUser(data);
+//     })
+//     .catch((err) => {
+//       console.error('Fetch Other User Profile Data: Failed ', err);
+//     });
+// };
+
 const getPublicUserData = (
-  userId: number,
+  username: string,
   setPublicUser: (user: object) => void
 ) => {
-  // console.log('Public User Req Id:', userId);
-
   axios
-    .get(`/user/public/${userId}`)
+    .get(`/user/public/${username}`)
     .then(({ data }) => {
-      // console.log('Req Public User data:', data);
       setPublicUser(data);
     })
     .catch((err) => {

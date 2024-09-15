@@ -31,7 +31,8 @@ interface User {
 
 // Hard coded single user
 const UserPublicProfile = () => {
-  const { userId } = useParams();
+  // const { userId } = useParams();
+  const { username } = useParams();
   const [publicUser, setPublicUser] = useState<User | null>(null);
 
   const [plants, setPlants] = useState([]);
@@ -41,13 +42,16 @@ const UserPublicProfile = () => {
 
   // 1st load UE
   useEffect(() => {
-    if (userId) {
-      UserControls.getPublicUserData(Number(userId), (data) => {
+    // if (userId) {
+    if (username) {
+      // UserControls.getPublicUserData(Number(userId), (data) => {
+      UserControls.getPublicUserData(username, (data) => {
         setPublicUser(data.user);
       });
     }
     isFirstRender.current = false;
-  }, [userId]);
+    // }, [userId]);
+  }, [username]);
 
   // Reloads for Changes
   useEffect(() => {

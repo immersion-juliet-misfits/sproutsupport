@@ -17,7 +17,7 @@ import { VscAccount } from 'react-icons/vsc';
 import { useUser } from './App';
 
 const NavBar = () => {
-  const { user, isAuthenticated } = useUser(); 
+  const { user, isAuthenticated } = useUser();
 
 
   // * V2 ****
@@ -39,7 +39,8 @@ const NavBar = () => {
         <ChakraLink as={ReactRouterLink} to='/userprofile'>
           <SettingsIcon />
         </ChakraLink>
-        <ChakraLink as={ReactRouterLink} to={`/public-profile/${user?.id}`}>
+        {/* <ChakraLink as={ReactRouterLink} to={`/public-profile/${user?.id}`}> */}
+        <ChakraLink as={ReactRouterLink} to={`/public-profile/${user?.userName}`}>
           <VscAccount />
         </ChakraLink>
       </HStack>

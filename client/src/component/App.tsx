@@ -120,18 +120,28 @@ const App = () => {
               }
             ></Route>
 
-            <Route
+            {/* <Route
               path='/enter-user-id'
               element={<UserInput />}
-              />
+              /> */}
 
-             <Route
+<Route
+  path='/enter-username'
+  element={<UserInput />}
+  />
+
+             {/* <Route
               path="/public-profile/:userId?"
               element={
                 <UserPublicProfile
                 />
               }
-            />
+            /> */}
+
+<Route
+  path="/public-profile/:username"
+  element={<UserPublicProfile />}
+  />
 
             <Route
               path='/'

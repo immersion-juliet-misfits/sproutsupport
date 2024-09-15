@@ -12,7 +12,7 @@ model User {
   google_id        String         @unique
   email            String?        @unique
   password         String?
-  userName         String?
+  userName         String?        @unique
   avatar           String?
   bio              String?        @db.Text
   city             String?
