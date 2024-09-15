@@ -10,28 +10,29 @@ datasource db {
 model User {
   id               Int            @id @default(autoincrement())
   google_id        String         @unique
-  city             String?
-  state            String?
-  userName         String?
   email            String?        @unique
   password         String?
+  userName         String?
   avatar           String?
   bio              String?        @db.Text
+  city             String?
+  state            String?
   level            Int            @default(1)
   points           Int            @default(0)
+  DarkLight        Boolean        @default(false)
+  showForumPosts   Boolean        @default(false)
+  showMyMeetups    Boolean        @default(false)
+  showOtherMeetups Boolean        @default(false)
+  showPlants       Boolean        @default(false)
+  showWeather      Boolean        @default(false)
+  attendees        Attendee[]
   meets            Meet[]
   notifications    Notification[]
   plants           Plant[]
   posts            Post[]
-  comments Comment[]
-  attendees        Attendee[]
+  comments         Comment[]
+
   @@unique([id, userName])
-  DarkLight        Boolean        @default(false)
-  showPlants       Boolean        @default(false)
-  showMyMeetups    Boolean        @default(false)
-  showOtherMeetups Boolean        @default(false)
-  showForumPosts   Boolean        @default(false)
-  showWeather      Boolean        @default(false)
 }
 
 model Image {
@@ -102,17 +103,19 @@ model Post {
   username String
   owner    User      @relation(fields: [userId, username], references: [id, userName], onDelete: Cascade)
   Comment  Comment[]
-  // @@index([userId, username], map: "Post_userId_fkey")
+
+  @@index([userId, username], map: "Post_userId_fkey")
 }
 
 model Comment {
-  id        Int    @id @default(autoincrement())
-  message   String
-  postId    Int
-  userId    Int
-  username  String
-  post      Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  owner  User   @relation(fields: [userId, username], references: [id, userName], onDelete: Cascade)
+  id       Int    @id @default(autoincrement())
+  message  String
+  postId   Int
+  userId   Int
+  username String
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  owner    User   @relation(fields: [userId, username], references: [id, userName], onDelete: Cascade)
+
   @@index([postId], map: "Comment_postId_fkey")
   @@index([userId, username], map: "Comment_userId_fkey")
 }
