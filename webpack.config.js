@@ -43,10 +43,6 @@ export default (env) => {
       },
       runtimeChunk: 'single',
     },
-    cache: {
-      type: 'filesystem',
-      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       plugins: [new TsconfigPathsPlugin()],
