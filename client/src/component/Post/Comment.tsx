@@ -99,13 +99,15 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
             <Text>{comment.username}</Text>
             <Text>{comment.message}</Text>
           </Box>
-          <IconButton
-            variant='contained'
+          <Button
+            // variant='contained'
             mt={2}
             onClick={onOpen}
-            icon={<DeleteIcon />}
+            // icon={<DeleteIcon />}
+            bgColor='red'
             isDisabled={user.id !== comment.userId}
-            aria-label={''}          />
+            aria-label={''}
+            >Delete</Button>
           <AlertDialog
             isOpen={isOpen}
             leastDestructiveRef={comCancelRef}

@@ -55,9 +55,7 @@ export default (env) => {
           use: [
             {
               loader: 'babel-loader',
-              options: {
-                cacheDirectory: true,
-              },
+              
             },
             {
               loader: 'ts-loader',

@@ -42,7 +42,7 @@ const Home = ({ user }) => {
   const [message, setMessage] = useState('');
   const [postId, setPostId] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef: MutableRefObject<undefined> = useRef();
+  const comCancelRef = useRef();
   // console.log('pi', postId);
   function EditableControls(e: any) {
 
@@ -106,6 +106,7 @@ const Home = ({ user }) => {
       .then(() => {
         getPosts();
       })
+      .then(() => console.log('Delete'))
       .catch((err) => {
         console.error('Failed to Delete message: ', err);
       });
@@ -185,12 +186,13 @@ const Home = ({ user }) => {
                       </Editable>
                     </CardBody>
                     <CardFooter>
-                      <Button hidden={user.id !== post.userId} bgColor='red'>
+                      <Button hidden={user.id !== post.userId} bgColor='red' onClick={onOpen}>
                         Delete
                       </Button>
                       <AlertDialog
                         isOpen={isOpen}
                         onClose={onClose}
+                        leastDestructiveRef={comCancelRef}
                       >
                         <AlertDialogOverlay>
                           <AlertDialogContent>
@@ -203,7 +205,7 @@ const Home = ({ user }) => {
                               afterwards.
                             </AlertDialogBody>
                             <AlertDialogFooter>
-                              <Button ref={cancelRef} onClick={onClose}>
+                              <Button ref={comCancelRef} onClick={onClose}>
                                 Cancel
                               </Button>
                               <Button
