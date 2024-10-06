@@ -35,6 +35,31 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
 });
 
 // ******
+// Check if User exists
+
+UserInfo.get('/checkUserExists/:username', (req: Request, res: Response) => {
+  const { username } = req.params;
+
+  prisma.user
+    .findUnique({
+      where: { userName: username },
+    })
+    .then((user) => {
+      if (user) {
+        res.json({ exists: true });
+      } else {
+        res.json({ exists: false });
+      }
+    })
+    .catch((error) => {
+      console.error('Error checking if user exists:', error);
+      res.status(500).send('Failed to check user existence');
+    });
+});
+
+
+
+// ******
 // Fetch a specific Users posts
 
 Posts.get('/post/:userId', (req: Request, res: Response) => {
@@ -54,8 +79,8 @@ Posts.get('/post/:userId', (req: Request, res: Response) => {
         ? res.status(200).send(posts)
         : res.status(404).send('No posts found for this user');
     })
-    .catch((err) => {
-      console.error('Failed to get posts: ', err);
+    .catch((error) => {
+      console.error('Failed to get posts: ', error);
       res.sendStatus(500);
     });
 });
@@ -287,9 +312,9 @@ UserInfo.get('/public/:username', (req, res) => {
               // console.log(`Fetched ${plants.length} plants for userId: ${userId}`);
               return plants;
             })
-            .catch((err) => {
-              // console.error('Error fetching plants for userId:', userId, err);
-              console.error('Error fetching plants for username:', username, user.id, err);
+            .catch((error) => {
+              // console.error('Error fetching plants for userId:', userId, error);
+              console.error('Error fetching plants for username:', username, user.id, error);
               return []; // Return empty array for plants in case of an error
             })
         : Promise.resolve([]);
@@ -305,8 +330,8 @@ UserInfo.get('/public/:username', (req, res) => {
               // console.log(`Fetched ${posts.length} posts for userId: ${userId}`);
               return posts;
             })
-            .catch((err) => {
-              console.error('Error fetching posts for username:', username, user.id, err);
+            .catch((error) => {
+              console.error('Error fetching posts for username:', username, user.id, error);
               return []; // Return empty array for posts in case of an error
             })
         : Promise.resolve([]);
@@ -329,9 +354,9 @@ UserInfo.get('/public/:username', (req, res) => {
               // console.log(`Fetched ${meetups.length} meetups for userId: ${userId}`);
               return meetups;
             })
-            .catch((err) => {
-              // console.error('Error fetching meetups for userId:', userId, err);
-              console.error('Error fetching meetups for username:', username, user.id, err);
+            .catch((error) => {
+              // console.error('Error fetching meetups for userId:', userId, error);
+              console.error('Error fetching meetups for username:', username, user.id, error);
               return []; // Return empty array for meetups in case of an error
             })
         : Promise.resolve([]);
@@ -343,8 +368,8 @@ UserInfo.get('/public/:username', (req, res) => {
         }
       );
     })
-    .catch((err) => {
-      console.error('Public User data fetch: Failed:', err);
+    .catch((error) => {
+      console.error('Public User data fetch: Failed:', error);
       res.status(500).send('Internal Server Error');
     });
 });
@@ -363,8 +388,8 @@ UserInfo.delete('/deleteAccount', (req: Request, res: Response) => {
     .then(() => {
       res.status(200).send('User Account Deletion: Success');
     })
-    .catch((err) => {
-      console.error('Error deleting user account:', err);
+    .catch((error) => {
+      console.error('Error deleting user account:', error);
       res.status(500).send('Failed to delete user account');
     });
 });

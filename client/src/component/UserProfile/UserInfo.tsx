@@ -36,19 +36,44 @@ const UserInfo = ({
 
   return (
     <>
-      <VStack
+      <HStack
       // border='2px solid blue'
+      className='u-top-hstack'
       >
         {/* Edit Profile Select ************* */}
-        <span
+        {/* <span
           id='g-link'
           className='u-link'
           onClick={() => setIsEditMode(!isEditMode)}
           style={{ cursor: 'pointer', textDecoration: 'underline' }}
         >
           {isEditMode ? 'Editing Complete' : 'Edit Profile'}
-        </span>
-      </VStack>
+        </span> */}
+
+        <Button
+          colorScheme='blue'
+          // id='g-link'
+          // className='u-link'
+          onClick={() => setIsEditMode(!isEditMode)}
+          // style={{
+          //   cursor: 'pointer',
+          //   textDecoration: 'underline',
+          //   background: 'none',
+          //   border: 'none',
+          //   padding: '0',
+          // }}
+        >
+          {isEditMode ? 'Save Changes' : 'Edit Profile'}
+        </Button>
+
+        <Button
+          colorScheme='blue'
+          isDisabled={isEditMode}
+          onClick={() => UserControls.handleLogOut(onLogout, navigate)}
+        >
+          Log Out
+        </Button>
+      </HStack>
 
       <HStack
         // className='u-hstack'
@@ -207,8 +232,10 @@ const UserInfo = ({
       </Box>
 
       {/* Log Out & Delete Account Box  */}
-      <Box className='pub-box'>
-        <HStack>
+      <Box
+      // className='pub-box'
+      >
+        <HStack className='u-hstack'>
           <Button
             colorScheme='red'
             isDisabled={!isEditMode}
@@ -230,13 +257,13 @@ const UserInfo = ({
             Delete Account
           </Button>
 
-          <Button
+          {/* <Button
             colorScheme='blue'
             isDisabled={isEditMode}
             onClick={() => UserControls.handleLogOut(onLogout, navigate)}
           >
             Log Out
-          </Button>
+          </Button> */}
         </HStack>
       </Box>
 

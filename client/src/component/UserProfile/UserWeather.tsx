@@ -86,55 +86,52 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             : 'No Location Watched'}
         </Heading>
 
+        {/* ******************************* */}
 
-          {/* ******************************* */}
+        <HStack
+          id='g-hstack'
+          className='u-hs-input'
+          spacing={1}
+          // visibility={isEditModeWeather ? 'visible' : 'hidden'}
+        >
+          <Input
+            id='g-input'
+            className='u-input'
+            name='city'
+            value={editableCity}
+            placeholder='Enter new City here'
+            isDisabled={!isEditModeWeather}
+            onChange={(e) => setEditableCity(e.target.value)}
+          />
 
-          <HStack
-            id='g-hstack'
-            className='u-hs-input'
-            spacing={1}
-            // visibility={isEditModeWeather ? 'visible' : 'hidden'}
+          <Input
+            id='g-input'
+            className='u-input'
+            name='state'
+            value={editableState}
+            placeholder='Enter new State here'
+            isDisabled={!isEditModeWeather}
+            onChange={(e) => setEditableState(e.target.value)}
+          />
+
+          <Button
+            id='g-button'
+            className='u-check-button'
+            onClick={() => {
+              if (editableCity.trim() !== '' && editableState.trim() !== '') {
+                UserControls.handleLocationChange(
+                  editableCity,
+                  editableState,
+                  setUser
+                );
+                setIsEditModeWeather(!isEditModeWeather);
+              }
+            }}
+            isDisabled={!editableCity.trim() || !editableState.trim()}
           >
-            <Input
-              id='g-input'
-              className='u-input'
-              name='city'
-              value={editableCity}
-              placeholder='Enter new City here'
-              isDisabled={!isEditModeWeather}
-              onChange={(e) => setEditableCity(e.target.value)}
-            />
-
-            <Input
-              id='g-input'
-              className='u-input'
-              name='state'
-              value={editableState}
-              placeholder='Enter new State here'
-              isDisabled={!isEditModeWeather}
-              onChange={(e) => setEditableState(e.target.value)}
-            />
-
-            <Button
-              id='g-button'
-              className='u-check-button'
-              onClick={() => {
-                if (editableCity.trim() !== '' && editableState.trim() !== '') {
-                  UserControls.handleLocationChange(
-                    editableCity,
-                    editableState,
-                    setUser
-                  );
-                  setIsEditModeWeather(!isEditModeWeather)
-                }
-              }}
-              isDisabled={!editableCity.trim() || !editableState.trim()}
-            >
-              <CheckIcon className='u-checkIcon' />
-            </Button>
-          </HStack>
-
-
+            <CheckIcon className='u-checkIcon' />
+          </Button>
+        </HStack>
       </VStack>
 
       {/* ******************************* */}
@@ -155,6 +152,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                 Current Weather for {user.city}, {user.state}
               </Heading>
               <Text
+                className='u-text'
                 fontSize='lg'
                 fontWeight='bold'
               >
@@ -165,15 +163,27 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                   day: 'numeric',
                 })}
               </Text>
-              <Text>
+              <Text className='u-text'>
                 Temperature: {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
               </Text>
-              <Text>Condition: {weatherData.conditions ?? 'N/A'}</Text>
-              <Text>Wind Speed: {weatherData.windspeed ?? 'N/A'} mph</Text>
-              <Text>Humidity: {weatherData.humidity ?? 'N/A'}%</Text>
-              <Text>Feels Like: {weatherData.feelslike ?? 'N/A'}°F</Text>
-              <Text>UV Index: {weatherData.uvindex ?? 'N/A'}</Text>
-              <Text>Visibility: {weatherData.visibility ?? 'N/A'} km</Text>
+              <Text className='u-text'>
+                Condition: {weatherData.conditions ?? 'N/A'}
+              </Text>
+              <Text className='u-text'>
+                Wind Speed: {weatherData.windspeed ?? 'N/A'} mph
+              </Text>
+              <Text className='u-text'>
+                Humidity: {weatherData.humidity ?? 'N/A'}%
+              </Text>
+              <Text className='u-text'>
+                Feels Like: {weatherData.feelslike ?? 'N/A'}°F
+              </Text>
+              <Text className='u-text'>
+                UV Index: {weatherData.uvindex ?? 'N/A'}
+              </Text>
+              <Text className='u-text'>
+                Visibility: {weatherData.visibility ?? 'N/A'} km
+              </Text>
             </Box>
           )}
 
@@ -205,20 +215,23 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                       key={index}
                     >
                       <Text
+                        className='u-text'
                         fontSize='lg'
                         fontWeight='bold'
                       >
                         {dayOfWeek} - {day.datetime}
                       </Text>
-                      <Text>
+                      <Text className='u-text'>
                         High: {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}
                         °F
                       </Text>
-                      <Text>
+                      <Text className='u-text'>
                         Low: {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
                         °F
                       </Text>
-                      <Text>Conditions: {day.conditions ?? 'N/A'}</Text>
+                      <Text className='u-text'>
+                        Conditions: {day.conditions ?? 'N/A'}
+                      </Text>
                     </Box>
                   );
                 })}
@@ -248,12 +261,22 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                   key={index}
                   mb={4}
                 >
-                  <Text fontWeight='bold'>Alert: {alert.event}</Text>
-                  <Text>{alert.headline}</Text>
-                  <Text whiteSpace='pre-wrap'>
+                  <Text
+                    className='u-text'
+                    fontWeight='bold'
+                  >
+                    Alert: {alert.event}
+                  </Text>
+                  <Text className='u-text'>{alert.headline}</Text>
+                  <Text
+                    className='u-text'
+                    whiteSpace='pre-wrap'
+                  >
                     {alert.description.replace(/(WHERE|WHEN|IMPACTS)/g, '\n$1')}
                   </Text>
-                  <Text>Ends: {new Date(alert.ends).toLocaleString()}</Text>
+                  <Text className='u-text'>
+                    Ends: {new Date(alert.ends).toLocaleString()}
+                  </Text>
                 </Box>
               ))}
             </Box>

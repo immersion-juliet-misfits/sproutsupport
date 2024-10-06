@@ -75,35 +75,48 @@ const UserPublicProfile = () => {
   return (
     <>
       <TopBar route={`${publicUser.userName || ''}'s Public Profile`} />
+
+      {/* User's Avatar and Info */}
+      <Box
+        className='pub-top-box'
+        // border='5px solid red'
+        >
+        <HStack
+        className='pub-top-hstack'
+          // className='pub-box'
+          // border='1px solid purple'
+          // alignItems={'center'}
+        >
+          <GridItem
+            id='u-avatar-gi'
+            // border='1px solid blue'
+          >
+            <Image
+              id='u-avatar-img'
+              src={publicUser.avatar}
+              alt={`${publicUser.userName || 'User'}'s avatar`}
+            />
+          </GridItem>
+
+          <VStack className='u-vstack'>
+            <Heading
+              id='g-heading'
+              className='u-heading3'
+            >
+              {publicUser.userName}
+            </Heading>
+            <Text className='u-text'>
+              {publicUser.bio || 'No bio available'}
+            </Text>
+          </VStack>
+        </HStack>
+      </Box>
+
       <Grid
         id='lvl-one'
-        className='u-lvl-one'
+        // className='u-lvl-one'
+        // border='5px solid red'
       >
-        {/* User's Avatar and Info */}
-        <Box className='pub-box'>
-          <HStack className='pub-box'>
-            <GridItem id='u-avatar-gi'>
-              <Image
-                id='u-avatar-img'
-                src={publicUser.avatar}
-                alt={`${publicUser.userName || 'User'}'s avatar`}
-              />
-            </GridItem>
-
-            <VStack className='u-vstack'>
-              <Heading
-                id='g-heading'
-                className='u-heading3'
-              >
-                {publicUser.userName}
-              </Heading>
-              <Text className='u-text'>
-                {publicUser.bio || 'No bio available'}
-              </Text>
-            </VStack>
-          </HStack>
-        </Box>
-
         {/* User's Plants */}
         <VStack
           spacing={4}

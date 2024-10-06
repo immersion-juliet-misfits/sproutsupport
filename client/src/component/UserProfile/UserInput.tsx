@@ -1,13 +1,34 @@
 // Temp input component for working on User profiles
 import { useState } from 'react';
-import { Input, Button, Heading, HStack, VStack } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Input, Button, Heading, Text, HStack, VStack } from '@chakra-ui/react';
+// import { Link } from 'react-router-dom';
+// temp import
+import axios from 'axios';
 
 const UserInput = () => {
   // const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
   // const isInputEmpty = userId.trim() === '' || isNaN(Number(userId));
   const isInputEmpty = username.trim() === '';
+  // Confirm if User is in database
+  const [userExists, setUserExists] = useState(true);
+
+  // Move to UserControls later
+  const checkUserExists = () => {
+    axios
+      .get(`/user/public/${username}`)
+      .then(({ data }) => {
+        if (data) {
+          setUserExists(true);
+          window.location.href = `/public-profile/${username}`; // Navigate ONLY if the user exists
+        } else {
+          setUserExists(false);
+        }
+      })
+      .catch(() => {
+        setUserExists(false);
+      });
+  };
 
   return (
     <VStack>
@@ -18,29 +39,32 @@ const UserInput = () => {
         Search for other Users to View their Profiles
       </Heading>
 
-      <HStack>
+      <HStack
+        className='u-search-hstack'
+        alignItems='center'
+      >
         <Input
           id='g-input'
           className='u-input'
-          // type='number'
           type='text'
-          // value={userId}
           value={username}
-          // onChange={(e) => setUserId(e.target.value)}
-          // placeholder='Enter User ID'
           onChange={(e) => setUsername(e.target.value)}
           placeholder='Enter Username'
         />
-        {/* <Link to={`/public-profile/${userId}`}> */}
-        <Link to={`/public-profile/${username}`}>
-          <Button
-            mt={4}
-            isDisabled={isInputEmpty}
-          >
-            Submit
-          </Button>
-        </Link>
+        {/* <Link to={userExists ? `/public-profile/${username}` : '#'}>
+          <Button isDisabled={isInputEmpty}>Search</Button>
+        </Link> */}
+        <Button
+          isDisabled={isInputEmpty}
+          onClick={checkUserExists}
+        >
+          Search
+        </Button>
       </HStack>
+
+      {!userExists && !isInputEmpty && (
+        <Text id='u-text-alert'>There is no User by that name</Text>
+      )}
     </VStack>
   );
 };

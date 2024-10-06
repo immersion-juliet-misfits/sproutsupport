@@ -2,7 +2,6 @@ import { mode } from '@chakra-ui/theme-tools';
 import colors from '../colors';
 
 const UserStyles = (props) => ({
-
   '.pub-bio': {
     border: '1px solid',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
@@ -27,12 +26,35 @@ const UserStyles = (props) => ({
     my: '5px',
   },
 
+  '.pub-top-box': {
+    // border:'1px solid red',
+    width: '1100px',
+    mx: 'auto',
+    display: 'flex',
+    // flexDirection: 'column',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingBottom: '15px',
+  },
+
   '.pub-grid': {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '20px',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  '.pub-top-hstack': {
+    // border:'1px solid purple',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    // alignItems: 'center',
+    width: '100%',
+    // mt: '15px',
+    // pt: '10px',
+    mx: 'auto',
   },
 
   '#pub-imgBox': {
@@ -51,21 +73,20 @@ const UserStyles = (props) => ({
   },
 
   '#u-avatar-gi': {
-    border: '15px solid',
+    // border: '15px solid',
     // borderColor: 'red',
-    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    // borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     backgroundColor: 'black',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     justifySelf: 'center',
     alignSelf: 'center',
-    borderRadius: '10px',
+    borderRadius: '40px',
     width: '300px',
     height: '300px',
     position: 'relative',
     overflow: 'hidden',
-    cursor: 'pointer',
   },
 
   '#u-avatar-img': {
@@ -128,19 +149,20 @@ const UserStyles = (props) => ({
   },
 
   '.u-heading': {
-    color: mode(colors.text.light, colors.text.dark)(props),
+    color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     textAlign: 'center',
     alignItems: 'center',
+    pt: '15px',
   },
   '.u-heading3': {
-    color: mode(colors.text.light, colors.text.dark)(props),
+    color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     fontSize: '3xl',
     textAlign: 'center',
     alignItems: 'center',
     margin: '10px',
   },
   '.u-heading5': {
-    color: mode(colors.text.light, colors.text.dark)(props),
+    color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     fontSize: '5xl',
     textAlign: 'center',
     alignItems: 'center',
@@ -153,6 +175,32 @@ const UserStyles = (props) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
+    mt: '15px',
+    pt: '10px',
+    mx: 'auto',
+  },
+
+  '.u-search-hstack': {
+    // border: '1px dashed orange',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '600px',
+    height: '75px',
+  },
+
+  '.u-text-alert': {
+    color: mode(colors.alert.light, colors.alert.dark)(props),
+  },
+
+  '.u-top-hstack': {
+    // border:'1px solid red',
+    display: 'flex',
+    // flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    // alignItems: 'center',
     width: '100%',
     mt: '15px',
     pt: '10px',
@@ -173,6 +221,7 @@ const UserStyles = (props) => ({
   '.u-input': {
     // border: '10px solid orange', // This doesn't even appear
     // my: '0px'
+    height: '50px',
   },
 
   '.u-link': {
@@ -202,6 +251,7 @@ const UserStyles = (props) => ({
 
   '.u-text': {
     color: mode(colors.text.light, colors.text.dark)(props),
+    // color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     // fontSize: 'xl',
     fontWeight: 'bold',
     alignItems: 'center',

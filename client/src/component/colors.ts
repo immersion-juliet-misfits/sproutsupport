@@ -32,6 +32,10 @@ const colors = {
     light: '#2d4130',
     dark: '#D5E8CE',
   },
+  textTwo: {
+    light: '#2d4130',
+    dark: '#2d4130',
+  },
   tbGiThree: {
     bg: {
       light: '#C5E063',
