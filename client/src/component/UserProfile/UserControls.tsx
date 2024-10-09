@@ -94,26 +94,6 @@ export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// User Methods: Data Retrieval *******************************************
-
-// Fetch User data by ID (for viewing another Users profile)
-// const getPublicUserData = (
-//   userId: number,
-//   setPublicUser: (user: object) => void
-// ) => {
-//   // console.log('Public User Req Id:', userId);
-
-//   axios
-//     .get(`/user/public/${userId}`)
-//     .then(({ data }) => {
-//       // console.log('Req Public User data:', data);
-//       setPublicUser(data);
-//     })
-//     .catch((err) => {
-//       console.error('Fetch Other User Profile Data: Failed ', err);
-//     });
-// };
-
 const getPublicUserData = (
   username: string,
   setPublicUser: (user: object) => void
@@ -128,39 +108,24 @@ const getPublicUserData = (
     });
 };
 
-// ********* // Global WIP ******
-
-// const fetchWeather = () => {
-//   const { state, setState } = useGlobalState();
-//   const { city, state: locationState } = state.location;
-
-//   if (!city || !locationState) {
-//     console.error('City or State is undefined.');
-//     return;
-//   }
-
-//   axios
-//     .get(`/user/weatherDataByCity?city=${city}&state=${locationState}`)
-//     .then((response) => {
-//       const data = response.data;
-
-//       setState((prevState) => ({
-//         ...prevState,
-//         weatherData: data.currentConditions,
-//         dailyForecastData: data.days,
-//         alertsData: data.alerts || [],
-//       }));
-//     })
-//     .catch((err) => {
-//       console.error('Error fetching weather data for city and state:', err);
-//       setState((prevState) => ({
-//         ...prevState,
-//         apiError: true,
-//       }));
-//     });
-// };
-
-// **********
+export const checkUserExists = (
+  username: string,
+  setUserExists: (exists: boolean) => void
+) => {
+  axios
+    .get(`/user/public/${username}`)
+    .then(({ data }) => {
+      if (data) {
+        setUserExists(true);
+        window.location.href = `/public-profile/${username}`;
+      } else {
+        setUserExists(false);
+      }
+    })
+    .catch(() => {
+      setUserExists(false);
+    });
+};
 
 const fetchWeather = (
   city: string,
@@ -256,44 +221,6 @@ const getMeetups = (
     });
 };
 
-// User Methods: Data Altering  *******************************************
-
-// ************
-// Global WIP
-// const handleAvatarChange = (event, BUCKET_NAME) => {
-//   const { state, setState } = useGlobalState();
-//   const file = event.target.files[0];
-
-//   if (file) {
-//     axios
-//       .get('/upload/url', { params: { filename: file.name } })
-//       .then(({ data }) => {
-//         return axios.put(data, file, {
-//           headers: { 'Content-Type': file.type },
-//         });
-//       })
-//       .then(() => {
-//         const newAvatarUrl = `https://${BUCKET_NAME}.s3.amazonaws.com/${file.name}`;
-//         return axios.patch('/user/updateAvatar', { avatar: newAvatarUrl });
-//       })
-//       .then((response) => {
-//         setState((prevState) => ({
-//           ...prevState,
-//           editableUserName: response.data.userName,
-//         }));
-//       })
-//       .catch((err) => {
-//         console.error('Failed to get image url', err);
-//         setState((prevState) => ({
-//           ...prevState,
-//           apiError: true,
-//         }));
-//       });
-//   }
-// };
-
-// ******
-
 const handleAvatarChange = (
   event: React.ChangeEvent<HTMLInputElement>,
   setUser: (user: object[]) => void,
@@ -322,27 +249,6 @@ const handleAvatarChange = (
   }
 };
 
-// ************
-
-// Global WIP
-// const handleUserNameChange = (newUserName) => {
-//   const { setState } = useGlobalState();
-
-//   axios
-//     .patch('/user/updateUserName', { userName: newUserName })
-//     .then((response) => {
-//       setState((prevState) => ({
-//         ...prevState,
-//         editableUserName: response.data.userName,
-//       }));
-//     })
-//     .catch((error) => {
-//       console.error('Update User Name: Failed ', error);
-//     });
-// };
-
-// ******
-
 const handleUserNameChange = (
   newUserName: object,
   setUser: (user: object[]) => void
@@ -356,26 +262,6 @@ const handleUserNameChange = (
       console.error('Update User Name: Failed ', error);
     });
 };
-
-// ************
-// Global WIP
-// const handleBioChange = (newBio) => {
-//   const { setState } = useGlobalState();
-
-//   axios
-//     .patch('/user/updateBio', { bio: newBio })
-//     .then((response) => {
-//       setState((prevState) => ({
-//         ...prevState,
-//         editableBio: response.data.bio,
-//       }));
-//     })
-//     .catch((error) => {
-//       console.error('Update Bio: Failed ', error);
-//     });
-// };
-
-// ******
 
 const handleBioChange = (newBio, setUser: (user: object[]) => void) => {
   axios
@@ -426,33 +312,6 @@ const handleToggle = (field, value, setSettings) => {
     });
 };
 
-// ************
-
-// Combining all Edit functions
-
-// ************
-
-// Global WIP
-// const handleLogOut = (onLogout, navigate) => {
-//   fetch('/api/logout', {
-//     method: 'POST',
-//     credentials: 'include',
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         onLogout();
-//         navigate('/login');
-//       } else {
-//         console.error('Logout: Failed');
-//       }
-//     })
-//     .catch((err) => {
-//       console.error('Logout: Failed', err);
-//     });
-// };
-
-// ******
-
 const handleLogOut = (onLogout, navigate) => {
   fetch('/api/logout', {
     method: 'POST',
@@ -471,8 +330,6 @@ const handleLogOut = (onLogout, navigate) => {
     });
 };
 
-// ************
-
 const deleteAccount = (setUser: (user: object | null) => void) => {
   return axios
     .delete('/user/deleteAccount')
@@ -485,10 +342,10 @@ const deleteAccount = (setUser: (user: object | null) => void) => {
     });
 };
 
-// ************
 
-// Export all functions in a single object
 export default {
+  checkUserExists,
+  deleteAccount,
   fetchWeather,
   getPublicUserData,
   getPlants,
@@ -502,5 +359,4 @@ export default {
   handleToggle,
   // useGlobalState,
   // GlobalStateProvider,
-  deleteAccount,
 };

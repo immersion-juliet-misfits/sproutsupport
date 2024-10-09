@@ -3,32 +3,31 @@ import { useState } from 'react';
 import { Input, Button, Heading, Text, HStack, VStack } from '@chakra-ui/react';
 // import { Link } from 'react-router-dom';
 // temp import
-import axios from 'axios';
+// import axios from 'axios';
+import UserControls from './UserControls';
 
 const UserInput = () => {
-  // const [userId, setUserId] = useState('');
   const [username, setUsername] = useState('');
-  // const isInputEmpty = userId.trim() === '' || isNaN(Number(userId));
   const isInputEmpty = username.trim() === '';
   // Confirm if User is in database
   const [userExists, setUserExists] = useState(true);
 
   // Move to UserControls later
-  const checkUserExists = () => {
-    axios
-      .get(`/user/public/${username}`)
-      .then(({ data }) => {
-        if (data) {
-          setUserExists(true);
-          window.location.href = `/public-profile/${username}`; // Navigate ONLY if the user exists
-        } else {
-          setUserExists(false);
-        }
-      })
-      .catch(() => {
-        setUserExists(false);
-      });
-  };
+  // const checkUserExists = () => {
+  //   axios
+  //     .get(`/user/public/${username}`)
+  //     .then(({ data }) => {
+  //       if (data) {
+  //         setUserExists(true);
+  //         window.location.href = `/public-profile/${username}`; // Navigate ONLY if the user exists
+  //       } else {
+  //         setUserExists(false);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setUserExists(false);
+  //     });
+  // };
 
   return (
     <VStack>
@@ -56,15 +55,24 @@ const UserInput = () => {
         </Link> */}
         <Button
           isDisabled={isInputEmpty}
-          onClick={checkUserExists}
+          // onClick={checkUserExists}
+          onClick={() => UserControls.checkUserExists(username, setUserExists)}
         >
           Search
         </Button>
       </HStack>
 
-      {!userExists && !isInputEmpty && (
-        <Text id='u-text-alert'>There is no User by that name</Text>
-      )}
+      <HStack height='15px'>
+        {!userExists && !isInputEmpty && (
+          <div>
+            <Text className='u-text-alert'>
+              There is no User that goes by: {username}
+            </Text>
+            {/* <Heading className='u-text-alert'>There is no User by the name: {username}</Heading> */}
+          </div>
+        )}
+      </HStack>
+
     </VStack>
   );
 };

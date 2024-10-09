@@ -1,5 +1,7 @@
 import { mode } from '@chakra-ui/theme-tools';
 import colors from '../colors';
+import '@fontsource/nerko-one';
+import '@fontsource/pangolin';
 
 const UserStyles = (props) => ({
   '.pub-bio': {
@@ -149,10 +151,11 @@ const UserStyles = (props) => ({
   },
 
   '.u-heading': {
+    // border: '1px dashed purple',
     color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     textAlign: 'center',
     alignItems: 'center',
-    pt: '15px',
+    pt: '30px',
   },
   '.u-heading3': {
     color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
@@ -189,10 +192,6 @@ const UserStyles = (props) => ({
     alignItems: 'center',
     width: '600px',
     height: '75px',
-  },
-
-  '.u-text-alert': {
-    color: mode(colors.alert.light, colors.alert.dark)(props),
   },
 
   '.u-top-hstack': {
@@ -255,6 +254,14 @@ const UserStyles = (props) => ({
     // fontSize: 'xl',
     fontWeight: 'bold',
     alignItems: 'center',
+    fontFamily: 'pangolin',
+  },
+
+  '.u-text-alert': {
+    color: mode(colors.alert.light, colors.alert.dark)(props),
+    fontSize: '30px',
+    fontWeight: 'bold',
+    fontFamily: 'pangolin',
   },
 
   '.u-edit-vstack': {
