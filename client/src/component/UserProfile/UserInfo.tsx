@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Box,
@@ -12,9 +11,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
-import UserControls, { useGlobalState } from './UserControls';
+// import UserControls, { useGlobalState } from './UserControls';
+import UserControls from './UserControls';
 import UserToggles from './UserToggles';
-import UserSearch from './UserSearch';
+// import UserSearch from './UserSearch';
 
 const UserInfo = ({
   BUCKET_NAME,
@@ -27,6 +27,7 @@ const UserInfo = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
+  const [userExistsError, setUserExistsError] = useState('');
 
   useEffect(() => {
     fetchUserData();
@@ -40,28 +41,10 @@ const UserInfo = ({
       // border='2px solid blue'
       className='u-top-hstack'
       >
-        {/* Edit Profile Select ************* */}
-        {/* <span
-          id='g-link'
-          className='u-link'
-          onClick={() => setIsEditMode(!isEditMode)}
-          style={{ cursor: 'pointer', textDecoration: 'underline' }}
-        >
-          {isEditMode ? 'Editing Complete' : 'Edit Profile'}
-        </span> */}
 
         <Button
           colorScheme='blue'
-          // id='g-link'
-          // className='u-link'
           onClick={() => setIsEditMode(!isEditMode)}
-          // style={{
-          //   cursor: 'pointer',
-          //   textDecoration: 'underline',
-          //   background: 'none',
-          //   border: 'none',
-          //   padding: '0',
-          // }}
         >
           {isEditMode ? 'Save Changes' : 'Edit Profile'}
         </Button>
@@ -76,7 +59,6 @@ const UserInfo = ({
       </HStack>
 
       <HStack
-        // className='u-hstack'
         className='pub-box'
       >
         <VStack className='u-edit-vstack'>
@@ -132,7 +114,6 @@ const UserInfo = ({
             // border='5px dashed green'
           >
             <VStack
-              // id='g-vstack'
               className='u-vs-input'
             >
               <HStack
@@ -145,7 +126,7 @@ const UserInfo = ({
                   className='u-input'
                   name='username'
                   value={editableUserName}
-                  placeholder='Enter new User Name here'
+                  placeholder='Enter new Username here'
                   isDisabled={!isEditMode}
                   onChange={(e) => setEditableUserName(e.target.value)}
                 />
@@ -153,20 +134,36 @@ const UserInfo = ({
                 <Button
                   id='g-button'
                   className='u-check-button'
+                  // onClick={() => {
+                  //   if (editableUserName.trim() !== '') {
+                  //     UserControls.handleUserNameChange(
+                  //       editableUserName,
+                  //       setUser
+                  //     );
+                  //   }
+                  // }}
+
                   onClick={() => {
                     if (editableUserName.trim() !== '') {
-                      UserControls.handleUserNameChange(
-                        editableUserName,
-                        setUser
-                      );
+                      // Check if the username exists
+                      UserControls.checkUserExists(editableUserName, (exists) => {
+                        if (exists) {
+                          setUserExistsError('This is not an available Username'); 
+                        } else {
+                          setUserExistsError('');
+                          UserControls.handleUserNameChange(editableUserName, setUser);
+                        }
+                      });
                     }
                   }}
+
                   isDisabled={!editableUserName.trim()}
                 >
-                  {/* Update */}
                   <CheckIcon className='u-checkIcon' />
                 </Button>
               </HStack>
+              {userExistsError && <Text color='red.500'>{userExistsError}</Text>}
+
             </VStack>
 
             <Text className='u-text'>Current Display Name:</Text>
@@ -256,14 +253,6 @@ const UserInfo = ({
           >
             Delete Account
           </Button>
-
-          {/* <Button
-            colorScheme='blue'
-            isDisabled={isEditMode}
-            onClick={() => UserControls.handleLogOut(onLogout, navigate)}
-          >
-            Log Out
-          </Button> */}
         </HStack>
       </Box>
 

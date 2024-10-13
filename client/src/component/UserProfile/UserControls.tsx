@@ -43,56 +43,56 @@ interface AlertData {
   ends: string;
 }
 
-interface GlobalState {
-  isEditMode: boolean;
-  isEditModeWeather: boolean;
-  editableUserName: string;
-  editableBio: string;
-  apiError: boolean;
-  weatherData: object;
-  dailyForecastData: object;
-  alertsData: object;
-  location: Location;
-  publicUser: User | null;
-}
+// interface GlobalState {
+//   isEditMode: boolean;
+//   isEditModeWeather: boolean;
+//   editableUserName: string;
+//   editableBio: string;
+//   apiError: boolean;
+//   weatherData: object;
+//   dailyForecastData: object;
+//   alertsData: object;
+//   location: Location;
+//   publicUser: User | null;
+// }
 
-interface GlobalStateContextProps {
-  state: GlobalState;
-  setState: React.Dispatch<React.SetStateAction<GlobalState>>;
-}
+// interface GlobalStateContextProps {
+//   state: GlobalState;
+//   setState: React.Dispatch<React.SetStateAction<GlobalState>>;
+// }
 
-const defaultState: GlobalState = {
-  isEditMode: false,
-  isEditModeWeather: false,
-  editableUserName: '',
-  editableBio: '',
-  apiError: false,
-  weatherData: null,
-  dailyForecastData: null,
-  alertsData: null,
-  location: {
-    city: '',
-    state: '',
-  },
-  publicUser: null,
-};
+// const defaultState: GlobalState = {
+//   isEditMode: false,
+//   isEditModeWeather: false,
+//   editableUserName: '',
+//   editableBio: '',
+//   apiError: false,
+//   weatherData: null,
+//   dailyForecastData: null,
+//   alertsData: null,
+//   location: {
+//     city: '',
+//     state: '',
+//   },
+//   publicUser: null,
+// };
 
-const GlobalStateContext = createContext<GlobalStateContextProps>({
-  state: defaultState,
-  setState: () => {},
-});
+// const GlobalStateContext = createContext<GlobalStateContextProps>({
+//   state: defaultState,
+//   setState: () => {},
+// });
 
-export const useGlobalState = () => useContext(GlobalStateContext);
+// export const useGlobalState = () => useContext(GlobalStateContext);
 
-export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<GlobalState>(defaultState);
+// export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
+//   const [state, setState] = useState<GlobalState>(defaultState);
 
-  return (
-    <GlobalStateContext.Provider value={{ state, setState }}>
-      {children}
-    </GlobalStateContext.Provider>
-  );
-};
+//   return (
+//     <GlobalStateContext.Provider value={{ state, setState }}>
+//       {children}
+//     </GlobalStateContext.Provider>
+//   );
+// };
 
 const getPublicUserData = (
   username: string,
@@ -108,7 +108,22 @@ const getPublicUserData = (
     });
 };
 
-export const checkUserExists = (
+const checkUserExists = (username, setUserExists) => {
+  axios
+    .get(`/user/public/${username}`)
+    .then(({ data }) => {
+      if (data) {
+        setUserExists(true);
+      } else {
+        setUserExists(false);
+      }
+    })
+    .catch(() => {
+      setUserExists(false);
+    });
+};
+
+const goToUserProfile = (
   username: string,
   setUserExists: (exists: boolean) => void
 ) => {
@@ -342,7 +357,6 @@ const deleteAccount = (setUser: (user: object | null) => void) => {
     });
 };
 
-
 export default {
   checkUserExists,
   deleteAccount,
@@ -351,6 +365,7 @@ export default {
   getPlants,
   getPosts,
   getMeetups,
+  goToUserProfile,
   handleAvatarChange,
   handleUserNameChange,
   handleBioChange,

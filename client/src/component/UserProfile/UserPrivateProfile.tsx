@@ -7,7 +7,8 @@ import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserWeather from './UserWeather';
 import UserSearch from './UserSearch';
-import UserControls, { GlobalStateProvider } from './UserControls';
+// import UserControls, { GlobalStateProvider } from './UserControls';
+// import UserControls from './UserControls';
 
 // User context
 interface User {
@@ -37,20 +38,16 @@ const UserPrivateProfile = ({
   }
 
   return (
-    <GlobalStateProvider>
+    // <GlobalStateProvider>
+    <>
       <TopBar route={'Settings'} />
 
       <Grid id='lvl-one'>
         <UserTabs setCurrentView={setCurrentView} />
 
         <Grid
-        // id='lvl-two'
-        // className='u-pages'
         >
-          {currentView === 'userSearch' && (
-            <UserSearch
-            />
-          )}
+          {currentView === 'userSearch' && <UserSearch />}
           {currentView === 'weather' && (
             <UserWeather
               fetchUserData={fetchUserData}
@@ -70,7 +67,8 @@ const UserPrivateProfile = ({
           )}
         </Grid>
       </Grid>
-    </GlobalStateProvider>
+      {/* </GlobalStateProvider> */}
+    </>
   );
 };
 

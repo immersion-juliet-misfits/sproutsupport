@@ -35,8 +35,7 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
 });
 
 // ******
-// Check if User exists
-
+// Check if User exists (This may not be needed)
 UserInfo.get('/checkUserExists/:username', (req: Request, res: Response) => {
   const { username } = req.params;
 

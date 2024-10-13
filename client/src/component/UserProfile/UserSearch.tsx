@@ -30,7 +30,7 @@ const UserSearch = () => {
         />
         <Button
           isDisabled={isInputEmpty}
-          onClick={() => UserControls.checkUserExists(username, setUserExists)}
+          onClick={() => UserControls.goToUserProfile(username, setUserExists)}
         >
           Search
         </Button>
