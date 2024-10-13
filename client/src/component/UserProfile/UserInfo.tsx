@@ -14,7 +14,7 @@ import {
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
 import UserControls, { useGlobalState } from './UserControls';
 import UserToggles from './UserToggles';
-import UserInput from './UserInput';
+import UserSearch from './UserSearch';
 
 const UserInfo = ({
   BUCKET_NAME,

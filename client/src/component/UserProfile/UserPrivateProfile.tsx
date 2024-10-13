@@ -6,7 +6,7 @@ import TopBar from './TopBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserWeather from './UserWeather';
-import UserInput from './UserInput';
+import UserSearch from './UserSearch';
 import UserControls, { GlobalStateProvider } from './UserControls';
 
 // User context
@@ -48,7 +48,7 @@ const UserPrivateProfile = ({
         // className='u-pages'
         >
           {currentView === 'userSearch' && (
-            <UserInput
+            <UserSearch
             />
           )}
           {currentView === 'weather' && (

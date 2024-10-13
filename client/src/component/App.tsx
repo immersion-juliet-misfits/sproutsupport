@@ -21,7 +21,7 @@ const UserPrivateProfile = lazy(
 const UserPublicProfile = lazy(() => import('./UserProfile/UserPublicProfile'));
 const Meetup = lazy(() => import('./meetup/Meetup'));
 // const PublicTest = lazy(() => import('./UserProfile/PublicTest'));
-const UserInput = lazy(() => import('./UserProfile/UserInput'));
+const UserSearch = lazy(() => import('./UserProfile/UserSearch'));
 
 
 const socket = io('http://localhost:8000');
@@ -120,23 +120,10 @@ const App = () => {
               }
             ></Route>
 
-            {/* <Route
-              path='/enter-user-id'
-              element={<UserInput />}
-              /> */}
-
 <Route
   path='/enter-username'
-  element={<UserInput />}
+  element={<UserSearch />}
   />
-
-             {/* <Route
-              path="/public-profile/:userId?"
-              element={
-                <UserPublicProfile
-                />
-              }
-            /> */}
 
 <Route
   path="/public-profile/:username"
