@@ -7,6 +7,12 @@ import {
   HStack,
   Image,
   Input,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
   Text,
   VStack,
 } from '@chakra-ui/react';
@@ -28,6 +34,7 @@ const UserInfo = ({
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
   const [userExistsError, setUserExistsError] = useState('');
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -35,14 +42,32 @@ const UserInfo = ({
     setEditableBio('');
   }, [user.userName, user.bio]);
 
+  const handleUserNameCheck = () => {
+    if (editableUserName.trim() !== '') {
+      UserControls.checkUserExists(editableUserName, (exists) => {
+        if (exists) {
+          setUserExistsError('This Username is not available');
+          setIsPopoverOpen(true);
+
+          setTimeout(() => {
+            setIsPopoverOpen(false);
+          }, 3000);
+        } else {
+          setUserExistsError('');
+          UserControls.handleUserNameChange(editableUserName, setUser);
+        }
+      });
+    }
+  };
+
   return (
     <>
       <HStack
-      // border='2px solid blue'
-      className='u-top-hstack'
+        // border='2px solid blue'
+        className='u-top-hstack'
       >
 
-        <Button
+         <Button
           colorScheme='blue'
           onClick={() => setIsEditMode(!isEditMode)}
         >
@@ -58,9 +83,7 @@ const UserInfo = ({
         </Button>
       </HStack>
 
-      <HStack
-        className='pub-box'
-      >
+      <HStack className='pub-box'>
         <VStack className='u-edit-vstack'>
           {/* Avatar  */}
 
@@ -113,9 +136,7 @@ const UserInfo = ({
             className='u-vstack'
             // border='5px dashed green'
           >
-            <VStack
-              className='u-vs-input'
-            >
+            <VStack className='u-vs-input'>
               <HStack
                 id='g-hstack'
                 className='u-hs-input'
@@ -131,6 +152,42 @@ const UserInfo = ({
                   onChange={(e) => setEditableUserName(e.target.value)}
                 />
 
+                <Popover
+                  isOpen={isPopoverOpen}
+                  onClose={() => setIsPopoverOpen(false)}
+                  placement='top'
+                  closeOnBlur={false}
+                >
+                  <PopoverTrigger>
+                    <Box />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    {/* <PopoverArrow /> */}
+                    <PopoverCloseButton />
+                    <PopoverBody>{userExistsError}</PopoverBody>
+                  </PopoverContent>
+                </Popover>
+
+                <Button
+                  id='g-button'
+                  className='u-check-button'
+                  onClick={handleUserNameCheck}
+                  isDisabled={!editableUserName.trim()}
+                >
+                  <CheckIcon className='u-checkIcon' />
+                </Button>
+
+                {/* <Input
+                  id='g-input'
+                  className='u-input'
+                  name='username'
+                  value={editableUserName}
+                  placeholder='Enter new Username here'
+                  isDisabled={!isEditMode}
+                  onChange={(e) => setEditableUserName(e.target.value)}
+                /> */}
+
+                {/*
                 <Button
                   id='g-button'
                   className='u-check-button'
@@ -148,7 +205,7 @@ const UserInfo = ({
                       // Check if the username exists
                       UserControls.checkUserExists(editableUserName, (exists) => {
                         if (exists) {
-                          setUserExistsError('This is not an available Username'); 
+                          setUserExistsError('This is not an available Username');
                         } else {
                           setUserExistsError('');
                           UserControls.handleUserNameChange(editableUserName, setUser);
@@ -160,10 +217,11 @@ const UserInfo = ({
                   isDisabled={!editableUserName.trim()}
                 >
                   <CheckIcon className='u-checkIcon' />
-                </Button>
+                </Button> */}
+                
               </HStack>
-              {userExistsError && <Text color='red.500'>{userExistsError}</Text>}
 
+              {/* {userExistsError && <Text color='red.500'>{userExistsError}</Text>} */}
             </VStack>
 
             <Text className='u-text'>Current Display Name:</Text>
