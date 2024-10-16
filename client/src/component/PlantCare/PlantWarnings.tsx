@@ -14,6 +14,8 @@ const PlantWarnings = ({ user }) => {
       return 'Your sprouts may be more thirsty than usual today. Give \'em some shade if needed.'
     } else if (alert.toLowerCase().includes('flood')) {
       return 'Make sure your outdoor sprouts don\'t float away.'
+    } else {
+      return 0;
     }
   }
 
@@ -40,12 +42,14 @@ const PlantWarnings = ({ user }) => {
       {/* {currWeather && <h2>{currWeather.conditions}</h2>} */}
       {!alerts.length && <Heading size={"md"}>No warnings today.</Heading>}
       {alerts.length > 0 && alerts.map((alert, i) => {
-        return (
-          <div key={`${alert}-${i}`}>
-          <Heading size="sm">{alert.event}</Heading>
-          <h1>{decideWarning(alert.event)}</h1>
-          </div>
-        )
+        if (decideWarning(alert.event)) {
+          return (
+            <div key={`${alert}-${i}`}>
+            <Heading size="sm">{alert.event}</Heading>
+            <h1>{decideWarning(alert.event)}</h1>
+            </div>
+          )
+        }
       })}
     </div>
   );

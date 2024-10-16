@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Input, Heading, Select, FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Button, Grid, GridItem} from '@chakra-ui/react'
+import { Input, Heading, Select, FormControl, FormLabel, FormErrorMessage, FormHelperText, Box, Button, Grid, GridItem, InputGroup, InputLeftElement, Text} from '@chakra-ui/react'
 import axios from 'axios';
 import PlantImgUpload from './PlantImgUpload';
 import TopBar from '../UserProfile/TopBar';
+import { SearchIcon } from '@chakra-ui/icons';
 
 type Plant = {
     CommonName: string;
@@ -22,6 +23,8 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
   const [tasks, setTasks] = useState([]);
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
+  const [searching, setSearching] = useState(false)
+  const [missingTask, setMissingTask] = useState(true)
 
 
 
@@ -34,9 +37,11 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
   };
 
   const handleSubmit = () => {
+    setSearching(true)
     axios.post('/plants/search', {query: input})
       .then(({data}) => {
         setResults(data)
+        setSearching(false)
       })
       .catch((err) => {
         console.error('No results found.', err)
@@ -67,11 +72,18 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
     //   console.log(result, 'resstdshtdrjdjyfc')
     // })
     setTaskName('');
+    setMissingTask(false)
   }
 
   const handleNicknameSubmit = () => {
     const ScientificName = selected.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
     const { CommonName, Id } = selected;
+
+    if (tasks.length === 0) {
+      setMissingTask(true);
+      return;
+    }
+
     axios.post('/plants/newPlant', {nickname, bio, ScientificName, CommonName, Id, userId: user.id, imageUrl })
     .then(({data}) => {
       axios.put(`/plants/task/${data.id}`, { tasks, freq })
@@ -112,30 +124,41 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
 
   return (
     // <Box mx="auto" color='green.500' p={5}>
-    <Box mx="auto" w='1100px'color='green.500' p={7}>
+    <Box mx="auto" w='1100px'>
       <TopBar />
-      <Heading textAlign={'center'}>Plant Finder</Heading>
+
+    <Box>
       <Link to={'/myplants'}>
-        <Button colorScheme="green" value="My Plants">My Plants</Button>
+        <Text value="Back to My Plants">← Back to My Plants</Text>
       </Link>
+    </Box>
+      <Grid templateColumns="2fr 2fr" gap={4}>
+      <GridItem>
+        {/* <VStack align="start" spacing={4}> */}
+
+        <Box position={"relative"} bg='#488B49' p="3" borderRadius="xl">
       <FormControl>
       {/* <FormLabel>{`Search ${input}`}</FormLabel> */}
       {/* will eventually be used with cards... */}
-      <br></br>
+      <InputGroup>
+      <InputLeftElement>
+       <SearchIcon id='p-icon'></SearchIcon>
+      </InputLeftElement>
       <Input
         type="text"
         placeholder="Plant name"
         onChange={(e) => handleInput(e)}
-        bgColor='green.100'
-        textColor="green.900"
-        width='auto'
+        id='p-input'
+        _placeholder={{ color: 'inherit' }}
+        width='100%'
+        variant='outline'
+        focusBorderColor='#488B49'
         ></Input>
-      <Button onClick={() => handleSubmit()}>Search</Button><br></br>
+      {!searching && <><Button onClick={() => handleSubmit()} id='p-button'>Search</Button></>}
+      {searching && <><Button onClick={() => handleSubmit()} isLoading loadingText='Searching' id='p-button'>Search</Button></>}
+        </InputGroup>
       </FormControl>
-
-      <Grid templateColumns="2fr 2fr" gap={4}>
-      <GridItem>
-        {/* <VStack align="start" spacing={4}> */}
+      <br></br>
 
       {results &&
         results.map((result, i) => {
@@ -143,51 +166,55 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
           const scientificName = result.ScientificName.replace(/<[^>]*>/g, '').split(' ').slice(0, 2).join(' ');
           //   needs nicer looking display or possibly separate component
           return (
-
-            <div key={`${result}-${i}`}>
-          <h3 onClick={() => handlePlantSelect(result)}>{result.CommonName}</h3>
-          <h5>{scientificName}</h5>
+            
+            <Box flexDirection="row" display="flex" justifyContent={"center"} alignItems="center" key={`${result}-${i}`}>
+          {/* <Heading  fontWeight="250" className='u-text' size='md' onClick={() => handlePlantSelect(result)}><strong>{result.CommonName}</strong> | {scientificName}</Heading> */}
+          <Heading  fontWeight="250" className='u-text' size='md' onClick={() => handlePlantSelect(result)}><strong>{result.CommonName}</strong> | <strong>{scientificName}</strong></Heading>
+          {/* <Heading size='sm'>{scientificName}</Heading> */}
           {/* look for API image data */}
           {/* <img src={result.ProfileImageFilename}></img> */}
-        </div>
+        </Box>
         )
       })
     }
+    </Box>
     {/* </VStack> */}
     </GridItem>
 
 
         <GridItem>
       {selected && selected.CommonName &&
-        <Box bg="green.700" p={7}>
-          <Box bg="green.200">
-          <FormControl>
-          <FormLabel>Choose a name for your plant (optional)</FormLabel>
-          <Input type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
-          <FormLabel>Choose a bio for your plant</FormLabel>
-          <Input type="text" placeholder="Bio :P(you get it?)" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
-          <FormLabel>Choose a frequency for task</FormLabel>
-          <Select placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
+        // <Box p={3} borderRadius="xl" id='lvl-alert'>
+          <Box bg="#488B49" p={3} borderRadius="xl" id='lvl-alert'>
+          <FormControl isRequired>
+          <FormLabel color={"#488B49"} requiredIndicator={false}>Choose a name for your plant:</FormLabel>
+          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
+          <FormLabel color={"#488B49"} requiredIndicator={false}>Choose a bio for your plant:</FormLabel>
+          <Input id='p-input2' type="text" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
+          <FormLabel color={"#488B49"}>Choose a frequency for task</FormLabel>
+          <Select color={"#B9DA44"} bgColor={"#488B49"} placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
           </Select>
-          <Input type="text" placeholder="Task" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
-          <Button onClick={() => handleAddTask()} color="green">Add Task</Button>
+          <FormLabel color={"#488B49"}>Choose a name for task:</FormLabel>
+          <Input id='p-input2' type="text" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900" isRequired={true}></Input><br></br>
+          <Button onClick={() => handleAddTask()} bgColor="#d5e8ce" color="#4AAD52" w="100%">Add Task</Button>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
             tasks.map((task, i) => (
               <h4 key={`${task}-${i}`}>{task}</h4>
             ))
           }
+          <FormLabel color={"#488B49"} requiredIndicator={false}>Add a picture</FormLabel>
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
           <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
             <Link to="/myplants">
-          <Button onClick={() => handleNicknameSubmit()} bgColor={"green.400"}>Add New Plant</Button>
+          <Button onClick={() => handleNicknameSubmit()} id='p-button' w="100%" isDisabled={missingTask}>Add New Plant</Button>
             </Link>
           </FormControl>
           </Box>
-        </Box>
+        // </Box>
       }
       </GridItem>
     </Grid>
