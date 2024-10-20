@@ -17,10 +17,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
-// import UserControls, { useGlobalState } from './UserControls';
 import UserControls from './UserControls';
 import UserToggles from './UserToggles';
-// import UserSearch from './UserSearch';
 
 const UserInfo = ({
   BUCKET_NAME,
@@ -72,14 +70,6 @@ const UserInfo = ({
           onClick={() => setIsEditMode(!isEditMode)}
         >
           {isEditMode ? 'Save Changes' : 'Edit Profile'}
-        </Button>
-
-        <Button
-          colorScheme='blue'
-          // isDisabled={isEditMode}
-          onClick={() => UserControls.handleLogOut(onLogout, navigate)}
-        >
-          Log Out
         </Button>
       </HStack>
 

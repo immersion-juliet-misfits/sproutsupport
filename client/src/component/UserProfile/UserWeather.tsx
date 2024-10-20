@@ -55,30 +55,13 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
         // id='g-vstack'
         className='u-box-todaysWeather'
       >
-        <HStack
-          className='u-hstack'
-          // border='1px solid red'
-        >
-          <span
-            id='g-link'
-            className='u-link'
-            onClick={() => setIsEditModeWeather(!isEditModeWeather)}
-            style={{ cursor: 'pointer', textDecoration: 'underline' }}
-          >
-            {isEditModeWeather ? 'Editing Complete' : 'Edit Location'}
-          </span>
-        </HStack>
-
-        {/* ******************************* */}
-
-        {/* ************* */}
-        <Text className='u-text'>Current City and State for Weather Watch</Text>
         <p />
         <Heading
+          // border='1px solid red'
           id='g-heading'
           className='u-heading'
         >
-          {user.city &&
+          Currently Watching:  {user.city &&
           user.state &&
           user.city !== 'undefined' &&
           user.state !== 'undefined'
@@ -100,7 +83,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             name='city'
             value={editableCity}
             placeholder='Enter new City here'
-            isDisabled={!isEditModeWeather}
+            // isDisabled={!isEditModeWeather}
             onChange={(e) => setEditableCity(e.target.value)}
           />
 
@@ -110,7 +93,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             name='state'
             value={editableState}
             placeholder='Enter new State here'
-            isDisabled={!isEditModeWeather}
+            // isDisabled={!isEditModeWeather}
             onChange={(e) => setEditableState(e.target.value)}
           />
 
@@ -124,7 +107,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                   editableState,
                   setUser
                 );
-                setIsEditModeWeather(!isEditModeWeather);
+                // setIsEditModeWeather(!isEditModeWeather);
               }
             }}
             isDisabled={!editableCity.trim() || !editableState.trim()}

@@ -155,7 +155,7 @@ const UserStyles = (props) => ({
     color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
     textAlign: 'center',
     alignItems: 'center',
-    pt: '30px',
+    // pt: '10px',
   },
   '.u-heading3': {
     color: mode(colors.textTwo.light, colors.textTwo.dark)(props),
