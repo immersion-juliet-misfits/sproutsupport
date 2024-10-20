@@ -82,7 +82,7 @@ const App = () => {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, isAuthenticated }}>
+    <UserContext.Provider value={{ user, setUser, isAuthenticated, setIsAuthenticated  }}>
     <ChakraProvider theme={ssTheme}>
       <ColorModeScript initialColorMode={ssTheme.config.initialColorMode} />
       <div className='App'>

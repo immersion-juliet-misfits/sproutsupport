@@ -76,7 +76,7 @@ const UserInfo = ({
 
         <Button
           colorScheme='blue'
-          isDisabled={isEditMode}
+          // isDisabled={isEditMode}
           onClick={() => UserControls.handleLogOut(onLogout, navigate)}
         >
           Log Out
@@ -218,7 +218,7 @@ const UserInfo = ({
                 >
                   <CheckIcon className='u-checkIcon' />
                 </Button> */}
-                
+
               </HStack>
 
               {/* {userExistsError && <Text color='red.500'>{userExistsError}</Text>} */}
