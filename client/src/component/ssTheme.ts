@@ -186,7 +186,9 @@ fontFamily: 'pangolin'
       },
 
       // Attempting to mimic settings of offSet
-      '#topBar-menu': {},
+      '#topBar-menu': {
+        bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+      },
 
       '#topBar-menuList': {
         position: 'absolute',
@@ -213,7 +215,7 @@ fontFamily: 'pangolin'
           }
         })
       }
-    },  
+    },
     Tabs: {
       variants: {
         enclosed: (props) => ({
@@ -230,6 +232,27 @@ fontFamily: 'pangolin'
         }),
       },
     },
+    Menu: {
+      baseStyle: (props) => ({
+        list: {
+          bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+          borderColor: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+          borderRadius: 'md',
+          // boxShadow: 'lg',
+          boxShadow: 'none',
+        },
+        item: {
+          bg: 'transparent',
+          _hover: {
+            bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+          },
+          _focus: {
+            bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+          },
+        },
+      }),
+    },
+
   },
   Switch: {
     baseStyle: {
