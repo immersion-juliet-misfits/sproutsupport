@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
   Grid,
   GridItem,
-  Heading,
   HStack,
   Switch,
   useColorMode,
@@ -12,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import UserControls from './UserControls';
 
-const UserToggles = ({ user, fetchUserData, isEditMode }) => {
+const UserToggles = ({ user, fetchUserData }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [settings, setSettings] = useState({
@@ -42,9 +40,7 @@ const UserToggles = ({ user, fetchUserData, isEditMode }) => {
           p='10px'
           borderRadius='lg'
         >
-          {/* <Heading textAlign='center' w='100%'>
-            Public Profile Presentation
-          </Heading> */}
+
           <Box
             //border='2px solid red'
             w='80%'
@@ -60,7 +56,7 @@ const UserToggles = ({ user, fetchUserData, isEditMode }) => {
               <HStack>
                 <Switch
                   id='showDarkLight'
-                  isDisabled={!isEditMode}
+                  // isDisabled={!isEditMode}
                   isChecked={colorMode === 'dark'}
                   onChange={toggleColorMode}
                 />
@@ -72,7 +68,7 @@ const UserToggles = ({ user, fetchUserData, isEditMode }) => {
               <HStack>
                 <Switch
                   id='showPlants'
-                  isDisabled={!isEditMode}
+                  // isDisabled={!isEditMode}
                   isChecked={settings.showPlants}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -88,7 +84,7 @@ const UserToggles = ({ user, fetchUserData, isEditMode }) => {
               <HStack>
                 <Switch
                   id='showMyMeetups'
-                  isDisabled={!isEditMode}
+                  // isDisabled={!isEditMode}
                   isChecked={settings.showMyMeetups}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -103,25 +99,10 @@ const UserToggles = ({ user, fetchUserData, isEditMode }) => {
                 </label>
               </HStack>
 
-              {/* Hide Below until I have access to other Users profiles & Meetups  */}
-              {/* <HStack>
-                <Switch
-                  id='showOtherMeetups'
-                  isDisabled={!isEditMode}
-                  isChecked={settings.showOtherMeetups}
-                  onChange={(e) =>
-                    UserControls.handleToggle('showOtherMeetups', e.target.checked, setSettings)
-                  }
-                />
-                <label htmlFor='showOtherMeetups'>
-                  Display Your RSVP'd Meetups?
-                </label>
-              </HStack> */}
-
               <HStack>
                 <Switch
                   id='showForumPosts'
-                  isDisabled={!isEditMode}
+                  // isDisabled={!isEditMode}
                   isChecked={settings.showForumPosts}
                   onChange={(e) =>
                     UserControls.handleToggle(

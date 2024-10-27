@@ -29,31 +29,24 @@ interface User {
   showMyMeetups: boolean;
 }
 
-// Hard coded single user
 const UserPublicProfile = () => {
-  // const { userId } = useParams();
   const { username } = useParams();
   const [publicUser, setPublicUser] = useState<User | null>(null);
 
   const [plants, setPlants] = useState([]);
   const [posts, setPosts] = useState([]);
   const [myMeetups, setMyMeetups] = useState([]);
-  const isFirstRender = useRef(true); // Prevents infinite Loop from 'user' being a dependency
+  const isFirstRender = useRef(true);
 
-  // 1st load UE
   useEffect(() => {
-    // if (userId) {
     if (username) {
-      // UserControls.getPublicUserData(Number(userId), (data) => {
       UserControls.getPublicUserData(username, (data) => {
         setPublicUser(data.user);
       });
     }
     isFirstRender.current = false;
-    // }, [userId]);
   }, [username]);
 
-  // Reloads for Changes
   useEffect(() => {
     if (!isFirstRender.current && publicUser?.id) {
       if (publicUser?.showPlants) {
@@ -77,20 +70,9 @@ const UserPublicProfile = () => {
       <TopBar route={`${publicUser.userName || ''}'s Public Profile`} />
 
       {/* User's Avatar and Info */}
-      <Box
-        className='pub-top-box'
-        // border='5px solid red'
-        >
-        <HStack
-        className='pub-top-hstack'
-          // className='pub-box'
-          // border='1px solid purple'
-          // alignItems={'center'}
-        >
-          <GridItem
-            id='u-avatar-gi'
-            // border='1px solid blue'
-          >
+      <Box className='pub-top-box'>
+        <HStack className='pub-top-hstack'>
+          <GridItem id='u-avatar-gi'>
             <Image
               id='u-avatar-img'
               src={publicUser.avatar}
@@ -111,12 +93,7 @@ const UserPublicProfile = () => {
           </VStack>
         </HStack>
       </Box>
-
-      <Grid
-        id='lvl-one'
-        // className='u-lvl-one'
-        // border='5px solid red'
-      >
+      <Grid id='lvl-one'>
         {/* User's Plants */}
         <VStack
           spacing={4}
@@ -138,8 +115,10 @@ const UserPublicProfile = () => {
                       id='g-card'
                       className='pub-card'
                     >
-                      <CardHeader textAlign={'center'}>
-                        <Heading size='md'>{plant.nickname}</Heading>
+                      <CardHeader className='pub-cardHeader'>
+                        <Heading className='pub-header'>
+                          {plant.nickname}
+                        </Heading>
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {plant.imageUrl && (
@@ -183,8 +162,10 @@ const UserPublicProfile = () => {
                       id='g-card'
                       className='pub-card'
                     >
-                      <CardHeader textAlign={'center'}>
-                        <Heading size='md'>{meetup.eventName}</Heading>
+                      <CardHeader className='pub-cardHeader'>
+                        <Heading className='pub-header'>
+                          {meetup.eventName}
+                        </Heading>
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {meetup.imageUrl && (
@@ -217,19 +198,6 @@ const UserPublicProfile = () => {
               )}
             </Box>
           )}
-          {/* ***************************************  */}
-
-          {/* Can't Implement without access to other Users data  */}
-          {/*
-            {user?.showOtherMeetups && (
-              <Box className='rsvpMeetupsBox'>
-
-                <Heading textAlign='center' mb={4}>
-                  Meetups I'm Attending
-                </Heading>
-              </Box>
-            )}
-            */}
 
           {/* User's Forum Posts */}
           {publicUser?.showForumPosts && (

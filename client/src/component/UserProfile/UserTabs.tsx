@@ -14,9 +14,6 @@ const UserTabs = ({ setCurrentView }) => {
       id='g-tabList'
       className='UserTabList'
       >
-        {/* <Tab className='uTab' onClick={handleLogOut}>
-          Log Out
-        </Tab> */}
          <Tab className='uTab' onClick={() => setCurrentView('userSearch')}>
           User Search
         </Tab>
