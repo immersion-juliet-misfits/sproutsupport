@@ -28,13 +28,17 @@ const colors = {
     light: '#D5E8CE',
     dark: '#D5E8CE',
   },
+  switch: {
+    light: '#B9DA44',
+    dark: '#93C482',
+  },
   text: {
     light: '#2d4130',
     dark: '#D5E8CE',
   },
   textTwo: {
     light: '#2d4130',
-    dark: '#2d4130',
+    dark: '#D5E8CE',
   },
   tbGiThree: {
     bg: {

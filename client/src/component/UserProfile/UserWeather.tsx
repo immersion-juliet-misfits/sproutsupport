@@ -61,7 +61,8 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
           id='g-heading'
           className='u-heading'
         >
-          Currently Watching:  {user.city &&
+          Currently Watching:{' '}
+          {user.city &&
           user.state &&
           user.city !== 'undefined' &&
           user.state !== 'undefined'
@@ -136,8 +137,8 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
               </Heading>
               <Text
                 className='u-text'
-                fontSize='lg'
-                fontWeight='bold'
+                // fontSize='xl'
+                // fontWeight='bold'
               >
                 {new Date().toLocaleDateString('en-US', {
                   weekday: 'long',
@@ -179,7 +180,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                 id='g-heading'
                 className='u-heading5'
               >
-                Daily Forecast
+                Upcoming Forecast
               </Heading>
               <Grid
                 templateColumns='repeat(3, 1fr)'
@@ -188,8 +189,14 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                 {dailyForecastData.slice(1, 7).map((day, index) => {
                   const date = new Date(day.datetime);
                   date.setDate(date.getDate() + 1);
+                  // const dayOfWeek = date.toLocaleDateString('en-US', {
+                  //   weekday: 'long',
+                  // });
                   const dayOfWeek = date.toLocaleDateString('en-US', {
                     weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
                   });
 
                   return (
@@ -199,10 +206,11 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                     >
                       <Text
                         className='u-text'
-                        fontSize='lg'
-                        fontWeight='bold'
+                        // fontSize='xl'
+                        // fontWeight='bold'
                       >
-                        {dayOfWeek} - {day.datetime}
+                        {/* {dayOfWeek} - {day.datetime} */}
+                        {dayOfWeek}
                       </Text>
                       <Text className='u-text'>
                         High: {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}

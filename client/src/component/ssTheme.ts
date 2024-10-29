@@ -124,15 +124,15 @@ const ssTheme = extendTheme({
         px: '50px',
       },
 
-      '#g-box':{
+      '#g-box': {
         bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         color: mode(colors.text.light, colors.text.dark)(props),
         borderRadius: '10px',
-        fontFamily: 'pangolin'
+        fontFamily: 'pangolin',
       },
 
-      '.g-font':{
-fontFamily: 'pangolin'
+      '.g-font': {
+        fontFamily: 'pangolin',
       },
 
       '.tb-gi-one': {
@@ -208,19 +208,20 @@ fontFamily: 'pangolin'
   components: {
     Button: {
       variants: {
-        solid: (props)=>({
+        solid: (props) => ({
           bg: mode(colors.button.light, colors.button.dark)(props),
           _active: {
             bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
-          }
-        })
-      }
+          },
+        }),
+      },
     },
     Tabs: {
       variants: {
         enclosed: (props) => ({
           tab: {
             fontSize: '35px',
+            color: mode(colors.levelThree.light, colors.levelThree.dark)(props),
             _selected: {
               bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
               color: mode(colors.text.light, colors.text.dark)(props),
@@ -252,18 +253,17 @@ fontFamily: 'pangolin'
         },
       }),
     },
-
-  },
-  Switch: {
-    baseStyle: {
-      track: {
-        _checked: {
-          bg: 'brand.500',
+    Switch: {
+      baseStyle: (props) => ({
+        track: {
+          _checked: {
+            bg: mode(colors.switch.light, colors.switch.dark)(props),
+          },
         },
+      }),
+      defaultProps: {
+        size: 'lg',
       },
-    },
-    defaultProps: {
-      size: 'lg',
     },
   },
 });

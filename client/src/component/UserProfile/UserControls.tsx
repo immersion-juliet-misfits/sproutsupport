@@ -43,57 +43,6 @@ interface AlertData {
   ends: string;
 }
 
-// interface GlobalState {
-//   isEditMode: boolean;
-//   isEditModeWeather: boolean;
-//   editableUserName: string;
-//   editableBio: string;
-//   apiError: boolean;
-//   weatherData: object;
-//   dailyForecastData: object;
-//   alertsData: object;
-//   location: Location;
-//   publicUser: User | null;
-// }
-
-// interface GlobalStateContextProps {
-//   state: GlobalState;
-//   setState: React.Dispatch<React.SetStateAction<GlobalState>>;
-// }
-
-// const defaultState: GlobalState = {
-//   isEditMode: false,
-//   isEditModeWeather: false,
-//   editableUserName: '',
-//   editableBio: '',
-//   apiError: false,
-//   weatherData: null,
-//   dailyForecastData: null,
-//   alertsData: null,
-//   location: {
-//     city: '',
-//     state: '',
-//   },
-//   publicUser: null,
-// };
-
-// const GlobalStateContext = createContext<GlobalStateContextProps>({
-//   state: defaultState,
-//   setState: () => {},
-// });
-
-// export const useGlobalState = () => useContext(GlobalStateContext);
-
-// export const GlobalStateProvider = ({ children }: { children: ReactNode }) => {
-//   const [state, setState] = useState<GlobalState>(defaultState);
-
-//   return (
-//     <GlobalStateContext.Provider value={{ state, setState }}>
-//       {children}
-//     </GlobalStateContext.Provider>
-//   );
-// };
-
 const getPublicUserData = (
   username: string,
   setPublicUser: (user: object) => void
@@ -164,7 +113,7 @@ const fetchWeather = (
     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
     .then((response) => {
       const data = response.data;
-      // console.log('Response Check: ', data);
+      console.log('Response Check: ', data);
 
       if (data && data.currentConditions) {
         // Valid location, update the weather data
@@ -372,6 +321,4 @@ export default {
   handleLocationChange,
   handleLogOut,
   handleToggle,
-  // useGlobalState,
-  // GlobalStateProvider,
 };

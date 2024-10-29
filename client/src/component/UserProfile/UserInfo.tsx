@@ -125,7 +125,6 @@ const UserInfo = ({
 
           <VStack
             id='g-vstack'
-            className='u-vstack'
             // border='5px dashed green'
           >
             <VStack className='u-vs-input'>

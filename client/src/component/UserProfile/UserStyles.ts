@@ -214,6 +214,7 @@ const UserStyles = (props) => ({
   },
 
   '.u-hs-input': {
+    // border: '1px solid blue',
     // width: '90%',
     display: 'flex',
     flexDirection: 'column',
@@ -257,6 +258,7 @@ const UserStyles = (props) => ({
   '.u-text': {
     color: mode(colors.text.light, colors.text.dark)(props),
     fontWeight: 'bold',
+    fontSize: 'xl',
     alignItems: 'center',
     fontFamily: 'pangolin',
   },
@@ -281,8 +283,8 @@ const UserStyles = (props) => ({
   },
 
   '.u-vstack': {
-    borderRadius: '10px',
-    // width: '75%',
+    // border: '1px solid blue',
+    width: '70%',
     mx: 'auto',
     my: '10px',
   },
