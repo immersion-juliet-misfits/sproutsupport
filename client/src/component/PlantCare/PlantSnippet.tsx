@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel, EditableTextarea, Avatar } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Heading, Box, Text, Image, Center, ButtonGroup, IconButton, useEditableControls, Flex, Editable, EditablePreview, EditableInput, Input, CircularProgress, CircularProgressLabel, EditableTextarea, Avatar, Button, AlertDialogBody, AlertDialog,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton, useDisclosure, useColorModeValue } from '@chakra-ui/react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { CheckIcon, CloseIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import PlantCare from './PlantCare';
 import { motion } from "framer-motion"
 import io from 'socket.io-client';
+import colors from '../colors';
 
 const socket = io('http://localhost:8000');
 
@@ -17,7 +23,12 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   const [newDescription, setNewDescription] = useState(plant.description)
   const [progress, setProgress] = useState({})
   const [editing, setEditing] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = React.useRef()
 
+  const modalBg = useColorModeValue(colors.background.light, colors.background.dark)
+
+  
   
   // const handleDelete = () => {
   //   axios.delete(`/plants/delete/${plant.id}`)
@@ -237,7 +248,32 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
     </CardBody>
     <CardFooter justify={"space-between"} alignContent={"center"}>
       <Flex>
-      <IconButton bgColor="tomato" aria-label='Delete plant' icon={<DeleteIcon color="white" />} onClick={deletePlant}/>
+      {/* <IconButton bgColor="tomato" aria-label='Delete plant' icon={<DeleteIcon color="white" />} onClick={deletePlant}/> */}
+      <IconButton bgColor="tomato" aria-label='Delete plant' icon={<DeleteIcon color="white" />} onClick={onOpen}/>
+
+      <AlertDialog
+          motionPreset='slideInBottom'
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
+  
+          <AlertDialogContent bgColor={modalBg}>
+            <AlertDialogHeader className='u-text'>Delete {plant.nickname}?</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody className='u-text' fontSize={"md"}>
+              Are you sure you want to uproot this sprout from your virtual garden?
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button _hover={{ bg: "tomato" }} ringOffsetColor={"green"} ml={3} onClick={deletePlant}>
+                Yes
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
       {editing ? (
       <ButtonGroup justifyContent='center' size='md'>
         <IconButton onClick={handleCancel} icon={<CloseIcon color="tomato"/>} />

@@ -149,6 +149,11 @@ const ssTheme = extendTheme({
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },
+      '#p-form':{
+        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        color: mode(colors.text.dark, colors.text.light)(props),
+        borderRadius: '10px',
+      },
 
       '.g-font':{
 fontFamily: 'pangolin'

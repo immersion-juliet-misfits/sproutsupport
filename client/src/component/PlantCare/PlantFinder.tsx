@@ -185,30 +185,30 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
         <GridItem>
       {selected && selected.CommonName &&
         // <Box p={3} borderRadius="xl" id='lvl-alert'>
-          <Box bg="#488B49" p={3} borderRadius="xl" id='lvl-alert'>
+          <Box p={3} borderRadius="xl" id='p-form'>
           <FormControl isRequired>
-          <FormLabel color={"#488B49"} requiredIndicator={false}>Choose a name for your plant:</FormLabel>
-          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br>
-          <FormLabel color={"#488B49"} requiredIndicator={false}>Choose a bio for your plant:</FormLabel>
-          <Input id='p-input2' type="text" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br>
-          <FormLabel color={"#488B49"}>Choose a frequency for task</FormLabel>
-          <Select color={"#B9DA44"} bgColor={"#488B49"} placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
+          <FormLabel id="p-text" requiredIndicator={false}>Choose a name for your plant:</FormLabel>
+          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br><br/>
+          <FormLabel id="p-text" requiredIndicator={false}>Choose a bio for your plant:</FormLabel>
+          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br><br/>
+          <FormLabel id="p-text">Choose a frequency for task</FormLabel>
+          <Select bgColor={"#B9DA44"} color={"#488B49"} placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
-          </Select>
-          <FormLabel color={"#488B49"}>Choose a name for task:</FormLabel>
-          <Input id='p-input2' type="text" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900" isRequired={true}></Input><br></br>
-          <Button onClick={() => handleAddTask()} bgColor="#d5e8ce" color="#4AAD52" w="100%">Add Task</Button>
+          </Select><br/>
+          <FormLabel id="p-text">Choose a name for task:</FormLabel>
+          <Input id='p-input2' type="text" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900" isRequired={true}></Input><br></br><br/>
+          <Button onClick={() => handleAddTask()} bgColor="#d5e8ce" color="#4AAD52" w="100%">Add Task</Button><br/>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
             tasks.map((task, i) => (
               <h4 key={`${task}-${i}`}>{task}</h4>
             ))
-          }
-          <FormLabel color={"#488B49"} requiredIndicator={false}>Add a picture</FormLabel>
+          }<br/>
+          <FormLabel id="p-text" requiredIndicator={false}>Add a picture</FormLabel>
           {imageUrl && <img width={250} height={250} src={imageUrl}></img>}
-          <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/>
+          <PlantImgUpload handleUploadFile={() => handleUploadFile()} handleChooseFile={(e) => handleChooseFile(e)}/><br/><br/>
             <Link to="/myplants">
           <Button onClick={() => handleNicknameSubmit()} id='p-button' w="100%" isDisabled={missingTask}>Add New Plant</Button>
             </Link>
