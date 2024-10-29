@@ -52,7 +52,6 @@ const UserStyles = (props) => ({
   },
 
   '.pub-header': {
-    // border: '1px solid purple',
     color: mode(colors.text.light, colors.text.dark)(props),
     fontFamily: 'pangolin !important',
     fontSize: '2xl !important',
@@ -71,7 +70,6 @@ const UserStyles = (props) => ({
   },
 
   '#pub-imgBox': {
-    // border: '1px solid blue',
     width: '300px',
     height: '300px',
     overflow: 'hidden',
@@ -111,7 +109,7 @@ const UserStyles = (props) => ({
     objectFit: 'cover',
   },
 
-  '.u-box-todaysWeather': {
+  '.u-box-weatherSet': {
     border: '1px solid',
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     boxShadow: 'md',
@@ -121,7 +119,22 @@ const UserStyles = (props) => ({
     marginBottom: '10px',
     textAlign: 'center',
     maxWidth: '90%',
+    minWidth: '35%',
     mx: 'auto',
+  },
+
+  '.u-box-todaysWeather': {
+    border: '1px solid',
+    borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+    boxShadow: 'md',
+    borderRadius: 'lg',
+    padding: '20px',
+    marginTop: '20px',
+    marginBottom: '10px',
+    textAlign: 'center',
+    width: '100% !important',
+    mx: 'auto',
+    height: '150% !important',
   },
 
   '.u-box-weeksWeather': {
@@ -129,19 +142,17 @@ const UserStyles = (props) => ({
     borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
     boxShadow: 'md',
     borderRadius: 'lg',
-    padding: '20px',
+    padding: '5px',
     marginBottom: '10px',
     textAlign: 'center',
   },
 
   '.u-check-button': {
-    // border: '2px solid purple',
     size: 'md',
     alignSelf: 'center',
   },
 
   '.u-checkIcon': {
-    // border: '2px solid orange',
     alignSelf: 'center',
   },
 
@@ -214,8 +225,6 @@ const UserStyles = (props) => ({
   },
 
   '.u-hs-input': {
-    // border: '1px solid blue',
-    // width: '90%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -257,7 +266,6 @@ const UserStyles = (props) => ({
 
   '.u-text': {
     color: mode(colors.text.light, colors.text.dark)(props),
-    fontWeight: 'bold',
     fontSize: 'xl',
     alignItems: 'center',
     fontFamily: 'pangolin',
@@ -275,15 +283,12 @@ const UserStyles = (props) => ({
   },
 
   '.u-vs-input': {
-    // border: '1px solid purple',
-    // width: '75%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   '.u-vstack': {
-    // border: '1px solid blue',
     width: '70%',
     mx: 'auto',
     my: '10px',

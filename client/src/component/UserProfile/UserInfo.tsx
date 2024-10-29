@@ -61,36 +61,20 @@ const UserInfo = ({
 
   return (
     <>
-      <HStack
-        // border='2px solid blue'
-        className='u-top-hstack'
-      >
-        {/* <Button
-          colorScheme='blue'
-          onClick={() => setIsEditMode(!isEditMode)}
-        >
-          {isEditMode ? 'Save Changes' : 'Edit Profile'}
-        </Button> */}
-      </HStack>
+      <HStack className='u-top-hstack'></HStack>
 
       <HStack className='pub-box'>
         <VStack className='u-edit-vstack'>
-          {/* Avatar  */}
-
           <GridItem
             id='u-avatar-gi'
             onClick={() => {
-              // if (isEditMode) {
               document.getElementById('avatarInput').click();
-              // }
             }}
-            // style={{ cursor: isEditMode ? 'pointer' : 'default' }}
             style={{ cursor: 'pointer' }}
           >
             <Image
               id='u-avatar-img'
               src={user.avatar}
-              // alt={isEditMode ? 'Click to Edit Avatar' : 'Avatar'}
               alt={'Avatar'}
             />
             <input
@@ -103,7 +87,6 @@ const UserInfo = ({
               }
             />
 
-            {/* {isEditMode && ( */}
             <EditIcon
               position='absolute'
               top='10px'
@@ -111,22 +94,14 @@ const UserInfo = ({
               boxSize='24px'
               color='gray.500'
             />
-            {/* )} */}
           </GridItem>
         </VStack>
 
-        {/* Edit Boxes Start ************************** */}
         <VStack
-          // border='5px dashed purple'
           id='g-vstack'
           className='u-vstack'
         >
-          {/* Edit Username Start ************************** */}
-
-          <VStack
-            id='g-vstack'
-            // border='5px dashed green'
-          >
+          <VStack id='g-vstack'>
             <VStack className='u-vs-input'>
               <HStack
                 id='g-hstack'
@@ -139,7 +114,6 @@ const UserInfo = ({
                   name='username'
                   value={editableUserName}
                   placeholder='Enter new Username here'
-                  // isDisabled={!isEditMode}
                   onChange={(e) => setEditableUserName(e.target.value)}
                 />
 
@@ -153,7 +127,6 @@ const UserInfo = ({
                     <Box />
                   </PopoverTrigger>
                   <PopoverContent>
-                    {/* <PopoverArrow /> */}
                     <PopoverCloseButton />
                     <PopoverBody>{userExistsError}</PopoverBody>
                   </PopoverContent>
@@ -169,8 +142,6 @@ const UserInfo = ({
                 </Button>
               </HStack>
 
-              {/* </VStack> */}
-
               <Text className='u-text'>Current Display Name:</Text>
               <Heading
                 id='g-heading'
@@ -178,13 +149,6 @@ const UserInfo = ({
               >
                 {user.userName}
               </Heading>
-              {/* </VStack> */}
-
-              {/* Edit Username End ************************** */}
-
-              {/* Edit Bio Start ************************** */}
-
-              {/* <VStack className='u-vs-input'> */}
               <HStack
                 id='g-hstack'
                 className='u-hs-input'
@@ -196,7 +160,6 @@ const UserInfo = ({
                   name='bio'
                   value={editableBio}
                   placeholder='Enter new Bio here'
-                  // isDisabled={!isEditMode}
                   onChange={(e) => setEditableBio(e.target.value)}
                 />
 
@@ -214,27 +177,20 @@ const UserInfo = ({
                 </Button>
               </HStack>
 
-              {/* Edit Bio End ************************** */}
-
               <Text className='u-text'>Current User Bio</Text>
               <Text className='u-text'>{user.bio}</Text>
             </VStack>
           </VStack>
         </VStack>
-
-        {/* Edit Boxes Start ************************** */}
       </HStack>
 
-      {/* Import Privacy Toggles  */}
       <Box className='pub-box'>
         <UserToggles
           user={user}
           fetchUserData={fetchUserData}
-          // isEditMode={isEditMode}
         />
       </Box>
 
-      {/* Delete Account Box  */}
       <Box>
         <VStack className='u-hstack'>
           <Checkbox
@@ -244,13 +200,6 @@ const UserInfo = ({
           >
             Enable Account Deletion
           </Checkbox>
-
-          {/* <Button
-          colorScheme='blue'
-          onClick={() => setIsEditMode(!isEditMode)}
-        >
-          {isEditMode ? 'Save Changes' : 'Edit Profile'}
-        </Button> */}
 
           <Button
             colorScheme='red'

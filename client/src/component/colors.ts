@@ -1,7 +1,6 @@
 const colors = {
   brand: {
-    500: '#f00', // Light mode
-    //     900: '#c00', // Dark mode
+    500: '#f00',
     900: '#1D4044',
   },
   background: {

@@ -113,7 +113,7 @@ const fetchWeather = (
     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
     .then((response) => {
       const data = response.data;
-      console.log('Response Check: ', data);
+      // console.log('Response Check: ', data);
 
       if (data && data.currentConditions) {
         // Valid location, update the weather data

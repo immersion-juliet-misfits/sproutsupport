@@ -30,7 +30,6 @@ const UserToggles = ({ user, fetchUserData }) => {
   return (
     <>
       <Grid
-        // border='2px solid yellow'
         className='BottomGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
@@ -42,7 +41,6 @@ const UserToggles = ({ user, fetchUserData }) => {
         >
 
           <Box
-            //border='2px solid red'
             w='80%'
             mx='auto'
             p={10}
@@ -56,7 +54,6 @@ const UserToggles = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showDarkLight'
-                  // isDisabled={!isEditMode}
                   isChecked={colorMode === 'dark'}
                   onChange={toggleColorMode}
                 />
@@ -68,7 +65,6 @@ const UserToggles = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showPlants'
-                  // isDisabled={!isEditMode}
                   isChecked={settings.showPlants}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -84,7 +80,6 @@ const UserToggles = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showMyMeetups'
-                  // isDisabled={!isEditMode}
                   isChecked={settings.showMyMeetups}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -102,7 +97,6 @@ const UserToggles = ({ user, fetchUserData }) => {
               <HStack>
                 <Switch
                   id='showForumPosts'
-                  // isDisabled={!isEditMode}
                   isChecked={settings.showForumPosts}
                   onChange={(e) =>
                     UserControls.handleToggle(

@@ -13,7 +13,6 @@ import { CheckIcon, EditIcon } from '@chakra-ui/icons';
 import UserControls from './UserControls';
 
 const UserWeather = ({ fetchUserData, user, setUser }) => {
-  const [isEditModeWeather, setIsEditModeWeather] = useState(false);
   const [editableCity, setEditableCity] = useState('');
   const [editableState, setEditableState] = useState('');
   const [apiError, setApiError] = useState(false);
@@ -41,7 +40,6 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
     }
     setEditableCity('');
     setEditableState('');
-    // setIsEditModeWeather(!isEditModeWeather)
   }, [user.city, user.state]);
 
   return (
@@ -49,15 +47,9 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
       id='g-box'
       className='u-weatherBox'
     >
-      {/* ******************************* */}
-
-      <VStack
-        // id='g-vstack'
-        className='u-box-todaysWeather'
-      >
+      <VStack className='u-box-weatherSet'>
         <p />
         <Heading
-          // border='1px solid red'
           id='g-heading'
           className='u-heading'
         >
@@ -70,13 +62,10 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             : 'No Location Watched'}
         </Heading>
 
-        {/* ******************************* */}
-
         <HStack
           id='g-hstack'
           className='u-hs-input'
           spacing={1}
-          // visibility={isEditModeWeather ? 'visible' : 'hidden'}
         >
           <Input
             id='g-input'
@@ -84,7 +73,6 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             name='city'
             value={editableCity}
             placeholder='Enter new City here'
-            // isDisabled={!isEditModeWeather}
             onChange={(e) => setEditableCity(e.target.value)}
           />
 
@@ -94,7 +82,6 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
             name='state'
             value={editableState}
             placeholder='Enter new State here'
-            // isDisabled={!isEditModeWeather}
             onChange={(e) => setEditableState(e.target.value)}
           />
 
@@ -108,7 +95,6 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
                   editableState,
                   setUser
                 );
-                // setIsEditModeWeather(!isEditModeWeather);
               }
             }}
             isDisabled={!editableCity.trim() || !editableState.trim()}
@@ -118,161 +104,222 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
         </HStack>
       </VStack>
 
-      {/* ******************************* */}
-
-      {apiError ? (
-        <Text>No Weather Update Currently Available</Text>
-      ) : (
-        <>
-          {weatherData && (
-            <Box
-              // id=''
-              className='u-box-todaysWeather'
-            >
-              <Heading
-                id='g-heading'
-                className='u-heading5'
-              >
-                Current Weather for {user.city}, {user.state}
-              </Heading>
-              <Text
-                className='u-text'
-                // fontSize='xl'
-                // fontWeight='bold'
-              >
-                {new Date().toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </Text>
-              <Text className='u-text'>
-                Temperature: {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
-              </Text>
-              <Text className='u-text'>
-                Condition: {weatherData.conditions ?? 'N/A'}
-              </Text>
-              <Text className='u-text'>
-                Wind Speed: {weatherData.windspeed ?? 'N/A'} mph
-              </Text>
-              <Text className='u-text'>
-                Humidity: {weatherData.humidity ?? 'N/A'}%
-              </Text>
-              <Text className='u-text'>
-                Feels Like: {weatherData.feelslike ?? 'N/A'}°F
-              </Text>
-              <Text className='u-text'>
-                UV Index: {weatherData.uvindex ?? 'N/A'}
-              </Text>
-              <Text className='u-text'>
-                Visibility: {weatherData.visibility ?? 'N/A'} km
-              </Text>
-            </Box>
-          )}
-
-          {dailyForecastData && dailyForecastData.length > 0 && (
-            <Box
-              p={5}
-              mb={4}
-            >
-              <Heading
-                id='g-heading'
-                className='u-heading5'
-              >
-                Upcoming Forecast
-              </Heading>
-              <Grid
-                templateColumns='repeat(3, 1fr)'
-                gap={6}
-              >
-                {dailyForecastData.slice(1, 7).map((day, index) => {
-                  const date = new Date(day.datetime);
-                  date.setDate(date.getDate() + 1);
-                  // const dayOfWeek = date.toLocaleDateString('en-US', {
-                  //   weekday: 'long',
-                  // });
-                  const dayOfWeek = date.toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  });
-
-                  return (
-                    <Box
-                      className='u-box-weeksWeather'
-                      key={index}
-                    >
-                      <Text
-                        className='u-text'
-                        // fontSize='xl'
-                        // fontWeight='bold'
-                      >
-                        {/* {dayOfWeek} - {day.datetime} */}
-                        {dayOfWeek}
-                      </Text>
-                      <Text className='u-text'>
-                        High: {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}
-                        °F
-                      </Text>
-                      <Text className='u-text'>
-                        Low: {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
-                        °F
-                      </Text>
-                      <Text className='u-text'>
-                        Conditions: {day.conditions ?? 'N/A'}
-                      </Text>
-                    </Box>
-                  );
-                })}
-              </Grid>
-            </Box>
-          )}
-
-          {alertsData && alertsData.length > 0 && (
-            <Box
-              p={5}
-              shadow='md'
-              borderWidth='1px'
-              borderRadius='lg'
-              mb={4}
-              textAlign='center'
-              maxWidth='85%' // Limit the width for alerts as well
-              mx='auto' // Center the box
-            >
-              <Heading
-                id='g-heading'
-                className='u-heading5'
-              >
-                Weather Alerts
-              </Heading>
-              {alertsData.map((alert, index) => (
-                <Box
-                  key={index}
-                  mb={4}
+      <HStack>
+        {apiError ? (
+          <Text>No Weather Update Currently Available</Text>
+        ) : (
+          <>
+            {weatherData && (
+              <Box width='45%'>
+                <Heading
+                  id='g-heading'
+                  className='u-heading5'
                 >
-                  <Text
-                    className='u-text'
-                    fontWeight='bold'
-                  >
-                    Alert: {alert.event}
-                  </Text>
-                  <Text className='u-text'>{alert.headline}</Text>
-                  <Text
-                    className='u-text'
-                    whiteSpace='pre-wrap'
-                  >
-                    {alert.description.replace(/(WHERE|WHEN|IMPACTS)/g, '\n$1')}
+                  Current Weather
+                </Heading>
+
+                <Box className='u-box-todaysWeather'>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                      fontSize='2xl'
+                    >
+                      {new Date().toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </Box>
                   </Text>
                   <Text className='u-text'>
-                    Ends: {new Date(alert.ends).toLocaleString()}
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Temperature:
+                    </Box>
+                    {(weatherData.temp * 9) / 5 + 32 ?? 'N/A'}°F
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Condition:
+                    </Box>{' '}
+                    {weatherData.conditions ?? 'N/A'}
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Wind Speed:
+                    </Box>{' '}
+                    {weatherData.windspeed ?? 'N/A'} mph
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Humidity:
+                    </Box>{' '}
+                    {weatherData.humidity ?? 'N/A'}%
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Feels Like:
+                    </Box>{' '}
+                    {weatherData.feelslike ?? 'N/A'}°F
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      UV Index:
+                    </Box>{' '}
+                    {weatherData.uvindex ?? 'N/A'}
+                  </Text>
+                  <Text className='u-text'>
+                    <Box
+                      as='span'
+                      fontWeight='bold'
+                    >
+                      Visibility:
+                    </Box>{' '}
+                    {weatherData.visibility ?? 'N/A'} km
                   </Text>
                 </Box>
-              ))}
+              </Box>
+            )}
+
+            {dailyForecastData && dailyForecastData.length > 0 && (
+              <Box
+                p={5}
+                mb={4}
+              >
+                <Heading
+                  id='g-heading'
+                  className='u-heading5'
+                >
+                  Upcoming Forecast
+                </Heading>
+                <Grid
+                  templateColumns='repeat(3, 1fr)'
+                  gap={6}
+                >
+                  {dailyForecastData.slice(1, 7).map((day, index) => {
+                    const date = new Date(day.datetime);
+                    date.setDate(date.getDate() + 1);
+                    const dayOfWeek = date.toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    });
+
+                    return (
+                      <Box
+                        className='u-box-weeksWeather'
+                        key={index}
+                      >
+                        <Text className='u-text'>
+                          <Box
+                            as='span'
+                            fontWeight='bold'
+                            fontSize='2xl'
+                          >
+                            {' '}
+                            {dayOfWeek}{' '}
+                          </Box>
+                        </Text>
+                        <Text className='u-text'>
+                          <Box
+                            as='span'
+                            fontWeight='bold'
+                          >
+                            High:
+                          </Box>{' '}
+                          {Math.floor((day.tempmax * 9) / 5 + 32) ?? 'N/A'}
+                          °F
+                        </Text>
+                        <Text className='u-text'>
+                          <Box
+                            as='span'
+                            fontWeight='bold'
+                          >
+                            Low:
+                          </Box>{' '}
+                          {Math.floor((day.tempmin * 9) / 5 + 32) ?? 'N/A'}
+                          °F
+                        </Text>
+                        <Text className='u-text'>
+                          <Box
+                            as='span'
+                            fontWeight='bold'
+                          >
+                            Conditions:
+                          </Box>{' '}
+                          {day.conditions ?? 'N/A'}
+                        </Text>
+                      </Box>
+                    );
+                  })}
+                </Grid>
+              </Box>
+            )}
+          </>
+        )}
+      </HStack>
+      {alertsData && alertsData.length > 0 && (
+        <Box className='u-box-weeksWeather'>
+          <Heading
+            id='g-heading'
+            className='u-heading5'
+          >
+            Weather Alerts
+          </Heading>
+          {alertsData.map((alert, index) => (
+            <Box
+              key={index}
+              mb={4}
+            >
+              <Text
+                className='u-text'
+                fontWeight='bold'
+              >
+                <Box
+                  as='span'
+                  fontWeight='bold'
+                >
+                  Alert:
+                </Box>{' '}
+                {alert.event}
+              </Text>
+              <Text className='u-text'>{alert.headline}</Text>
+              <Text
+                className='u-text'
+                whiteSpace='pre-wrap'
+              >
+                {alert.description.replace(/(WHERE|WHEN|IMPACTS)/g, '\n$1')}
+              </Text>
+              <Text className='u-text'>
+                <Box
+                  as='span'
+                  fontWeight='bold'
+                >
+                  Ends:
+                </Box>{' '}
+                {new Date(alert.ends).toLocaleString()}
+              </Text>
             </Box>
-          )}
-        </>
+          ))}
+        </Box>
       )}
     </Box>
   );

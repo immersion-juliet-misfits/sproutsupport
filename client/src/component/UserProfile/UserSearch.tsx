@@ -12,6 +12,7 @@ const UserSearch = () => {
       <Heading
         id='g-heading'
         className='u-heading'
+        marginTop='20px'
       >
         Search for other Users to View their Profiles
       </Heading>
