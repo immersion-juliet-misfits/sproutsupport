@@ -43,9 +43,6 @@ export default (env) => {
       },
       runtimeChunk: 'single',
     },
-    cache: {
-      type: 'filesystem',
-    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       plugins: [new TsconfigPathsPlugin()],
