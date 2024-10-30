@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Input } from '@chakra-ui/react';
+import { Box, Button, Input } from '@chakra-ui/react';
 
 const PlantImgUpload = ({handleUploadFile, handleChooseFile}) => {
 //   const [image, setImage] = useState(null)
@@ -31,12 +31,11 @@ const PlantImgUpload = ({handleUploadFile, handleChooseFile}) => {
 //   }
 
   return (
-    <div>
-      <h1>Upload Img</h1>
+    <Box flexDirection="row" display="flex" justifyContent={"center"} alignItems="center">
       <Input type="file" onChange={handleChooseFile}></Input>
-      <Input type="button" onClick={handleUploadFile} value="Submit"></Input>
+      <Button onClick={handleUploadFile} bgColor="#d5e8ce" color="#4AAD52" value="Confirm Image" w="100%">Confirm Image</Button>
       {/* {image && <img src={imageUrl}></img>} */}
-    </div>
+    </Box>
   )
 }
 

@@ -189,6 +189,12 @@ const UserStyles = (props) => ({
     fontWeight: 'bold',
     alignItems: 'center',
   },
+  '.p-text': {
+    color: mode(colors.text.dark, colors.text.light)(props),
+    fontSize: 'xl',
+    fontWeight: 'bold',
+    alignItems: 'center',
+  },
 
   '.u-edit-vstack': {
     // border: '1px solid blue',
