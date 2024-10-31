@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -19,97 +19,106 @@ import UserControls from './UserControls';
 
 interface User {
   id: number;
-  google_id: string;
   userName: string;
-  email: string;
   avatar: string;
-  bio: string;
-  city: string;
-  state: string;
+  bio: string | null;
+  city: string | null;
+  state: string | null;
+  showPlants: boolean;
+  showForumPosts: boolean;
+  showMyMeetups: boolean;
 }
 
-const UserPublicProfile = ({ fetchUserData, user }) => {
+const UserPublicProfile = () => {
+  const { username } = useParams();
+  const [publicUser, setPublicUser] = useState<User | null>(null);
+
   const [plants, setPlants] = useState([]);
   const [posts, setPosts] = useState([]);
   const [myMeetups, setMyMeetups] = useState([]);
-  // States for when another User views your profile
-  // const { userId } = useParams();
-  // const [user, setUser] = useState(null);
-
-  // Prevents infinite Loop from 'user' being a dependency
   const isFirstRender = useRef(true);
 
-  // Fetches user data only on initial mount
   useEffect(() => {
-    fetchUserData();
+    if (username) {
+      UserControls.getPublicUserData(username, (data) => {
+        setPublicUser(data.user);
+      });
+    }
     isFirstRender.current = false;
-  }, []);
+  }, [username]);
 
-  // Fetches data based on changes to the dependency
   useEffect(() => {
-    // fetchUserData(); // Currently logged in User data
-    // UserControls.getPublicUserData(userId, setUser); // Other User data
-
-    if (!isFirstRender.current && user?.id) {
-      if (user?.showPlants) {
-        // fetchUserData();
-        UserControls.getPlants(user, setPlants);
+    if (!isFirstRender.current && publicUser?.id) {
+      if (publicUser?.showPlants) {
+        UserControls.getPlants(publicUser, setPlants);
       }
-      if (user?.showForumPosts && user?.id) {
-        // fetchUserData();
-        UserControls.getPosts(setPosts, user.id);
+      if (publicUser?.showForumPosts && publicUser?.id) {
+        UserControls.getPosts(setPosts, publicUser.id);
       }
-      if (user?.showMyMeetups) {
-        // fetchUserData();
-        UserControls.getMeetups(user, setMyMeetups);
+      if (publicUser?.showMyMeetups) {
+        UserControls.getMeetups(publicUser, setMyMeetups);
       }
     }
-  }, [user]);
+  }, [publicUser]);
+
+  if (!publicUser) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <TopBar route={`${user.userName}'s Public Profile`} />
-      <Grid
-        // border='1px solid red'
-        id='lvl-one'
-        className='u-lvl-one'
-      >
-        <Box className='pub-box'>
-          <HStack>
-            <GridItem id='u-avatar-gi'>
-              <Image
-                id='u-avatar-img'
-                src={user.avatar}
-                alt={`${user.userName}'s avatar`}
-              />
-            </GridItem>
+      <TopBar route={`${publicUser.userName || ''}'s Public Profile`} />
 
-            <VStack>
-              <Heading id='g-heading' className='u-heading3'>
-                {user.userName}
-              </Heading>
-              <Text className='u-text'>{user.bio}</Text>
-            </VStack>
-          </HStack>
-        </Box>
+      {/* User's Avatar and Info */}
+      <Box className='pub-top-box'>
+        <HStack className='pub-top-hstack'>
+          <GridItem id='u-avatar-gi'>
+            <Image
+              id='u-avatar-img'
+              src={publicUser.avatar}
+              alt={`${publicUser.userName || 'User'}'s avatar`}
+            />
+          </GridItem>
 
-        {/* ***************************************  */}
-        <VStack spacing={4} align='center'>
-          {user?.showPlants && (
-            <Box
-              // border='5px solid red'
-              className='pub-box'
+          <VStack className='u-vstack'>
+            <Heading
+              id='g-heading'
+              className='u-heading3'
             >
-
-              <Heading id='g-heading' className='u-heading3'>
-                My Newest Plants
+              {publicUser.userName}
+            </Heading>
+            <Text className='u-text'>
+              {publicUser.bio || 'No bio available'}
+            </Text>
+          </VStack>
+        </HStack>
+      </Box>
+      <Grid id='lvl-one'>
+        {/* User's Plants */}
+        <VStack
+          spacing={4}
+          align='center'
+        >
+          {publicUser?.showPlants && (
+            <Box className='pub-box'>
+              <Heading
+                id='g-heading'
+                className='u-heading3'
+              >
+                Newest Plants
               </Heading>
               {plants.length > 0 ? (
                 <Grid className='pub-grid'>
                   {plants.slice(-6).map((plant) => (
-                    <Card key={plant.id} id='g-card' className='pub-card'>
-                      <CardHeader textAlign={'center'}>
-                        <Heading size='md'>{plant.nickname}</Heading>
+                    <Card
+                      key={plant.id}
+                      id='g-card'
+                      className='pub-card'
+                    >
+                      <CardHeader className='pub-cardHeader'>
+                        <Heading className='pub-header'>
+                          {plant.nickname}
+                        </Heading>
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {plant.imageUrl && (
@@ -136,23 +145,27 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
             </Box>
           )}
 
-          {/* ***************************************  */}
-
-          {user?.showMyMeetups && (
-            <Box
-              // border='5px solid red'
-              className='pub-box'
-            >
-
-              <Heading id='g-heading' className='u-heading3'>
-                My Hosted Meetups
+          {/* User's Meetups */}
+          {publicUser?.showMyMeetups && (
+            <Box className='pub-box'>
+              <Heading
+                id='g-heading'
+                className='u-heading3'
+              >
+                Hosted Meetups
               </Heading>
               {myMeetups.length > 0 ? (
                 <Grid className='pub-grid'>
                   {myMeetups.slice(-6).map((meetup) => (
-                    <Card key={meetup.id} id='g-card' className='pub-card'>
-                      <CardHeader textAlign={'center'}>
-                        <Heading size='md'>{meetup.eventName}</Heading>
+                    <Card
+                      key={meetup.id}
+                      id='g-card'
+                      className='pub-card'
+                    >
+                      <CardHeader className='pub-cardHeader'>
+                        <Heading className='pub-header'>
+                          {meetup.eventName}
+                        </Heading>
                       </CardHeader>
                       <CardBody textAlign={'center'}>
                         {meetup.imageUrl && (
@@ -185,35 +198,24 @@ const UserPublicProfile = ({ fetchUserData, user }) => {
               )}
             </Box>
           )}
-          {/* ***************************************  */}
 
-          {/* Can't Implement without access to other Users data  */}
-          {/*
-            {user?.showOtherMeetups && (
-              <Box className='rsvpMeetupsBox'>
-
-                <Heading textAlign='center' mb={4}>
-                  Meetups I'm Attending
-                </Heading>
-              </Box>
-            )}
-            */}
-
-          {/* ***************************************  */}
-
-          {user?.showForumPosts && (
-            <Box
-              // border='5px solid red'
-              className='pub-box'
-            >
-
-              <Heading id='g-heading' className='u-heading3'>
-                My Recent Posts
+          {/* User's Forum Posts */}
+          {publicUser?.showForumPosts && (
+            <Box className='pub-box'>
+              <Heading
+                id='g-heading'
+                className='u-heading3'
+              >
+                Recent Posts
               </Heading>
               {posts.length > 0 ? (
                 <Grid className='pub-grid'>
                   {posts.slice(-6).map((post) => (
-                    <Card key={post.id} id='g-card' className='pub-card'>
+                    <Card
+                      key={post.id}
+                      id='g-card'
+                      className='pub-card'
+                    >
                       <CardBody textAlign={'center'}>
                         {post.imageUrl && (
                           <Center>

@@ -1,7 +1,6 @@
 const colors = {
   brand: {
-    500: '#f00', // Light mode
-    //     900: '#c00', // Dark mode
+    500: '#f00',
     900: '#1D4044',
   },
   background: {
@@ -28,7 +27,15 @@ const colors = {
     light: '#D5E8CE',
     dark: '#D5E8CE',
   },
+  switch: {
+    light: '#B9DA44',
+    dark: '#93C482',
+  },
   text: {
+    light: '#2d4130',
+    dark: '#D5E8CE',
+  },
+  textTwo: {
     light: '#2d4130',
     dark: '#D5E8CE',
   },

@@ -2,11 +2,13 @@
 import { useState } from 'react';
 import { Grid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import TopBar from './TopBar';
 import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
-import UserPrivacy from './UserPrivacy';
-import TopBar from './TopBar';
-import UserControls, { GlobalStateProvider } from './UserControls';
+import UserWeather from './UserWeather';
+import UserSearch from './UserSearch';
+// import UserControls, { GlobalStateProvider } from './UserControls';
+// import UserControls from './UserControls';
 
 // User context
 interface User {
@@ -29,40 +31,44 @@ const UserPrivateProfile = ({
   BUCKET_NAME,
 }) => {
   const navigate = useNavigate();
-  const [currentView, setCurrentView] = useState('info');
+  const [currentView, setCurrentView] = useState('profileInfo');
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
-    <GlobalStateProvider>
+    // <GlobalStateProvider>
+    <>
       <TopBar route={'Settings'} />
 
       <Grid id='lvl-one'>
-        <UserTabs
-          handleLogOut={() => UserControls.handleLogOut(onLogout, navigate)}
-          setCurrentView={setCurrentView}
-        />
+        <UserTabs setCurrentView={setCurrentView} />
 
         <Grid
-          // id='lvl-two'
-          // className='u-pages'
         >
-          {currentView === 'info' && (
+          {currentView === 'userSearch' && <UserSearch />}
+          {currentView === 'weather' && (
+            <UserWeather
+              fetchUserData={fetchUserData}
+              user={user}
+              setUser={setUser}
+            />
+          )}
+          {currentView === 'profileInfo' && (
             <UserInfo
               BUCKET_NAME={BUCKET_NAME}
               fetchUserData={fetchUserData}
               setUser={setUser}
               user={user}
+              onLogout={onLogout}
+              navigate={navigate}
             />
-          )}
-          {currentView === 'help' && (
-            <UserPrivacy user={user} fetchUserData={fetchUserData} />
           )}
         </Grid>
       </Grid>
-    </GlobalStateProvider>
+      {/* </GlobalStateProvider> */}
+    </>
   );
 };
 
