@@ -277,6 +277,12 @@ const UserStyles = (props) => ({
     fontWeight: 'bold',
     fontFamily: 'pangolin',
   },
+  '.p-text': {
+    color: mode(colors.text.dark, colors.text.light)(props),
+    fontSize: 'xl',
+    fontWeight: 'bold',
+    alignItems: 'center',
+  },
 
   '.u-edit-vstack': {
     width: '50%',

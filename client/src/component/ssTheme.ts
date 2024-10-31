@@ -130,6 +130,36 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
         fontFamily: 'pangolin',
       },
+      '#p-button':{
+        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        color: mode(colors.text.dark, colors.text.light)(props),
+        borderRadius: '10px',
+        _hover: {
+          color: '#6EB257',
+        },
+      },
+      '#p-input':{
+        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        color: mode(colors.text.dark, colors.text.light)(props),
+        borderRadius: '10px',
+      },
+      '#p-input2':{
+        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        color: '#B9DA44',
+        borderRadius: '10px',
+        _placeholder: {
+          color: '#67723E'
+        }
+      },
+      '#p-icon':{
+        color: mode(colors.text.dark, colors.text.light)(props),
+        borderRadius: '10px',
+      },
+      '#p-form':{
+        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        color: mode(colors.text.dark, colors.text.light)(props),
+        borderRadius: '10px',
+      },
 
       '.g-font': {
         fontFamily: 'pangolin',
