@@ -67,13 +67,13 @@ if(joinMeetupMessages.length !== 0){
        email
     }
 };
-// axios.post('https://api.emailjs.com/api/v1.0/email/send', obj)
-// .then(()=>{
-// console.log('sent')
-// })
-// .catch((err: any)=>{
-//   console.log('Can\'t send email: ', err)
-// })
+axios.post('https://api.emailjs.com/api/v1.0/email/send', obj)
+.then(()=>{
+console.log('sent')
+})
+.catch((err: any)=>{
+  console.log('Can\'t send email: ', err)
+})
 }
 
 
