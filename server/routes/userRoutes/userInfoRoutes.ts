@@ -35,6 +35,30 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
 });
 
 // ******
+// Check if User exists (This may not be needed)
+UserInfo.get('/checkUserExists/:username', (req: Request, res: Response) => {
+  const { username } = req.params;
+
+  prisma.user
+    .findUnique({
+      where: { userName: username },
+    })
+    .then((user) => {
+      if (user) {
+        res.json({ exists: true });
+      } else {
+        res.json({ exists: false });
+      }
+    })
+    .catch((error) => {
+      console.error('Error checking if user exists:', error);
+      res.status(500).send('Failed to check user existence');
+    });
+});
+
+
+
+// ******
 // Fetch a specific Users posts
 
 Posts.get('/post/:userId', (req: Request, res: Response) => {
@@ -54,8 +78,8 @@ Posts.get('/post/:userId', (req: Request, res: Response) => {
         ? res.status(200).send(posts)
         : res.status(404).send('No posts found for this user');
     })
-    .catch((err) => {
-      console.error('Failed to get posts: ', err);
+    .catch((error) => {
+      console.error('Failed to get posts: ', error);
       res.sendStatus(500);
     });
 });
@@ -161,7 +185,7 @@ UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
       where: { id: userId },
       data: {
         city: city || null,
-        state: state || null
+        state: state || null,
       },
     })
     .then((updatedUser) => {
@@ -240,33 +264,133 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
     });
 });
 
-// *******
-
 // Retrieve another Users profile Data to view it
-UserInfo.get('/public/:userId', (req, res) => {
-  const { userId } = req.params;
+// UserInfo.get('/public/:userId', (req, res) => {
+// const { userId } = req.params;
+// console.log('Req-Handler UserId Check:', userId);
+UserInfo.get('/public/:username', (req, res) => {
+  const { username } = req.params;
+  console.log('Req-Handler UserName Check:', username);
 
-  prisma.user.findUnique({
-    where: { id: Number(userId) },
-    select: {
-      userName: true,
-      avatar: true,
-      bio: true,
-      city: true,
-      state: true,
-    },
-  })
-  .then(user => {
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).send('User not found');
-    }
-  })
-  .catch(err => {
-    res.status(500).send('Internal Server Error');
-  });
+  prisma.user
+    .findUnique({
+      // where: { id: Number(userId) },
+      where: { userName: username },
+      select: {
+        id: true,
+        userName: true,
+        avatar: true,
+        bio: true,
+        city: true,
+        state: true,
+        showPlants: true,
+        showForumPosts: true,
+        showMyMeetups: true,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+
+      // console.log('User found:', user);
+
+      const plantsPromise = user.showPlants
+        ? prisma.plant
+            .findMany({
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
+              select: {
+                id: true,
+                nickname: true,
+                description: true,
+                imageUrl: true,
+              },
+            })
+            .then((plants) => {
+              // console.log(`Fetched ${plants.length} plants for userId: ${userId}`);
+              return plants;
+            })
+            .catch((error) => {
+              // console.error('Error fetching plants for userId:', userId, error);
+              console.error('Error fetching plants for username:', username, user.id, error);
+              return []; // Return empty array for plants in case of an error
+            })
+        : Promise.resolve([]);
+
+      const postsPromise = user.showForumPosts
+        ? prisma.post
+            .findMany({
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
+              select: { id: true, message: true, imageUrl: true },
+            })
+            .then((posts) => {
+              // console.log(`Fetched ${posts.length} posts for userId: ${userId}`);
+              return posts;
+            })
+            .catch((error) => {
+              console.error('Error fetching posts for username:', username, user.id, error);
+              return []; // Return empty array for posts in case of an error
+            })
+        : Promise.resolve([]);
+
+      const meetupsPromise = user.showMyMeetups
+        ? prisma.meet
+            .findMany({
+              // where: { userId: Number(userId) },
+              where: { userId: Number(user.id) },
+              select: {
+                id: true,
+                eventName: true,
+                description: true,
+                location: true,
+                time_date: true,
+                imageUrl: true,
+              },
+            })
+            .then((meetups) => {
+              // console.log(`Fetched ${meetups.length} meetups for userId: ${userId}`);
+              return meetups;
+            })
+            .catch((error) => {
+              // console.error('Error fetching meetups for userId:', userId, error);
+              console.error('Error fetching meetups for username:', username, user.id, error);
+              return []; // Return empty array for meetups in case of an error
+            })
+        : Promise.resolve([]);
+
+      return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
+        ([plants, posts, meetups]) => {
+          // console.log('Response Data:', { user, plants, posts, meetups });
+          res.json({ user, plants, posts, meetups });
+        }
+      );
+    })
+    .catch((error) => {
+      console.error('Public User data fetch: Failed:', error);
+      res.status(500).send('Internal Server Error');
+    });
 });
 
+UserInfo.delete('/deleteAccount', (req: Request, res: Response) => {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(400).send('User ID is required');
+  }
+
+  prisma.user
+    .delete({
+      where: { id: userId },
+    })
+    .then(() => {
+      res.status(200).send('User Account Deletion: Success');
+    })
+    .catch((error) => {
+      console.error('Error deleting user account:', error);
+      res.status(500).send('Failed to delete user account');
+    });
+});
 
 export default UserInfo;

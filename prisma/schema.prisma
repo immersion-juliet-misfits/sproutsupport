@@ -10,28 +10,29 @@ datasource db {
 model User {
   id               Int            @id @default(autoincrement())
   google_id        String         @unique
-  city             String?
-  state            String?
-  userName         String?
   email            String?        @unique
   password         String?
+  userName         String?        @unique
   avatar           String?
-  bio              String?
+  bio              String?        @db.Text
+  city             String?
+  state            String?
   level            Int            @default(1)
   points           Int            @default(0)
+  DarkLight        Boolean        @default(false)
+  showForumPosts   Boolean        @default(false)
+  showMyMeetups    Boolean        @default(false)
+  showOtherMeetups Boolean        @default(false)
+  showPlants       Boolean        @default(false)
+  showWeather      Boolean        @default(false)
+  attendees        Attendee[]
   meets            Meet[]
   notifications    Notification[]
   plants           Plant[]
   posts            Post[]
-  comments Comment[]
-  attendees        Attendee[]
+  comments         Comment[]
+
   @@unique([id, userName])
-  DarkLight        Boolean        @default(false)
-  showPlants       Boolean        @default(false)
-  showMyMeetups    Boolean        @default(false)
-  showOtherMeetups Boolean        @default(false)
-  showForumPosts   Boolean        @default(false)
-  showWeather      Boolean        @default(false)
 }
 
 model Image {
@@ -51,7 +52,7 @@ model Meet {
   message     String?
   status      String
   attendees   Attendee[]
-  owner       User       @relation(fields: [userId], references: [id])
+  owner       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Meet_userId_fkey")
 }
@@ -60,7 +61,7 @@ model Notification {
   id        Int    @id @default(autoincrement())
   userId    Int
   message   String
-  recipient User   @relation(fields: [userId], references: [id])
+  recipient User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Notification_userId_fkey")
 }
@@ -75,7 +76,7 @@ model Plant {
   location    String?
   imageUrl    String?
   description String?
-  caregiver   User    @relation(fields: [userId], references: [id])
+  caregiver   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   tasks       Task[]
 
   @@index([userId], map: "Plant_userId_fkey")
@@ -89,7 +90,7 @@ model Task {
   nextComplection DateTime?
   overdue         Boolean?
   plant_id        Int?
-  taskPlant       Plant?    @relation(fields: [plant_id], references: [id])
+  taskPlant       Plant?    @relation(fields: [plant_id], references: [id], onDelete: Cascade)
 
   @@index([plant_id], map: "Task_plant_id_fkey")
 }
@@ -100,19 +101,21 @@ model Post {
   message  String
   imageUrl String
   username String
-  owner    User      @relation(fields: [userId, username], references: [id, userName])
+  owner    User      @relation(fields: [userId, username], references: [id, userName], onDelete: Cascade)
   Comment  Comment[]
+
   @@index([userId, username], map: "Post_userId_fkey")
 }
 
 model Comment {
-  id        Int    @id @default(autoincrement())
-  message   String
-  postId    Int
-  userId    Int
-  username  String
-  post      Post   @relation(fields: [postId], references: [id])
-  owner  User   @relation(fields: [userId, username], references: [id, userName])
+  id       Int    @id @default(autoincrement())
+  message  String
+  postId   Int
+  userId   Int
+  username String
+  post     Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  owner    User   @relation(fields: [userId, username], references: [id, userName], onDelete: Cascade)
+
   @@index([postId], map: "Comment_postId_fkey")
   @@index([userId, username], map: "Comment_userId_fkey")
 }
@@ -121,8 +124,8 @@ model Attendee {
   id          Int  @id @default(autoincrement())
   meet_id     Int
   userId      Int
-  meet        Meet @relation(fields: [meet_id], references: [id])
-  participant User @relation(fields: [userId], references: [id])
+  meet        Meet @relation(fields: [meet_id], references: [id], onDelete: Cascade)
+  participant User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([meet_id], map: "Attendee_meet_id_fkey")
   @@index([userId], map: "Attendee_userId_fkey")

@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
   Grid,
   GridItem,
-  Heading,
   HStack,
   Switch,
   useColorMode,
@@ -12,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import UserControls from './UserControls';
 
-const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
+const UserToggles = ({ user, fetchUserData }) => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   const [settings, setSettings] = useState({
@@ -32,41 +30,41 @@ const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
   return (
     <>
       <Grid
-        // border='2px solid yellow'
         className='BottomGrids'
         templateColumns='repeat(1, 1fr)'
         w='85%'
         gap={4}
       >
-        <GridItem p='10px' borderRadius='lg'
+        <GridItem
+          p='10px'
+          borderRadius='lg'
         >
-          {/* <Heading textAlign='center' w='100%'>
-            Public Profile Presentation
-          </Heading> */}
+
           <Box
-            //border='2px solid red'
             w='80%'
             mx='auto'
             p={10}
             fontSize='25px'
           >
-            <VStack align='start' pl={4} spacing={6}>
+            <VStack
+              align='start'
+              pl={4}
+              spacing={6}
+            >
               <HStack>
                 <Switch
                   id='showDarkLight'
-                  isDisabled={!isEditMode}
                   isChecked={colorMode === 'dark'}
                   onChange={toggleColorMode}
                 />
                 <label htmlFor='showDarkLight'>
-                  Change Site Color Mode? Current: {colorMode}
+                  Change Theme? Current: {colorMode}
                 </label>
               </HStack>
 
               <HStack>
                 <Switch
                   id='showPlants'
-                  isDisabled={!isEditMode}
                   isChecked={settings.showPlants}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -82,7 +80,6 @@ const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
               <HStack>
                 <Switch
                   id='showMyMeetups'
-                  isDisabled={!isEditMode}
                   isChecked={settings.showMyMeetups}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -97,25 +94,9 @@ const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
                 </label>
               </HStack>
 
-              {/* Hide Below until I have access to other Users profiles & Meetups  */}
-              {/* <HStack>
-                <Switch
-                  id='showOtherMeetups'
-                  isDisabled={!isEditMode}
-                  isChecked={settings.showOtherMeetups}
-                  onChange={(e) =>
-                    UserControls.handleToggle('showOtherMeetups', e.target.checked, setSettings)
-                  }
-                />
-                <label htmlFor='showOtherMeetups'>
-                  Display Your RSVP'd Meetups?
-                </label>
-              </HStack> */}
-
               <HStack>
                 <Switch
                   id='showForumPosts'
-                  isDisabled={!isEditMode}
                   isChecked={settings.showForumPosts}
                   onChange={(e) =>
                     UserControls.handleToggle(
@@ -132,26 +113,9 @@ const UserPrivacy = ({ user, fetchUserData, isEditMode  }) => {
             </VStack>
           </Box>
         </GridItem>
-        {/* <GridItem bg='green.500' h='150px'>
-          Blocking - Enter the name of the User you want to block. <p>
-            You will no longer see each others: profiles, forum posts, or Meet Ups. </p>
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          Links to Users various Social Media accounts (Twitter, Tumblr, Etc) <p> STRETCH Goal</p>
-        </GridItem>
-        <GridItem bg='green.500' h='150px'>
-          Email/Password/Login Method Editing will be here
-        </GridItem> */}
-        <GridItem p='10px'
-        className='gi-delete'
-        borderRadius='lg'
-        // bg='#BDE3FF'
-        >
-          <Button colorScheme='red' isDisabled={!isEditMode}>Delete Account</Button>
-        </GridItem>
       </Grid>
     </>
   );
 };
 
-export default UserPrivacy;
+export default UserToggles;

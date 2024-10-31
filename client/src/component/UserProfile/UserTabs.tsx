@@ -1,6 +1,6 @@
 import { Tabs, TabList, Tab } from '@chakra-ui/react';
 
-const UserTabs = ({ handleLogOut, setCurrentView }) => {
+const UserTabs = ({ setCurrentView }) => {
   return (
     <Tabs
       id='g-tabs'
@@ -14,13 +14,13 @@ const UserTabs = ({ handleLogOut, setCurrentView }) => {
       id='g-tabList'
       className='UserTabList'
       >
-        <Tab className='uTab' onClick={handleLogOut}>
-          Log Out
+         <Tab className='uTab' onClick={() => setCurrentView('userSearch')}>
+          User Search
         </Tab>
-        <Tab className='uTab' onClick={() => setCurrentView('help')}>
-          Privacy
+         <Tab className='uTab' onClick={() => setCurrentView('weather')}>
+          Weather
         </Tab>
-        <Tab className='uTab' onClick={() => setCurrentView('info')}>
+        <Tab className='uTab' onClick={() => setCurrentView('profileInfo')}>
           Profile Display
         </Tab>
       </TabList>

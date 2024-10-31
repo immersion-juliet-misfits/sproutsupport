@@ -58,8 +58,6 @@ const ssTheme = extendTheme({
 
       '#g-button': {
         backgroundColor: mode(colors.button.light, colors.button.dark)(props),
-        size: 'md',
-        mb: '5',
       },
 
       '#g-card': {
@@ -76,11 +74,15 @@ const ssTheme = extendTheme({
         fontFamily: 'nerko one',
       },
 
+      '#g-hstack': {
+        margin: 'auto',
+      },
+
       '#g-input': {
-        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
         border: '5px solid',
         borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
+        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
       },
 
       '#g-link': {
@@ -95,6 +97,10 @@ const ssTheme = extendTheme({
       '#g-tabList': {
         height: '75px',
         gap: '20px',
+      },
+
+      '#g-vstack': {
+        margin: 'auto',
       },
 
       // *** Global Nav/Top Bar Settings ***
@@ -118,11 +124,11 @@ const ssTheme = extendTheme({
         px: '50px',
       },
 
-      '#g-box':{
+      '#g-box': {
         bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         color: mode(colors.text.light, colors.text.dark)(props),
         borderRadius: '10px',
-        fontFamily: 'pangolin'
+        fontFamily: 'pangolin',
       },
       '#p-button':{
         bgColor: mode(colors.text.light, colors.text.dark)(props),
@@ -155,8 +161,8 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
       },
 
-      '.g-font':{
-fontFamily: 'pangolin'
+      '.g-font': {
+        fontFamily: 'pangolin',
       },
 
       '.tb-gi-one': {
@@ -210,7 +216,9 @@ fontFamily: 'pangolin'
       },
 
       // Attempting to mimic settings of offSet
-      '#topBar-menu': {},
+      '#topBar-menu': {
+        bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+      },
 
       '#topBar-menuList': {
         position: 'absolute',
@@ -230,19 +238,20 @@ fontFamily: 'pangolin'
   components: {
     Button: {
       variants: {
-        solid: (props)=>({
+        solid: (props) => ({
           bg: mode(colors.button.light, colors.button.dark)(props),
           _active: {
             bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
-          }
-        })
-      }
-    },  
+          },
+        }),
+      },
+    },
     Tabs: {
       variants: {
         enclosed: (props) => ({
           tab: {
             fontSize: '35px',
+            color: mode(colors.levelThree.light, colors.levelThree.dark)(props),
             _selected: {
               bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
               color: mode(colors.text.light, colors.text.dark)(props),
@@ -254,17 +263,37 @@ fontFamily: 'pangolin'
         }),
       },
     },
-  },
-  Switch: {
-    baseStyle: {
-      track: {
-        _checked: {
-          bg: 'brand.500',
+    Menu: {
+      baseStyle: (props) => ({
+        list: {
+          bg: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+          borderColor: mode(colors.levelTwo.light, colors.levelTwo.dark)(props),
+          borderRadius: 'md',
+          // boxShadow: 'lg',
+          boxShadow: 'none',
         },
-      },
+        item: {
+          bg: 'transparent',
+          _hover: {
+            bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+          },
+          _focus: {
+            bg: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+          },
+        },
+      }),
     },
-    defaultProps: {
-      size: 'lg',
+    Switch: {
+      baseStyle: (props) => ({
+        track: {
+          _checked: {
+            bg: mode(colors.switch.light, colors.switch.dark)(props),
+          },
+        },
+      }),
+      defaultProps: {
+        size: 'lg',
+      },
     },
   },
 });

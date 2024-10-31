@@ -29,6 +29,7 @@ export default (env) => {
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, './client/dist/'),
+      publicPath: '/',
       clean: true,
     },
     optimization: {
@@ -42,10 +43,6 @@ export default (env) => {
         chunks: 'all',
       },
       runtimeChunk: 'single',
-    },
-    cache: {
-      type: 'filesystem',
-      cacheDirectory: path.resolve(__dirname, '.temp_cache'),
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],

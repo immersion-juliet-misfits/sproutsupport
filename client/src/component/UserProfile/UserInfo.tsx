@@ -1,69 +1,81 @@
-// import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  Checkbox,
   GridItem,
   Heading,
   HStack,
   Image,
   Input,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import { CheckIcon, EditIcon } from '@chakra-ui/icons';
-import UserControls, { useGlobalState } from './UserControls';
-import UserWeather from './UserWeather';
-import UserPrivacy from './UserPrivacy';
+import UserControls from './UserControls';
+import UserToggles from './UserToggles';
 
-const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
+const UserInfo = ({
+  BUCKET_NAME,
+  fetchUserData,
+  setUser,
+  user,
+  onLogout,
+  navigate,
+}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableUserName, setEditableUserName] = useState('');
   const [editableBio, setEditableBio] = useState('');
-  const [editableCity, setEditableCity] = useState('');
-  const [editableState, setEditableState] = useState('');
+  const [userExistsError, setUserExistsError] = useState('');
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
     fetchUserData();
     setEditableUserName('');
     setEditableBio('');
-    setEditableCity('');
-    setEditableState('');
-  }, [user.userName, user.bio, user.city, user.state]);
+  }, [user.userName, user.bio]);
+
+  const handleUserNameCheck = () => {
+    if (editableUserName.trim() !== '') {
+      UserControls.checkUserExists(editableUserName, (exists) => {
+        if (exists) {
+          setUserExistsError('This Username is not available');
+          setIsPopoverOpen(true);
+
+          setTimeout(() => {
+            setIsPopoverOpen(false);
+          }, 3000);
+        } else {
+          setUserExistsError('');
+          UserControls.handleUserNameChange(editableUserName, setUser);
+        }
+      });
+    }
+  };
 
   return (
     <>
-      <HStack
-      // className='u-hstack'
-      className='pub-box'
-      >
+      <HStack className='u-top-hstack'></HStack>
 
+      <HStack className='pub-box'>
         <VStack className='u-edit-vstack'>
-          {/* Edit Profile Select ************* */}
-          <span
-            id='g-link'
-            className='u-link'
-            onClick={() => setIsEditMode(!isEditMode)}
-            style={{ cursor: 'pointer', textDecoration: 'underline' }}
-          >
-            {isEditMode ? 'Editing Complete' : 'Edit Profile'}
-          </span>
-
-          {/* Avatar  */}
-
           <GridItem
             id='u-avatar-gi'
             onClick={() => {
-              if (isEditMode) {
-                document.getElementById('avatarInput').click();
-              }
+              document.getElementById('avatarInput').click();
             }}
-            style={{ cursor: isEditMode ? 'pointer' : 'default' }}
+            style={{ cursor: 'pointer' }}
           >
             <Image
               id='u-avatar-img'
               src={user.avatar}
-              alt={isEditMode ? 'Click to Edit Avatar' : 'Avatar'}
+              alt={'Avatar'}
             />
             <input
               type='file'
@@ -75,182 +87,142 @@ const UserInfo = ({ BUCKET_NAME, fetchUserData, setUser, user }) => {
               }
             />
 
-            {isEditMode && (
-              <EditIcon
-                position='absolute'
-                top='10px'
-                right='10px'
-                boxSize='24px'
-                color='gray.500'
-              />
-            )}
+            <EditIcon
+              position='absolute'
+              top='10px'
+              right='10px'
+              boxSize='24px'
+              color='gray.500'
+            />
           </GridItem>
         </VStack>
 
-        <VStack className='u-edit-vstack'>
-          {/* Edit Username ************************** */}
-
-          <VStack
-            // id='g-vstack'
-            className='u-vs-input'
-            visibility={isEditMode ? 'visible' : 'hidden'}
-          >
-            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-              <Input
-                id='g-input'
-                className='u-input'
-                name='username'
-                value={editableUserName}
-                placeholder='Enter new User Name here'
-                onChange={(e) => setEditableUserName(e.target.value)}
-              />
-
-              <Button
-                id='g-button'
-                className='u-check-button'
-                onClick={() => {
-                  if (editableUserName.trim() !== '') {
-                    UserControls.handleUserNameChange(
-                      editableUserName,
-                      setUser
-                    );
-                  }
-                }}
-                isDisabled={!editableUserName.trim()}
+        <VStack
+          id='g-vstack'
+          className='u-vstack'
+        >
+          <VStack id='g-vstack'>
+            <VStack className='u-vs-input'>
+              <HStack
+                id='g-hstack'
+                className='u-hs-input'
+                spacing={1}
               >
-                {/* Update */}
-                <CheckIcon className='u-checkIcon' />
-              </Button>
-            </HStack>
-          </VStack>
+                <Input
+                  id='g-input'
+                  className='u-input'
+                  name='username'
+                  value={editableUserName}
+                  placeholder='Enter new Username here'
+                  onChange={(e) => setEditableUserName(e.target.value)}
+                />
 
-          <VStack
-            // id='g-vstack'
-            className='u-vstack'
-          >
-            <Text className='u-text'>Current Display Name:</Text>
-            <Heading id='g-heading' className='u-heading'>
-              {user.userName}
-            </Heading>
-          </VStack>
+                <Popover
+                  isOpen={isPopoverOpen}
+                  onClose={() => setIsPopoverOpen(false)}
+                  placement='top'
+                  closeOnBlur={false}
+                >
+                  <PopoverTrigger>
+                    <Box />
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <PopoverCloseButton />
+                    <PopoverBody>{userExistsError}</PopoverBody>
+                  </PopoverContent>
+                </Popover>
 
-          {/* Edit Bio ************************** */}
+                <Button
+                  id='g-button'
+                  className='u-check-button'
+                  onClick={handleUserNameCheck}
+                  isDisabled={!editableUserName.trim()}
+                >
+                  <CheckIcon className='u-checkIcon' />
+                </Button>
+              </HStack>
 
-          <VStack
-            // id='g-vstack'
-            className='u-vs-input'
-            visibility={isEditMode ? 'visible' : 'hidden'}
-          >
-            <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-              <Input
-                id='g-input'
-                className='u-input'
-                name='bio'
-                value={editableBio}
-                placeholder='Enter new Bio here'
-                onChange={(e) => setEditableBio(e.target.value)}
-              />
-
-              <Button
-                id='g-button'
-                className='u-check-button'
-                onClick={() => {
-                  if (editableBio.trim() !== '') {
-                    UserControls.handleBioChange(editableBio, setUser);
-                  }
-                }}
-                isDisabled={!editableBio.trim()}
+              <Text className='u-text'>Current Display Name:</Text>
+              <Heading
+                id='g-heading'
+                className='u-heading'
               >
-                <CheckIcon className='u-checkIcon' />
-              </Button>
-            </HStack>
-          </VStack>
+                {user.userName}
+              </Heading>
+              <HStack
+                id='g-hstack'
+                className='u-hs-input'
+                spacing={1}
+              >
+                <Input
+                  id='g-input'
+                  className='u-input'
+                  name='bio'
+                  value={editableBio}
+                  placeholder='Enter new Bio here'
+                  onChange={(e) => setEditableBio(e.target.value)}
+                />
 
-          <VStack
-            // id='g-vstack'
-            className='u-vstack'
-          >
-            <Text className='u-text'>Current User Bio</Text>
+                <Button
+                  id='g-button'
+                  className='u-check-button'
+                  onClick={() => {
+                    if (editableBio.trim() !== '') {
+                      UserControls.handleBioChange(editableBio, setUser);
+                    }
+                  }}
+                  isDisabled={!editableBio.trim()}
+                >
+                  <CheckIcon className='u-checkIcon' />
+                </Button>
+              </HStack>
 
-            <Heading id='g-heading' className='u-heading'>
-              {user.bio}
-            </Heading>
+              <Text className='u-text'>Current User Bio</Text>
+              <Text className='u-text'>{user.bio}</Text>
+            </VStack>
           </VStack>
         </VStack>
       </HStack>
 
-{/* Import Privacy Toggles  */}
-<Box className='pub-box'>
-  <UserPrivacy user={user} fetchUserData={fetchUserData} isEditMode={isEditMode}  />
-</Box>
-
-
-      {/* Edit Location ************************** */}
-
-      <VStack
-        // id='g-vstack'
-        className='u-vs-input'
-        visibility={isEditMode ? 'visible' : 'hidden'}
-      >
-        <HStack id='g-hstack' className='u-hs-input' spacing={1}>
-          <Input
-            id='g-input'
-            className='u-input'
-            name='city'
-            value={editableCity}
-            placeholder='Enter new City here'
-            onChange={(e) => setEditableCity(e.target.value)}
-          />
-
-          <Input
-            id='g-input'
-            className='u-input'
-            name='state'
-            value={editableState}
-            placeholder='Enter new State here'
-            onChange={(e) => setEditableState(e.target.value)}
-          />
-
-          <Button
-            id='g-button'
-            className='u-check-button'
-            onClick={() => {
-              if (editableCity.trim() !== '' && editableState.trim() !== '') {
-                UserControls.handleLocationChange(
-                  editableCity,
-                  editableState,
-                  setUser
-                );
-              }
-            }}
-            isDisabled={!editableCity.trim() || !editableState.trim()}
-          >
-            <CheckIcon className='u-checkIcon' />
-          </Button>
-        </HStack>
-      </VStack>
-
-      <VStack
-        // id='g-vstack'
-        className='u-vstack'
-      >
-        <Text className='u-text'>Current City and State for Weather Watch</Text>
-        <p />
-        <Heading id='g-heading' className='u-heading'>
-          {user.city &&
-          user.state &&
-          user.city !== 'undefined' &&
-          user.state !== 'undefined'
-            ? `${user.city}, ${user.state}`
-            : 'No Location Watched'}
-        </Heading>
-
-        <UserWeather
+      <Box className='pub-box'>
+        <UserToggles
           user={user}
-          setUser={setUser}
           fetchUserData={fetchUserData}
         />
-      </VStack>
+      </Box>
+
+      <Box>
+        <VStack className='u-hstack'>
+          <Checkbox
+            colorScheme='blue'
+            isChecked={isEditMode}
+            onChange={() => setIsEditMode(!isEditMode)}
+          >
+            Enable Account Deletion
+          </Checkbox>
+
+          <Button
+            colorScheme='red'
+            isDisabled={!isEditMode}
+            onClick={() => {
+              if (
+                window.confirm('Are you sure you want to delete your account?')
+              ) {
+                UserControls.deleteAccount(setUser)
+                  .then(() => {
+                    onLogout();
+                    navigate('/login');
+                  })
+                  .catch((err) => {
+                    console.error('Error during account deletion:', err);
+                  });
+              }
+            }}
+          >
+            Delete Account
+          </Button>
+        </VStack>
+      </Box>
     </>
   );
 };
