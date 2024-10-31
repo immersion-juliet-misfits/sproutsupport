@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid, GridItem, IconButton } from '@chakra-ui/react'
+import { Card, CardHeader, CardBody, CardFooter, Progress, Heading, Box, Flex, Button, Grid, GridItem, IconButton, Text, Center, Icon } from '@chakra-ui/react'
 import { AddIcon } from '@chakra-ui/icons'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -105,14 +105,15 @@ const OwnedPlants = ({ user }) => {
       {/* will eventually be used with cards... */}
       <Box position={"relative"} bg='#488B49' p={5} borderRadius="xl">
       {/* <motion.div drag dragConstraints={{top: -20, left: -20, right: 20, bottom: 20}}> */}
+      {/* </motion.div> */}
+      {/* make into seperate component */}
+      {plants.length > 0 &&
+      <div>
       <Link to={'/plantfinder'}>
         <IconButton fontSize="3xl" width="70px" height="70px" position="absolute" size="lg" top="-5" right="-5" zIndex="10" bgColor='#4AAD52' color="#d5e8ce" icon={<><RiPlantFill />+</>} isRound={true} aria-label='New Plant'>New Plant</IconButton>
       </Link>
-      {/* </motion.div> */}
-      {/* make into seperate component */}
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-      {plants.length > 0 &&
-        plants.map((plant) => (
+        {plants.map((plant) => (
           <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick} editPlant={editPlant}/>
           // <Card>
           //   <CardHeader>
@@ -124,10 +125,24 @@ const OwnedPlants = ({ user }) => {
           //     <h3>{plant.description}</h3>
           //   </CardBody>
           // </Card>
-        ))
-      }
-      {!plants.length && <Heading size={"lg"}>No sprouts...yet.</Heading>}
+        ))}
       </Grid>
+      </div>
+      }
+      {!plants.length &&
+      <motion.div>
+        <Heading className='u-text' textAlign={'center'} size={"lg"}>No sprouts... yet.</Heading>
+        <Center>
+        <Icon id='p-icon' color="#d5e8ce" as={RiPlantFill}  boxSize={"3xs"}/>
+        </Center>
+        {/* <Text textAlign={'center'} fontSize={"xl"}>Let's get growing.</Text><br></br> */}
+        <Center>
+          <Link to={'/plantfinder'}>
+        <Button id='p-button' fontSize="2xl" width="211px" height="77px" bgColor='#4AAD52' color="#d5e8ce" aria-label='Add a new sprout to your family.'>Let's get growing.</Button>
+        </Link>
+        </Center>
+      </motion.div> 
+      }
       </Box>
     </Box>
   );

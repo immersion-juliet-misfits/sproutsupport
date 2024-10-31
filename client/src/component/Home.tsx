@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -16,6 +17,7 @@ import {
   GridItem,
   IconButton,
   Stack,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   Input,
@@ -26,16 +28,27 @@ import {
   ButtonGroup,
   useEditableControls,
 } from '@chakra-ui/react';
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+} from '@chakra-ui/react';
 import { Link as ChakraLink } from '@chakra-ui/react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 import { CheckIcon, CloseIcon, EditIcon, DeleteIcon } from '@chakra-ui/icons';
+import { GrAddCircle } from 'react-icons/gr';
 import Comment from './Post/Comment';
-// import NavBar from './NavBar';
 import TopBar from './UserProfile/TopBar';
 
-const Home = () => {
+const Home = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState('');
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   function EditableControls() {
     const {
@@ -47,12 +60,20 @@ const Home = () => {
 
     return isEditing ? (
       <ButtonGroup justifyContent='center' size='sm'>
-        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
         <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} />
+        <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
       </ButtonGroup>
     ) : (
       <Flex>
-        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} />
+        <IconButton
+          variant='contained'
+          size='sm'
+          icon={<EditIcon />}
+          // isDisabled={user.id !== post.userId}
+          position='sticky'
+          top={0}
+          {...getEditButtonProps()}
+        />
       </Flex>
     );
   }
@@ -91,58 +112,85 @@ const Home = () => {
       });
   };
 
-  const handleDelete = (id: string) => {
-    deleteMessage(id);
-  };
-
   useEffect(() => {
     getPosts();
   }, []);
 
   return (
-    <Box w='1100px' mx='auto' >
-      <TopBar/>
+    <Box w='1100px' mx='auto'>
+      <TopBar />
       <Grid
+        className='bodyGrid'
+        border='15px solid #D3FFEB'
+        bg='#D3FFEB'
+        borderBottom='0'
         w='1100px'
         mx='auto'
-        mt={10}
-        p={5}
-        borderWidth='1px'
-        borderRadius='lg'
+        borderRadius='lg lg 0 0'
         overflow='hidden'
         boxShadow='md'
-        bg='#D3FFEB'
+        display='flex'
+        alignItems='center'
       >
         {/* below are html for posts */}
-
-        <Flex  py={4} direction='column'>
-          <ChakraLink as={ReactRouterLink} to='/createPost'>
-            Create Post
-          </ChakraLink>
-          <Flex
-            alignItems='center'
-            gap='2'
-            direction='column-reverse'
-            justify='center'
-            bg='#5AB78D'
+        <Flex
+          w='1100px'
+          mx='auto'
+          mt='0'
+          borderRadius='0 0 lg lg'
+          border='15px solid #D3FFEB'
+          borderTop='0'
+          bg='#5AB78D'
+          gap={10}
+          overflow='hidden'
+          boxShadow='md'
+          display='flex'
+          flexDirection='column'
+          // alignItems='center'
+          justifyContent='center'
+          py={4}
+        >
+          <ChakraLink
+            as={ReactRouterLink}
+            to='/createPost'
+            position='fixed'
+            bottom={5}
+            right={40}
           >
+            <GrAddCircle />
+          </ChakraLink>
+          <Flex direction='column-reverse' gap={5}>
             {posts.map((post) => {
               return (
-                <Card
-                  // box-sizing='large'
-                  alignItems='center'
-                  bg='#A3EECC'
-                  key={post.id}
+                <Flex
                   direction='column'
+                  bg='#A3EECC'
+                  // borderRadius='0 0 lg lg'
+                  w='900px'
+                  mx='auto'
+                  mt='0'
+                  alignItems='left'
+                  gap={5}
+                  key={post.id}
+                  rounded='true'
                 >
-                  <CardBody boxSize='380px'>
-                    {/* <CardBody > */}
-                    <Image src={post.imageUrl} boxSize='360'/>
-                  </CardBody>
-                  <Stack mt='6' spacing='3'>
-                    <Flex flexDirection='row' align='left'>
+                  <Card
+                    // box-sizing='large'
+                    // alignItems='left'
+                    bg='#A3EECC'
+                    key={post.id}
+                    direction={{ base: 'column', sm: 'row' }}
+                    overflow='hidden'
+                    variant='outline'
+                  >
+                    <Image
+                      src={post.imageUrl}
+                      objectFit='cover'
+                      maxW={{ base: '100%', sm: '100px' }}
+                    />
+                    <CardBody>
                       <Editable
-                        textAlign='center'
+                        textAlign='left'
                         defaultValue={post.message}
                         onSubmit={() => {
                           updateMessage(post.id);
@@ -153,30 +201,71 @@ const Home = () => {
                         fontSize='2xl'
                         isPreviewFocusable={false}
                       >
-                        <EditablePreview />
-                        <Input as={EditableInput} />
                         <EditableControls />
+                        <Input as={EditableInput} />
+                      <ChakraLink as={ReactRouterLink} to=''>
+                        <Text fontSize={16}>{post.username}</Text>
+                      </ChakraLink>
+                        <EditablePreview />
                       </Editable>
+                    </CardBody>
+                    <CardFooter>
                       <IconButton
-                        size='small'
+                        // position='top-right'
                         isRound={true}
-                        variant='solid'
-                        // colorScheme='yellow'
+                        variant='contained'
                         aria-label='Done'
                         fontSize='15px'
-                        onClick={() => {
-                          handleDelete(post.id);
-                        }}
+                        onClick={onOpen}
                         icon={<DeleteIcon />}
+                        isDisabled={user.id !== post.userId}
                       />
-                    </Flex>
-                  </Stack>
-                  <CardFooter>
-                    <Flex direction='column'>
-                      <Comment postId={post.id} />
-                    </Flex>
-                  </CardFooter>
-                </Card>
+                      <AlertDialog
+                        isOpen={isOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                      >
+                        <AlertDialogOverlay>
+                          <AlertDialogContent>
+                            <AlertDialogHeader fontSize='md' fontWeight='bold'>
+                              Delete Post
+                            </AlertDialogHeader>
+
+                            <AlertDialogBody>
+                              Are you sure? You can't undo this action
+                              afterwards.
+                            </AlertDialogBody>
+
+                            <AlertDialogFooter>
+                              <Button ref={cancelRef} onClick={onClose}>
+                                Cancel
+                              </Button>
+                              <Button
+                                colorScheme='red'
+                                onClick={() => {
+                                  deleteMessage(post.id);
+                                }}
+                                onChange={onClose}
+                                ml={3}
+                              >
+                                Delete
+                              </Button>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialogOverlay>
+                      </AlertDialog>
+                    </CardFooter>
+                  </Card>
+                  <Flex direction='column'>
+                    <Comment
+                      postId={post.id}
+                      user={user}
+                      isOpen={isOpen}
+                      onOpen={onOpen}
+                      onClose={onClose}
+                    />
+                  </Flex>
+                </Flex>
               );
             })}
           </Flex>

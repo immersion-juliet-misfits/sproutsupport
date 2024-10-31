@@ -30,6 +30,7 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const modalBg = useColorModeValue(colors.background.light, colors.background.dark)
+  const completionColor = useColorModeValue(colors.background.dark, colors.background.light)
 
   const handleCompletion = (task) => {
     axios.post('/plants/completeTask', { id: task.id })
@@ -81,22 +82,22 @@ const PlantCare = ({ plant, tasks, fetchTasks, getScore, updateProgressBar, fetc
         <ModalContent bgColor={modalBg} maxWidth="900px" width="50%">
           <ModalHeader>
             <Flex direction="column" alignItems="center" width="100%">
-              <Heading as="h1" size="lg">{plant.nickname}</Heading>
+              <Heading className='u-text' as="h1" size="lg">{plant.nickname}</Heading>
               {plant.nickname !== plant.commonName && (
-                <h3>{<strong>{plant.commonName}</strong>}</h3>
+                <h3 className='u-text'>{<strong>{plant.commonName}</strong>}</h3>
               )}
               <Image width="50%" src={plant.imageUrl}></Image>
             </Flex>
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <Heading as="h2" size="lg">Tasks</Heading>
+          <Heading className='u-text' as="h3" size="md">Tasks</Heading>
           {!tasks.length && <Heading as="h2" size="md" bgGradient='linear(to-t, green.600, green.900)' bgClip={"text"}>{'No tasks due :)'}</Heading>}
           {tasks.length > 0 && // no awkward spacing now
               tasks.map((task) => (
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.9 }}>
                 {progress[task.id] >= 100 &&
-                  <Progress sx={{'& > div': {backgroundColor: '#6EB257'}}}  borderRadius="lg" bgGradient='linear(to-b, green.100, green.300)' height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
+                  <Progress sx={{'& > div': {backgroundColor: '#488B49'}}}  borderRadius="lg" height='32px' value={progress[task.id]} onClick={() => handleCompletion(task)}>
                   <ProgressLabel>
                     <Heading as="h2" size="md" bgGradient='linear(to-t, #4AAD52, #b9da44, white)' bgClip={"text"}>{task.taskName}</Heading>
                   </ProgressLabel>
