@@ -94,6 +94,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
 {card.isJoined === true && <Button className="g-font" position={"absolute"} left={"70px"} top={"40px"} id='g-button' onClick={()=>{leaveMeetup()}}>Leave</Button>}
 </>}
 {updateSwap === true && <Box><MeetupUpdate event={card} refresh={refresh} showSwitch={showSwitch}/></Box>}
+{updateSwap === false &&<Image p={"15px"} src={'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/chackFlower.png'} position={"absolute"} top={"-30px"} left={"430px"} h={"430px"} w={"2000px"}></Image>}
 </SimpleGrid>
   </>)
 }

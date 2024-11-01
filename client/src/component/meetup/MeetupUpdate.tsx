@@ -171,7 +171,7 @@ return 'not in range'
 
   return(<Card id="g-card">
     <CardBody id="g-card" /*bg={"#C5E063"}*/ w={"450px"}>
-    <Box id="g-box" h={"60px"} >{'weather: ' + selecDate}<Button h={"25px"} id='g-button'color={"#6EB257"} onClick={()=>{meetupUpdate()}} isDisabled={fillIn} left={"210px"} top={"5px"}><AddIcon/></Button></Box>
+    <Box id="g-box" h={"60px"} >{'weather: ' + selecDate}<Button h={"25px"} id='g-button'color={"#6EB257"} onClick={()=>{meetupUpdate()}} isDisabled={fillIn} left={"380px"} top={"25px"} position={'absolute'}><AddIcon/></Button></Box>
    {check === true && <Center><Image objectFit={'fill'} src={image.name[0] === 'h' ? image.name : URL.createObjectURL(image)} h={"150px"} w={"470px"}></Image></Center>}
    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder="mm/dd/year h:mm am/pm"></Input>
     <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder="location"></Input>
