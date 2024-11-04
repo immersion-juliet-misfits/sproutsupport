@@ -95,9 +95,10 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
 {card.isJoined === true && <Button className="g-font" position={"absolute"} left={"70px"} top={"40px"} id='g-button' onClick={()=>{leaveMeetup()}}>Leave</Button>}
 </>}
 {updateSwap === true && <Box><MeetupUpdate event={card} refresh={refresh} showSwitch={showSwitch}/></Box>}
-{updateSwap === false &&<Image p={"15px"} src={'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/Peter_sprout-support_textlessIcon_copy(greenLight).png'} position={"absolute"} top={"-30px"} left={"670px"} h={"400px"} w={"400px"}></Image>}
+{updateSwap === false &&<Image p={"15px"} src={'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/Peter_sprout-support_textlessIcon_copy(black).png'} position={"absolute"}
+ top={"-30px"} left={"670px"} h={"400px"} w={"400px"} id="flitter-meetups-logo" ></Image>}
 </SimpleGrid>
   </>)
 }
-
+//filter="invert(59%) sepia(49%) saturate(397%) hue-rotate(60deg) brightness(95%) contrast(98%);"
 export default MeetupCard

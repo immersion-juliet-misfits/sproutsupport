@@ -103,6 +103,10 @@ const ssTheme = extendTheme({
         margin: 'auto',
       },
 
+      '#flitter-meetups-logo': {
+        filter: mode(colors.meetupLogo.light, colors.meetupLogo.dark)(props)
+      },
+
       // *** Global Nav/Top Bar Settings ***
       '#topBar-grid': {
         height: '100px',
