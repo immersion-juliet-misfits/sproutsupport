@@ -70,6 +70,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
   },[])
 
   return(<>
+  { console.log(true, card.imageUrl, typeof card.imageUrl)}
   <Center><Button id='g-button' mx={"20px"} onClick={()=>{showSwitch(false, {})}}>go back</Button></Center>
   <SimpleGrid mt={'30px'} position="relative" top="-38px" columns={2} spacing={60} w={'940px'} >
   <Card id="g-card" w={'470px'} h={'425px'} mx={"20px"}>
@@ -94,7 +95,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
 {card.isJoined === true && <Button className="g-font" position={"absolute"} left={"70px"} top={"40px"} id='g-button' onClick={()=>{leaveMeetup()}}>Leave</Button>}
 </>}
 {updateSwap === true && <Box><MeetupUpdate event={card} refresh={refresh} showSwitch={showSwitch}/></Box>}
-{updateSwap === false &&<Image p={"15px"} src={'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/chackFlower.png'} position={"absolute"} top={"-30px"} left={"430px"} h={"430px"} w={"2000px"}></Image>}
+{updateSwap === false &&<Image p={"15px"} src={'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/Peter_sprout-support_textlessIcon_copy(white).png'} position={"absolute"} top={"-30px"} left={"670px"} h={"400px"} w={"400px"}></Image>}
 </SimpleGrid>
   </>)
 }

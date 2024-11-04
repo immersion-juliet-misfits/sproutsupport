@@ -77,7 +77,7 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
   })
     }else{
       const combine = `Location: ${location}\n, State: ${st}\n, City: ${city}`
-      const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: 'https://sproutsupportbucket.s3.amazonaws.com/sproutsSupportLogo1.png', id}
+      const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: 'none', id}
       const url = 'meetup/update/' + id
       axios.patch(url, obj)
       .then(()=>{
