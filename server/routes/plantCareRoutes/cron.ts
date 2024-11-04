@@ -17,7 +17,10 @@ const job = new CronJob('*/1 * * * * *', () => { // wanna make this dynamic
   prisma.task.findMany({where: { nextComplection: { lt: new Date() }, overdue: false}, include: {taskPlant: true}}) // gives me all entries back
    .then((data) => {
      data.forEach((task) => {
-      io.emit('overdue', task)
+      const userRoom = `user_${task.taskPlant.userId}`
+      // io.emit('overdue', task)
+      console.log(`user_${task.taskPlant.userId}`)
+      io.to(userRoom).emit('overdue', task)
      })
     // notify plant owner of their overdue task
     if (data.length > 0) {
@@ -25,7 +28,7 @@ const job = new CronJob('*/1 * * * * *', () => { // wanna make this dynamic
       prisma.task.updateMany({where: { nextComplection: { lt: new Date() }, overdue: false }, data: {overdue: true}})
         .then(() => {
           // console.log('updated')
-        })
+        })  
     }
    })
 })

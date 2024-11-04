@@ -114,7 +114,7 @@ const OwnedPlants = ({ user }) => {
       </Link>
       <Grid templateColumns="repeat(3, 1fr)" gap={6}>
         {plants.map((plant) => (
-          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick} editPlant={editPlant}/>
+          <PlantSnippet key={plant.id} plant={plant} getPlants={getPlants} handlePlantClick={handlePlantClick} getScore={getScore} updateProgressBar={updateProgressBar} handleDelete={handleDelete} handlePlantClick={handlePlantClick} editPlant={editPlant} user={user}/>
           // <Card>
           //   <CardHeader>
           //     <Heading size='md'>{plant.nickname}</Heading>
