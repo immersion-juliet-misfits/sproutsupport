@@ -72,7 +72,12 @@ const UserPublicProfile = () => {
       {/* User's Avatar and Info */}
       <Box className='pub-top-box'>
         <HStack className='pub-top-hstack'>
-          <GridItem id='u-avatar-gi'>
+          <GridItem
+          // id='u-avatar-gi'
+          id={publicUser.avatar === 'https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
+            ? 'u-avatar-gi-default'
+            : 'u-avatar-gi'}
+          >
             <Image
               id='u-avatar-img'
               src={publicUser.avatar}

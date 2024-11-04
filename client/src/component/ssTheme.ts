@@ -121,7 +121,11 @@ const ssTheme = extendTheme({
         // Below also affects color of text in Hamburger menu
         color: mode(colors.text.light, colors.text.dark)(props),
         borderRadius: 'lg',
-        px: '50px',
+        // px: '50px', // for the Text placeholder for the logo
+      },
+
+      '#logo-text': {
+        filter: 'invert(76%) sepia(16%) saturate(797%) hue-rotate(60deg) brightness(95%) contrast(85%)',
       },
 
       '#g-box': {
@@ -130,7 +134,7 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
         fontFamily: 'pangolin',
       },
-      '#p-button':{
+      '#p-button': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
@@ -138,24 +142,24 @@ const ssTheme = extendTheme({
           color: '#6EB257',
         },
       },
-      '#p-input':{
+      '#p-input': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },
-      '#p-input2':{
+      '#p-input2': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: '#B9DA44',
         borderRadius: '10px',
         _placeholder: {
-          color: '#67723E'
-        }
+          color: '#67723E',
+        },
       },
-      '#p-icon':{
+      '#p-icon': {
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },
-      '#p-form':{
+      '#p-form': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
@@ -213,6 +217,7 @@ const ssTheme = extendTheme({
 
       '#topBar-hstack': {
         gap: '50px',
+        m: 'auto',
       },
 
       // Attempting to mimic settings of offSet

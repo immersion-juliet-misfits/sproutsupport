@@ -1,4 +1,4 @@
-import { Grid, GridItem, Heading } from '@chakra-ui/react';
+import { Grid, GridItem, Image } from '@chakra-ui/react';
 import NavBar from '../NavBar';
 import '@fontsource/nerko-one';
 
@@ -7,7 +7,12 @@ const TopBar = ({ route }: { route: string }) => {
   return (
     <Grid id='topBar-grid'>
       <GridItem id='topBar-gridItem' className='tb-gi-one'>
-        Sprout Support
+      <Image
+              id='logo-text'
+              src='https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-yestext.png'
+              alt='Website Logo with Text'
+            />
+        {/* Sprout Support */}
       </GridItem>
 
       <GridItem id='topBar-gridItem' className='tb-gi-two'>
@@ -16,26 +21,6 @@ const TopBar = ({ route }: { route: string }) => {
     </Grid>
   );
 
-  // * V1 *****
-  // return (
-  //   <Grid id='topBar-grid'>
-  //     <GridItem id='topBar-gridItem' className='tb-gi-one'>
-  //       Logo
-  //     </GridItem>
-
-  //     <GridItem className='tb-gi-three'>
-  //       <Heading id='g-heading'>
-  //         {route === undefined || route === '' ? 'Sprout Support' : route}
-  //       </Heading>
-  //     </GridItem>
-
-  //     <GridItem id='topBar-gridItem' className='tb-gi-one'>
-  //       <NavBar />
-  //     </GridItem>
-  //   </Grid>
-  // );
-
-  // ******
 };
 
 export default TopBar;
