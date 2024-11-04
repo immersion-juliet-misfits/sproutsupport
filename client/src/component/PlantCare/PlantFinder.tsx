@@ -188,17 +188,17 @@ const PlantFinder = ({ user, BUCKET_NAME }) => {
           <Box p={3} borderRadius="xl" id='p-form'>
           <FormControl isRequired>
           <FormLabel id="p-text" requiredIndicator={false}>Choose a name for your plant:</FormLabel>
-          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br><br/>
+          <Input id='p-input' focusBorderColor='#B9DA44' type="text" placeholder={selected.CommonName} onChange={(e) => handleNicknameChange(e)}></Input><br></br><br/>
           <FormLabel id="p-text" requiredIndicator={false}>Choose a bio for your plant:</FormLabel>
-          <Input id='p-input2' focusBorderColor='#B9DA44' type="text" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br><br/>
+          <Input id='p-input' focusBorderColor='#B9DA44' type="text" onChange={(e) => handleBio(e)} bgColor='green.100' textColor="green.900"></Input><br></br><br/>
           <FormLabel id="p-text">Choose a frequency for task</FormLabel>
-          <Select bgColor={"#B9DA44"} color={"#488B49"} placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
+          <Select bgColor={"#488B49"} color={"#D5E8CE"} focusBorderColor='#B9DA44' placeholder="Select frequency" onChange={(e) => handleFrequencyChange(e)}>
             <option>second</option>
             <option>minute</option>
             <option>hour</option>
           </Select><br/>
           <FormLabel id="p-text">Choose a name for task:</FormLabel>
-          <Input id='p-input2' type="text" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900" isRequired={true}></Input><br></br><br/>
+          <Input id='p-input' type="text" value={taskName} onChange={(e) => handleTaskName(e)} bgColor='green.100' textColor="green.900" isRequired={true}></Input><br></br><br/>
           <Button onClick={() => handleAddTask()} bgColor="#d5e8ce" color="#4AAD52" w="100%">Add Task</Button><br/>
           {tasks.length > 0 && <FormLabel>Tasks</FormLabel>}
           {tasks.length > 0 &&
