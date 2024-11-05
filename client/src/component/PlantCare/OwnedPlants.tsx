@@ -11,7 +11,6 @@ import TopBar from '../UserProfile/TopBar';
 import { RiPlantFill } from "react-icons/ri";
 import { motion } from "framer-motion"
 // import UploadImage from '../UploadImage';
-// import io from 'socket.io-client';
 
 // const socket = io('http://localhost:8000');
 
