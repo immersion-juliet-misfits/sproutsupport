@@ -60,7 +60,7 @@ const NavBar = () => {
             aria-label='Menu Options'
             icon={<HamburgerIcon id='topBar-icon-hamburger' />}
           />
-          <MenuList className='topBar-menuList'>
+          <MenuList className='topBar-menuList' zIndex={"popover"}>
             <MenuItem
               as={ReactRouterLink}
               to={`/public-profile/${user?.userName}`}
@@ -73,7 +73,7 @@ const NavBar = () => {
               as={ReactRouterLink}
               to='/userprofile'
             >
-              <SettingsIcon mr={2} />
+              <SettingsIcon  />
               Settings
             </MenuItem>
 
