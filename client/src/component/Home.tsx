@@ -92,7 +92,7 @@ const Home = ({ user }) => {
 
   const updateMessage = (id: string) => {
     axios
-      .patch(`/post/post${id}`, { message })
+      .patch(`/post/post/${id}`, { message })
       .then(() => {
         getPosts();
       })
