@@ -82,7 +82,7 @@ const ssTheme = extendTheme({
         border: '5px solid',
         borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
-        backgroundColor: mode(colors.button.light, colors.button.dark)(props),
+        backgroundColor: mode(colors.button.light, '')(props),
       },
 
       '#g-link': {
@@ -167,6 +167,11 @@ const ssTheme = extendTheme({
 
       '.g-font': {
         fontFamily: 'pangolin',
+      },
+      
+      '.g-font-p': {
+        fontFamily: 'pangolin',
+        _placeholder:  {color: mode(colors.text.light, colors.text.dark)(props)}    //mode(colors.levelOne.light, colors.levelOne.dark)(props),
       },
 
       '.tb-gi-one': {

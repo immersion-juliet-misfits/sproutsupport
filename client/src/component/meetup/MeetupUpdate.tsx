@@ -173,20 +173,20 @@ return 'not in range'
     <CardBody id="g-card" /*bg={"#C5E063"}*/ w={"450px"}>
     <Box id="g-box" h={"60px"} >{'weather: ' + selecDate}<Button h={"25px"} id='g-button'color={"#6EB257"} onClick={()=>{meetupUpdate()}} isDisabled={fillIn} left={"380px"} top={"25px"} position={'absolute'}><AddIcon/></Button></Box>
    {check === true && <Center><Image objectFit={'fill'} src={image.name[0] === 'h' ? image.name : URL.createObjectURL(image)} h={"150px"} w={"470px"}></Image></Center>}
-   <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder="mm/dd/year h:mm am/pm"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder="location"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+   <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder="mm/dd/year h:mm am/pm"></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder="location"></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
     }} name='c' placeholder="city"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
      getweather()
     }} name='s' placeholder="state"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder="eventName"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder="description"></Input>
-  <Input className="g-font" id="g-input" type="file" accept="image/*" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder="eventName"></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder="description"></Input>
+  <Input className="g-font-p" id="g-input" type="file" accept="image/*" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
   <Alert status={warn}>
   <AlertIcon />
-  <AlertDescription className="g-font">{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
+  <AlertDescription className="g-font-p">{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
 </Alert>
   </CardBody>
   </Card>
