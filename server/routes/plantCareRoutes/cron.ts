@@ -19,7 +19,7 @@ const job = new CronJob('*/1 * * * * *', () => { // wanna make this dynamic
      data.forEach((task) => {
       const userRoom = `user_${task.taskPlant.userId}`
       // io.emit('overdue', task)
-      console.log(`user_${task.taskPlant.userId}`)
+      // console.log(`user_${task.taskPlant.userId}`)
       io.to(userRoom).emit('overdue', task)
      })
     // notify plant owner of their overdue task
