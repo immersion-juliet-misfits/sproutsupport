@@ -13,9 +13,9 @@ import { motion } from "framer-motion"
 import io from 'socket.io-client';
 import colors from '../colors';
 
-const socket = io('http://localhost:8000');
+// const socket = io('http://localhost:8000');
 
-const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick }) => {
+const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProgressBar, handleDelete, handlePlantClick, user }) => {
   const [tasks, setTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
   const [allTasks, setAll] = useState([]);
@@ -123,22 +123,30 @@ const PlantSnippet = ({ plant, getPlants, handlePlantClick, getScore, updateProg
   }
 
   useEffect(() => {
-    fetchTasks()
-    fetchTaskProgress()
-    fetchDoneTasks()
-    socket.on('overdue', () => {
+    if(user?.id) {
+
+    const socket = io('http://localhost:8000', {
+      query: {userId: user.id}
+    });
+
       fetchTasks()
       fetchTaskProgress()
       fetchDoneTasks()
-    }) // task on
-
+      socket.on('overdue', () => {
+        fetchTasks()
+        fetchTaskProgress()
+        fetchDoneTasks()
+      }) // task on
+      
       return (() => {
         socket.off('overdue', () => {
           fetchTasks()
           fetchTaskProgress()
           fetchDoneTasks()
         })
+        socket.disconnect()
       })
+    }
   }, [])
 
   const getProgress = (lastCompleted, nextCompletion) => {

@@ -160,7 +160,7 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
       },
       '#p-form':{
-        bgColor: mode(colors.text.light, colors.text.dark)(props),
+        bgColor: mode(colors.text.light, colors.switch.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },

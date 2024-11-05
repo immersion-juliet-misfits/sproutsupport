@@ -24,7 +24,6 @@ const Meetup = lazy(() => import('./meetup/Meetup'));
 const UserSearch = lazy(() => import('./UserProfile/UserSearch'));
 
 
-const socket = io('http://localhost:8000');
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -32,10 +31,15 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast();
-  const BUCKET_NAME = 'my1test1bucket';
+  // const BUCKET_NAME = 'my1test1bucket';
   // const BUCKET_NAME = 'sprout-support';
+<<<<<<< HEAD
   const BUCKET_NAME = 'sproutsupportbucket'
   // const BUCKET_NAME = 'ssupportbucket'
+=======
+  // const BUCKET_NAME = 'sproutsupportbucket'
+  const BUCKET_NAME = 'ssupportbucket'
+>>>>>>> 7d557651001c6fdd533fb8fbe180bbe19da6786b
 
   const fetchUserData = () => {
     axios
@@ -54,24 +58,31 @@ const App = () => {
   useEffect(() => {
     // Fetch Users authentication status
     fetchUserData();
-
-    const notif = (task) => {
-      toast({
-        title: `${task.taskPlant.nickname}`,
-        description: `${task.taskName}`,
-        status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'top-right',
+    
+    if (user?.id) {
+      const socket = io('http://localhost:8000', {
+        query: { userId: user.id }
       });
-    };
-
-    socket.on('overdue', notif); // task on
-
-    return () => {
-      socket.off('overdue', notif); // then off to not double up upon re-render with update
-    };
-  }, []);
+      
+      const notif = (task) => {
+        toast({
+          title: `${task.taskPlant.nickname}`,
+          description: `${task.taskName}`,
+          status: 'warning',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        });
+      };
+      
+      socket.on('overdue', notif); // task on
+      
+      return () => {
+        socket.off('overdue', notif); // then off to not double up upon re-render with update
+        // socket.disconnect()
+      };
+    }
+  }, [user?.id]);
 
   const handleLogout = () => {
     setIsAuthenticated(false);
