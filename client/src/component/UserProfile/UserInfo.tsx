@@ -67,6 +67,7 @@ const UserInfo = ({
         <VStack className='u-edit-vstack'>
           <GridItem
             // id='u-avatar-gi'
+            // Change below to dynamic bucket name use
             id={user.avatar === 'https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
               ? 'u-avatar-gi-default'
               : 'u-avatar-gi'}
@@ -112,7 +113,7 @@ const UserInfo = ({
                 spacing={1}
               >
                 <Input
-                  id='g-input'
+                  id='u-g-input'
                   className='u-input'
                   name='username'
                   value={editableUserName}
@@ -158,7 +159,7 @@ const UserInfo = ({
                 spacing={1}
               >
                 <Input
-                  id='g-input'
+                  id='u-g-input'
                   className='u-input'
                   name='bio'
                   value={editableBio}

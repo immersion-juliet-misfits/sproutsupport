@@ -95,6 +95,7 @@ passport.use(
               userName: profile.displayName,
               email: profile.emails?.[0].value,
               // avatar: 'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
+              // Change below to dynamic bucket name use
               avatar: 'https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png',
             },
           });

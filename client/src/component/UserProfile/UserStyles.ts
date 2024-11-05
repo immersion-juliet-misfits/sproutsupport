@@ -241,6 +241,19 @@ const UserStyles = (props) => ({
     mx: 'auto',
   },
 
+  '.u-input': {
+    height: '50px',
+    width: '300px !important',
+  },
+
+  '#u-g-input': {
+    border: '5px solid',
+    borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+    borderRadius: '10px',
+    backgroundColor: mode(colors.button.light, colors.button.dark)(props),
+  },
+
+
   '.u-hs-input': {
     display: 'flex',
     flexDirection: 'column',
@@ -249,10 +262,6 @@ const UserStyles = (props) => ({
     pb: '5px',
   },
 
-  '.u-input': {
-    height: '50px',
-    width: '300px !important',
-  },
 
   '.u-link': {
     fontSize: '3xl',

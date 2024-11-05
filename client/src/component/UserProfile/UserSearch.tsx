@@ -22,7 +22,7 @@ const UserSearch = () => {
         alignItems='center'
       >
         <Input
-          id='g-input'
+          id='u-g-input'
           className='u-input'
           type='text'
           value={username}

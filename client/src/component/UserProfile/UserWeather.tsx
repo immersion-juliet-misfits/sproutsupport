@@ -68,7 +68,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
           spacing={1}
         >
           <Input
-            id='g-input'
+            id='u-g-input'
             className='u-input'
             name='city'
             value={editableCity}
@@ -77,7 +77,7 @@ const UserWeather = ({ fetchUserData, user, setUser }) => {
           />
 
           <Input
-            id='g-input'
+            id='u-g-input'
             className='u-input'
             name='state'
             value={editableState}

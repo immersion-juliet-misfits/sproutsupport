@@ -74,6 +74,7 @@ const UserPublicProfile = () => {
         <HStack className='pub-top-hstack'>
           <GridItem
           // id='u-avatar-gi'
+          // Change below to dynamic bucket name use
           id={publicUser.avatar === 'https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
             ? 'u-avatar-gi-default'
             : 'u-avatar-gi'}

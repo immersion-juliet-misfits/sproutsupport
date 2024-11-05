@@ -7,6 +7,7 @@ const TopBar = ({ route }: { route: string }) => {
   return (
     <Grid id='topBar-grid'>
       <GridItem id='topBar-gridItem' className='tb-gi-one'>
+        {/* Change this to dynamic bucket name use  */}
       <Image
               id='logo-text'
               src='https://my1test1bucket.s3.us-east-2.amazonaws.com/icon-sprout-support-yestext.png'
