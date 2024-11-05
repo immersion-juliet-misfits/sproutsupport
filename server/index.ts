@@ -209,9 +209,15 @@ const io = new Server(httpServer);
 io.on("connection", (socket) => {
   // ...
   // console.log(`${socket.id} connected.`)
+  const userId = socket.handshake.query.userId
+
+  if(userId) {
+    const room = `user_${userId}`
+    socket.join(room)
+  }
 
   socket.on('disconnect', () => {
-    // console.log(`${socket.id} disconnected.`);
+    console.log(`${socket.id} disconnected.`);
   });
 });
 
