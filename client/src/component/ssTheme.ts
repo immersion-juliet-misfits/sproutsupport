@@ -80,8 +80,8 @@ const ssTheme = extendTheme({
 
       '#g-input': {
         border: '5px solid',
-        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         backgroundColor: mode(colors.button.light, colors.button.dark)(props),
       },
 
@@ -238,6 +238,40 @@ const ssTheme = extendTheme({
       '.visible': {
         visibility: 'visible',
       },
+
+      '.bodyGrid': {
+
+      },
+
+      '#post-box': {
+        border: '1px solid',
+        borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+        borderRadius: '10px',
+        width: '99%',
+        padding: '10px',
+        alignItems: 'left',
+        margin: '10px',
+        fontFamily: 'pangolin',
+      },
+
+      '#post-card': {
+        border: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
+        backgroundColor: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
+      },
+
+      '#post-flex': {
+        borderRadius: '10px',
+        margin:'5px',
+        padding:'5px',
+        bg: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+      },
+
     }),
   },
   components: {

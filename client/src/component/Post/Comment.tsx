@@ -32,6 +32,7 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
   const [input, setInput] = useState('');
   const [comments, setComments] = useState([]);
   // const { isOpen, onOpen, onClose } = useDisclosure();
+  const [submitted, setSubmitted] = useState(false);
   const comCancelRef = useRef();
 
   const handleInputChange = (e: {
@@ -43,6 +44,13 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
   const isError = input === '';
 
   const addComment = () => {
+
+    if (input === '') {
+      setSubmitted(true);
+      return;
+    }
+    setSubmitted(false);
+
     return axios
       .post('comment/comment', {
         message: input,
@@ -94,10 +102,19 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
   return (
     <Flex direction='column'>
       {comments.map((comment: object) => (
-        <Flex boxSize='large' key={comment.id}>
+        <Flex
+        id='post-flex'
+        // border='1px solid red'
+        // borderRadius='10px'
+        // bg='#A3EECC'
+        // margin='5px'
+        // padding='5px'
+        boxSize='large' key={comment.id}>
           <Box flex='1' alignSelf='left'>
             <Text>{comment.username}</Text>
-            <Text>{comment.message}</Text>
+            <Text
+            fontSize='2xl'
+            >{comment.message}</Text>
           </Box>
           <IconButton
             variant='contained'
@@ -142,9 +159,13 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
         </Flex>
       ))}
       <Box flexDirection='column'>
-        <FormControl isInvalid={isError}>
+        <FormControl
+        isInvalid={isError && submitted}
+        >
           {/* <FormLabel>Comment</FormLabel> */}
-          <Input type='post' value={input} onChange={handleInputChange} />
+          <Input
+          id='g-input'
+          type='post' value={input} onChange={handleInputChange} />
           {!isError ? (
             <FormHelperText>Press Submit to create comment.</FormHelperText>
           ) : (

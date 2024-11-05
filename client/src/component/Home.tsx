@@ -120,13 +120,14 @@ const Home = ({ user }) => {
     <Box w='1100px' mx='auto'>
       <TopBar />
       <Grid
+        id='lvl-one'
         className='bodyGrid'
-        border='15px solid #D3FFEB'
-        bg='#D3FFEB'
+        // border='15px solid #D3FFEB'
+        // bg='#D3FFEB'
         borderBottom='0'
         w='1100px'
         mx='auto'
-        borderRadius='lg lg 0 0'
+        // borderRadius='lg lg 0 0'
         overflow='hidden'
         boxShadow='md'
         display='flex'
@@ -138,9 +139,9 @@ const Home = ({ user }) => {
           mx='auto'
           mt='0'
           borderRadius='0 0 lg lg'
-          border='15px solid #D3FFEB'
+          // border='15px solid #D3FFEB'
           borderTop='0'
-          bg='#5AB78D'
+          // bg='#5AB78D'
           gap={10}
           overflow='hidden'
           boxShadow='md'
@@ -163,21 +164,23 @@ const Home = ({ user }) => {
             {posts.map((post) => {
               return (
                 <Flex
+                  id='post-box'
                   direction='column'
-                  bg='#A3EECC'
+                  // bg='#A3EECC'
                   // borderRadius='0 0 lg lg'
-                  w='900px'
+                  // w='900px'
                   mx='auto'
                   mt='0'
-                  alignItems='left'
+                  // alignItems='left'
                   gap={5}
                   key={post.id}
-                  rounded='true'
+                  // rounded='true'
                 >
                   <Card
                     // box-sizing='large'
                     // alignItems='left'
-                    bg='#A3EECC'
+                    id='post-card'
+                    // bg='#A3EECC'
                     key={post.id}
                     direction={{ base: 'column', sm: 'row' }}
                     overflow='hidden'
@@ -202,7 +205,9 @@ const Home = ({ user }) => {
                         isPreviewFocusable={false}
                       >
                         <EditableControls />
-                        <Input as={EditableInput} />
+                        <Input
+                        // id='g-input'
+                        as={EditableInput} />
                       <ChakraLink as={ReactRouterLink} to=''>
                         <Text fontSize={16}>{post.username}</Text>
                       </ChakraLink>
