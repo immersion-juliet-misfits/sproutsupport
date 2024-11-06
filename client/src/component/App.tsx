@@ -33,13 +33,8 @@ const App = () => {
   const toast = useToast();
   // const BUCKET_NAME = 'my1test1bucket';
   // const BUCKET_NAME = 'sprout-support';
-<<<<<<< HEAD
   const BUCKET_NAME = 'sproutsupportbucket'
   // const BUCKET_NAME = 'ssupportbucket'
-=======
-  // const BUCKET_NAME = 'sproutsupportbucket'
-  const BUCKET_NAME = 'ssupportbucket'
->>>>>>> 7d557651001c6fdd533fb8fbe180bbe19da6786b
 
   const fetchUserData = () => {
     axios

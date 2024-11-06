@@ -68,9 +68,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
       }
     })
   },[])
-
   return(<>
-  { console.log(true, card.imageUrl, typeof card.imageUrl)}
   <Center><Button id='g-button' mx={"20px"} onClick={()=>{showSwitch(false, {})}}>go back</Button></Center>
   <SimpleGrid mt={'30px'} position="relative" top="-38px" columns={2} spacing={60} w={'940px'} >
   <Card id="g-card" w={'470px'} h={'425px'} mx={"20px"}>
