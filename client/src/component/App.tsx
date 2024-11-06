@@ -31,10 +31,9 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast();
-  // const BUCKET_NAME = 'my1test1bucket';
+  const BUCKET_NAME = 'sproutsupportbucket'
   // const BUCKET_NAME = 'sprout-support';
-  // const BUCKET_NAME = 'sproutsupportbucket'
-  const BUCKET_NAME = 'ssupportbucket'
+  // const BUCKET_NAME = 'ssupportbucket'
 
   const fetchUserData = () => {
     axios
@@ -53,12 +52,12 @@ const App = () => {
   useEffect(() => {
     // Fetch Users authentication status
     fetchUserData();
-    
+
     if (user?.id) {
       const socket = io('http://localhost:8000', {
         query: { userId: user.id }
       });
-      
+
       const notif = (task) => {
         toast({
           title: `${task.taskPlant.nickname}`,
@@ -69,9 +68,9 @@ const App = () => {
           position: 'top-right',
         });
       };
-      
+
       socket.on('overdue', notif); // task on
-      
+
       return () => {
         socket.off('overdue', notif); // then off to not double up upon re-render with update
         // socket.disconnect()
