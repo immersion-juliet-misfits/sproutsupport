@@ -48,9 +48,11 @@ const Home = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [message, setMessage] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedPostId, setSelectedPostId] = useState(null);
+
   const cancelRef = useRef();
 
-  function EditableControls() {
+  function EditableControls({ user, post }) {
     const {
       isEditing,
       getSubmitButtonProps,
@@ -64,6 +66,7 @@ const Home = ({ user }) => {
         <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} />
       </ButtonGroup>
     ) : (
+      user.id === post.userId && (
       <Flex>
         <IconButton
           variant='contained'
@@ -75,6 +78,7 @@ const Home = ({ user }) => {
           {...getEditButtonProps()}
         />
       </Flex>
+      )
     );
   }
 
@@ -204,27 +208,36 @@ const Home = ({ user }) => {
                         fontSize='2xl'
                         isPreviewFocusable={false}
                       >
-                        <EditableControls />
+                        <EditableControls user={user} post={post}/>
                         <Input
-                        // id='g-input'
-                        as={EditableInput} />
-                      <ChakraLink as={ReactRouterLink} to=''>
-                        <Text fontSize={16}>{post.username}</Text>
-                      </ChakraLink>
+                          // id='g-input'
+                          as={EditableInput}
+                        />
+                        <ChakraLink
+                          as={ReactRouterLink}
+                          to=''
+                        >
+                          <Text fontSize={16}>{post.username}</Text>
+                        </ChakraLink>
                         <EditablePreview />
                       </Editable>
                     </CardBody>
                     <CardFooter>
-                      <IconButton
-                        // position='top-right'
-                        isRound={true}
-                        variant='contained'
-                        aria-label='Done'
-                        fontSize='15px'
-                        onClick={onOpen}
-                        icon={<DeleteIcon />}
-                        isDisabled={user.id !== post.userId}
-                      />
+                      {user.id === post.userId && (
+                        <IconButton
+                         // position='top-right'
+                         isRound={true}
+                         variant='contained'
+                         aria-label='Done'
+                         fontSize='15px'
+                         onClick={() => {
+                           setSelectedPostId(post.id);
+                           onOpen();
+                         }}
+                         icon={<DeleteIcon />}
+                         isDisabled={user.id !== post.userId}
+                        />
+                      )}
                       <AlertDialog
                         isOpen={isOpen}
                         leastDestructiveRef={cancelRef}
@@ -232,7 +245,10 @@ const Home = ({ user }) => {
                       >
                         <AlertDialogOverlay>
                           <AlertDialogContent>
-                            <AlertDialogHeader fontSize='md' fontWeight='bold'>
+                            <AlertDialogHeader
+                              fontSize='md'
+                              fontWeight='bold'
+                            >
                               Delete Post
                             </AlertDialogHeader>
 
@@ -242,15 +258,20 @@ const Home = ({ user }) => {
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
-                              <Button ref={cancelRef} onClick={onClose}>
+                              <Button
+                                ref={cancelRef}
+                                onClick={onClose}
+                              >
                                 Cancel
                               </Button>
                               <Button
                                 colorScheme='red'
                                 onClick={() => {
-                                  deleteMessage(post.id);
+                                  // deleteMessage(post.id);
+                                  deleteMessage(selectedPostId);
+                                  onClose();
                                 }}
-                                onChange={onClose}
+                                // onChange={onClose}
                                 ml={3}
                               >
                                 Delete

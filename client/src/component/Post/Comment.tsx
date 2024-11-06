@@ -33,6 +33,7 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
   const [comments, setComments] = useState([]);
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const [submitted, setSubmitted] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState(null);
   const comCancelRef = useRef();
 
   const handleInputChange = (e: {
@@ -116,13 +117,19 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
             fontSize='2xl'
             >{comment.message}</Text>
           </Box>
+          {user.id === comment.userId && (
           <IconButton
             variant='contained'
             mt={2}
             onClick={onOpen}
+            // onClick={() => {
+            //   setSelectedCommentId(comment.id);
+            //   onOpen();
+            // }}
             icon={<DeleteIcon />}
             isDisabled={user.id !== comment.userId}
             aria-label={''}          />
+           )}
           <AlertDialog
             isOpen={isOpen}
             leastDestructiveRef={comCancelRef}
@@ -146,6 +153,8 @@ const Comment = ({ postId, user, isOpen, onOpen, onClose }) => {
                     colorScheme='red'
                     onClick={() => {
                       deleteComment(comment.id);
+                      // deleteComment(selectedCommentId);
+                      onClose();
                     }}
                     onChange={onClose}
                     ml={3}
