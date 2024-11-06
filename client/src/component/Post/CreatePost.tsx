@@ -71,7 +71,7 @@ const CreatePost = ({user, BUCKET_NAME}) => {
     </div>
       <FormControl isInvalid={isError}>
         <FormLabel>Post</FormLabel>
-        <Input id='g-input' type='post' value={input} onChange={handleInputChange} />
+        <Input id='post-input' type='post' value={input} onChange={handleInputChange} />
         {!isError ? (
           <FormHelperText>
             Press Submit to create post.

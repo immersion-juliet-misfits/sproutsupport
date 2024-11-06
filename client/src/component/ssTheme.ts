@@ -272,6 +272,13 @@ const ssTheme = extendTheme({
         bg: mode(colors.levelThree.light, colors.levelThree.dark)(props),
       },
 
+      '#post-input': {
+        border: '5px solid',
+        borderRadius: '10px',
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        backgroundColor: mode(colors.text.light, colors.text.dark)(props),
+      },
+
     }),
   },
   components: {
