@@ -25,12 +25,10 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
   })
   const [st, setSt] = useState(()=>{ //city, setCity
     const temp: string = event.location.split('\n,')
-    console.log(temp[2].slice(6), 'city')
     return temp[2].slice(6)
   })
   const [city, setCity] = useState(()=>{
     const temp: string = event.location.split('\n,')
-    console.log(temp[1].slice(7), 'state')
     return temp[1].slice(7)
   })
   const [image, setImage] = useState({name: event.imageUrl})
@@ -67,14 +65,13 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
   const meetupUpdate = (): void =>{
     if(image.name !== undefined){
       const combine = `Location:${location}\n, State:${st}\n, City:${city}`
-      console.log('the combine string', combine)
     axios.get('/upload/url', { params: {filename: image.name}})
     .then(({data}) => {
       return axios.put(data, image, {
         headers: {'Content-Type': image.type}
       })
     }).then(()=>{
-      const test = image.name.includes('https://sproutsupportbucket.s3.amazonaws.com/') ? image.name : `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`
+      const test = image.name.includes('https://ssupportbucket.s3.amazonaws.com/') ? image.name : `https://ssupportbucket.s3.amazonaws.com/${image.name}`
   const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: test, id}
   const url = 'meetup/update/' + id
   axios.patch(url, obj)
