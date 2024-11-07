@@ -66,7 +66,12 @@ const UserInfo = ({
       <HStack className='pub-box'>
         <VStack className='u-edit-vstack'>
           <GridItem
-            id='u-avatar-gi'
+            id={
+              user.avatar ===
+              'https://ssupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
+                ? 'u-avatar-gi-default'
+                : 'u-avatar-gi'
+            }
             onClick={() => {
               document.getElementById('avatarInput').click();
             }}
@@ -109,7 +114,7 @@ const UserInfo = ({
                 spacing={1}
               >
                 <Input
-                  id='g-input'
+                  id='u-g-input'
                   className='u-input'
                   name='username'
                   value={editableUserName}
@@ -155,7 +160,7 @@ const UserInfo = ({
                 spacing={1}
               >
                 <Input
-                  id='g-input'
+                  id='u-g-input'
                   className='u-input'
                   name='bio'
                   value={editableBio}

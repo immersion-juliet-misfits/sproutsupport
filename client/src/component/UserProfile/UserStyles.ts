@@ -101,6 +101,23 @@ const UserStyles = (props) => ({
     overflow: 'hidden',
   },
 
+  '#u-avatar-gi-default': {
+    filter: mode(
+      'invert(19%) sepia(27%) saturate(524%) hue-rotate(78deg) brightness(97%) contrast(88%)',  // Light mode filter
+      'invert(76%) sepia(16%) saturate(797%) hue-rotate(60deg) brightness(95%) contrast(85%)'   // Dark mode filter
+    )(props),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    justifySelf: 'center',
+    alignSelf: 'center',
+    borderRadius: '40px',
+    width: '300px',
+    height: '300px',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+
   '#u-avatar-img': {
     width: '100%',
     height: '100%',
@@ -224,6 +241,19 @@ const UserStyles = (props) => ({
     mx: 'auto',
   },
 
+  '.u-input': {
+    height: '50px',
+    width: '300px !important',
+  },
+
+  '#u-g-input': {
+    border: '5px solid',
+    borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+    borderRadius: '10px',
+    backgroundColor: mode(colors.button.light, colors.button.dark)(props),
+  },
+
+
   '.u-hs-input': {
     display: 'flex',
     flexDirection: 'column',
@@ -232,10 +262,6 @@ const UserStyles = (props) => ({
     pb: '5px',
   },
 
-  '.u-input': {
-    height: '50px',
-    width: '300px !important',
-  },
 
   '.u-link': {
     fontSize: '3xl',

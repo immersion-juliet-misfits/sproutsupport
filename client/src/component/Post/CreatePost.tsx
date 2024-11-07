@@ -22,8 +22,9 @@ const CreatePost = ({user, BUCKET_NAME}) => {
   const handleInputChange = (e: {
     target: { value: SetStateAction<string> };
   }) => setInput(e.target.value);
-
   const isError = input === '';
+  // const [submitted, setSubmitted] = useState(false);
+  // const isError = input === '' && submitted;
 
 
   const handleChooseFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +63,7 @@ const CreatePost = ({user, BUCKET_NAME}) => {
   };
 
   return (
-    <Box>
+    <Box  id='lvl-one'>
       <div>
       <input type="file" onChange={handleChooseFile}></input>
       <input type="button" onClick={handleUploadFile} value="Upload"></input>
@@ -70,7 +71,7 @@ const CreatePost = ({user, BUCKET_NAME}) => {
     </div>
       <FormControl isInvalid={isError}>
         <FormLabel>Post</FormLabel>
-        <Input type='post' value={input} onChange={handleInputChange} />
+        <Input id='post-input' type='post' value={input} onChange={handleInputChange} />
         {!isError ? (
           <FormHelperText>
             Press Submit to create post.
@@ -79,7 +80,15 @@ const CreatePost = ({user, BUCKET_NAME}) => {
           <FormErrorMessage>A post is required.</FormErrorMessage>
         )}
         <ChakraLink as={ReactRouterLink} to='/home'>
-        <Button mt={4} onClick={addMessage}>
+        <Button mt={4}
+        // onClick={addMessage}
+        onClick={() => {
+          // setSubmitted(true);
+          if (!isError) {
+            addMessage();
+          }
+        }}
+        >
           Submit
         </Button>
         </ChakraLink>

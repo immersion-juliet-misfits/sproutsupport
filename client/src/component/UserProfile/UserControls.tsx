@@ -1,7 +1,5 @@
 import axios from 'axios';
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-// Global User states WIP ****************************************
+import React from 'react';
 
 interface User {
   id: number;
@@ -113,33 +111,26 @@ const fetchWeather = (
     .get(`/user/weatherDataByCity?city=${city}&state=${state}`)
     .then((response) => {
       const data = response.data;
-      // console.log('Response Check: ', data);
 
       if (data && data.currentConditions) {
-        // Valid location, update the weather data
         setWeatherData(data.currentConditions);
         setDailyForecastData(data.days);
         setAlertsData(data.alerts || []);
       } else {
-        // Invalid location, reset city and state in the database
         alert('Invalid Location');
         handleLocationChange('undefined', 'undefined', setUser);
       }
     })
     .catch((err) => {
       console.error('Error fetching weather data for city and state:', err);
-      // Reset city and state to 'undefined' in the database upon API failure
       handleLocationChange('undefined', 'undefined', setUser);
     });
 };
-
-// ************
 
 const getPlants = (user: object, setPlants: (plants: object[]) => void) => {
   axios
     .get(`/plants/all/${user.id}`)
     .then(({ data }) => {
-      // console.log('Plant Data: ', data);
       setPlants(data);
     })
     .catch((err) => {
@@ -151,10 +142,9 @@ const getPosts = (setPosts: (posts: object[]) => void, userId: number) => {
   axios
     .get(`/post/post/${userId}`)
     .then(({ data }) => {
-      //       // console.log('1 User Forum Data Check: ', data);
       if (data.length === 0) {
         console.log('User has no Posts.');
-        setPosts([]); // Set as empty array to prevent browser error
+        setPosts([]);
       } else {
         setPosts(data);
       }
@@ -162,7 +152,6 @@ const getPosts = (setPosts: (posts: object[]) => void, userId: number) => {
     .catch((err) => {
       if (err.response && err.response.status === 404) {
         console.log('No posts found for this user');
-        // Set an empty array if no posts are found
         setPosts([]);
       } else {
         console.error('Failed to GET posts: ', err);
@@ -177,7 +166,6 @@ const getMeetups = (
   axios
     .get(`/meetup/all/${user.id}`)
     .then(({ data }) => {
-      // console.log('Meetups data:', data);
       setMyMeetups(data.yours);
     })
     .catch((err) => {
@@ -238,27 +226,20 @@ const handleBioChange = (newBio, setUser: (user: object[]) => void) => {
     });
 };
 
-// ************
-
 const handleLocationChange = (
   newCity,
   newState,
   setUser: (user: object[]) => void
 ) => {
-  // console.log('Request: Hello World');
-  // console.log('Location UpdateCheck: ', newCity, newState);
   axios
     .patch('/user/updateLocation', { city: newCity, state: newState })
     .then((response) => {
-      // console.log('Response Check: ', response);
       return setUser(response.data);
     })
     .catch((error) => {
       console.error('Update Location: Failed ', error);
     });
 };
-
-// ************
 
 const handleToggle = (field, value, setSettings) => {
   setSettings((prevState) => ({
@@ -268,9 +249,7 @@ const handleToggle = (field, value, setSettings) => {
 
   axios
     .patch('/user/updateUserField', { field, value })
-    .then((status) => {
-      // console.log('Update Field: Success ', status);
-    })
+    .then((status) => {})
     .catch((err) => {
       console.error('Error updating: ', err);
     });

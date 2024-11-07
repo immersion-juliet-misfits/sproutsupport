@@ -80,6 +80,7 @@ const ssTheme = extendTheme({
 
       '#g-input': {
         border: '5px solid',
+        borderRadius: '10px',
         borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
         borderRadius: '10px',
         backgroundColor: mode(colors.button.light, '')(props),
@@ -113,7 +114,7 @@ const ssTheme = extendTheme({
         width: '1100px',
         mx: 'auto',
         marginTop: '20px',
-        marginBottom: '20px',
+        marginBottom: '40px',
         display: 'grid',
         gridTemplateRows: 'repeat(1, 1fr)',
         gridTemplateColumns: 'repeat(5, 1fr)',
@@ -125,7 +126,11 @@ const ssTheme = extendTheme({
         // Below also affects color of text in Hamburger menu
         color: mode(colors.text.light, colors.text.dark)(props),
         borderRadius: 'lg',
-        px: '50px',
+        // px: '50px', // for the Text placeholder for the logo
+      },
+
+      '#logo-text': {
+        filter: 'invert(76%) sepia(16%) saturate(797%) hue-rotate(60deg) brightness(95%) contrast(85%)',
       },
 
       '#g-box': {
@@ -134,7 +139,7 @@ const ssTheme = extendTheme({
         borderRadius: '10px',
         fontFamily: 'pangolin',
       },
-      '#p-button':{
+      '#p-button': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
@@ -142,20 +147,20 @@ const ssTheme = extendTheme({
           color: '#6EB257',
         },
       },
-      '#p-input':{
+      '#p-input': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },
-      '#p-input2':{
+      '#p-input2': {
         bgColor: mode(colors.text.light, colors.text.dark)(props),
         color: '#B9DA44',
         borderRadius: '10px',
         _placeholder: {
-          color: '#67723E'
-        }
+          color: '#67723E',
+        },
       },
-      '#p-icon':{
+      '#p-icon': {
         color: mode(colors.text.dark, colors.text.light)(props),
         borderRadius: '10px',
       },
@@ -168,7 +173,7 @@ const ssTheme = extendTheme({
       '.g-font': {
         fontFamily: 'pangolin',
       },
-      
+
       '.g-font-p': {
         fontFamily: 'pangolin',
         _placeholder:  {color: mode(colors.text.light, colors.text.dark)(props)}    //mode(colors.levelOne.light, colors.levelOne.dark)(props),
@@ -222,6 +227,7 @@ const ssTheme = extendTheme({
 
       '#topBar-hstack': {
         gap: '50px',
+        m: 'auto',
       },
 
       // Attempting to mimic settings of offSet
@@ -242,6 +248,47 @@ const ssTheme = extendTheme({
       '.visible': {
         visibility: 'visible',
       },
+
+      '.bodyGrid': {
+
+      },
+
+      '#post-box': {
+        border: '1px solid',
+        borderColor: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+        borderRadius: '10px',
+        width: '99%',
+        padding: '10px',
+        alignItems: 'left',
+        margin: '10px',
+        fontFamily: 'pangolin',
+      },
+
+      '#post-card': {
+        border: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
+        backgroundColor: mode(
+          colors.levelTwo.light,
+          colors.levelTwo.dark
+        )(props),
+      },
+
+      '#post-flex': {
+        borderRadius: '10px',
+        margin:'5px',
+        padding:'5px',
+        bg: mode(colors.levelThree.light, colors.levelThree.dark)(props),
+      },
+
+      '#post-input': {
+        border: '5px solid',
+        borderRadius: '10px',
+        borderColor: mode(colors.levelOne.light, colors.levelOne.dark)(props),
+        backgroundColor: mode(colors.text.light, colors.text.dark)(props),
+      },
+
     }),
   },
   components: {

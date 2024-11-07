@@ -23,7 +23,7 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
     return temp[0]
     }
   })
-  const [st, setSt] = useState(()=>{ //city, setCity
+  const [st, setSt] = useState(()=>{ 
     const temp: string = event.location.split('\n,')
     return temp[2].slice(6)
   })
@@ -210,4 +210,4 @@ edit('none', 'none')
   )
 }
 
-export default MeetupUpdate 
+export default MeetupUpdate

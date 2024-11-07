@@ -94,8 +94,7 @@ passport.use(
               google_id: profile.id,
               userName: profile.displayName,
               email: profile.emails?.[0].value,
-              avatar:
-              'https://dummyimage.com/250x250/000/fff.png&text=SS+:+PH',
+              avatar: 'https://ssupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png',
             },
           });
         }

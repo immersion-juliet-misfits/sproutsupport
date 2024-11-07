@@ -7,11 +7,9 @@ import Posts from '../postRoute';
 const prisma = new PrismaClient();
 const UserInfo = express.Router();
 const { WEATHER_KEY } = process.env;
-// console.log('Key Check: ', WEATHER_KEY);
 
 UserInfo.get('/getUserData', (req: Request, res: Response) => {
   const userId = req.user?.id;
-  // console.log('Req User Info: ', req.user);
 
   if (!userId) {
     return res.status(400).send('User ID is required');
@@ -25,7 +23,6 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
       if (!user) {
         return res.status(404).send('User not found');
       }
-      // console.log('UIR User Check: ', user);
       res.send(user);
     })
     .catch((error) => {
@@ -34,8 +31,6 @@ UserInfo.get('/getUserData', (req: Request, res: Response) => {
     });
 });
 
-// ******
-// Check if User exists (This may not be needed)
 UserInfo.get('/checkUserExists/:username', (req: Request, res: Response) => {
   const { username } = req.params;
 
@@ -56,16 +51,8 @@ UserInfo.get('/checkUserExists/:username', (req: Request, res: Response) => {
     });
 });
 
-
-
-// ******
-// Fetch a specific Users posts
-
 Posts.get('/post/:userId', (req: Request, res: Response) => {
-  // const { userId } = req.params;
-  // console.log('U-Id Check: ', req.params);
   const userId = parseInt(req.params.userId, 10);
-  // console.log('New U-Id Check: ', userId, typeof userId);
 
   prisma.post
     .findMany({
@@ -83,8 +70,6 @@ Posts.get('/post/:userId', (req: Request, res: Response) => {
       res.sendStatus(500);
     });
 });
-
-// ******
 
 UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
   const { avatar } = req.body;
@@ -110,8 +95,6 @@ UserInfo.patch('/updateAvatar', (req: Request, res: Response) => {
     });
 });
 
-// ****
-
 UserInfo.patch('/updateUserName', (req: Request, res: Response) => {
   const { userName } = req.body;
   const userId = req.user.id;
@@ -135,8 +118,6 @@ UserInfo.patch('/updateUserName', (req: Request, res: Response) => {
       res.status(500).send('Failed to update userName');
     });
 });
-
-// ****
 
 UserInfo.patch('/updateBio', (req: Request, res: Response) => {
   const { bio } = req.body;
@@ -162,16 +143,9 @@ UserInfo.patch('/updateBio', (req: Request, res: Response) => {
     });
 });
 
-// ****
-
 UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
-  // console.log('Request Handler: Hello World');
-
   const { city, state } = req.body;
   const userId = req.user?.id;
-
-  // console.log('Received city:', city, 'state:', state);
-  // console.log('Received userId:', userId);
 
   if (!userId || !city || !state) {
     return res.status(400).send('User ID, City, and State are required');
@@ -197,10 +171,6 @@ UserInfo.patch('/updateLocation', (req: Request, res: Response) => {
     });
 });
 
-// **************
-
-// * Call to Weather API ****
-// Fetch Weather by entering City & State
 UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
   const { city, state } = req.query;
   const userId = req.user?.id;
@@ -215,7 +185,6 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
   axios
     .get(weatherUrl)
     .then((response) => {
-      // console.log('Weather data retrieved successfully:', response.data);
       res.json(response.data);
     })
     .catch((error) => {
@@ -224,14 +193,9 @@ UserInfo.get('/weatherDataByCity', (req: Request, res: Response) => {
     });
 });
 
-// **************
-
-// *** Update all Privacy Toggles ***
 UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
   const { field, value } = req.body;
   const userId = req.user.id;
-
-  // console.log('Req User Check: ', req.user, 'Id Type Check: ', req.user.id);
 
   const validFields = [
     'showWeather',
@@ -246,8 +210,6 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
       .send('User ID, a valid field, and a boolean value are required');
   }
 
-  // req.user[field] = value;
-  // Attempt to resolve Typescript warning
   (req.user[field as keyof typeof req.user] as boolean) = value;
 
   prisma.user
@@ -264,17 +226,12 @@ UserInfo.patch('/updateUserField', (req: Request, res: Response) => {
     });
 });
 
-// Retrieve another Users profile Data to view it
-// UserInfo.get('/public/:userId', (req, res) => {
-// const { userId } = req.params;
-// console.log('Req-Handler UserId Check:', userId);
 UserInfo.get('/public/:username', (req, res) => {
   const { username } = req.params;
   console.log('Req-Handler UserName Check:', username);
 
   prisma.user
     .findUnique({
-      // where: { id: Number(userId) },
       where: { userName: username },
       select: {
         id: true,
@@ -293,12 +250,9 @@ UserInfo.get('/public/:username', (req, res) => {
         return res.status(404).send('User not found');
       }
 
-      // console.log('User found:', user);
-
       const plantsPromise = user.showPlants
         ? prisma.plant
             .findMany({
-              // where: { userId: Number(userId) },
               where: { userId: Number(user.id) },
               select: {
                 id: true,
@@ -308,37 +262,42 @@ UserInfo.get('/public/:username', (req, res) => {
               },
             })
             .then((plants) => {
-              // console.log(`Fetched ${plants.length} plants for userId: ${userId}`);
               return plants;
             })
             .catch((error) => {
-              // console.error('Error fetching plants for userId:', userId, error);
-              console.error('Error fetching plants for username:', username, user.id, error);
-              return []; // Return empty array for plants in case of an error
+              console.error(
+                'Error fetching plants for username:',
+                username,
+                user.id,
+                error
+              );
+              return [];
             })
         : Promise.resolve([]);
 
       const postsPromise = user.showForumPosts
         ? prisma.post
             .findMany({
-              // where: { userId: Number(userId) },
               where: { userId: Number(user.id) },
               select: { id: true, message: true, imageUrl: true },
             })
             .then((posts) => {
-              // console.log(`Fetched ${posts.length} posts for userId: ${userId}`);
               return posts;
             })
             .catch((error) => {
-              console.error('Error fetching posts for username:', username, user.id, error);
-              return []; // Return empty array for posts in case of an error
+              console.error(
+                'Error fetching posts for username:',
+                username,
+                user.id,
+                error
+              );
+              return [];
             })
         : Promise.resolve([]);
 
       const meetupsPromise = user.showMyMeetups
         ? prisma.meet
             .findMany({
-              // where: { userId: Number(userId) },
               where: { userId: Number(user.id) },
               select: {
                 id: true,
@@ -350,19 +309,21 @@ UserInfo.get('/public/:username', (req, res) => {
               },
             })
             .then((meetups) => {
-              // console.log(`Fetched ${meetups.length} meetups for userId: ${userId}`);
               return meetups;
             })
             .catch((error) => {
-              // console.error('Error fetching meetups for userId:', userId, error);
-              console.error('Error fetching meetups for username:', username, user.id, error);
-              return []; // Return empty array for meetups in case of an error
+              console.error(
+                'Error fetching meetups for username:',
+                username,
+                user.id,
+                error
+              );
+              return [];
             })
         : Promise.resolve([]);
 
       return Promise.all([plantsPromise, postsPromise, meetupsPromise]).then(
         ([plants, posts, meetups]) => {
-          // console.log('Response Data:', { user, plants, posts, meetups });
           res.json({ user, plants, posts, meetups });
         }
       );

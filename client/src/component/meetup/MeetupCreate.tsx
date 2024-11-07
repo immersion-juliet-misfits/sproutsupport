@@ -1,4 +1,4 @@
-import { Input, Button, Box, Center, useToast, Alert, AlertIcon, AlertDescription, Image, background} from '@chakra-ui/react';
+import { Input, Button, Box, Center, useToast, Alert, AlertIcon, AlertDescription, Image } from '@chakra-ui/react';
 import axios from 'axios';
 import React, {useState, useEffect, useRef} from 'react'
 import {AddIcon} from '@chakra-ui/icons'
@@ -88,7 +88,7 @@ if(image.name !== undefined){
     console.error('Failed to get image url', err)
   })
 
-  }else if(image.name === undefined){  
+  }else if(image.name === undefined){
       const combine = `Location:${location}\n, State:${st}\n, City:${city}`
     axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: 'https://sproutsupportbucket.s3.amazonaws.com/sproutsSupportLogo1.png', userId: user.id, status: 'none'})
     .then(()=>{
@@ -204,7 +204,7 @@ return 'not in range'
     <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='event Name'></Input>
     <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='description'></Input>
     <Input className="g-font-p" id="g-input" type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
-    {warn !== '' && 
+    {warn !== '' &&
     <Alert status={warn}>
   <AlertIcon />
   <AlertDescription className="g-font">{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
@@ -213,7 +213,6 @@ return 'not in range'
     </Box>
     </Center>
     <Button id='g-button' onClick={()=>{makeMeetup()}} isDisabled={fillIn} position='relative' left="875px" top="-368px"><AddIcon/></Button>
-    {/* <Box position="relative" left='360px' top="-410px" w={'450px'}>{selecDate}</Box> */}
   </div>)
 };
 
