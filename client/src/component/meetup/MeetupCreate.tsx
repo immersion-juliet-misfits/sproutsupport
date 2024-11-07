@@ -1,4 +1,4 @@
-import { Input, Button, Box, Center, useToast, Alert, AlertIcon, AlertDescription, Image} from '@chakra-ui/react';
+import { Input, Button, Box, Center, useToast, Alert, AlertIcon, AlertDescription, Image, background} from '@chakra-ui/react';
 import axios from 'axios';
 import React, {useState, useEffect, useRef} from 'react'
 import {AddIcon} from '@chakra-ui/icons'
@@ -59,7 +59,7 @@ if(image.name !== undefined){
     })
   })
   .then(() => {
-    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
+    axios.post('/meetup/create', {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://ssupportbucket.s3.amazonaws.com/${image.name}`, userId: user.id, status: 'none'})
     .then(()=>{
      refresh()
      showSwitch()
@@ -191,19 +191,19 @@ return 'not in range'
     <Box w={"800px"} id='g-card'>
     {check === true && <Image objectFit={'fill'} src={src} h={"150px"} w={"470px"} mx={"170px"}></Image>}
       <Box h={'40px'} className="g-font">{'weather: ' + selecDate}</Box>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
     }} name='dt' placeholder='mm/dd/year h:mm am/pm'></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='location'></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder='location'></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
     }} name='c' placeholder='city'></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
     }} name='s' placeholder='state'></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='event Name'></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='description'></Input>
-    <Input className="g-font" id="g-input" type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder='event Name'></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder='description'></Input>
+    <Input className="g-font-p" id="g-input" type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img' id='choose image'></Input>
     {warn !== '' && 
     <Alert status={warn}>
   <AlertIcon />

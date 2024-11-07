@@ -92,7 +92,6 @@ arr1[i].timeleft = dayjs(cur).to(time)
 const all = arr1.concat(arr2)
 setYourMeetups(arr1)
 setJoinedMeetups(arr2)
-let check = 0
 
 for(let i = 0; i < all.length; i++){
   const time: string = dayjs().format('MM/DD/YYYY hh:mm a')
@@ -100,19 +99,16 @@ for(let i = 0; i < all.length; i++){
   const passDueDate: boolean = dayjs(time).isSameOrAfter(all[i].dueDelete)
 if(todayOrAfter === true && passDueDate === true){
       const url = 'meetup/delete/' + all[i].id
+      console.log(url)
   axios.delete(url)
   .then(()=>{
-    check++
+    getMeetups()
   })
   .catch((err: any)=>{
     console.error('Error can\'t update: ', err)
   })
 }
 }
-if(check !== 0){
-  getMeetups()
-}
-
    }
 
 

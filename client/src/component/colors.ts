@@ -49,6 +49,10 @@ const colors = {
       dark: '#507255',
     },
   },
+  meetupLogo: {
+    light: '',
+    dark: 'invert(59%) sepia(49%) saturate(397%) hue-rotate(60deg) brightness(95%) contrast(98%);',
+  },
 };
 
 export default colors;
