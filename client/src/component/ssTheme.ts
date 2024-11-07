@@ -109,7 +109,7 @@ const ssTheme = extendTheme({
         width: '1100px',
         mx: 'auto',
         marginTop: '20px',
-        marginBottom: '20px',
+        marginBottom: '40px',
         display: 'grid',
         gridTemplateRows: 'repeat(1, 1fr)',
         gridTemplateColumns: 'repeat(5, 1fr)',
