@@ -14,13 +14,27 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
   const [warn, setWarn] = useState('warning')
   const [warnMessage, setWarnMessage] = useState('please fill in both city and state with the selected date')
   const [id, setId] = useState(event.id)
-  const [dateTime, setDateTime] = useState('')
-  const [location, setLocation] = useState('')
-  const [city, setCity] = useState('')
-  const [st, setSt] = useState('')
-  const [eventName, setEventName] = useState('')
-  const [description, setDescription] = useState('')
+  const [dateTime, setDateTime] = useState(event.time_date)
+  const [location, setLocation] = useState(()=>{
+    const temp: string = event.location.slice(9).split('\n')
+    if(temp[0].length - 1 === ' '){
+      return temp[0].slice(0, -1)
+    }else{
+    return temp[0]
+    }
+  })
+  const [st, setSt] = useState(()=>{ //city, setCity
+    const temp: string = event.location.split('\n,')
+    return temp[2].slice(6)
+  })
+  const [city, setCity] = useState(()=>{
+    const temp: string = event.location.split('\n,')
+    return temp[1].slice(7)
+  })
   const [image, setImage] = useState({name: event.imageUrl})
+  const [eventName, setEventName] = useState(event.eventName)
+  const [description, setDescription] = useState(event.description)
+
 
   const edit = (name: string, value: any): void =>{
     switch(name){
@@ -57,7 +71,8 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
         headers: {'Content-Type': image.type}
       })
     }).then(()=>{
-  const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: `https://sproutsupportbucket.s3.amazonaws.com/${image.name}`, id}
+      const test = image.name.includes('https://ssupportbucket.s3.amazonaws.com/') ? image.name : `https://ssupportbucket.s3.amazonaws.com/${image.name}`
+  const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: test, id}
   const url = 'meetup/update/' + id
   axios.patch(url, obj)
   .then(()=>{
@@ -77,7 +92,7 @@ const MeetupUpdate = ({event, refresh, showSwitch}: {event: object, refresh: any
   })
     }else{
       const combine = `Location: ${location}\n, State: ${st}\n, City: ${city}`
-      const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: 'https://sproutsupportbucket.s3.amazonaws.com/sproutsSupportLogo1.png', id}
+      const obj: object = {time_date: dateTime, location: combine, eventName, description, imageUrl: 'none', id}
       const url = 'meetup/update/' + id
       axios.patch(url, obj)
       .then(()=>{
@@ -169,24 +184,26 @@ return 'not in range'
     }
   },[edit])
 
+edit('none', 'none')
+
   return(<Card id="g-card">
     <CardBody id="g-card" /*bg={"#C5E063"}*/ w={"450px"}>
-    <Box id="g-box" h={"60px"} >{'weather: ' + selecDate}<Button h={"25px"} id='g-button'color={"#6EB257"} onClick={()=>{meetupUpdate()}} isDisabled={fillIn} left={"210px"} top={"5px"}><AddIcon/></Button></Box>
+    <Box id="g-box" h={"60px"} >{'weather: ' + selecDate}<Button h={"25px"} id='g-button'color={"#6EB257"} onClick={()=>{meetupUpdate()}} isDisabled={fillIn} left={"380px"} top={"25px"} position={'absolute'}><AddIcon/></Button></Box>
    {check === true && <Center><Image objectFit={'fill'} src={image.name[0] === 'h' ? image.name : URL.createObjectURL(image)} h={"150px"} w={"470px"}></Image></Center>}
-   <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder="mm/dd/year h:mm am/pm"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder="location"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+   <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' placeholder={dateTime}></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' placeholder={location}></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
       getweather()
-    }} name='c' placeholder="city"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
+    }} name='c' placeholder={city}></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )
      getweather()
-    }} name='s' placeholder="state"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder="eventName"></Input>
-    <Input className="g-font" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder="description"></Input>
-  <Input className="g-font" id="g-input" type="file" accept="image/*" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
+    }} name='s' placeholder={st}></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' placeholder={eventName}></Input>
+    <Input className="g-font-p" id="g-input" onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' placeholder={description}></Input>
+  <Input className="g-font-p" id="g-input" type="file" accept="image/*" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
   <Alert status={warn}>
   <AlertIcon />
-  <AlertDescription className="g-font">{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
+  <AlertDescription className="g-font-p">{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
 </Alert>
   </CardBody>
   </Card>
