@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import { useState } from 'react';
 import { Grid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
@@ -7,10 +6,7 @@ import UserTabs from './UserTabs';
 import UserInfo from './UserInfo';
 import UserWeather from './UserWeather';
 import UserSearch from './UserSearch';
-// import UserControls, { GlobalStateProvider } from './UserControls';
-// import UserControls from './UserControls';
 
-// User context
 interface User {
   id: number;
   google_id: string;
@@ -22,7 +18,6 @@ interface User {
   state: string;
 }
 
-// Main component
 const UserPrivateProfile = ({
   fetchUserData,
   user,
@@ -38,15 +33,13 @@ const UserPrivateProfile = ({
   }
 
   return (
-    // <GlobalStateProvider>
     <>
       <TopBar route={'Settings'} />
 
       <Grid id='lvl-one'>
         <UserTabs setCurrentView={setCurrentView} />
 
-        <Grid
-        >
+        <Grid>
           {currentView === 'userSearch' && <UserSearch />}
           {currentView === 'weather' && (
             <UserWeather
@@ -67,7 +60,6 @@ const UserPrivateProfile = ({
           )}
         </Grid>
       </Grid>
-      {/* </GlobalStateProvider> */}
     </>
   );
 };

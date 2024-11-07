@@ -1,25 +1,13 @@
 import MeetupListItem from './MeetupListItem'
-//import axios from 'axios';
 import React, {useState, useEffect} from 'react'
-import { Input, Button, SimpleGrid, Box, useToast, Alert, AlertIcon, AlertDescription, Center, Select } from '@chakra-ui/react';
+import { Button, SimpleGrid, Box, Alert, AlertIcon, AlertDescription, Center } from '@chakra-ui/react';
 
 const MeetupList = ({refresh, createSwapUpdateCheck, user, yours, pub, join, showSwitch, buttonCheck}: {refresh: any, createSwapUpdateCheck: any, user: object, yours: Array<T>, pub: Array<T>, join: Array<T>, showSwitch: void, buttonCheck: void}) =>{
   const [swap, setSwap] = useState('none')
-  // const [id, setId] = useState(0)
   const [dateTime, setDateTime] = useState('')
   const [location, setLocation] = useState('')
-  // const [city, setCity] = useState('')
-  // const [st, setSt] = useState('')
-  // const [eventName, setEventName] = useState('')
-  // const [description, setDescription] = useState('')
-  // const [image, setImage] = useState({})
   const [currentState, setCurrentState] = useState('yours')
   const [fillIn, setFillIn] = useState(false)
- // const toast = useToast()
-  // const [warn, setWarn] = useState('warning')
-  // const [warnMessage, setWarnMessage] = useState('please fill in both city and state')
-  // const [selecDate, setSelecDate] = useState('')
-  // const [weather, setWeather] = useState([])
 
   const edit = (name: string, value: any): void =>{
     switch(name){
@@ -133,39 +121,6 @@ const meetupSwap = (event: object): void =>{
   }
 }
 
-// const getweather = (): void => {
-//   if(city.length >= 4 && st.length >= 4){
-//   axios.get(`/meetup/weather?city=${city}&state=${st}`)
-//   .then(({data})=>{
-//     setWeather(data.days)
-//     setWarnMessage('city and state exist')
-//     setWarn('success')
-//   })
-//   .catch((err)=>{
-//    setWarnMessage('city or state don\'t exist')
-//    setWarn('error')
-//   })
-// }else{
-//   setWarnMessage('pleas fill in both city and state')
-//   setWarn('warning')
-// }
-// }
-
-// const selectedDate = (target: string): void =>{
-//   target = target.slice(6)
-// for(let i = 0; i < weather.length; i++){
-// let arr = weather?.[i].datetime.split('-')
-//      const month = arr[2]
-//      arr[2] = arr[1]
-//      arr[1] = month
-//      arr.reverse()
-//      arr = arr.join('/')
-//  if(arr === target){
-//   setSelecDate(weather?.[i].description)
-//  }
-// }
-// }
-
 useEffect(()=>{
   if(dateTime[2] === '/' && dateTime[5] === '/' && dateTime[10] === ' ' && dateTime[13] === ':' && dateTime[16] === ' '){
     if(dateTime[17] + dateTime[18] === 'pm' || dateTime[17] + dateTime[18] === 'am'){
@@ -216,36 +171,6 @@ setFillIn(true)
     <>{currentState === 'yours' && <>{yours.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'>you don't have any meetup events</AlertDescription></Alert>}</>}</>
     <>{currentState === 'public' && <>{pub.length === 0 && <Alert status={'warning'}><AlertIcon/><AlertDescription className='g-font'> there are currently no public meetUps at the moment</AlertDescription></Alert>}</>}</>
      </>}
-    {/* {swap === 'update' && <Center><Box w={'800px'} bg={"#C5E063"}>
-    <Button bg={"#4AAD52"} onClick={()=>{
-      setSwap('none')
-      createSwapUpdateCheck()
-      }}>Cancel Update</Button>
-       <Button bg={"#4AAD52"} onClick={()=>{
-        meetupUpdate()
-        refresh()
-        refresh()
-        }} isDisabled={fillIn} >Confirm Update</Button>
-   
-      <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='dt' value={dateTime}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='l' value={location}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
-      getweather()
-    }} name='c' placeholder='city'></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )
-      getweather()
-    }} name='s' placeholder='state'></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='en' value={eventName}></Input>
-    <Input onChange={(e)=>{edit(e.target.name, e.target.value )}} name='d' value={description}></Input>
-  <Input type="file" onChange={(e)=>{edit(e.target.name, e.target.files[0] )}} name='img'></Input>
-    {warn !== '' && 
-    <Alert status={warn}>
-  <AlertIcon />
-  <AlertDescription>{warn === 'error' ? 'city or state don\'t exist' : warnMessage}</AlertDescription>
-</Alert>
-}
-    </Box></Center>}
-    {swap === 'update' &&  <Box position="relative" left='360px' top="-362px">{selecDate}</Box>} */}
     </>
   )
 }

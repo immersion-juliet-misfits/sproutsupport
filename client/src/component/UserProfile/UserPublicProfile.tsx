@@ -69,15 +69,15 @@ const UserPublicProfile = () => {
     <>
       <TopBar route={`${publicUser.userName || ''}'s Public Profile`} />
 
-      {/* User's Avatar and Info */}
       <Box className='pub-top-box'>
         <HStack className='pub-top-hstack'>
           <GridItem
-          // id='u-avatar-gi'
-          // Change below to dynamic bucket name use
-          id={publicUser.avatar === 'https://ssupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
-            ? 'u-avatar-gi-default'
-            : 'u-avatar-gi'}
+            id={
+              publicUser.avatar ===
+              'https://ssupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png'
+                ? 'u-avatar-gi-default'
+                : 'u-avatar-gi'
+            }
           >
             <Image
               id='u-avatar-img'
@@ -100,7 +100,6 @@ const UserPublicProfile = () => {
         </HStack>
       </Box>
       <Grid id='lvl-one'>
-        {/* User's Plants */}
         <VStack
           spacing={4}
           align='center'
@@ -151,7 +150,6 @@ const UserPublicProfile = () => {
             </Box>
           )}
 
-          {/* User's Meetups */}
           {publicUser?.showMyMeetups && (
             <Box className='pub-box'>
               <Heading
@@ -205,7 +203,6 @@ const UserPublicProfile = () => {
             </Box>
           )}
 
-          {/* User's Forum Posts */}
           {publicUser?.showForumPosts && (
             <Box className='pub-box'>
               <Heading
@@ -245,8 +242,6 @@ const UserPublicProfile = () => {
               )}
             </Box>
           )}
-
-          {/* ***************************************  */}
         </VStack>
       </Grid>
     </>

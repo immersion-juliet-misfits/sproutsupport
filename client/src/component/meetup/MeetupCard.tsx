@@ -20,7 +20,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
       console.error('cant\'t join: ', err)
     })
     }
-    
+
     const leaveMeetup = (): void =>{
       axios.get('/meetup/Attendee')
       .then((result)=>{
@@ -29,7 +29,7 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
     for(let i = 0; i < arr.length; i++){
       if(arr[i].userId === user.id && arr[i].meet_id === card.id){
     meetTest = arr[i].id
-      } 
+      }
     }
     const url = `meetup/AttendeeLeave/${meetTest}`
     axios.delete(url)
@@ -98,5 +98,4 @@ const MeetupCard = ({card, showSwitch, refresh, user}: {card: object,  showSwitc
 </SimpleGrid>
   </>)
 }
-//filter="invert(59%) sepia(49%) saturate(397%) hue-rotate(60deg) brightness(95%) contrast(98%);"
 export default MeetupCard
