@@ -31,9 +31,7 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   const toast = useToast();
-  const BUCKET_NAME = 'sproutsupportbucket'
-  // const BUCKET_NAME = 'sprout-support';
-  // const BUCKET_NAME = 'ssupportbucket'
+  const BUCKET_NAME = 'ssupportbucket'
 
   const fetchUserData = () => {
     axios

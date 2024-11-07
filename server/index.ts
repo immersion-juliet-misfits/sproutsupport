@@ -94,7 +94,7 @@ passport.use(
               google_id: profile.id,
               userName: profile.displayName,
               email: profile.emails?.[0].value,
-              avatar: 'https://sproutsupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png',
+              avatar: 'https://ssupportbucket.s3.us-east-2.amazonaws.com/icon-sprout-support-notext.png',
             },
           });
         }
